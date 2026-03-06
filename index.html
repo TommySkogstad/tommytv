@@ -499,15 +499,14 @@
             });
 
             // Vis lokalt nettverk-seksjonen hvis på LAN
+            // Portainer (port 9999) er unik for hjemmenettverket
             var img = new Image();
-            var timeout = setTimeout(function() {
-                img.src = '';
-            }, 2000);
+            var timeout = setTimeout(function() { img.src = ''; }, 2000);
             img.onload = img.onerror = function() {
                 clearTimeout(timeout);
                 document.getElementById('local-section').style.display = '';
             };
-            img.src = 'http://nuc.tommy.tv/favicon.ico?' + Date.now();
+            img.src = 'http://192.168.1.87:9999/favicon.ico?' + Date.now();
         })();
     </script>
 </body>
