@@ -107,6 +107,15 @@
             font-weight: 600;
             color: #f8fafc;
             margin-bottom: 0.4rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .card h3 img {
+            width: 20px;
+            height: 20px;
+            border-radius: 4px;
         }
 
         .card p {
@@ -143,7 +152,7 @@
 </head>
 <body>
     <header>
-        <h1>Bokmerker</h1>
+        <a href="/" style="text-decoration:none;"><img src="logo.svg" alt="TommyTV" style="height:3rem;"></a>
         <p>Eksterne tjenester og lenker</p>
         <div style="margin-top:1rem;">
             <a href="/" style="display:inline-block; padding:0.5rem 1.2rem; background:#1e293b; color:#94a3b8; border-radius:8px; text-decoration:none; font-size:0.9rem; border:1px solid #334155; transition: border-color 0.2s;">Tilbake til dashboard</a>
@@ -158,44 +167,44 @@
             </div>
             <div class="grid">
                 <a href="https://claude.ai" class="card" target="_blank">
-                    <h3>Claude Chat</h3>
-                    <p>AI-assistent</p>
+                    <h3><img src="https://claude.ai/favicon.ico" alt="">Claude Chat</h3>
+                    <p>AI-assistent fra Anthropic for koding, skriving og analyse</p>
                     <span class="url">claude.ai</span>
                 </a>
 
                 <a href="https://console.anthropic.com" class="card" target="_blank">
-                    <h3>Claude API</h3>
-                    <p>API-konsoll og administrasjon</p>
+                    <h3><img src="https://console.anthropic.com/favicon.ico" alt="">Claude API</h3>
+                    <p>API-konsoll for nøkler, forbruk og modellkonfigurasjon</p>
                     <span class="url">console.anthropic.com</span>
                 </a>
 
                 <a href="https://dash.cloudflare.com" class="card" target="_blank">
-                    <h3>Cloudflare</h3>
-                    <p>DNS, tunneler og sikkerhet</p>
+                    <h3><img src="https://dash.cloudflare.com/favicon.ico" alt="">Cloudflare</h3>
+                    <p>DNS-administrasjon, Tunnel-konfig, Email Routing og sikkerhet</p>
                     <span class="url">dash.cloudflare.com</span>
                 </a>
 
                 <a href="https://github.com/TommySkogstad" class="card" target="_blank">
-                    <h3>GitHub</h3>
-                    <p>Kildekode og repositories</p>
+                    <h3><img src="https://github.githubassets.com/favicons/favicon-dark.svg" alt="">GitHub</h3>
+                    <p>Kildekode, repositories og CI/CD for alle prosjekter</p>
                     <span class="url">github.com/TommySkogstad</span>
                 </a>
 
                 <a href="https://robot.hetzner.com" class="card" target="_blank">
-                    <h3>Hetzner</h3>
-                    <p>StorageBox og offsite backup</p>
+                    <h3><img src="https://robot.hetzner.com/favicon.ico" alt="">Hetzner</h3>
+                    <p>StorageBox for offsite GPG-kryptert backup via Safekeeper</p>
                     <span class="url">robot.hetzner.com</span>
                 </a>
 
                 <a href="https://lastpass.com/vault" class="card" target="_blank">
-                    <h3>LastPass</h3>
-                    <p>Passordadministrasjon</p>
+                    <h3><img src="https://lastpass.com/favicon.ico" alt="">LastPass</h3>
+                    <p>Passord- og hemmelighetsadministrasjon</p>
                     <span class="url">lastpass.com</span>
                 </a>
 
                 <a href="https://unifi.ui.com" class="card" target="_blank">
-                    <h3>UniFi</h3>
-                    <p>Nettverksadministrasjon</p>
+                    <h3><img src="https://unifi.ui.com/favicon.ico" alt="">UniFi</h3>
+                    <p>Nettverksadministrasjon, WireGuard VPN og klientoversikt</p>
                     <span class="url">unifi.ui.com</span>
                 </a>
             </div>
@@ -208,14 +217,14 @@
             </div>
             <div class="grid">
                 <a href="https://makerworld.com/en" class="card" target="_blank">
-                    <h3>MakerWorld</h3>
-                    <p>3D-modeller og fellesskap</p>
+                    <h3><img src="https://makerworld.com/favicon.ico" alt="">MakerWorld</h3>
+                    <p>Bambu Labs markedsplass for ferdiglagde 3D-modeller og profiler</p>
                     <span class="url">makerworld.com</span>
                 </a>
 
                 <a href="https://www.tinkercad.com" class="card" target="_blank">
-                    <h3>Tinkercad</h3>
-                    <p>3D-design i nettleseren</p>
+                    <h3><img src="https://www.tinkercad.com/favicon.ico" alt="">Tinkercad</h3>
+                    <p>Gratis 3D-design i nettleseren fra Autodesk</p>
                     <span class="url">tinkercad.com</span>
                 </a>
             </div>
@@ -228,14 +237,14 @@
             </div>
             <div class="grid">
                 <a href="https://www.iptorrents.com" class="card" target="_blank">
-                    <h3>IPTorrents</h3>
-                    <p>Privat torrent-tracker</p>
+                    <h3><img src="https://www.iptorrents.com/favicon.ico" alt="">IPTorrents</h3>
+                    <p>Privat torrent-tracker med invitasjon</p>
                     <span class="url">iptorrents.com</span>
                 </a>
 
                 <a href="https://sub-scene.com" class="card" target="_blank">
-                    <h3>Subscene</h3>
-                    <p>Undertekster for film og TV</p>
+                    <h3><img src="https://sub-scene.com/favicon.ico" alt="">Subscene</h3>
+                    <p>Undertekster for film og TV-serier i alle språk</p>
                     <span class="url">sub-scene.com</span>
                 </a>
             </div>
@@ -248,8 +257,8 @@
             </div>
             <div class="grid">
                 <a href="https://miro.com" class="card" target="_blank">
-                    <h3>Miro</h3>
-                    <p>Digitalt whiteboard og samarbeid</p>
+                    <h3><img src="https://miro.com/favicon.ico" alt="">Miro</h3>
+                    <p>Digitalt whiteboard for brainstorming, flytdiagrammer og samarbeid</p>
                     <span class="url">miro.com</span>
                 </a>
             </div>
@@ -262,14 +271,14 @@
             </div>
             <div class="grid">
                 <a href="https://awardfares.com" class="card" target="_blank">
-                    <h3>AwardFares</h3>
-                    <p>Bonusreiser og poengsoking</p>
+                    <h3><img src="https://awardfares.com/favicon.ico" alt="">AwardFares</h3>
+                    <p>Søk i bonusreiser på tvers av flyselskaper og allianser</p>
                     <span class="url">awardfares.com</span>
                 </a>
 
                 <a href="https://www.sas.no" class="card" target="_blank">
-                    <h3>SAS</h3>
-                    <p>Flybestilling og EuroBonus</p>
+                    <h3><img src="https://www.sas.no/favicon.ico" alt="">SAS</h3>
+                    <p>Flybestilling, EuroBonus-poeng og reisestatus</p>
                     <span class="url">sas.no</span>
                 </a>
             </div>

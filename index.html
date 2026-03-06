@@ -107,6 +107,15 @@
             font-weight: 600;
             color: #f8fafc;
             margin-bottom: 0.4rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .card h3 img {
+            width: 20px;
+            height: 20px;
+            border-radius: 4px;
         }
 
         .card p {
@@ -189,7 +198,7 @@
 </head>
 <body>
     <header>
-        <h1>TommyTV</h1>
+        <img src="logo.svg" alt="TommyTV" style="height:3rem;">
         <p>Prosjekter og infrastruktur</p>
         <div style="margin-top:1rem; display:flex; gap:0.75rem; justify-content:center; flex-wrap:wrap;">
             <a id="lan-toggle" href="http://nuc.tommy.tv:8880" style="display:inline-block; padding:0.5rem 1.2rem; background:#1e3a5f; color:#7dd3fc; border-radius:8px; text-decoration:none; font-size:0.9rem; border:1px solid #334155; transition: border-color 0.2s;">Bytt til LAN-versjon</a>
@@ -231,7 +240,7 @@
             </div>
             <div class="grid">
                 <a href="http://nuc.tommy.tv:9100" class="card" target="_blank">
-                    <h3>Biologportal DEV</h3>
+                    <h3><img src="https://portal.tommytv.no/favicon.ico" alt="">Biologportal DEV</h3>
                     <p>Utviklingsmiljo</p>
                     <span class="url">nuc.tommy.tv:9100</span>
                     <div>
@@ -241,13 +250,13 @@
                 </a>
 
                 <a href="http://nuc.tommy.tv:9101" class="card" target="_blank">
-                    <h3>Biologportal PROD</h3>
+                    <h3><img src="https://portal.tommytv.no/favicon.ico" alt="">Biologportal PROD</h3>
                     <p>Produksjonsmiljo</p>
                     <span class="url">nuc.tommy.tv:9101</span>
                 </a>
 
                 <a href="http://nuc.tommy.tv:9000" class="card" target="_blank">
-                    <h3>LO Finans DEV</h3>
+                    <h3><img src="https://lo-finans.no/favicon.png" alt="">LO Finans DEV</h3>
                     <p>Utviklingsmiljo</p>
                     <span class="url">nuc.tommy.tv:9000</span>
                     <div>
@@ -257,14 +266,14 @@
                 </a>
 
                 <a href="http://nuc.tommy.tv:9001" class="card" target="_blank">
-                    <h3>LO Finans PROD</h3>
+                    <h3><img src="https://lo-finans.no/favicon.png" alt="">LO Finans PROD</h3>
                     <p>Produksjonsmiljo</p>
                     <span class="url">nuc.tommy.tv:9001</span>
                 </a>
 
                 <div class="card">
                     <a href="http://nuc.tommy.tv" target="_blank" style="text-decoration:none;color:inherit">
-                        <h3>NUC</h3>
+                        <h3><img src="https://www.asus.com/favicon.ico" alt="">NUC</h3>
                         <p>Intel NUC - tjenester, Docker-host og Claude Code</p>
                         <span class="url">nuc.tommy.tv</span>
                     </a>
@@ -275,13 +284,13 @@
                 </div>
 
                 <a href="http://nas.tommy.tv:32400/web" class="card" target="_blank">
-                    <h3>Plex</h3>
+                    <h3><img src="https://app.plex.tv/desktop/favicon.ico" alt="">Plex</h3>
                     <p>Medieserver</p>
                     <span class="url">nas.tommy.tv:32400</span>
                 </a>
 
                 <a href="http://nuc.tommy.tv:9999" class="card" target="_blank">
-                    <h3>Portainer</h3>
+                    <h3><img src="https://cdn.prod.website-files.com/685ddfde8f36a9682093fa2b/6971824e7c74c0d3c0b79cbf_Portainer%20-%20P%20Icon%20SQUARE%20-%20Purple%20%26%20Graphite%20(32x32).png" alt="">Portainer</h3>
                     <p>Docker container-administrasjon</p>
                     <span class="url">nuc.tommy.tv:9999</span>
                     <div>
@@ -291,7 +300,7 @@
 
                 <div class="card">
                     <a href="http://nas.tommy.tv:8080" target="_blank" style="text-decoration:none;color:inherit">
-                        <h3>QNAP NAS</h3>
+                        <h3><img src="https://www.google.com/s2/favicons?domain=qnap.com&sz=32" alt="">QNAP NAS</h3>
                         <p>Nettverkslagring - QNAP TS-464 (4x20 TB RAID 5)</p>
                         <span class="url">nas.tommy.tv:8080</span>
                     </a>
@@ -302,7 +311,7 @@
                 </div>
 
                 <a href="http://nuc.tommy.tv:9200" class="card" target="_blank">
-                    <h3>Summa Summarum DEV</h3>
+                    <h3><img src="icons/summa.svg" alt="">Summa Summarum DEV</h3>
                     <p>Utviklingsmiljo</p>
                     <span class="url">nuc.tommy.tv:9200</span>
                     <div>
@@ -321,7 +330,7 @@
             </div>
             <div class="grid">
                 <div class="card">
-                    <h3>WireGuard VPN</h3>
+                    <h3><img src="https://www.wireguard.com/favicon.ico" alt="">WireGuard VPN</h3>
                     <p>Fjerntilgang til lokalt nettverk - clientstyrt tilgang via UniFi</p>
                     <span class="url">Konfigurert i UniFi Network</span>
                     <div>
@@ -346,9 +355,15 @@
                 <span class="badge badge-public">Internett</span>
             </div>
             <div class="grid">
+                <a href="https://app.plex.tv/desktop/" class="card" target="_blank">
+                    <h3><img src="https://app.plex.tv/desktop/favicon.ico" alt="">Plex</h3>
+                    <p>Medieserver - ekstern tilgang via Plex-appen</p>
+                    <span class="url">app.plex.tv</span>
+                </a>
+
                 <a href="https://portal.tommytv.no" class="card" target="_blank">
-                    <h3>Biologportal</h3>
-                    <p>Biologiportal med faginnhold og administrasjon</p>
+                    <h3><img src="https://portal.tommytv.no/favicon.ico" alt="">Biologportal</h3>
+                    <p>Oppdragshåndtering for biologer og oppdragsgivere med kalender, økonomi og chat</p>
                     <span class="url">portal.tommytv.no</span>
                     <div>
                         <span class="tech">Kotlin/Ktor</span>
@@ -358,17 +373,18 @@
                 </a>
 
                 <a href="https://geoloop.tommytv.no" class="card" target="_blank">
-                    <h3>GeoLoop</h3>
-                    <p>Geografisk dataverktoy</p>
+                    <h3><img src="https://geoloop.tommytv.no/static/logo.svg" alt="">GeoLoop</h3>
+                    <p>Styring av vannbåren varme med prediktiv oppstart basert på værdata fra met.no</p>
                     <span class="url">geoloop.tommytv.no</span>
                     <div>
                         <span class="tech">Python</span>
+                        <span class="tech">Raspberry Pi</span>
                     </div>
                 </a>
 
                 <a href="https://lo-finans.no" class="card" target="_blank">
-                    <h3>LO Finans</h3>
-                    <p>Finansportal for LO-forbundet</p>
+                    <h3><img src="https://lo-finans.no/favicon.png" alt="">LO Finans</h3>
+                    <p>Nettside for fagforeningen med medlemssystem, dokumenter, kalender og chatvegg</p>
                     <span class="url">lo-finans.no</span>
                     <div>
                         <span class="tech">Kotlin/Ktor</span>
@@ -378,29 +394,30 @@
                 </a>
 
                 <a href="https://ntfy.tommytv.no" class="card" target="_blank">
-                    <h3>Ntfy</h3>
-                    <p>Push-varslingstjeneste</p>
+                    <h3><img src="https://ntfy.tommytv.no/static/images/ntfy.png" alt="">Ntfy</h3>
+                    <p>Push-varsler til telefon og desktop via HTTP-forespørsler</p>
                     <span class="url">ntfy.tommytv.no</span>
                 </a>
 
                 <a href="https://github.com/TommySkogstad/safekeeper" class="card" target="_blank">
-                    <h3>Safekeeper</h3>
-                    <p>Backup-bibliotek - GPG-kryptert backup til NAS og Hetzner</p>
+                    <h3><img src="icons/safekeeper.svg" alt="">Safekeeper</h3>
+                    <p>Docker-image for PostgreSQL-backup med GPG-kryptering til NAS og Hetzner StorageBox</p>
                     <span class="url">github.com/TommySkogstad/safekeeper</span>
                     <div>
+                        <span class="tech">Docker</span>
                         <span class="tech">Bash</span>
                     </div>
                 </a>
 
                 <a href="https://pdf.tommytv.no" class="card" target="_blank">
-                    <h3>Stirling PDF</h3>
-                    <p>PDF-verktoy - konvertering, sammenslåing og redigering</p>
+                    <h3><img src="https://pdf.tommytv.no/favicon.svg" alt="">Stirling PDF</h3>
+                    <p>Lokal PDF-editor med 50+ verktøy for redigering, sammenslåing, konvertering og OCR</p>
                     <span class="url">pdf.tommytv.no</span>
                 </a>
 
                 <a href="https://summa.tommytv.no" class="card" target="_blank">
-                    <h3>Summa Summarum</h3>
-                    <p>Regnskaps- og okonomiverktoy</p>
+                    <h3><img src="icons/summa.svg" alt="">Summa Summarum</h3>
+                    <p>Regnskapssystem for bedrift og forening med multi-tenancy, rapporter og vedleggsparsing</p>
                     <span class="url">summa.tommytv.no</span>
                     <div>
                         <span class="tech">Kotlin/Ktor</span>
@@ -410,8 +427,8 @@
                 </a>
 
                 <a href="https://uptime.tommytv.no" class="card" target="_blank">
-                    <h3>Uptime</h3>
-                    <p>Oppetidsmonitorering for tjenester</p>
+                    <h3><img src="https://uptime.tommytv.no/icon.svg" alt="">Uptime Kuma</h3>
+                    <p>Oppetidsovervåkning for alle tjenester med varsling og statusside</p>
                     <span class="url">uptime.tommytv.no</span>
                 </a>
             </div>

@@ -20,6 +20,8 @@ services:
     volumes:
       - ./index.html:/usr/share/nginx/html/index.html:ro
       - ./bookmarks.html:/usr/share/nginx/html/bookmarks.html:ro
+      - ./logo.svg:/usr/share/nginx/html/logo.svg:ro
+      - ./icons:/usr/share/nginx/html/icons:ro
       - ./nginx.conf:/etc/nginx/nginx.conf:ro
     healthcheck:
       test: ["CMD-SHELL", "wget -q --spider http://127.0.0.1:80/ || exit 1"]
