@@ -191,6 +191,10 @@
     <header>
         <h1>TommyTV</h1>
         <p>Prosjekter og infrastruktur</p>
+        <div style="margin-top:1rem; display:flex; gap:0.75rem; justify-content:center; flex-wrap:wrap;">
+            <a id="lan-toggle" href="http://nuc.tommy.tv:8880" style="display:inline-block; padding:0.5rem 1.2rem; background:#1e3a5f; color:#7dd3fc; border-radius:8px; text-decoration:none; font-size:0.9rem; border:1px solid #334155; transition: border-color 0.2s;">Bytt til LAN-versjon</a>
+            <a href="bookmarks.html" style="display:inline-block; padding:0.5rem 1.2rem; background:#1e293b; color:#94a3b8; border-radius:8px; text-decoration:none; font-size:0.9rem; border:1px solid #334155; transition: border-color 0.2s;">Bokmerker</a>
+        </div>
     </header>
 
     <main>
@@ -220,57 +224,7 @@
             </div>
         </section>
 
-        <section class="section">
-            <div class="section-header">
-                <h2>Eksterne tjenester</h2>
-                <span class="badge badge-public">Internett</span>
-            </div>
-            <div class="grid">
-                <a href="https://claude.ai" class="card" target="_blank">
-                    <h3>Claude Chat</h3>
-                    <p>AI-assistent</p>
-                    <span class="url">claude.ai</span>
-                </a>
-
-                <a href="https://console.anthropic.com" class="card" target="_blank">
-                    <h3>Claude API</h3>
-                    <p>API-konsoll og administrasjon</p>
-                    <span class="url">console.anthropic.com</span>
-                </a>
-
-                <a href="https://dash.cloudflare.com" class="card" target="_blank">
-                    <h3>Cloudflare</h3>
-                    <p>DNS, tunneler og sikkerhet</p>
-                    <span class="url">dash.cloudflare.com</span>
-                </a>
-
-                <a href="https://github.com/TommySkogstad" class="card" target="_blank">
-                    <h3>GitHub</h3>
-                    <p>Kildekode og repositories</p>
-                    <span class="url">github.com/TommySkogstad</span>
-                </a>
-
-                <a href="https://robot.hetzner.com" class="card" target="_blank">
-                    <h3>Hetzner</h3>
-                    <p>StorageBox og offsite backup</p>
-                    <span class="url">robot.hetzner.com</span>
-                </a>
-
-                <a href="https://lastpass.com/vault" class="card" target="_blank">
-                    <h3>LastPass</h3>
-                    <p>Passordadministrasjon</p>
-                    <span class="url">lastpass.com</span>
-                </a>
-
-                <a href="https://unifi.ui.com" class="card" target="_blank">
-                    <h3>UniFi</h3>
-                    <p>Nettverksadministrasjon</p>
-                    <span class="url">unifi.ui.com</span>
-                </a>
-            </div>
-        </section>
-
-        <section class="section" id="local-section" style="display: none;">
+        <section class="section local-section" style="display: none;">
             <div class="section-header">
                 <h2>Lokalt nettverk</h2>
                 <span class="badge badge-local">LAN</span>
@@ -498,15 +452,13 @@
                 cards.forEach(function(c) { grid.appendChild(c); });
             });
 
-            // Vis lokalt nettverk-seksjonen hvis på LAN
-            // Portainer (port 9999) er unik for hjemmenettverket
-            var img = new Image();
-            var timeout = setTimeout(function() { img.src = ''; }, 2000);
-            img.onload = img.onerror = function() {
-                clearTimeout(timeout);
-                document.getElementById('local-section').style.display = '';
-            };
-            img.src = 'http://192.168.1.87:9999/favicon.ico?' + Date.now();
+            // Vis LAN-seksjonene hvis vi er på lokal adresse
+            if (location.hostname !== 'tommytv.no') {
+                document.querySelectorAll('.local-section').forEach(function(s) {
+                    s.style.display = '';
+                });
+                document.getElementById('lan-toggle').style.display = 'none';
+            }
         })();
     </script>
 </body>

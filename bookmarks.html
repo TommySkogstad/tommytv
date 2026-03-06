@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="no">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TommyTV - Bokmerker</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #0f172a;
+            color: #e2e8f0;
+            min-height: 100vh;
+        }
+
+        header {
+            text-align: center;
+            padding: 3rem 1rem 2rem;
+        }
+
+        header h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: #f8fafc;
+            letter-spacing: -0.5px;
+        }
+
+        header p {
+            color: #94a3b8;
+            margin-top: 0.5rem;
+            font-size: 1.1rem;
+        }
+
+        main {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 0 1rem 3rem;
+        }
+
+        .section {
+            margin-bottom: 2.5rem;
+        }
+
+        .section-header {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 1px solid #1e293b;
+        }
+
+        .section-header h2 {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: #f1f5f9;
+        }
+
+        .badge {
+            font-size: 0.7rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            padding: 0.2rem 0.6rem;
+            border-radius: 9999px;
+        }
+
+        .badge-public {
+            background: #065f46;
+            color: #6ee7b7;
+        }
+
+        .badge-local {
+            background: #1e3a5f;
+            color: #7dd3fc;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+            gap: 1rem;
+        }
+
+        .card {
+            background: #1e293b;
+            border: 1px solid #334155;
+            border-radius: 12px;
+            padding: 1.5rem;
+            transition: border-color 0.2s, transform 0.2s;
+            text-decoration: none;
+            color: inherit;
+            display: block;
+        }
+
+        .card:hover {
+            border-color: #60a5fa;
+            transform: translateY(-2px);
+        }
+
+        .card h3 {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #f8fafc;
+            margin-bottom: 0.4rem;
+        }
+
+        .card p {
+            font-size: 0.9rem;
+            color: #94a3b8;
+            margin-bottom: 0.75rem;
+            line-height: 1.4;
+        }
+
+        .card .url {
+            font-size: 0.8rem;
+            color: #60a5fa;
+            word-break: break-all;
+        }
+
+        footer {
+            text-align: center;
+            padding: 2rem 1rem;
+            color: #475569;
+            font-size: 0.85rem;
+            border-top: 1px solid #1e293b;
+        }
+
+        @media (max-width: 600px) {
+            header h1 {
+                font-size: 1.8rem;
+            }
+
+            .grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Bokmerker</h1>
+        <p>Eksterne tjenester og lenker</p>
+        <div style="margin-top:1rem;">
+            <a href="/" style="display:inline-block; padding:0.5rem 1.2rem; background:#1e293b; color:#94a3b8; border-radius:8px; text-decoration:none; font-size:0.9rem; border:1px solid #334155; transition: border-color 0.2s;">Tilbake til dashboard</a>
+        </div>
+    </header>
+
+    <main>
+        <section class="section">
+            <div class="section-header">
+                <h2>Administrasjon</h2>
+                <span class="badge badge-public">Internett</span>
+            </div>
+            <div class="grid">
+                <a href="https://claude.ai" class="card" target="_blank">
+                    <h3>Claude Chat</h3>
+                    <p>AI-assistent</p>
+                    <span class="url">claude.ai</span>
+                </a>
+
+                <a href="https://console.anthropic.com" class="card" target="_blank">
+                    <h3>Claude API</h3>
+                    <p>API-konsoll og administrasjon</p>
+                    <span class="url">console.anthropic.com</span>
+                </a>
+
+                <a href="https://dash.cloudflare.com" class="card" target="_blank">
+                    <h3>Cloudflare</h3>
+                    <p>DNS, tunneler og sikkerhet</p>
+                    <span class="url">dash.cloudflare.com</span>
+                </a>
+
+                <a href="https://github.com/TommySkogstad" class="card" target="_blank">
+                    <h3>GitHub</h3>
+                    <p>Kildekode og repositories</p>
+                    <span class="url">github.com/TommySkogstad</span>
+                </a>
+
+                <a href="https://robot.hetzner.com" class="card" target="_blank">
+                    <h3>Hetzner</h3>
+                    <p>StorageBox og offsite backup</p>
+                    <span class="url">robot.hetzner.com</span>
+                </a>
+
+                <a href="https://lastpass.com/vault" class="card" target="_blank">
+                    <h3>LastPass</h3>
+                    <p>Passordadministrasjon</p>
+                    <span class="url">lastpass.com</span>
+                </a>
+
+                <a href="https://unifi.ui.com" class="card" target="_blank">
+                    <h3>UniFi</h3>
+                    <p>Nettverksadministrasjon</p>
+                    <span class="url">unifi.ui.com</span>
+                </a>
+            </div>
+        </section>
+
+        <section class="section local-section" style="display: none;">
+            <div class="section-header">
+                <h2>3D-printing</h2>
+                <span class="badge badge-local">LAN</span>
+            </div>
+            <div class="grid">
+                <a href="https://makerworld.com/en" class="card" target="_blank">
+                    <h3>MakerWorld</h3>
+                    <p>3D-modeller og fellesskap</p>
+                    <span class="url">makerworld.com</span>
+                </a>
+
+                <a href="https://www.tinkercad.com" class="card" target="_blank">
+                    <h3>Tinkercad</h3>
+                    <p>3D-design i nettleseren</p>
+                    <span class="url">tinkercad.com</span>
+                </a>
+            </div>
+        </section>
+
+        <section class="section local-section" style="display: none;">
+            <div class="section-header">
+                <h2>Nedlasting</h2>
+                <span class="badge badge-local">LAN</span>
+            </div>
+            <div class="grid">
+                <a href="https://www.iptorrents.com" class="card" target="_blank">
+                    <h3>IPTorrents</h3>
+                    <p>Privat torrent-tracker</p>
+                    <span class="url">iptorrents.com</span>
+                </a>
+
+                <a href="https://sub-scene.com" class="card" target="_blank">
+                    <h3>Subscene</h3>
+                    <p>Undertekster for film og TV</p>
+                    <span class="url">sub-scene.com</span>
+                </a>
+            </div>
+        </section>
+
+        <section class="section local-section" style="display: none;">
+            <div class="section-header">
+                <h2>Produktivitet og planlegging</h2>
+                <span class="badge badge-local">LAN</span>
+            </div>
+            <div class="grid">
+                <a href="https://miro.com" class="card" target="_blank">
+                    <h3>Miro</h3>
+                    <p>Digitalt whiteboard og samarbeid</p>
+                    <span class="url">miro.com</span>
+                </a>
+            </div>
+        </section>
+
+        <section class="section local-section" style="display: none;">
+            <div class="section-header">
+                <h2>Reise</h2>
+                <span class="badge badge-local">LAN</span>
+            </div>
+            <div class="grid">
+                <a href="https://awardfares.com" class="card" target="_blank">
+                    <h3>AwardFares</h3>
+                    <p>Bonusreiser og poengsoking</p>
+                    <span class="url">awardfares.com</span>
+                </a>
+
+                <a href="https://www.sas.no" class="card" target="_blank">
+                    <h3>SAS</h3>
+                    <p>Flybestilling og EuroBonus</p>
+                    <span class="url">sas.no</span>
+                </a>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div>TommyTV &copy; 2026</div>
+    </footer>
+    <script>
+        (function() {
+            // Sorter seksjoner alfabetisk etter h2-tittel
+            var main = document.querySelector('main');
+            var sections = Array.from(main.querySelectorAll('.section'));
+            sections.sort(function(a, b) {
+                var titleA = a.querySelector('h2').textContent.toLowerCase();
+                var titleB = b.querySelector('h2').textContent.toLowerCase();
+                return titleA.localeCompare(titleB, 'no');
+            });
+            sections.forEach(function(s) { main.appendChild(s); });
+
+            // Sorter kort innad i hver seksjon alfabetisk etter h3-tittel
+            document.querySelectorAll('.grid').forEach(function(grid) {
+                var cards = Array.from(grid.children);
+                cards.sort(function(a, b) {
+                    var nameA = a.querySelector('h3').textContent.toLowerCase();
+                    var nameB = b.querySelector('h3').textContent.toLowerCase();
+                    return nameA.localeCompare(nameB, 'no');
+                });
+                cards.forEach(function(c) { grid.appendChild(c); });
+            });
+
+            // Vis LAN-seksjonene hvis vi er på lokal adresse
+            if (location.hostname !== 'tommytv.no') {
+                document.querySelectorAll('.local-section').forEach(function(s) {
+                    s.style.display = '';
+                });
+            }
+        })();
+    </script>
+</body>
+</html>
