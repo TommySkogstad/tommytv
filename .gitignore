@@ -1,1 +1,1 @@
-.env
+# .env håndteres av git-crypt (se .gitattributes)
