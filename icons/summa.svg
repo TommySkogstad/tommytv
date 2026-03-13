@@ -1,6 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 40 40">
-  <rect width="40" height="40" rx="8" fill="#0f172a"/>
-  <rect x="6" y="6" width="28" height="28" rx="4" fill="#4c1d95"/>
-  <text x="13" y="27" font-family="serif" font-size="20" font-weight="700" fill="#c4b5fd" text-anchor="middle">Σ</text>
-  <text x="28" y="27" font-family="serif" font-size="20" font-weight="700" fill="#a78bfa" text-anchor="middle">$</text>
+  <rect width="40" height="40" rx="8" fill="#0d1b2a"/>
+  <rect x="6" y="6" width="28" height="28" rx="4" fill="#1b2d42"/>
+  <text x="13" y="27" font-family="'DM Mono', serif" font-size="20" font-weight="700" fill="#b8cad8" text-anchor="middle">Σ</text>
+  <text x="28" y="27" font-family="'DM Mono', serif" font-size="20" font-weight="700" fill="#7a96b0" text-anchor="middle">$</text>
 </svg>

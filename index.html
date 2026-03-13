@@ -4,7 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="icon" type="image/svg+xml" href="/favicon.svg">
-    <title>TommyTV - Dashboard</title>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@300;400;500&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500&display=swap" rel="stylesheet">
+    <title>Tommy Skogstad — Dashboard</title>
     <style>
         * {
             margin: 0;
@@ -13,9 +14,9 @@
         }
 
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            background: #0f172a;
-            color: #e2e8f0;
+            font-family: 'DM Sans', sans-serif;
+            background: #0d1b2a;
+            color: #b8cad8;
             min-height: 100vh;
         }
 
@@ -24,15 +25,8 @@
             padding: 3rem 1rem 2rem;
         }
 
-        header h1 {
-            font-size: 2.5rem;
-            font-weight: 700;
-            color: #f8fafc;
-            letter-spacing: -0.5px;
-        }
-
         header p {
-            color: #94a3b8;
+            color: #7a96b0;
             margin-top: 0.5rem;
             font-size: 1.1rem;
         }
@@ -53,20 +47,21 @@
             gap: 0.75rem;
             margin-bottom: 1rem;
             padding-bottom: 0.5rem;
-            border-bottom: 1px solid #1e293b;
+            border-bottom: 1px solid #1b2d42;
         }
 
         .section-header h2 {
             font-size: 1.25rem;
-            font-weight: 600;
-            color: #f1f5f9;
+            font-weight: 500;
+            color: #f4f5f2;
         }
 
         .badge {
-            font-size: 0.7rem;
-            font-weight: 600;
+            font-family: 'DM Mono', monospace;
+            font-size: 0.65rem;
+            font-weight: 400;
             text-transform: uppercase;
-            letter-spacing: 0.05em;
+            letter-spacing: 0.1em;
             padding: 0.2rem 0.6rem;
             border-radius: 9999px;
         }
@@ -77,8 +72,8 @@
         }
 
         .badge-local {
-            background: #1e3a5f;
-            color: #7dd3fc;
+            background: #1b2d42;
+            color: #7a96b0;
         }
 
         .grid {
@@ -88,8 +83,8 @@
         }
 
         .card {
-            background: #1e293b;
-            border: 1px solid #334155;
+            background: #1b2d42;
+            border: 1px solid #2e4260;
             border-radius: 12px;
             padding: 1.5rem;
             transition: border-color 0.2s, transform 0.2s;
@@ -99,14 +94,14 @@
         }
 
         .card:hover {
-            border-color: #60a5fa;
+            border-color: #7a96b0;
             transform: translateY(-2px);
         }
 
         .card h3 {
             font-size: 1.1rem;
-            font-weight: 600;
-            color: #f8fafc;
+            font-weight: 500;
+            color: #f4f5f2;
             margin-bottom: 0.4rem;
             display: flex;
             align-items: center;
@@ -121,26 +116,29 @@
 
         .card p {
             font-size: 0.9rem;
-            color: #94a3b8;
+            color: #7a96b0;
             margin-bottom: 0.75rem;
             line-height: 1.4;
         }
 
         .card .url {
+            font-family: 'DM Mono', monospace;
             font-size: 0.8rem;
-            color: #60a5fa;
+            color: #b8cad8;
             word-break: break-all;
         }
 
         .card .tech {
             display: inline-block;
-            font-size: 0.7rem;
-            background: #0f172a;
-            color: #94a3b8;
+            font-family: 'DM Mono', monospace;
+            font-size: 0.65rem;
+            background: #0d1b2a;
+            color: #7a96b0;
             padding: 0.15rem 0.5rem;
             border-radius: 4px;
             margin-top: 0.5rem;
             margin-right: 0.25rem;
+            letter-spacing: 0.02em;
         }
 
         .ssh-cmd {
@@ -148,12 +146,12 @@
             align-items: center;
             gap: 0.5rem;
             margin-top: 0.75rem;
-            background: #0f172a;
+            background: #0d1b2a;
             border-radius: 6px;
             padding: 0.4rem 0.6rem;
-            font-family: 'SF Mono', 'Fira Code', 'Consolas', monospace;
+            font-family: 'DM Mono', monospace;
             font-size: 0.8rem;
-            color: #a5b4fc;
+            color: #b8cad8;
         }
 
         .ssh-cmd code {
@@ -163,34 +161,39 @@
 
         .ssh-cmd button {
             background: none;
-            border: 1px solid #334155;
+            border: 1px solid #2e4260;
             border-radius: 4px;
-            color: #94a3b8;
+            color: #7a96b0;
             cursor: pointer;
             padding: 0.2rem 0.5rem;
+            font-family: 'DM Mono', monospace;
             font-size: 0.7rem;
             transition: color 0.2s, border-color 0.2s;
             white-space: nowrap;
         }
 
         .ssh-cmd button:hover {
-            color: #e2e8f0;
-            border-color: #60a5fa;
+            color: #f4f5f2;
+            border-color: #7a96b0;
         }
 
         footer {
             text-align: center;
             padding: 2rem 1rem;
-            color: #475569;
+            color: #4a6080;
             font-size: 0.85rem;
-            border-top: 1px solid #1e293b;
+            border-top: 1px solid #1b2d42;
+        }
+
+        footer a {
+            transition: color 0.2s;
+        }
+
+        footer a:hover {
+            color: #f4f5f2;
         }
 
         @media (max-width: 600px) {
-            header h1 {
-                font-size: 1.8rem;
-            }
-
             .grid {
                 grid-template-columns: 1fr;
             }
@@ -199,11 +202,10 @@
 </head>
 <body>
     <header>
-        <img src="logo.svg" alt="TommyTV" style="height:3rem;">
-        <p>Prosjekter og infrastruktur</p>
+        <img src="logo.svg" alt="Tommy Skogstad" style="height:3.5rem;">
         <div style="margin-top:1rem; display:flex; gap:0.75rem; justify-content:center; flex-wrap:wrap;">
-            <a id="lan-toggle" href="http://nuc.tommy.tv:8880" style="display:inline-block; padding:0.5rem 1.2rem; background:#1e3a5f; color:#7dd3fc; border-radius:8px; text-decoration:none; font-size:0.9rem; border:1px solid #334155; transition: border-color 0.2s;">Bytt til LAN-versjon</a>
-            <a href="bookmarks.html" style="display:inline-block; padding:0.5rem 1.2rem; background:#1e293b; color:#94a3b8; border-radius:8px; text-decoration:none; font-size:0.9rem; border:1px solid #334155; transition: border-color 0.2s;">Bokmerker</a>
+            <a id="lan-toggle" href="http://nuc.tommy.tv:8880" style="display:inline-block; padding:0.5rem 1.2rem; background:#1b2d42; color:#7a96b0; border-radius:8px; text-decoration:none; font-size:0.9rem; border:1px solid #2e4260; transition: border-color 0.2s;">Bytt til LAN-versjon</a>
+            <a href="bookmarks.html" style="display:inline-block; padding:0.5rem 1.2rem; background:#1b2d42; color:#7a96b0; border-radius:8px; text-decoration:none; font-size:0.9rem; border:1px solid #2e4260; transition: border-color 0.2s;">Bokmerker</a>
         </div>
     </header>
 
@@ -560,15 +562,15 @@
 
     <footer>
         <div style="margin-bottom: 1rem;">
-            <strong style="color: #f1f5f9;">Tommy Skogstad</strong>
+            <strong style="color: #f4f5f2;">Tommy Skogstad</strong>
         </div>
         <div style="display: flex; justify-content: center; gap: 1.5rem; flex-wrap: wrap; margin-bottom: 1rem;">
-            <a href="tel:+4748061560" target="_blank" style="color: #94a3b8; text-decoration: none;">48 06 15 60</a>
-            <a href="mailto:tommyskogstad@gmail.com" target="_blank" style="color: #94a3b8; text-decoration: none;">tommyskogstad@gmail.com</a>
-            <a href="https://www.linkedin.com/in/tommy-skogstad-79b04864/" target="_blank" style="color: #60a5fa; text-decoration: none;">LinkedIn</a>
-            <a href="https://github.com/TommySkogstad" target="_blank" style="color: #60a5fa; text-decoration: none;">GitHub</a>
+            <a href="tel:+4748061560" target="_blank" style="color: #7a96b0; text-decoration: none;">48 06 15 60</a>
+            <a href="mailto:tommyskogstad@gmail.com" target="_blank" style="color: #7a96b0; text-decoration: none;">tommyskogstad@gmail.com</a>
+            <a href="https://www.linkedin.com/in/tommy-skogstad-79b04864/" target="_blank" style="color: #b8cad8; text-decoration: none;">LinkedIn</a>
+            <a href="https://github.com/TommySkogstad" target="_blank" style="color: #b8cad8; text-decoration: none;">GitHub</a>
         </div>
-        <div>TommyTV &copy; 2026</div>
+        <div style="font-family: 'DM Mono', monospace; font-size: 0.75rem; letter-spacing: 0.1em;">Tommy Skogstad &copy; 2026</div>
     </footer>
     <script>
         (function() {

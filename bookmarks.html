@@ -4,7 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="icon" type="image/svg+xml" href="/favicon.svg">
-    <title>TommyTV - Bokmerker</title>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@300;400;500&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500&display=swap" rel="stylesheet">
+    <title>Tommy Skogstad — Bokmerker</title>
     <style>
         * {
             margin: 0;
@@ -13,9 +14,9 @@
         }
 
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            background: #0f172a;
-            color: #e2e8f0;
+            font-family: 'DM Sans', sans-serif;
+            background: #0d1b2a;
+            color: #b8cad8;
             min-height: 100vh;
         }
 
@@ -24,15 +25,8 @@
             padding: 3rem 1rem 2rem;
         }
 
-        header h1 {
-            font-size: 2.5rem;
-            font-weight: 700;
-            color: #f8fafc;
-            letter-spacing: -0.5px;
-        }
-
         header p {
-            color: #94a3b8;
+            color: #7a96b0;
             margin-top: 0.5rem;
             font-size: 1.1rem;
         }
@@ -53,20 +47,21 @@
             gap: 0.75rem;
             margin-bottom: 1rem;
             padding-bottom: 0.5rem;
-            border-bottom: 1px solid #1e293b;
+            border-bottom: 1px solid #1b2d42;
         }
 
         .section-header h2 {
             font-size: 1.25rem;
-            font-weight: 600;
-            color: #f1f5f9;
+            font-weight: 500;
+            color: #f4f5f2;
         }
 
         .badge {
-            font-size: 0.7rem;
-            font-weight: 600;
+            font-family: 'DM Mono', monospace;
+            font-size: 0.65rem;
+            font-weight: 400;
             text-transform: uppercase;
-            letter-spacing: 0.05em;
+            letter-spacing: 0.1em;
             padding: 0.2rem 0.6rem;
             border-radius: 9999px;
         }
@@ -77,8 +72,8 @@
         }
 
         .badge-local {
-            background: #1e3a5f;
-            color: #7dd3fc;
+            background: #1b2d42;
+            color: #7a96b0;
         }
 
         .grid {
@@ -88,8 +83,8 @@
         }
 
         .card {
-            background: #1e293b;
-            border: 1px solid #334155;
+            background: #1b2d42;
+            border: 1px solid #2e4260;
             border-radius: 12px;
             padding: 1.5rem;
             transition: border-color 0.2s, transform 0.2s;
@@ -99,14 +94,14 @@
         }
 
         .card:hover {
-            border-color: #60a5fa;
+            border-color: #7a96b0;
             transform: translateY(-2px);
         }
 
         .card h3 {
             font-size: 1.1rem;
-            font-weight: 600;
-            color: #f8fafc;
+            font-weight: 500;
+            color: #f4f5f2;
             margin-bottom: 0.4rem;
             display: flex;
             align-items: center;
@@ -121,30 +116,27 @@
 
         .card p {
             font-size: 0.9rem;
-            color: #94a3b8;
+            color: #7a96b0;
             margin-bottom: 0.75rem;
             line-height: 1.4;
         }
 
         .card .url {
+            font-family: 'DM Mono', monospace;
             font-size: 0.8rem;
-            color: #60a5fa;
+            color: #b8cad8;
             word-break: break-all;
         }
 
         footer {
             text-align: center;
             padding: 2rem 1rem;
-            color: #475569;
+            color: #4a6080;
             font-size: 0.85rem;
-            border-top: 1px solid #1e293b;
+            border-top: 1px solid #1b2d42;
         }
 
         @media (max-width: 600px) {
-            header h1 {
-                font-size: 1.8rem;
-            }
-
             .grid {
                 grid-template-columns: 1fr;
             }
@@ -153,10 +145,10 @@
 </head>
 <body>
     <header>
-        <a href="/" style="text-decoration:none;"><img src="logo.svg" alt="TommyTV" style="height:3rem;"></a>
+        <a href="/" style="text-decoration:none;"><img src="logo.svg" alt="Tommy Skogstad" style="height:3.5rem;"></a>
         <p>Eksterne tjenester og lenker</p>
         <div style="margin-top:1rem;">
-            <a href="/" style="display:inline-block; padding:0.5rem 1.2rem; background:#1e293b; color:#94a3b8; border-radius:8px; text-decoration:none; font-size:0.9rem; border:1px solid #334155; transition: border-color 0.2s;">Tilbake til dashboard</a>
+            <a href="/" style="display:inline-block; padding:0.5rem 1.2rem; background:#1b2d42; color:#7a96b0; border-radius:8px; text-decoration:none; font-size:0.9rem; border:1px solid #2e4260; transition: border-color 0.2s;">Tilbake til dashboard</a>
         </div>
     </header>
 
@@ -287,7 +279,7 @@
     </main>
 
     <footer>
-        <div>TommyTV &copy; 2026</div>
+        <div style="font-family: 'DM Mono', monospace; font-size: 0.75rem; letter-spacing: 0.1em;">Tommy Skogstad &copy; 2026</div>
     </footer>
     <script>
         (function() {
