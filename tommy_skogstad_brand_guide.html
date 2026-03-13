@@ -1,0 +1,598 @@
+<!DOCTYPE html>
+<html lang="no">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Brand Guide – Tommy Skogstad</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:ital,wght@0,300;0,400;0,500;1,300&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --navy:   #0d1b2a;
+    --blue1:  #1b2d42;
+    --blue2:  #2e4260;
+    --blue3:  #4a6080;
+    --blue4:  #7a96b0;
+    --blue5:  #b8cad8;
+    --blue6:  #e4eaf0;
+    --white:  #f4f5f2;
+    --font-sans: 'DM Sans', sans-serif;
+    --font-mono: 'DM Mono', monospace;
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { background:var(--white); color:var(--navy); font-family:var(--font-sans); font-size:15px; line-height:1.6; }
+  .page { max-width:900px; margin:0 auto; padding:64px 40px 120px; }
+
+  .header { display:flex; align-items:flex-end; justify-content:space-between; border-bottom:1px solid var(--navy); padding-bottom:20px; margin-bottom:72px; }
+  .header-label { font-family:var(--font-mono); font-size:10px; letter-spacing:0.18em; color:var(--blue3); text-transform:uppercase; }
+  .header-title { font-family:var(--font-mono); font-size:11px; letter-spacing:0.12em; color:var(--blue3); }
+
+  .section { margin-bottom:72px; }
+  .section-label { font-family:var(--font-mono); font-size:10px; letter-spacing:0.2em; color:var(--blue3); text-transform:uppercase; margin-bottom:32px; display:flex; align-items:center; gap:12px; }
+  .section-label::after { content:''; flex:1; height:1px; background:var(--blue6); }
+
+  .mark-grid { display:flex; gap:2px; align-items:stretch; }
+  .mark-cell { display:flex; flex-direction:column; align-items:center; justify-content:center; gap:14px; padding:32px 20px; flex:1; }
+  .mark-cell.bg-white  { background:var(--white); border:1px solid var(--blue6); }
+  .mark-cell.bg-navy   { background:var(--navy); }
+  .mark-cell.bg-blue6  { background:var(--blue6); }
+  .mark-cell.bg-blue2  { background:var(--blue2); }
+  .mark-label { font-family:var(--font-mono); font-size:8.5px; letter-spacing:0.12em; opacity:0.45; }
+  .mark-label.on-dark  { color:var(--white); }
+  .mark-label.on-light { color:var(--navy); }
+
+  .logo-grid { display:grid; grid-template-columns:1fr 1fr; gap:2px; }
+  .logo-cell { padding:36px 32px; display:flex; align-items:center; gap:20px; }
+  .logo-cell.bg-white { background:var(--white); border:1px solid var(--blue6); }
+  .logo-cell.bg-navy  { background:var(--navy); }
+  .logo-text-wrap { display:flex; flex-direction:column; gap:2px; }
+  .logo-name { font-family:var(--font-sans); font-weight:400; font-size:18px; letter-spacing:-0.02em; white-space:nowrap; }
+  .logo-name.on-light { color:var(--navy); }
+  .logo-name.on-dark  { color:var(--white); }
+  .logo-sep { height:1px; opacity:0.12; margin:1px 0; }
+  .logo-sub { font-family:var(--font-mono); font-size:8px; letter-spacing:0.16em; }
+  .logo-sub.on-light  { color:var(--blue3); }
+  .logo-sub.on-dark   { color:var(--blue4); }
+  .logo-tagline { font-family:var(--font-mono); font-size:8px; }
+  .logo-tagline.on-light { color:var(--blue4); }
+  .logo-tagline.on-dark  { color:var(--blue3); }
+  .logo-caption { font-family:var(--font-mono); font-size:9px; letter-spacing:0.1em; margin-top:8px; opacity:0.4; }
+  .logo-caption.on-light { color:var(--navy); }
+  .logo-caption.on-dark  { color:var(--white); }
+  .logo-cell-inner { display:flex; flex-direction:column; align-items:flex-start; }
+
+  .color-row { display:flex; gap:2px; margin-bottom:2px; }
+  .swatch { flex:1; height:88px; display:flex; flex-direction:column; justify-content:flex-end; padding:10px 12px; position:relative; }
+  .swatch-name { font-family:var(--font-mono); font-size:9px; letter-spacing:0.08em; font-weight:500; }
+  .swatch-hex  { font-family:var(--font-mono); font-size:9px; letter-spacing:0.06em; opacity:0.6; margin-top:1px; }
+  .swatch-role { font-family:var(--font-mono); font-size:8px; letter-spacing:0.1em; text-transform:uppercase; opacity:0.45; position:absolute; top:10px; left:12px; }
+
+  .type-block { margin-bottom:40px; padding-bottom:40px; border-bottom:1px solid var(--blue6); }
+  .type-block:last-child { border-bottom:none; margin-bottom:0; padding-bottom:0; }
+  .type-meta { font-family:var(--font-mono); font-size:9px; letter-spacing:0.14em; color:var(--blue3); text-transform:uppercase; margin-bottom:16px; display:flex; gap:20px; }
+  .type-specimen-large { font-family:var(--font-sans); font-weight:300; font-size:48px; letter-spacing:-0.03em; line-height:1.1; color:var(--navy); margin-bottom:12px; }
+  .type-specimen-mono  { font-family:var(--font-mono); font-size:18px; font-weight:300; letter-spacing:0.04em; color:var(--navy); margin-bottom:12px; }
+  .type-sizes { display:flex; flex-direction:column; gap:8px; margin-top:20px; }
+  .type-size-row { display:flex; align-items:baseline; gap:20px; }
+  .type-size-label { font-family:var(--font-mono); font-size:9px; color:var(--blue3); letter-spacing:0.1em; min-width:80px; }
+
+  .usage-grid { display:grid; grid-template-columns:1fr 1fr; gap:2px; }
+  .usage-card { padding:28px 28px 20px; position:relative; }
+  .usage-card.bg-white { background:var(--white); border:1px solid var(--blue6); }
+  .usage-card.bg-navy  { background:var(--navy); }
+  .usage-type { font-family:var(--font-mono); font-size:8.5px; letter-spacing:0.14em; color:var(--blue3); text-transform:uppercase; margin-bottom:18px; }
+  .usage-type.on-dark { color:var(--blue2); }
+
+  .card-sim { background:var(--white); border:1px solid var(--blue6); border-radius:4px; padding:22px 24px; width:100%; }
+  .card-sim-name { font-family:var(--font-sans); font-size:13px; font-weight:400; color:var(--navy); margin-top:14px; margin-bottom:2px; }
+  .card-sim-title { font-family:var(--font-mono); font-size:8px; letter-spacing:0.16em; color:var(--blue3); text-transform:uppercase; }
+  .card-sim-contact { font-family:var(--font-mono); font-size:8px; color:var(--blue4); margin-top:12px; line-height:1.8; }
+
+  .sig-sim { border-left:2px solid var(--blue6); padding-left:16px; }
+  .sig-name { font-family:var(--font-sans); font-size:13px; font-weight:500; color:var(--navy); margin-top:10px; margin-bottom:1px; }
+  .sig-title { font-family:var(--font-mono); font-size:8px; letter-spacing:0.14em; color:var(--blue3); text-transform:uppercase; margin-bottom:6px; }
+  .sig-detail { font-family:var(--font-mono); font-size:8px; color:var(--blue4); line-height:1.9; }
+
+  .header-sim { background:var(--navy); border-radius:3px; padding:14px 18px; display:flex; align-items:center; justify-content:space-between; }
+  .header-sim-nav { display:flex; gap:18px; }
+  .header-sim-nav span { font-family:var(--font-mono); font-size:8.5px; letter-spacing:0.1em; color:var(--blue3); }
+
+  .footer { border-top:1px solid var(--blue6); padding-top:24px; margin-top:80px; display:flex; justify-content:space-between; }
+  .footer-text { font-family:var(--font-mono); font-size:9px; letter-spacing:0.1em; color:var(--blue4); }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <div class="header">
+    <div>
+      <div class="header-label">Ingeniør Tommy Skogstad</div>
+      <div style="font-family:var(--font-sans);font-size:11px;color:var(--blue3);margin-top:3px;">Visuell identitetsguide · v1.1</div>
+    </div>
+    <div class="header-title">März 2026</div>
+  </div>
+
+  <!-- 01 LOGOMARK -->
+  <div class="section">
+    <div class="section-label">01 · Logomark</div>
+    <div class="mark-grid">
+      <div class="mark-cell bg-white">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="-14 -14 108 108" width="80" height="80">
+  <rect x="4" y="4" width="72" height="72" rx="4" fill="none" stroke="#0d1b2a" stroke-width="1.4"/>
+  <circle cx="13" cy="13" r="3" fill="none" stroke="#0d1b2a" stroke-width="0.8" opacity="0.28"/>
+  <line x1="16" y1="4" x2="16" y2="-2" stroke="#0d1b2a" stroke-width="3.5" stroke-linecap="square" opacity="0.65"/>
+  <line x1="30" y1="4" x2="30" y2="-2" stroke="#0d1b2a" stroke-width="3.5" stroke-linecap="square" opacity="0.65"/>
+  <line x1="50" y1="4" x2="50" y2="-2" stroke="#0d1b2a" stroke-width="3.5" stroke-linecap="square" opacity="0.65"/>
+  <line x1="64" y1="4" x2="64" y2="-2" stroke="#0d1b2a" stroke-width="3.5" stroke-linecap="square" opacity="0.65"/>
+  <line x1="16" y1="76" x2="16" y2="82" stroke="#0d1b2a" stroke-width="3.5" stroke-linecap="square" opacity="0.65"/>
+  <line x1="30" y1="76" x2="30" y2="82" stroke="#0d1b2a" stroke-width="3.5" stroke-linecap="square" opacity="0.65"/>
+  <line x1="50" y1="76" x2="50" y2="82" stroke="#0d1b2a" stroke-width="3.5" stroke-linecap="square" opacity="0.65"/>
+  <line x1="64" y1="76" x2="64" y2="82" stroke="#0d1b2a" stroke-width="3.5" stroke-linecap="square" opacity="0.65"/>
+  <line x1="4" y1="16" x2="-2" y2="16" stroke="#0d1b2a" stroke-width="3.5" stroke-linecap="square" opacity="0.65"/>
+  <line x1="4" y1="30" x2="-2" y2="30" stroke="#0d1b2a" stroke-width="3.5" stroke-linecap="square" opacity="0.65"/>
+  <line x1="4" y1="50" x2="-2" y2="50" stroke="#0d1b2a" stroke-width="3.5" stroke-linecap="square" opacity="0.65"/>
+  <line x1="4" y1="64" x2="-2" y2="64" stroke="#0d1b2a" stroke-width="3.5" stroke-linecap="square" opacity="0.65"/>
+  <line x1="76" y1="16" x2="82" y2="16" stroke="#0d1b2a" stroke-width="3.5" stroke-linecap="square" opacity="0.65"/>
+  <line x1="76" y1="30" x2="82" y2="30" stroke="#0d1b2a" stroke-width="3.5" stroke-linecap="square" opacity="0.65"/>
+  <line x1="76" y1="50" x2="82" y2="50" stroke="#0d1b2a" stroke-width="3.5" stroke-linecap="square" opacity="0.65"/>
+  <line x1="76" y1="64" x2="82" y2="64" stroke="#0d1b2a" stroke-width="3.5" stroke-linecap="square" opacity="0.65"/>
+  
+  <line x1="10" y1="22" x2="38" y2="22" stroke="#0d1b2a" stroke-width="4.5" stroke-linecap="round"/>
+  <line x1="24" y1="22" x2="24" y2="66" stroke="#0d1b2a" stroke-width="4.5" stroke-linecap="round"/>
+  <line x1="38" y1="22" x2="68" y2="22" stroke="#0d1b2a" stroke-width="4.5" stroke-linecap="round"/>
+  <line x1="38" y1="22" x2="38" y2="42" stroke="#0d1b2a" stroke-width="4.5" stroke-linecap="round"/>
+  <line x1="38" y1="42" x2="68" y2="42" stroke="#0d1b2a" stroke-width="4.5" stroke-linecap="round"/>
+  <line x1="68" y1="42" x2="68" y2="62" stroke="#0d1b2a" stroke-width="4.5" stroke-linecap="round"/>
+  <line x1="38" y1="62" x2="68" y2="62" stroke="#0d1b2a" stroke-width="4.5" stroke-linecap="round"/>
+  <circle cx="10" cy="22" r="5" fill="#0d1b2a"/>
+  <circle cx="24" cy="66" r="5" fill="#0d1b2a"/>
+  <circle cx="38" cy="22" r="7" fill="#0d1b2a"/>
+  <circle cx="68" cy="22" r="4" fill="#0d1b2a" opacity="0.4"/>
+  <circle cx="38" cy="42" r="4" fill="#0d1b2a" opacity="0.4"/>
+  <circle cx="68" cy="42" r="4" fill="#0d1b2a" opacity="0.4"/>
+  <circle cx="68" cy="62" r="4" fill="#0d1b2a" opacity="0.4"/>
+  <circle cx="38" cy="62" r="5" fill="#0d1b2a"/>
+</svg>
+        <div class="mark-label on-light">Lys bakgrunn</div>
+      </div>
+      <div class="mark-cell bg-navy">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="-14 -14 108 108" width="80" height="80">
+  <rect x="4" y="4" width="72" height="72" rx="4" fill="#0d1b2a" />
+  <circle cx="13" cy="13" r="3" fill="none" stroke="#f4f5f2" stroke-width="0.8" opacity="0.25"/>
+  <line x1="16" y1="4" x2="16" y2="-2" stroke="#0d1b2a" stroke-width="3.5" stroke-linecap="square" opacity="0.65"/>
+  <line x1="30" y1="4" x2="30" y2="-2" stroke="#0d1b2a" stroke-width="3.5" stroke-linecap="square" opacity="0.65"/>
+  <line x1="50" y1="4" x2="50" y2="-2" stroke="#0d1b2a" stroke-width="3.5" stroke-linecap="square" opacity="0.65"/>
+  <line x1="64" y1="4" x2="64" y2="-2" stroke="#0d1b2a" stroke-width="3.5" stroke-linecap="square" opacity="0.65"/>
+  <line x1="16" y1="76" x2="16" y2="82" stroke="#0d1b2a" stroke-width="3.5" stroke-linecap="square" opacity="0.65"/>
+  <line x1="30" y1="76" x2="30" y2="82" stroke="#0d1b2a" stroke-width="3.5" stroke-linecap="square" opacity="0.65"/>
+  <line x1="50" y1="76" x2="50" y2="82" stroke="#0d1b2a" stroke-width="3.5" stroke-linecap="square" opacity="0.65"/>
+  <line x1="64" y1="76" x2="64" y2="82" stroke="#0d1b2a" stroke-width="3.5" stroke-linecap="square" opacity="0.65"/>
+  <line x1="4" y1="16" x2="-2" y2="16" stroke="#0d1b2a" stroke-width="3.5" stroke-linecap="square" opacity="0.65"/>
+  <line x1="4" y1="30" x2="-2" y2="30" stroke="#0d1b2a" stroke-width="3.5" stroke-linecap="square" opacity="0.65"/>
+  <line x1="4" y1="50" x2="-2" y2="50" stroke="#0d1b2a" stroke-width="3.5" stroke-linecap="square" opacity="0.65"/>
+  <line x1="4" y1="64" x2="-2" y2="64" stroke="#0d1b2a" stroke-width="3.5" stroke-linecap="square" opacity="0.65"/>
+  <line x1="76" y1="16" x2="82" y2="16" stroke="#0d1b2a" stroke-width="3.5" stroke-linecap="square" opacity="0.65"/>
+  <line x1="76" y1="30" x2="82" y2="30" stroke="#0d1b2a" stroke-width="3.5" stroke-linecap="square" opacity="0.65"/>
+  <line x1="76" y1="50" x2="82" y2="50" stroke="#0d1b2a" stroke-width="3.5" stroke-linecap="square" opacity="0.65"/>
+  <line x1="76" y1="64" x2="82" y2="64" stroke="#0d1b2a" stroke-width="3.5" stroke-linecap="square" opacity="0.65"/>
+  
+  <line x1="10" y1="22" x2="38" y2="22" stroke="#f4f5f2" stroke-width="4.5" stroke-linecap="round"/>
+  <line x1="24" y1="22" x2="24" y2="66" stroke="#f4f5f2" stroke-width="4.5" stroke-linecap="round"/>
+  <line x1="38" y1="22" x2="68" y2="22" stroke="#f4f5f2" stroke-width="4.5" stroke-linecap="round"/>
+  <line x1="38" y1="22" x2="38" y2="42" stroke="#f4f5f2" stroke-width="4.5" stroke-linecap="round"/>
+  <line x1="38" y1="42" x2="68" y2="42" stroke="#f4f5f2" stroke-width="4.5" stroke-linecap="round"/>
+  <line x1="68" y1="42" x2="68" y2="62" stroke="#f4f5f2" stroke-width="4.5" stroke-linecap="round"/>
+  <line x1="38" y1="62" x2="68" y2="62" stroke="#f4f5f2" stroke-width="4.5" stroke-linecap="round"/>
+  <circle cx="10" cy="22" r="5" fill="#f4f5f2"/>
+  <circle cx="24" cy="66" r="5" fill="#f4f5f2"/>
+  <circle cx="38" cy="22" r="7" fill="#f4f5f2"/>
+  <circle cx="68" cy="22" r="4" fill="#f4f5f2" opacity="0.4"/>
+  <circle cx="38" cy="42" r="4" fill="#f4f5f2" opacity="0.4"/>
+  <circle cx="68" cy="42" r="4" fill="#f4f5f2" opacity="0.4"/>
+  <circle cx="68" cy="62" r="4" fill="#f4f5f2" opacity="0.4"/>
+  <circle cx="38" cy="62" r="5" fill="#f4f5f2"/>
+</svg>
+        <div class="mark-label on-dark">Mørk / Navy</div>
+      </div>
+      <div class="mark-cell bg-blue6">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="-14 -14 108 108" width="56" height="56">
+  <rect x="4" y="4" width="72" height="72" rx="4" fill="none" stroke="#0d1b2a" stroke-width="1.4"/>
+  <circle cx="13" cy="13" r="3" fill="none" stroke="#0d1b2a" stroke-width="0.8" opacity="0.28"/>
+  <line x1="16" y1="4" x2="16" y2="-2" stroke="#0d1b2a" stroke-width="3.5" stroke-linecap="square" opacity="0.65"/>
+  <line x1="30" y1="4" x2="30" y2="-2" stroke="#0d1b2a" stroke-width="3.5" stroke-linecap="square" opacity="0.65"/>
+  <line x1="50" y1="4" x2="50" y2="-2" stroke="#0d1b2a" stroke-width="3.5" stroke-linecap="square" opacity="0.65"/>
+  <line x1="64" y1="4" x2="64" y2="-2" stroke="#0d1b2a" stroke-width="3.5" stroke-linecap="square" opacity="0.65"/>
+  <line x1="16" y1="76" x2="16" y2="82" stroke="#0d1b2a" stroke-width="3.5" stroke-linecap="square" opacity="0.65"/>
+  <line x1="30" y1="76" x2="30" y2="82" stroke="#0d1b2a" stroke-width="3.5" stroke-linecap="square" opacity="0.65"/>
+  <line x1="50" y1="76" x2="50" y2="82" stroke="#0d1b2a" stroke-width="3.5" stroke-linecap="square" opacity="0.65"/>
+  <line x1="64" y1="76" x2="64" y2="82" stroke="#0d1b2a" stroke-width="3.5" stroke-linecap="square" opacity="0.65"/>
+  <line x1="4" y1="16" x2="-2" y2="16" stroke="#0d1b2a" stroke-width="3.5" stroke-linecap="square" opacity="0.65"/>
+  <line x1="4" y1="30" x2="-2" y2="30" stroke="#0d1b2a" stroke-width="3.5" stroke-linecap="square" opacity="0.65"/>
+  <line x1="4" y1="50" x2="-2" y2="50" stroke="#0d1b2a" stroke-width="3.5" stroke-linecap="square" opacity="0.65"/>
+  <line x1="4" y1="64" x2="-2" y2="64" stroke="#0d1b2a" stroke-width="3.5" stroke-linecap="square" opacity="0.65"/>
+  <line x1="76" y1="16" x2="82" y2="16" stroke="#0d1b2a" stroke-width="3.5" stroke-linecap="square" opacity="0.65"/>
+  <line x1="76" y1="30" x2="82" y2="30" stroke="#0d1b2a" stroke-width="3.5" stroke-linecap="square" opacity="0.65"/>
+  <line x1="76" y1="50" x2="82" y2="50" stroke="#0d1b2a" stroke-width="3.5" stroke-linecap="square" opacity="0.65"/>
+  <line x1="76" y1="64" x2="82" y2="64" stroke="#0d1b2a" stroke-width="3.5" stroke-linecap="square" opacity="0.65"/>
+  
+  <line x1="10" y1="22" x2="38" y2="22" stroke="#0d1b2a" stroke-width="4.5" stroke-linecap="round"/>
+  <line x1="24" y1="22" x2="24" y2="66" stroke="#0d1b2a" stroke-width="4.5" stroke-linecap="round"/>
+  <line x1="38" y1="22" x2="68" y2="22" stroke="#0d1b2a" stroke-width="4.5" stroke-linecap="round"/>
+  <line x1="38" y1="22" x2="38" y2="42" stroke="#0d1b2a" stroke-width="4.5" stroke-linecap="round"/>
+  <line x1="38" y1="42" x2="68" y2="42" stroke="#0d1b2a" stroke-width="4.5" stroke-linecap="round"/>
+  <line x1="68" y1="42" x2="68" y2="62" stroke="#0d1b2a" stroke-width="4.5" stroke-linecap="round"/>
+  <line x1="38" y1="62" x2="68" y2="62" stroke="#0d1b2a" stroke-width="4.5" stroke-linecap="round"/>
+  <circle cx="10" cy="22" r="5" fill="#0d1b2a"/>
+  <circle cx="24" cy="66" r="5" fill="#0d1b2a"/>
+  <circle cx="38" cy="22" r="7" fill="#0d1b2a"/>
+  <circle cx="68" cy="22" r="4" fill="#0d1b2a" opacity="0.4"/>
+  <circle cx="38" cy="42" r="4" fill="#0d1b2a" opacity="0.4"/>
+  <circle cx="68" cy="42" r="4" fill="#0d1b2a" opacity="0.4"/>
+  <circle cx="68" cy="62" r="4" fill="#0d1b2a" opacity="0.4"/>
+  <circle cx="38" cy="62" r="5" fill="#0d1b2a"/>
+</svg>
+        <div class="mark-label on-light">Blågrå bakgrunn</div>
+      </div>
+      <div class="mark-cell bg-blue2">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="-14 -14 108 108" width="56" height="56">
+  <rect x="4" y="4" width="72" height="72" rx="4" fill="#2e4260" />
+  <circle cx="13" cy="13" r="3" fill="none" stroke="#f4f5f2" stroke-width="0.8" opacity="0.25"/>
+  <line x1="16" y1="4" x2="16" y2="-2" stroke="#2e4260" stroke-width="3.5" stroke-linecap="square" opacity="0.65"/>
+  <line x1="30" y1="4" x2="30" y2="-2" stroke="#2e4260" stroke-width="3.5" stroke-linecap="square" opacity="0.65"/>
+  <line x1="50" y1="4" x2="50" y2="-2" stroke="#2e4260" stroke-width="3.5" stroke-linecap="square" opacity="0.65"/>
+  <line x1="64" y1="4" x2="64" y2="-2" stroke="#2e4260" stroke-width="3.5" stroke-linecap="square" opacity="0.65"/>
+  <line x1="16" y1="76" x2="16" y2="82" stroke="#2e4260" stroke-width="3.5" stroke-linecap="square" opacity="0.65"/>
+  <line x1="30" y1="76" x2="30" y2="82" stroke="#2e4260" stroke-width="3.5" stroke-linecap="square" opacity="0.65"/>
+  <line x1="50" y1="76" x2="50" y2="82" stroke="#2e4260" stroke-width="3.5" stroke-linecap="square" opacity="0.65"/>
+  <line x1="64" y1="76" x2="64" y2="82" stroke="#2e4260" stroke-width="3.5" stroke-linecap="square" opacity="0.65"/>
+  <line x1="4" y1="16" x2="-2" y2="16" stroke="#2e4260" stroke-width="3.5" stroke-linecap="square" opacity="0.65"/>
+  <line x1="4" y1="30" x2="-2" y2="30" stroke="#2e4260" stroke-width="3.5" stroke-linecap="square" opacity="0.65"/>
+  <line x1="4" y1="50" x2="-2" y2="50" stroke="#2e4260" stroke-width="3.5" stroke-linecap="square" opacity="0.65"/>
+  <line x1="4" y1="64" x2="-2" y2="64" stroke="#2e4260" stroke-width="3.5" stroke-linecap="square" opacity="0.65"/>
+  <line x1="76" y1="16" x2="82" y2="16" stroke="#2e4260" stroke-width="3.5" stroke-linecap="square" opacity="0.65"/>
+  <line x1="76" y1="30" x2="82" y2="30" stroke="#2e4260" stroke-width="3.5" stroke-linecap="square" opacity="0.65"/>
+  <line x1="76" y1="50" x2="82" y2="50" stroke="#2e4260" stroke-width="3.5" stroke-linecap="square" opacity="0.65"/>
+  <line x1="76" y1="64" x2="82" y2="64" stroke="#2e4260" stroke-width="3.5" stroke-linecap="square" opacity="0.65"/>
+  
+  <line x1="10" y1="22" x2="38" y2="22" stroke="#f4f5f2" stroke-width="4.5" stroke-linecap="round"/>
+  <line x1="24" y1="22" x2="24" y2="66" stroke="#f4f5f2" stroke-width="4.5" stroke-linecap="round"/>
+  <line x1="38" y1="22" x2="68" y2="22" stroke="#f4f5f2" stroke-width="4.5" stroke-linecap="round"/>
+  <line x1="38" y1="22" x2="38" y2="42" stroke="#f4f5f2" stroke-width="4.5" stroke-linecap="round"/>
+  <line x1="38" y1="42" x2="68" y2="42" stroke="#f4f5f2" stroke-width="4.5" stroke-linecap="round"/>
+  <line x1="68" y1="42" x2="68" y2="62" stroke="#f4f5f2" stroke-width="4.5" stroke-linecap="round"/>
+  <line x1="38" y1="62" x2="68" y2="62" stroke="#f4f5f2" stroke-width="4.5" stroke-linecap="round"/>
+  <circle cx="10" cy="22" r="5" fill="#f4f5f2"/>
+  <circle cx="24" cy="66" r="5" fill="#f4f5f2"/>
+  <circle cx="38" cy="22" r="7" fill="#f4f5f2"/>
+  <circle cx="68" cy="22" r="4" fill="#f4f5f2" opacity="0.4"/>
+  <circle cx="38" cy="42" r="4" fill="#f4f5f2" opacity="0.4"/>
+  <circle cx="68" cy="42" r="4" fill="#f4f5f2" opacity="0.4"/>
+  <circle cx="68" cy="62" r="4" fill="#f4f5f2" opacity="0.4"/>
+  <circle cx="38" cy="62" r="5" fill="#f4f5f2"/>
+</svg>
+        <div class="mark-label on-dark">Mellomblå</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 02 FULL LOGO -->
+  <div class="section">
+    <div class="section-label">02 · Full logo</div>
+    <div class="logo-grid">
+      <div class="logo-cell bg-white">
+        <div class="logo-cell-inner">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="-14 -14 108 108" width="68" height="68">
+  <rect x="4" y="4" width="72" height="72" rx="4" fill="none" stroke="#0d1b2a" stroke-width="1.4"/>
+  <circle cx="13" cy="13" r="3" fill="none" stroke="#0d1b2a" stroke-width="0.8" opacity="0.28"/>
+  <line x1="16" y1="4" x2="16" y2="-2" stroke="#0d1b2a" stroke-width="3.5" stroke-linecap="square" opacity="0.65"/>
+  <line x1="30" y1="4" x2="30" y2="-2" stroke="#0d1b2a" stroke-width="3.5" stroke-linecap="square" opacity="0.65"/>
+  <line x1="50" y1="4" x2="50" y2="-2" stroke="#0d1b2a" stroke-width="3.5" stroke-linecap="square" opacity="0.65"/>
+  <line x1="64" y1="4" x2="64" y2="-2" stroke="#0d1b2a" stroke-width="3.5" stroke-linecap="square" opacity="0.65"/>
+  <line x1="16" y1="76" x2="16" y2="82" stroke="#0d1b2a" stroke-width="3.5" stroke-linecap="square" opacity="0.65"/>
+  <line x1="30" y1="76" x2="30" y2="82" stroke="#0d1b2a" stroke-width="3.5" stroke-linecap="square" opacity="0.65"/>
+  <line x1="50" y1="76" x2="50" y2="82" stroke="#0d1b2a" stroke-width="3.5" stroke-linecap="square" opacity="0.65"/>
+  <line x1="64" y1="76" x2="64" y2="82" stroke="#0d1b2a" stroke-width="3.5" stroke-linecap="square" opacity="0.65"/>
+  <line x1="4" y1="16" x2="-2" y2="16" stroke="#0d1b2a" stroke-width="3.5" stroke-linecap="square" opacity="0.65"/>
+  <line x1="4" y1="30" x2="-2" y2="30" stroke="#0d1b2a" stroke-width="3.5" stroke-linecap="square" opacity="0.65"/>
+  <line x1="4" y1="50" x2="-2" y2="50" stroke="#0d1b2a" stroke-width="3.5" stroke-linecap="square" opacity="0.65"/>
+  <line x1="4" y1="64" x2="-2" y2="64" stroke="#0d1b2a" stroke-width="3.5" stroke-linecap="square" opacity="0.65"/>
+  <line x1="76" y1="16" x2="82" y2="16" stroke="#0d1b2a" stroke-width="3.5" stroke-linecap="square" opacity="0.65"/>
+  <line x1="76" y1="30" x2="82" y2="30" stroke="#0d1b2a" stroke-width="3.5" stroke-linecap="square" opacity="0.65"/>
+  <line x1="76" y1="50" x2="82" y2="50" stroke="#0d1b2a" stroke-width="3.5" stroke-linecap="square" opacity="0.65"/>
+  <line x1="76" y1="64" x2="82" y2="64" stroke="#0d1b2a" stroke-width="3.5" stroke-linecap="square" opacity="0.65"/>
+  
+  <line x1="10" y1="22" x2="38" y2="22" stroke="#0d1b2a" stroke-width="4.5" stroke-linecap="round"/>
+  <line x1="24" y1="22" x2="24" y2="66" stroke="#0d1b2a" stroke-width="4.5" stroke-linecap="round"/>
+  <line x1="38" y1="22" x2="68" y2="22" stroke="#0d1b2a" stroke-width="4.5" stroke-linecap="round"/>
+  <line x1="38" y1="22" x2="38" y2="42" stroke="#0d1b2a" stroke-width="4.5" stroke-linecap="round"/>
+  <line x1="38" y1="42" x2="68" y2="42" stroke="#0d1b2a" stroke-width="4.5" stroke-linecap="round"/>
+  <line x1="68" y1="42" x2="68" y2="62" stroke="#0d1b2a" stroke-width="4.5" stroke-linecap="round"/>
+  <line x1="38" y1="62" x2="68" y2="62" stroke="#0d1b2a" stroke-width="4.5" stroke-linecap="round"/>
+  <circle cx="10" cy="22" r="5" fill="#0d1b2a"/>
+  <circle cx="24" cy="66" r="5" fill="#0d1b2a"/>
+  <circle cx="38" cy="22" r="7" fill="#0d1b2a"/>
+  <circle cx="68" cy="22" r="4" fill="#0d1b2a" opacity="0.4"/>
+  <circle cx="38" cy="42" r="4" fill="#0d1b2a" opacity="0.4"/>
+  <circle cx="68" cy="42" r="4" fill="#0d1b2a" opacity="0.4"/>
+  <circle cx="68" cy="62" r="4" fill="#0d1b2a" opacity="0.4"/>
+  <circle cx="38" cy="62" r="5" fill="#0d1b2a"/>
+</svg>
+          <div class="logo-caption on-light">Lys</div>
+        </div>
+        <div class="logo-text-wrap">
+          <div class="logo-name on-light">Tommy Skogstad</div>
+          <div class="logo-sep" style="background:var(--navy);"></div>
+          <div class="logo-sub on-light">INGENIØR</div>
+          <div class="logo-tagline on-light">data · elektro · ledelse · produktutvikling</div>
+        </div>
+      </div>
+      <div class="logo-cell bg-navy">
+        <div class="logo-cell-inner">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="-14 -14 108 108" width="68" height="68">
+  <rect x="4" y="4" width="72" height="72" rx="4" fill="#0d1b2a" />
+  <circle cx="13" cy="13" r="3" fill="none" stroke="#f4f5f2" stroke-width="0.8" opacity="0.25"/>
+  <line x1="16" y1="4" x2="16" y2="-2" stroke="#0d1b2a" stroke-width="3.5" stroke-linecap="square" opacity="0.65"/>
+  <line x1="30" y1="4" x2="30" y2="-2" stroke="#0d1b2a" stroke-width="3.5" stroke-linecap="square" opacity="0.65"/>
+  <line x1="50" y1="4" x2="50" y2="-2" stroke="#0d1b2a" stroke-width="3.5" stroke-linecap="square" opacity="0.65"/>
+  <line x1="64" y1="4" x2="64" y2="-2" stroke="#0d1b2a" stroke-width="3.5" stroke-linecap="square" opacity="0.65"/>
+  <line x1="16" y1="76" x2="16" y2="82" stroke="#0d1b2a" stroke-width="3.5" stroke-linecap="square" opacity="0.65"/>
+  <line x1="30" y1="76" x2="30" y2="82" stroke="#0d1b2a" stroke-width="3.5" stroke-linecap="square" opacity="0.65"/>
+  <line x1="50" y1="76" x2="50" y2="82" stroke="#0d1b2a" stroke-width="3.5" stroke-linecap="square" opacity="0.65"/>
+  <line x1="64" y1="76" x2="64" y2="82" stroke="#0d1b2a" stroke-width="3.5" stroke-linecap="square" opacity="0.65"/>
+  <line x1="4" y1="16" x2="-2" y2="16" stroke="#0d1b2a" stroke-width="3.5" stroke-linecap="square" opacity="0.65"/>
+  <line x1="4" y1="30" x2="-2" y2="30" stroke="#0d1b2a" stroke-width="3.5" stroke-linecap="square" opacity="0.65"/>
+  <line x1="4" y1="50" x2="-2" y2="50" stroke="#0d1b2a" stroke-width="3.5" stroke-linecap="square" opacity="0.65"/>
+  <line x1="4" y1="64" x2="-2" y2="64" stroke="#0d1b2a" stroke-width="3.5" stroke-linecap="square" opacity="0.65"/>
+  <line x1="76" y1="16" x2="82" y2="16" stroke="#0d1b2a" stroke-width="3.5" stroke-linecap="square" opacity="0.65"/>
+  <line x1="76" y1="30" x2="82" y2="30" stroke="#0d1b2a" stroke-width="3.5" stroke-linecap="square" opacity="0.65"/>
+  <line x1="76" y1="50" x2="82" y2="50" stroke="#0d1b2a" stroke-width="3.5" stroke-linecap="square" opacity="0.65"/>
+  <line x1="76" y1="64" x2="82" y2="64" stroke="#0d1b2a" stroke-width="3.5" stroke-linecap="square" opacity="0.65"/>
+  
+  <line x1="10" y1="22" x2="38" y2="22" stroke="#f4f5f2" stroke-width="4.5" stroke-linecap="round"/>
+  <line x1="24" y1="22" x2="24" y2="66" stroke="#f4f5f2" stroke-width="4.5" stroke-linecap="round"/>
+  <line x1="38" y1="22" x2="68" y2="22" stroke="#f4f5f2" stroke-width="4.5" stroke-linecap="round"/>
+  <line x1="38" y1="22" x2="38" y2="42" stroke="#f4f5f2" stroke-width="4.5" stroke-linecap="round"/>
+  <line x1="38" y1="42" x2="68" y2="42" stroke="#f4f5f2" stroke-width="4.5" stroke-linecap="round"/>
+  <line x1="68" y1="42" x2="68" y2="62" stroke="#f4f5f2" stroke-width="4.5" stroke-linecap="round"/>
+  <line x1="38" y1="62" x2="68" y2="62" stroke="#f4f5f2" stroke-width="4.5" stroke-linecap="round"/>
+  <circle cx="10" cy="22" r="5" fill="#f4f5f2"/>
+  <circle cx="24" cy="66" r="5" fill="#f4f5f2"/>
+  <circle cx="38" cy="22" r="7" fill="#f4f5f2"/>
+  <circle cx="68" cy="22" r="4" fill="#f4f5f2" opacity="0.4"/>
+  <circle cx="38" cy="42" r="4" fill="#f4f5f2" opacity="0.4"/>
+  <circle cx="68" cy="42" r="4" fill="#f4f5f2" opacity="0.4"/>
+  <circle cx="68" cy="62" r="4" fill="#f4f5f2" opacity="0.4"/>
+  <circle cx="38" cy="62" r="5" fill="#f4f5f2"/>
+</svg>
+          <div class="logo-caption on-dark">Mørk</div>
+        </div>
+        <div class="logo-text-wrap">
+          <div class="logo-name on-dark">Tommy Skogstad</div>
+          <div class="logo-sep" style="background:var(--white);"></div>
+          <div class="logo-sub on-dark">INGENIØR</div>
+          <div class="logo-tagline on-dark">data · elektro · ledelse · produktutvikling</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 03 FARGER -->
+  <div class="section">
+    <div class="section-label">03 · Fargepalett</div>
+    <div class="color-row">
+      <div class="swatch" style="background:#0d1b2a; flex:2;">
+        <div class="swatch-role" style="color:#4a6080;">Primær</div>
+        <div class="swatch-name" style="color:#f4f5f2;">Navy</div>
+        <div class="swatch-hex"  style="color:#f4f5f2;">#0d1b2a</div>
+      </div>
+      <div class="swatch" style="background:#f4f5f2; flex:2; border:1px solid #e4eaf0;">
+        <div class="swatch-role" style="color:#7a96b0;">Bakgrunn</div>
+        <div class="swatch-name" style="color:#0d1b2a;">Warm White</div>
+        <div class="swatch-hex"  style="color:#0d1b2a;">#f4f5f2</div>
+      </div>
+    </div>
+    <div class="color-row" style="margin-top:2px;">
+      <div class="swatch" style="background:#1b2d42;">
+        <div class="swatch-name" style="color:#f4f5f2;">Blue 1</div>
+        <div class="swatch-hex"  style="color:#f4f5f2;">#1b2d42</div>
+      </div>
+      <div class="swatch" style="background:#2e4260;">
+        <div class="swatch-name" style="color:#f4f5f2;">Blue 2</div>
+        <div class="swatch-hex"  style="color:#f4f5f2;">#2e4260</div>
+      </div>
+      <div class="swatch" style="background:#4a6080;">
+        <div class="swatch-name" style="color:#f4f5f2;">Blue 3</div>
+        <div class="swatch-hex"  style="color:#f4f5f2;">#4a6080</div>
+      </div>
+      <div class="swatch" style="background:#7a96b0;">
+        <div class="swatch-name" style="color:#f4f5f2;">Blue 4</div>
+        <div class="swatch-hex"  style="color:#f4f5f2;">#7a96b0</div>
+      </div>
+      <div class="swatch" style="background:#b8cad8;">
+        <div class="swatch-name" style="color:#0d1b2a;">Blue 5</div>
+        <div class="swatch-hex"  style="color:#0d1b2a;">#b8cad8</div>
+      </div>
+      <div class="swatch" style="background:#e4eaf0; border:1px solid #b8cad8;">
+        <div class="swatch-name" style="color:#0d1b2a;">Blue 6</div>
+        <div class="swatch-hex"  style="color:#0d1b2a;">#e4eaf0</div>
+      </div>
+    </div>
+    <div style="margin-top:20px;font-family:var(--font-mono);font-size:9px;color:var(--blue3);letter-spacing:0.1em;line-height:1.9;">
+      <span style="color:var(--blue2);">Intensjonelt mørkeblå.</span> Paletten er bygget på navy og kalde blåtoner – fra dypt midnattsblå til lys stålblå. Ingen fremmede aksentfarger. Hierarki skapes gjennom tonalitet og typografi.
+    </div>
+  </div>
+
+  <!-- 04 TYPOGRAFI -->
+  <div class="section">
+    <div class="section-label">04 · Typografi</div>
+    <div class="type-block">
+      <div class="type-meta"><span>Primær · DM Sans</span><span>Google Fonts</span><span>300 / 400 / 500</span></div>
+      <div class="type-specimen-large">Data · Elektro<br>Ledelse · Produkt</div>
+      <div style="font-family:var(--font-sans);font-size:15px;color:var(--blue2);max-width:520px;line-height:1.7;">
+        Tommy Skogstad er ingeniør med bakgrunn i elektro og spesialisering innen API-utvikling, systemintegrasjon, ledelse og produktutvikling.
+      </div>
+      <div class="type-sizes">
+        <div class="type-size-row"><span class="type-size-label">28px / 400</span><span style="font-size:28px;font-weight:400;letter-spacing:-0.02em;">Tommy Skogstad</span></div>
+        <div class="type-size-row"><span class="type-size-label">22px / 400</span><span style="font-size:22px;font-weight:400;">Ingeniørtjenester</span></div>
+        <div class="type-size-row"><span class="type-size-label">16px / 400</span><span style="font-size:16px;">API Management · Produktutvikling</span></div>
+        <div class="type-size-row"><span class="type-size-label">13px / 400</span><span style="font-size:13px;color:var(--blue2);">Kontakt: tommyskogstad@gmail.com</span></div>
+      </div>
+    </div>
+    <div class="type-block">
+      <div class="type-meta"><span>Sekundær · DM Mono</span><span>Google Fonts</span><span>300 / 400 / 500</span></div>
+      <div class="type-specimen-mono">INGENIØR · data · elektro · ledelse · produktutvikling</div>
+      <div class="type-sizes">
+        <div class="type-size-row"><span class="type-size-label">10px / mono</span><span style="font-family:var(--font-mono);font-size:10px;letter-spacing:0.14em;color:var(--blue2);">INGENIØR  ·  data · elektro · ledelse · produktutvikling</span></div>
+        <div class="type-size-row"><span class="type-size-label">9px / mono</span><span style="font-family:var(--font-mono);font-size:9px;letter-spacing:0.1em;color:var(--blue3);">org.nr. 921 954 565  ·  Tønsberg</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 05 BRUKSEKSEMPLER -->
+  <div class="section">
+    <div class="section-label">05 · Brukseksempler</div>
+    <div class="usage-grid">
+      <div class="usage-card bg-white">
+        <div class="usage-type">Visittkort</div>
+        <div class="card-sim">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="-14 -14 108 108" width="40" height="40">
+  <rect x="4" y="4" width="72" height="72" rx="4" fill="none" stroke="#0d1b2a" stroke-width="1.4"/>
+  <circle cx="13" cy="13" r="3" fill="none" stroke="#0d1b2a" stroke-width="0.8" opacity="0.28"/>
+  <line x1="16" y1="4" x2="16" y2="-2" stroke="#0d1b2a" stroke-width="3.5" stroke-linecap="square" opacity="0.65"/>
+  <line x1="30" y1="4" x2="30" y2="-2" stroke="#0d1b2a" stroke-width="3.5" stroke-linecap="square" opacity="0.65"/>
+  <line x1="50" y1="4" x2="50" y2="-2" stroke="#0d1b2a" stroke-width="3.5" stroke-linecap="square" opacity="0.65"/>
+  <line x1="64" y1="4" x2="64" y2="-2" stroke="#0d1b2a" stroke-width="3.5" stroke-linecap="square" opacity="0.65"/>
+  <line x1="16" y1="76" x2="16" y2="82" stroke="#0d1b2a" stroke-width="3.5" stroke-linecap="square" opacity="0.65"/>
+  <line x1="30" y1="76" x2="30" y2="82" stroke="#0d1b2a" stroke-width="3.5" stroke-linecap="square" opacity="0.65"/>
+  <line x1="50" y1="76" x2="50" y2="82" stroke="#0d1b2a" stroke-width="3.5" stroke-linecap="square" opacity="0.65"/>
+  <line x1="64" y1="76" x2="64" y2="82" stroke="#0d1b2a" stroke-width="3.5" stroke-linecap="square" opacity="0.65"/>
+  <line x1="4" y1="16" x2="-2" y2="16" stroke="#0d1b2a" stroke-width="3.5" stroke-linecap="square" opacity="0.65"/>
+  <line x1="4" y1="30" x2="-2" y2="30" stroke="#0d1b2a" stroke-width="3.5" stroke-linecap="square" opacity="0.65"/>
+  <line x1="4" y1="50" x2="-2" y2="50" stroke="#0d1b2a" stroke-width="3.5" stroke-linecap="square" opacity="0.65"/>
+  <line x1="4" y1="64" x2="-2" y2="64" stroke="#0d1b2a" stroke-width="3.5" stroke-linecap="square" opacity="0.65"/>
+  <line x1="76" y1="16" x2="82" y2="16" stroke="#0d1b2a" stroke-width="3.5" stroke-linecap="square" opacity="0.65"/>
+  <line x1="76" y1="30" x2="82" y2="30" stroke="#0d1b2a" stroke-width="3.5" stroke-linecap="square" opacity="0.65"/>
+  <line x1="76" y1="50" x2="82" y2="50" stroke="#0d1b2a" stroke-width="3.5" stroke-linecap="square" opacity="0.65"/>
+  <line x1="76" y1="64" x2="82" y2="64" stroke="#0d1b2a" stroke-width="3.5" stroke-linecap="square" opacity="0.65"/>
+  
+  <line x1="10" y1="22" x2="38" y2="22" stroke="#0d1b2a" stroke-width="4.5" stroke-linecap="round"/>
+  <line x1="24" y1="22" x2="24" y2="66" stroke="#0d1b2a" stroke-width="4.5" stroke-linecap="round"/>
+  <line x1="38" y1="22" x2="68" y2="22" stroke="#0d1b2a" stroke-width="4.5" stroke-linecap="round"/>
+  <line x1="38" y1="22" x2="38" y2="42" stroke="#0d1b2a" stroke-width="4.5" stroke-linecap="round"/>
+  <line x1="38" y1="42" x2="68" y2="42" stroke="#0d1b2a" stroke-width="4.5" stroke-linecap="round"/>
+  <line x1="68" y1="42" x2="68" y2="62" stroke="#0d1b2a" stroke-width="4.5" stroke-linecap="round"/>
+  <line x1="38" y1="62" x2="68" y2="62" stroke="#0d1b2a" stroke-width="4.5" stroke-linecap="round"/>
+  <circle cx="10" cy="22" r="5" fill="#0d1b2a"/>
+  <circle cx="24" cy="66" r="5" fill="#0d1b2a"/>
+  <circle cx="38" cy="22" r="7" fill="#0d1b2a"/>
+  <circle cx="68" cy="22" r="4" fill="#0d1b2a" opacity="0.4"/>
+  <circle cx="38" cy="42" r="4" fill="#0d1b2a" opacity="0.4"/>
+  <circle cx="68" cy="42" r="4" fill="#0d1b2a" opacity="0.4"/>
+  <circle cx="68" cy="62" r="4" fill="#0d1b2a" opacity="0.4"/>
+  <circle cx="38" cy="62" r="5" fill="#0d1b2a"/>
+</svg>
+          <div class="card-sim-name">Tommy Skogstad</div>
+          <div class="card-sim-title">Ingeniør · data · elektro · ledelse</div>
+          <div class="card-sim-contact">tommyskogstad@gmail.com<br>org.nr. 921 954 565<br>Tønsberg, Norge</div>
+        </div>
+      </div>
+      <div class="usage-card bg-white">
+        <div class="usage-type">E-postsignatur</div>
+        <div class="sig-sim">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="-14 -14 108 108" width="28" height="28">
+  <rect x="4" y="4" width="72" height="72" rx="4" fill="none" stroke="#0d1b2a" stroke-width="1.4"/>
+  <circle cx="13" cy="13" r="3" fill="none" stroke="#0d1b2a" stroke-width="0.8" opacity="0.28"/>
+  <line x1="16" y1="4" x2="16" y2="-2" stroke="#0d1b2a" stroke-width="3.5" stroke-linecap="square" opacity="0.65"/>
+  <line x1="30" y1="4" x2="30" y2="-2" stroke="#0d1b2a" stroke-width="3.5" stroke-linecap="square" opacity="0.65"/>
+  <line x1="50" y1="4" x2="50" y2="-2" stroke="#0d1b2a" stroke-width="3.5" stroke-linecap="square" opacity="0.65"/>
+  <line x1="64" y1="4" x2="64" y2="-2" stroke="#0d1b2a" stroke-width="3.5" stroke-linecap="square" opacity="0.65"/>
+  <line x1="16" y1="76" x2="16" y2="82" stroke="#0d1b2a" stroke-width="3.5" stroke-linecap="square" opacity="0.65"/>
+  <line x1="30" y1="76" x2="30" y2="82" stroke="#0d1b2a" stroke-width="3.5" stroke-linecap="square" opacity="0.65"/>
+  <line x1="50" y1="76" x2="50" y2="82" stroke="#0d1b2a" stroke-width="3.5" stroke-linecap="square" opacity="0.65"/>
+  <line x1="64" y1="76" x2="64" y2="82" stroke="#0d1b2a" stroke-width="3.5" stroke-linecap="square" opacity="0.65"/>
+  <line x1="4" y1="16" x2="-2" y2="16" stroke="#0d1b2a" stroke-width="3.5" stroke-linecap="square" opacity="0.65"/>
+  <line x1="4" y1="30" x2="-2" y2="30" stroke="#0d1b2a" stroke-width="3.5" stroke-linecap="square" opacity="0.65"/>
+  <line x1="4" y1="50" x2="-2" y2="50" stroke="#0d1b2a" stroke-width="3.5" stroke-linecap="square" opacity="0.65"/>
+  <line x1="4" y1="64" x2="-2" y2="64" stroke="#0d1b2a" stroke-width="3.5" stroke-linecap="square" opacity="0.65"/>
+  <line x1="76" y1="16" x2="82" y2="16" stroke="#0d1b2a" stroke-width="3.5" stroke-linecap="square" opacity="0.65"/>
+  <line x1="76" y1="30" x2="82" y2="30" stroke="#0d1b2a" stroke-width="3.5" stroke-linecap="square" opacity="0.65"/>
+  <line x1="76" y1="50" x2="82" y2="50" stroke="#0d1b2a" stroke-width="3.5" stroke-linecap="square" opacity="0.65"/>
+  <line x1="76" y1="64" x2="82" y2="64" stroke="#0d1b2a" stroke-width="3.5" stroke-linecap="square" opacity="0.65"/>
+  
+  <line x1="10" y1="22" x2="38" y2="22" stroke="#0d1b2a" stroke-width="4.5" stroke-linecap="round"/>
+  <line x1="24" y1="22" x2="24" y2="66" stroke="#0d1b2a" stroke-width="4.5" stroke-linecap="round"/>
+  <line x1="38" y1="22" x2="68" y2="22" stroke="#0d1b2a" stroke-width="4.5" stroke-linecap="round"/>
+  <line x1="38" y1="22" x2="38" y2="42" stroke="#0d1b2a" stroke-width="4.5" stroke-linecap="round"/>
+  <line x1="38" y1="42" x2="68" y2="42" stroke="#0d1b2a" stroke-width="4.5" stroke-linecap="round"/>
+  <line x1="68" y1="42" x2="68" y2="62" stroke="#0d1b2a" stroke-width="4.5" stroke-linecap="round"/>
+  <line x1="38" y1="62" x2="68" y2="62" stroke="#0d1b2a" stroke-width="4.5" stroke-linecap="round"/>
+  <circle cx="10" cy="22" r="5" fill="#0d1b2a"/>
+  <circle cx="24" cy="66" r="5" fill="#0d1b2a"/>
+  <circle cx="38" cy="22" r="7" fill="#0d1b2a"/>
+  <circle cx="68" cy="22" r="4" fill="#0d1b2a" opacity="0.4"/>
+  <circle cx="38" cy="42" r="4" fill="#0d1b2a" opacity="0.4"/>
+  <circle cx="68" cy="42" r="4" fill="#0d1b2a" opacity="0.4"/>
+  <circle cx="68" cy="62" r="4" fill="#0d1b2a" opacity="0.4"/>
+  <circle cx="38" cy="62" r="5" fill="#0d1b2a"/>
+</svg>
+          <div class="sig-name">Tommy Skogstad</div>
+          <div class="sig-title">Ingeniør · Elektro · Data · Ledelse</div>
+          <div class="sig-detail">tommyskogstad@gmail.com<br>Ingeniør Tommy Skogstad ENK<br>org.nr. 921 954 565</div>
+        </div>
+      </div>
+      <div class="usage-card bg-navy" style="grid-column:span 2;">
+        <div class="usage-type on-dark">Nettside / presentasjonsheader</div>
+        <div class="header-sim">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="-14 -14 108 108" width="28" height="28">
+  <rect x="4" y="4" width="72" height="72" rx="4" fill="#0d1b2a" />
+  <circle cx="13" cy="13" r="3" fill="none" stroke="#f4f5f2" stroke-width="0.8" opacity="0.25"/>
+  <line x1="16" y1="4" x2="16" y2="-2" stroke="#0d1b2a" stroke-width="3.5" stroke-linecap="square" opacity="0.65"/>
+  <line x1="30" y1="4" x2="30" y2="-2" stroke="#0d1b2a" stroke-width="3.5" stroke-linecap="square" opacity="0.65"/>
+  <line x1="50" y1="4" x2="50" y2="-2" stroke="#0d1b2a" stroke-width="3.5" stroke-linecap="square" opacity="0.65"/>
+  <line x1="64" y1="4" x2="64" y2="-2" stroke="#0d1b2a" stroke-width="3.5" stroke-linecap="square" opacity="0.65"/>
+  <line x1="16" y1="76" x2="16" y2="82" stroke="#0d1b2a" stroke-width="3.5" stroke-linecap="square" opacity="0.65"/>
+  <line x1="30" y1="76" x2="30" y2="82" stroke="#0d1b2a" stroke-width="3.5" stroke-linecap="square" opacity="0.65"/>
+  <line x1="50" y1="76" x2="50" y2="82" stroke="#0d1b2a" stroke-width="3.5" stroke-linecap="square" opacity="0.65"/>
+  <line x1="64" y1="76" x2="64" y2="82" stroke="#0d1b2a" stroke-width="3.5" stroke-linecap="square" opacity="0.65"/>
+  <line x1="4" y1="16" x2="-2" y2="16" stroke="#0d1b2a" stroke-width="3.5" stroke-linecap="square" opacity="0.65"/>
+  <line x1="4" y1="30" x2="-2" y2="30" stroke="#0d1b2a" stroke-width="3.5" stroke-linecap="square" opacity="0.65"/>
+  <line x1="4" y1="50" x2="-2" y2="50" stroke="#0d1b2a" stroke-width="3.5" stroke-linecap="square" opacity="0.65"/>
+  <line x1="4" y1="64" x2="-2" y2="64" stroke="#0d1b2a" stroke-width="3.5" stroke-linecap="square" opacity="0.65"/>
+  <line x1="76" y1="16" x2="82" y2="16" stroke="#0d1b2a" stroke-width="3.5" stroke-linecap="square" opacity="0.65"/>
+  <line x1="76" y1="30" x2="82" y2="30" stroke="#0d1b2a" stroke-width="3.5" stroke-linecap="square" opacity="0.65"/>
+  <line x1="76" y1="50" x2="82" y2="50" stroke="#0d1b2a" stroke-width="3.5" stroke-linecap="square" opacity="0.65"/>
+  <line x1="76" y1="64" x2="82" y2="64" stroke="#0d1b2a" stroke-width="3.5" stroke-linecap="square" opacity="0.65"/>
+  
+  <line x1="10" y1="22" x2="38" y2="22" stroke="#f4f5f2" stroke-width="4.5" stroke-linecap="round"/>
+  <line x1="24" y1="22" x2="24" y2="66" stroke="#f4f5f2" stroke-width="4.5" stroke-linecap="round"/>
+  <line x1="38" y1="22" x2="68" y2="22" stroke="#f4f5f2" stroke-width="4.5" stroke-linecap="round"/>
+  <line x1="38" y1="22" x2="38" y2="42" stroke="#f4f5f2" stroke-width="4.5" stroke-linecap="round"/>
+  <line x1="38" y1="42" x2="68" y2="42" stroke="#f4f5f2" stroke-width="4.5" stroke-linecap="round"/>
+  <line x1="68" y1="42" x2="68" y2="62" stroke="#f4f5f2" stroke-width="4.5" stroke-linecap="round"/>
+  <line x1="38" y1="62" x2="68" y2="62" stroke="#f4f5f2" stroke-width="4.5" stroke-linecap="round"/>
+  <circle cx="10" cy="22" r="5" fill="#f4f5f2"/>
+  <circle cx="24" cy="66" r="5" fill="#f4f5f2"/>
+  <circle cx="38" cy="22" r="7" fill="#f4f5f2"/>
+  <circle cx="68" cy="22" r="4" fill="#f4f5f2" opacity="0.4"/>
+  <circle cx="38" cy="42" r="4" fill="#f4f5f2" opacity="0.4"/>
+  <circle cx="68" cy="42" r="4" fill="#f4f5f2" opacity="0.4"/>
+  <circle cx="68" cy="62" r="4" fill="#f4f5f2" opacity="0.4"/>
+  <circle cx="38" cy="62" r="5" fill="#f4f5f2"/>
+</svg>
+          <div class="header-sim-nav">
+            <span>Tjenester</span>
+            <span>Prosjekter</span>
+            <span>Kontakt</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="footer">
+    <div class="footer-text">Ingeniør Tommy Skogstad · org.nr. 921 954 565</div>
+    <div class="footer-text">Visuell identitetsguide v1.1 · 2026</div>
+  </div>
+
+</div>
+</body>
+</html>
