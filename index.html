@@ -7,6 +7,17 @@
     <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@300;400;500&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500&display=swap" rel="stylesheet">
     <title>Tommy Skogstad — Dashboard</title>
     <style>
+        :root {
+            --navy:   #0d1b2a;
+            --blue1:  #1b2d42;
+            --blue2:  #2e4260;
+            --blue3:  #4a6080;
+            --blue4:  #7a96b0;
+            --blue5:  #b8cad8;
+            --blue6:  #e4eaf0;
+            --white:  #f4f5f2;
+        }
+
         * {
             margin: 0;
             padding: 0;
@@ -15,20 +26,75 @@
 
         body {
             font-family: 'DM Sans', sans-serif;
-            background: #0d1b2a;
-            color: #b8cad8;
+            background: var(--navy);
+            color: var(--blue5);
             min-height: 100vh;
         }
 
         header {
-            text-align: center;
-            padding: 3rem 1rem 2rem;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 2.5rem 1rem 2rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 1.5rem;
         }
 
-        header p {
-            color: #7a96b0;
-            margin-top: 0.5rem;
-            font-size: 1.1rem;
+        .header-brand {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .header-brand img {
+            height: 3rem;
+            width: 3rem;
+        }
+
+        .header-text {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+        }
+
+        .header-name {
+            font-size: 1.25rem;
+            font-weight: 400;
+            color: var(--white);
+            letter-spacing: -0.02em;
+        }
+
+        .header-sub {
+            font-family: 'DM Mono', monospace;
+            font-size: 0.55rem;
+            letter-spacing: 0.16em;
+            color: var(--blue4);
+            text-transform: uppercase;
+        }
+
+        .header-nav {
+            display: flex;
+            gap: 0.5rem;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .header-nav a {
+            font-family: 'DM Mono', monospace;
+            font-size: 0.75rem;
+            letter-spacing: 0.08em;
+            color: var(--blue3);
+            text-decoration: none;
+            padding: 0.4rem 0.8rem;
+            border: 1px solid var(--blue2);
+            border-radius: 6px;
+            transition: color 0.2s, border-color 0.2s;
+        }
+
+        .header-nav a:hover {
+            color: var(--white);
+            border-color: var(--blue4);
         }
 
         main {
@@ -47,13 +113,13 @@
             gap: 0.75rem;
             margin-bottom: 1rem;
             padding-bottom: 0.5rem;
-            border-bottom: 1px solid #1b2d42;
+            border-bottom: 1px solid var(--blue1);
         }
 
         .section-header h2 {
             font-size: 1.25rem;
             font-weight: 500;
-            color: #f4f5f2;
+            color: var(--white);
         }
 
         .badge {
@@ -72,8 +138,8 @@
         }
 
         .badge-local {
-            background: #1b2d42;
-            color: #7a96b0;
+            background: var(--blue1);
+            color: var(--blue4);
         }
 
         .grid {
@@ -83,8 +149,8 @@
         }
 
         .card {
-            background: #1b2d42;
-            border: 1px solid #2e4260;
+            background: var(--blue1);
+            border: 1px solid var(--blue2);
             border-radius: 12px;
             padding: 1.5rem;
             transition: border-color 0.2s, transform 0.2s;
@@ -94,14 +160,14 @@
         }
 
         .card:hover {
-            border-color: #7a96b0;
+            border-color: var(--blue4);
             transform: translateY(-2px);
         }
 
         .card h3 {
             font-size: 1.1rem;
             font-weight: 500;
-            color: #f4f5f2;
+            color: var(--white);
             margin-bottom: 0.4rem;
             display: flex;
             align-items: center;
@@ -116,7 +182,7 @@
 
         .card p {
             font-size: 0.9rem;
-            color: #7a96b0;
+            color: var(--blue4);
             margin-bottom: 0.75rem;
             line-height: 1.4;
         }
@@ -124,7 +190,7 @@
         .card .url {
             font-family: 'DM Mono', monospace;
             font-size: 0.8rem;
-            color: #b8cad8;
+            color: var(--blue5);
             word-break: break-all;
         }
 
@@ -132,8 +198,8 @@
             display: inline-block;
             font-family: 'DM Mono', monospace;
             font-size: 0.65rem;
-            background: #0d1b2a;
-            color: #7a96b0;
+            background: var(--navy);
+            color: var(--blue4);
             padding: 0.15rem 0.5rem;
             border-radius: 4px;
             margin-top: 0.5rem;
@@ -146,12 +212,12 @@
             align-items: center;
             gap: 0.5rem;
             margin-top: 0.75rem;
-            background: #0d1b2a;
+            background: var(--navy);
             border-radius: 6px;
             padding: 0.4rem 0.6rem;
             font-family: 'DM Mono', monospace;
             font-size: 0.8rem;
-            color: #b8cad8;
+            color: var(--blue5);
         }
 
         .ssh-cmd code {
@@ -161,9 +227,9 @@
 
         .ssh-cmd button {
             background: none;
-            border: 1px solid #2e4260;
+            border: 1px solid var(--blue2);
             border-radius: 4px;
-            color: #7a96b0;
+            color: var(--blue4);
             cursor: pointer;
             padding: 0.2rem 0.5rem;
             font-family: 'DM Mono', monospace;
@@ -173,16 +239,16 @@
         }
 
         .ssh-cmd button:hover {
-            color: #f4f5f2;
-            border-color: #7a96b0;
+            color: var(--white);
+            border-color: var(--blue4);
         }
 
         footer {
             text-align: center;
             padding: 2rem 1rem;
-            color: #4a6080;
+            color: var(--blue3);
             font-size: 0.85rem;
-            border-top: 1px solid #1b2d42;
+            border-top: 1px solid var(--blue1);
         }
 
         footer a {
@@ -190,23 +256,34 @@
         }
 
         footer a:hover {
-            color: #f4f5f2;
+            color: var(--white);
         }
 
         @media (max-width: 600px) {
             .grid {
                 grid-template-columns: 1fr;
             }
+            header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
         }
     </style>
 </head>
 <body>
     <header>
-        <img src="logo.svg" alt="Tommy Skogstad" style="height:3.5rem;">
-        <div style="margin-top:1rem; display:flex; gap:0.75rem; justify-content:center; flex-wrap:wrap;">
-            <a id="lan-toggle" href="http://nuc.tommy.tv:8880" style="display:inline-block; padding:0.5rem 1.2rem; background:#1b2d42; color:#7a96b0; border-radius:8px; text-decoration:none; font-size:0.9rem; border:1px solid #2e4260; transition: border-color 0.2s;">Bytt til LAN-versjon</a>
-            <a href="bookmarks.html" style="display:inline-block; padding:0.5rem 1.2rem; background:#1b2d42; color:#7a96b0; border-radius:8px; text-decoration:none; font-size:0.9rem; border:1px solid #2e4260; transition: border-color 0.2s;">Bokmerker</a>
+        <div class="header-brand">
+            <img src="favicon.svg" alt="Tommy Skogstad">
+            <div class="header-text">
+                <div class="header-name">Tommy Skogstad</div>
+                <div class="header-sub">prosjekter og infrastruktur</div>
+            </div>
         </div>
+        <nav class="header-nav">
+            <a id="lan-toggle" href="http://nuc.tommy.tv:8880">LAN</a>
+            <a href="bookmarks.html">Bokmerker</a>
+            <a href="tommy_skogstad_brand_guide.html">Brand Guide</a>
+        </nav>
     </header>
 
     <main>
@@ -562,15 +639,15 @@
 
     <footer>
         <div style="margin-bottom: 1rem;">
-            <strong style="color: #f4f5f2;">Tommy Skogstad</strong>
+            <strong style="color: var(--white);">Tommy Skogstad</strong>
         </div>
         <div style="display: flex; justify-content: center; gap: 1.5rem; flex-wrap: wrap; margin-bottom: 1rem;">
-            <a href="tel:+4748061560" target="_blank" style="color: #7a96b0; text-decoration: none;">48 06 15 60</a>
-            <a href="mailto:tommyskogstad@gmail.com" target="_blank" style="color: #7a96b0; text-decoration: none;">tommyskogstad@gmail.com</a>
-            <a href="https://www.linkedin.com/in/tommy-skogstad-79b04864/" target="_blank" style="color: #b8cad8; text-decoration: none;">LinkedIn</a>
-            <a href="https://github.com/TommySkogstad" target="_blank" style="color: #b8cad8; text-decoration: none;">GitHub</a>
+            <a href="tel:+4748061560" target="_blank" style="color: var(--blue4); text-decoration: none;">48 06 15 60</a>
+            <a href="mailto:tommyskogstad@gmail.com" target="_blank" style="color: var(--blue4); text-decoration: none;">tommyskogstad@gmail.com</a>
+            <a href="https://www.linkedin.com/in/tommy-skogstad-79b04864/" target="_blank" style="color: var(--blue5); text-decoration: none;">LinkedIn</a>
+            <a href="https://github.com/TommySkogstad" target="_blank" style="color: var(--blue5); text-decoration: none;">GitHub</a>
         </div>
-        <div style="font-family: 'DM Mono', monospace; font-size: 0.75rem; letter-spacing: 0.1em;">Tommy Skogstad &copy; 2026</div>
+        <div style="font-family: 'DM Mono', monospace; font-size: 0.7rem; letter-spacing: 0.1em; color: var(--blue3);">Ingeniør Tommy Skogstad &middot; org.nr. 921 954 565 &middot; &copy; 2026</div>
     </footer>
     <script>
         (function() {
