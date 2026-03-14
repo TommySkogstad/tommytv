@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 40 40">
+  <rect width="40" height="40" rx="8" fill="#0d1b2a"/>
+  <!-- Markdown-dokument (venstre) -->
+  <rect x="4" y="8" width="14" height="18" rx="2" fill="#1b2d42" stroke="#4a6080" stroke-width="0.8"/>
+  <text x="11" y="20" font-family="monospace" font-size="10" font-weight="700" fill="#7a96b0" text-anchor="middle">M↓</text>
+  <!-- Pil (konvertering) -->
+  <line x1="20" y1="17" x2="24" y2="17" stroke="#b8cad8" stroke-width="1.5" stroke-linecap="round"/>
+  <polyline points="22,14.5 24.5,17 22,19.5" fill="none" stroke="#b8cad8" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+  <!-- PDF-dokument (høyre) -->
+  <rect x="26" y="8" width="14" height="18" rx="2" fill="#1b2d42" stroke="#7a96b0" stroke-width="0.8"/>
+  <rect x="28" y="10" width="10" height="3" rx="1" fill="#7a96b0" opacity="0.6"/>
+  <line x1="28" y1="16" x2="38" y2="16" stroke="#4a6080" stroke-width="0.8" stroke-linecap="round"/>
+  <line x1="28" y1="19" x2="38" y2="19" stroke="#4a6080" stroke-width="0.8" stroke-linecap="round"/>
+  <line x1="28" y1="22" x2="34" y2="22" stroke="#4a6080" stroke-width="0.8" stroke-linecap="round"/>
+  <!-- PDF-label -->
+  <text x="20" y="35" font-family="monospace" font-size="7" font-weight="500" fill="#4a6080" text-anchor="middle" letter-spacing="0.5">PDF</text>
+</svg>
