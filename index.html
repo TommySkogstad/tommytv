@@ -45,10 +45,41 @@
         .header-brand {
             display: flex;
             align-items: center;
+            gap: 1.25rem;
         }
 
         .header-brand img {
-            height: 5rem;
+            height: 4rem;
+            width: 4rem;
+        }
+
+        .header-brand-text {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .header-brand-name {
+            font-family: 'DM Sans', sans-serif;
+            font-size: 1.4rem;
+            font-weight: 400;
+            color: var(--white);
+            letter-spacing: -0.02em;
+            line-height: 1;
+        }
+
+        .header-brand-sep {
+            height: 1px;
+            background: var(--white);
+            opacity: 0.12;
+        }
+
+        .header-brand-sub {
+            font-family: 'DM Mono', monospace;
+            font-size: 0.6rem;
+            letter-spacing: 0.14em;
+            color: var(--blue4);
+            text-transform: uppercase;
         }
 
         .header-nav {
@@ -251,7 +282,12 @@
 <body>
     <header>
         <div class="header-brand">
-            <img src="tommy_skogstad_logo_mork.svg" alt="Tommy Skogstad">
+            <img src="favicon.svg" alt="Tommy Skogstad">
+            <div class="header-brand-text">
+                <div class="header-brand-name">Tommy Skogstad</div>
+                <div class="header-brand-sep"></div>
+                <div class="header-brand-sub">ingenior · data · elektro · ledelse · produktutvikling</div>
+            </div>
         </div>
         <nav class="header-nav">
             <a id="lan-toggle" href="http://nuc.tommy.tv:8880">LAN</a>
