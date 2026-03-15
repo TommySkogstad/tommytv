@@ -8,7 +8,7 @@
 
 ## Filstruktur
 - `index.html` — Hoveddashboard med egne tjenester
-- `status.html` — Status-side (LAN): Smarthus (Hue + Homey) + Infrastruktur (UniFi)
+- `status.html` — Status-side (LAN): Smarthus (Hue + Homey + Nanoleaf + Plejd + Yale + gardiner) + Infrastruktur (UniFi + speedtest + WiFi restart)
 - `bookmarks.html` — Bokmerkeside med eksterne tjenester og lenker
 - `logo.svg` — SVG-tekstlogo med gradient (Tommy=blå gradient, TV=hvit)
 - `nginx.conf` — Nginx-konfigurasjon
