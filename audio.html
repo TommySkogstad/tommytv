@@ -38,8 +38,6 @@
         .btn-play:hover { color:var(--white); }
         .control-row { display:flex; align-items:center; gap:0.4rem; margin:0.3rem 0; padding-left:0.25rem; }
         .control-label { font-size:0.65rem; color:var(--blue3); min-width:3.5rem; font-family:'DM Mono',monospace; }
-        .drop-zone { border:2px dashed var(--blue2); border-radius:12px; padding:1rem; margin:0.5rem 0; text-align:center; color:var(--blue3); font-size:0.75rem; transition:all 0.2s; min-height:3rem; display:flex; align-items:center; justify-content:center; }
-        .drop-zone.drag-over { border-color:var(--blue4); background:rgba(42,66,96,0.3); color:var(--blue5); }
         .group-box { background:rgba(26,45,66,0.5); border:1px solid var(--blue2); border-radius:12px; padding:0.75rem; margin-bottom:1rem; }
         .group-header { display:flex; align-items:center; justify-content:space-between; margin-bottom:0.5rem; font-size:0.7rem; color:var(--blue3); text-transform:uppercase; letter-spacing:0.1em; font-family:'DM Mono',monospace; }
         .now-playing { display:flex; align-items:center; gap:0.75rem; margin:0.5rem 0; }
@@ -111,7 +109,7 @@
         var isPlaying = s.state==='play'||s.state==='stream';
         var cls = 'speaker-card' + (isSlave?' is-slave':'') + (s.slaves&&s.slaves.length?' is-master':'') + (isPlaying?' is-playing':'');
         // Innganger kommer nå som {id, label} fra API
-        var html = '<div class="'+cls+'" draggable="'+(isSlave?'false':'true')+'" data-key="'+s.key+'">';
+        var html = '<div class="'+cls+'">';
 
         // Header
         html += '<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:0.4rem;">';
@@ -219,10 +217,7 @@
                 });
 
                 // Drop-sone for gruppering
-                html += '<div class="drop-zone" id="group-drop" ondragover="event.preventDefault();this.classList.add(\'drag-over\');" ondragleave="this.classList.remove(\'drag-over\');" ondrop="handleDrop(event)">';
-                html += 'Dra en høyttaler hit for å opprette en gruppe</div>';
-
-                // Manuell gruppering
+                // Gruppering
                 html += '<div style="margin-top:1rem;border-top:1px solid var(--blue1);padding-top:1rem;">';
                 html += '<div style="font-size:0.7rem;color:var(--blue3);text-transform:uppercase;letter-spacing:0.1em;margin-bottom:0.5rem;font-family:\'DM Mono\',monospace;">Grupper høyttalere</div>';
                 html += '<div style="display:flex;gap:0.5rem;flex-wrap:wrap;align-items:center;">';
@@ -240,24 +235,10 @@
 
                 container.innerHTML = html;
 
-                // Sett opp drag
-                container.querySelectorAll('.speaker-card[draggable=true]').forEach(function(card) {
-                    card.addEventListener('dragstart', function(e) {
-                        e.dataTransfer.setData('text/plain', card.dataset.key);
-                        card.style.opacity = '0.5';
-                    });
-                    card.addEventListener('dragend', function() { card.style.opacity = '1'; });
-                });
             })
             .catch(function() {
                 document.getElementById('refresh-badge').textContent = 'Feil ved lasting';
             });
-    }
-
-    function handleDrop(e) {
-        e.preventDefault();
-        e.target.classList.remove('drag-over');
-        // For drag-drop gruppering bruker vi select-boksene som fallback
     }
 
     loadAudio();
