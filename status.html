@@ -153,6 +153,16 @@
             .then(function() { setTimeout(loadSmarthus, 500); });
     }
 
+    function setBlinds(key, position) {
+        fetch(SH_API + '/api/blinds/' + key + '/set?position=' + position, { method: 'POST' })
+            .then(function() { setTimeout(loadSmarthus, 2000); });
+    }
+
+    function setAllBlinds(position) {
+        fetch(SH_API + '/api/blinds/all/set?position=' + position, { method: 'POST' })
+            .then(function() { setTimeout(loadSmarthus, 2000); });
+    }
+
     function runSpeedtest() {
         var btn = document.getElementById('speedtest-btn');
         var res = document.getElementById('speedtest-result');
@@ -232,7 +242,30 @@
                             '</div>';
                     });
 
-                    card.innerHTML = header + sensors + lightsList;
+                    // Gardiner (kun Stue)
+                    var blindsHtml = '';
+                    if (r.blinds && r.blinds.length > 0) {
+                        blindsHtml = '<div style="border-top:1px solid var(--blue2);margin-top:0.5rem;padding-top:0.5rem;">' +
+                            '<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:0.4rem;">' +
+                            '<span style="font-size:0.7rem;color:var(--blue3);text-transform:uppercase;letter-spacing:0.1em;font-family:\'DM Mono\',monospace;">Rullegardiner</span>' +
+                            '<div style="display:flex;gap:0.3rem;">' +
+                            '<button onclick="setAllBlinds(0)" style="font-family:\'DM Mono\',monospace;font-size:0.65rem;background:var(--navy);border:1px solid var(--blue2);color:var(--blue4);padding:0.2rem 0.5rem;border-radius:4px;cursor:pointer;">Lukk alle</button>' +
+                            '<button onclick="setAllBlinds(50)" style="font-family:\'DM Mono\',monospace;font-size:0.65rem;background:var(--navy);border:1px solid var(--blue2);color:var(--blue4);padding:0.2rem 0.5rem;border-radius:4px;cursor:pointer;">50%</button>' +
+                            '<button onclick="setAllBlinds(100)" style="font-family:\'DM Mono\',monospace;font-size:0.65rem;background:var(--navy);border:1px solid var(--blue2);color:var(--blue4);padding:0.2rem 0.5rem;border-radius:4px;cursor:pointer;">Åpne alle</button>' +
+                            '</div></div>';
+                        r.blinds.forEach(function(b) {
+                            var pct = b.position;
+                            var barColor = pct > 0 ? '#6D8345' : 'var(--blue2)';
+                            blindsHtml += '<div style="display:flex;align-items:center;gap:0.5rem;padding:0.15rem 0;font-size:0.75rem;">' +
+                                '<span style="flex:1;color:var(--blue5);">' + b.name + '</span>' +
+                                '<div style="width:60px;height:6px;background:var(--blue2);border-radius:3px;overflow:hidden;"><div style="width:' + pct + '%;height:100%;background:' + barColor + ';border-radius:3px;"></div></div>' +
+                                '<span style="color:var(--blue3);font-family:\'DM Mono\',monospace;font-size:0.65rem;min-width:2rem;text-align:right;">' + pct + '%</span>' +
+                                '</div>';
+                        });
+                        blindsHtml += '</div>';
+                    }
+
+                    card.innerHTML = header + sensors + lightsList + blindsHtml;
                     grid.appendChild(card);
                 });
             })
