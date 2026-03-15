@@ -112,6 +112,16 @@
                         </div>
                         <div style="font-size: 0.7rem; color: var(--blue3); text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 0.35rem; font-family: 'DM Mono', monospace;">Alle enheter</div>
                         <div id="unifi-devices" style="display: flex; flex-direction: column; gap: 0.25rem; font-size: 0.75rem; margin-bottom: 0.75rem;"></div>
+                        <!-- WiFi Restart -->
+                        <div style="border-top: 1px solid var(--blue2); padding-top: 0.75rem; margin-bottom: 0.75rem;">
+                            <div style="display: flex; align-items: center; gap: 0.75rem; flex-wrap: wrap;">
+                                <span style="font-size: 0.7rem; color: var(--blue3); text-transform: uppercase; letter-spacing: 0.1em; font-family: 'DM Mono', monospace;">WiFi restart</span>
+                                <button onclick="restartWifi('all')" style="font-family: 'DM Mono', monospace; font-size: 0.75rem; background: #C35839; border: none; color: var(--white); padding: 0.4rem 0.8rem; border-radius: 6px; cursor: pointer;">Restart alle AP-er</button>
+                                <button onclick="restartWifi('u7pro')" style="font-family: 'DM Mono', monospace; font-size: 0.7rem; background: var(--navy); border: 1px solid var(--blue2); color: var(--blue4); padding: 0.3rem 0.6rem; border-radius: 6px; cursor: pointer;">U7 Pro</button>
+                                <button onclick="restartWifi('u7kontor')" style="font-family: 'DM Mono', monospace; font-size: 0.7rem; background: var(--navy); border: 1px solid var(--blue2); color: var(--blue4); padding: 0.3rem 0.6rem; border-radius: 6px; cursor: pointer;">U7 Pro Kontor</button>
+                                <span id="wifi-restart-status" style="font-size: 0.7rem; color: var(--blue4);"></span>
+                            </div>
+                        </div>
                         <!-- Speedtest -->
                         <div style="border-top: 1px solid var(--blue2); padding-top: 0.75rem;">
                             <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 0.5rem;">
@@ -177,6 +187,22 @@
         if (!confirm('Er du sikker på at du vil endre låsen?')) return;
         fetch(SH_API + '/api/lock/toggle', { method: 'POST' })
             .then(function() { setTimeout(loadSmarthus, 2000); });
+    }
+
+    function restartWifi(ap) {
+        var msg = ap === 'all' ? 'Vil du restarte ALLE WiFi AP-er? Nettverket vil være nede i ~2 minutter.' : 'Vil du restarte ' + ap + '?';
+        if (!confirm(msg)) return;
+        var url = ap === 'all' ? SH_API + '/api/wifi/restart' : SH_API + '/api/wifi/restart/' + ap;
+        var status = document.getElementById('wifi-restart-status');
+        status.textContent = 'Restarter...';
+        status.style.color = '#F9A850';
+        fetch(url, { method: 'POST' })
+            .then(function(r) { return r.json(); })
+            .then(function(d) {
+                if (d.error) { status.textContent = 'Feil: ' + d.error; status.style.color = '#C35839'; }
+                else { status.textContent = 'Restart sendt! AP-ene er tilbake om ~2 min.'; status.style.color = '#6D8345'; }
+            })
+            .catch(function() { status.textContent = 'Feil ved restart'; status.style.color = '#C35839'; });
     }
 
     function runSpeedtest() {
