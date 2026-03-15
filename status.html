@@ -198,6 +198,19 @@
             .then(function() { setTimeout(loadSmarthus, 1000); });
     }
 
+    function setThermostat(temp) {
+        fetch(SH_API + '/api/thermostat/set?temperature=' + temp, { method: 'POST' })
+            .then(function() { setTimeout(loadSmarthus, 1000); });
+    }
+
+    function adjustThermostat(delta) {
+        fetch(SH_API + '/api/status').then(function(r) { return r.json(); }).then(function(d) {
+            var current = (d.homey || {}).thermostat || {};
+            var newTemp = (current.targetTemperature || 25) + delta;
+            setThermostat(Math.max(5, Math.min(40, newTemp)));
+        });
+    }
+
     function toggleLock() {
         if (!confirm('Er du sikker på at du vil endre låsen?')) return;
         fetch(SH_API + '/api/lock/toggle', { method: 'POST' })
@@ -257,12 +270,18 @@
                 if (th.temperature !== undefined) {
                     var hc = th.heating ? '#C35839' : '#6D8345';
                     thermoEl.innerHTML =
-                        '<div style="display:flex;gap:1.5rem;flex-wrap:wrap;">' +
-                        '<div style="text-align:center"><div style="font-size:1.5rem;font-weight:500;color:var(--white)">' + th.temperature + '°</div><div style="font-size:0.7rem;color:var(--blue4)">Bad</div></div>' +
+                        '<div style="display:flex;gap:1.5rem;flex-wrap:wrap;margin-bottom:0.5rem;">' +
+                        '<div style="text-align:center"><div style="font-size:1.5rem;font-weight:500;color:var(--white)">' + th.temperature + '°</div><div style="font-size:0.7rem;color:var(--blue4)">Skap (intern)</div></div>' +
                         '<div style="text-align:center"><div style="font-size:1.5rem;font-weight:500;color:var(--white)">' + (th.floorTemperature || '—') + '°</div><div style="font-size:0.7rem;color:var(--blue4)">Gulv</div></div>' +
                         '<div style="text-align:center"><div style="font-size:1.5rem;font-weight:500;color:var(--blue4)">' + th.targetTemperature + '°</div><div style="font-size:0.7rem;color:var(--blue4)">Mål</div></div>' +
                         '<div style="text-align:center"><div style="font-size:1.5rem;font-weight:500;color:' + hc + '">' + Math.round(th.power) + 'W</div><div style="font-size:0.7rem;color:var(--blue4)">' + (th.heating ? 'Varmer' : 'Idle') + '</div></div>' +
                         '<div style="text-align:center"><div style="font-size:1.5rem;font-weight:500;color:var(--blue3)">' + (th.energy ? Math.round(th.energy).toLocaleString() : '—') + '</div><div style="font-size:0.7rem;color:var(--blue4)">kWh totalt</div></div>' +
+                        '</div>' +
+                        '<div style="display:flex;align-items:center;gap:0.5rem;">' +
+                        '<button onclick="adjustThermostat(-1)" style="font-family:\'DM Mono\',monospace;font-size:1rem;background:var(--navy);border:1px solid var(--blue2);color:var(--blue4);width:2rem;height:2rem;border-radius:6px;cursor:pointer;">−</button>' +
+                        '<span style="font-family:\'DM Mono\',monospace;font-size:0.8rem;color:var(--blue5);min-width:3rem;text-align:center;">' + th.targetTemperature + '°C</span>' +
+                        '<button onclick="adjustThermostat(1)" style="font-family:\'DM Mono\',monospace;font-size:1rem;background:var(--navy);border:1px solid var(--blue2);color:var(--blue4);width:2rem;height:2rem;border-radius:6px;cursor:pointer;">+</button>' +
+                        '<span style="font-size:0.65rem;color:var(--blue3);margin-left:0.5rem;">Juster måltemperatur</span>' +
                         '</div>';
                 }
 
