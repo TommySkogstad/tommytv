@@ -20,6 +20,7 @@ services:
     volumes:
       - ./index.html:/usr/share/nginx/html/index.html:ro
       - ./bookmarks.html:/usr/share/nginx/html/bookmarks.html:ro
+      - ./status.html:/usr/share/nginx/html/status.html:ro
       - ./logo.svg:/usr/share/nginx/html/logo.svg:ro
       - ./favicon.svg:/usr/share/nginx/html/favicon.svg:ro
       - ./tommy_skogstad_brand_guide.html:/usr/share/nginx/html/tommy_skogstad_brand_guide.html:ro
