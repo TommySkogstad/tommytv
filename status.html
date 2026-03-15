@@ -73,6 +73,10 @@
                 <h2>Smarthus</h2>
                 <span class="badge badge-local">Live</span>
             </div>
+            <div style="display: flex; gap: 0.5rem; margin-bottom: 1rem;">
+                <button onclick="sceneAllOff()" style="font-family: 'DM Mono', monospace; font-size: 0.75rem; background: var(--blue1); border: 1px solid var(--blue2); color: var(--blue4); padding: 0.4rem 0.8rem; border-radius: 6px; cursor: pointer;">Alt av</button>
+                <button onclick="sceneTvMode()" style="font-family: 'DM Mono', monospace; font-size: 0.75rem; background: var(--blue1); border: 1px solid var(--blue2); color: var(--blue4); padding: 0.4rem 0.8rem; border-radius: 6px; cursor: pointer;">📺 TV-modus</button>
+            </div>
             <div id="sh-loading" style="color: var(--blue4); font-size: 0.8rem;">Laster rom...</div>
             <div id="sh-rooms-grid" class="grid" style="margin-top: 1rem;"></div>
         </section>
@@ -191,6 +195,17 @@
     function setNanoleafEffect(key, effect) {
         fetch(SH_API + '/api/nanoleaf/' + key + '/effect?name=' + encodeURIComponent(effect), { method: 'POST' })
             .then(function() { setTimeout(loadSmarthus, 1000); });
+    }
+
+    function sceneAllOff() {
+        if (!confirm('Slå av ALT lys?')) return;
+        fetch(SH_API + '/api/scenes/all-off', { method: 'POST' })
+            .then(function() { setTimeout(loadSmarthus, 1500); });
+    }
+
+    function sceneTvMode() {
+        fetch(SH_API + '/api/scenes/tv-mode', { method: 'POST' })
+            .then(function() { setTimeout(loadSmarthus, 1500); });
     }
 
     function toggleLock() {
