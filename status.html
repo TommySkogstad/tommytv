@@ -204,6 +204,25 @@
         });
     }
 
+    function adjustMill(delta) {
+        fetch(SH_API + '/api/status').then(function(r) { return r.json(); }).then(function(d) {
+            for (var i = 0; i < (d.rooms || []).length; i++) {
+                if (d.rooms[i].heater) {
+                    var current = d.rooms[i].heater.targetTemperature || 22;
+                    var newTemp = Math.max(4, Math.min(35, current + delta));
+                    fetch(SH_API + '/api/mill/set?temperature=' + newTemp, { method: 'POST' })
+                        .then(function() { setTimeout(loadSmarthus, 1000); });
+                    break;
+                }
+            }
+        });
+    }
+
+    function toggleMill() {
+        fetch(SH_API + '/api/mill/toggle', { method: 'POST' })
+            .then(function() { setTimeout(loadSmarthus, 1000); });
+    }
+
     function toggleLock() {
         if (!confirm('Er du sikker på at du vil endre låsen?')) return;
         fetch(SH_API + '/api/lock/toggle', { method: 'POST' })
@@ -398,14 +417,19 @@
                     var heaterHtml = '';
                     if (r.heater) {
                         var h = r.heater;
-                        var hOn = h.on ? '#C35839' : 'var(--blue3)';
                         heaterHtml = '<div style="border-top:1px solid var(--blue2);margin-top:0.5rem;padding-top:0.5rem;">' +
-                            '<div style="display:flex;align-items:center;gap:0.5rem;font-size:0.75rem;">' +
-                            '<span style="width:6px;height:6px;border-radius:50%;flex-shrink:0;background:' + (h.on ? '#C35839' : 'var(--blue2)') + '"></span>' +
-                            '<span style="flex:1;color:var(--blue5);">' + h.name + '</span>' +
-                            '<span style="color:var(--blue5);">' + (h.temperature || '—') + '°C</span>' +
-                            '<span style="color:var(--blue3);font-size:0.65rem;">' + (h.power || 0) + 'W</span>' +
-                            (h.openWindow ? '<span style="color:#F9A850;font-size:0.65rem;">Vindu åpent</span>' : '') +
+                            '<div style="font-size:0.7rem;color:var(--blue3);text-transform:uppercase;letter-spacing:0.1em;margin-bottom:0.3rem;font-family:\'DM Mono\',monospace;">Varmeovn</div>' +
+                            '<div style="display:flex;gap:1rem;flex-wrap:wrap;margin-bottom:0.4rem;font-size:0.75rem;">' +
+                            '<span style="color:var(--blue5);">' + (h.temperature || '—') + '°C rom</span>' +
+                            '<span style="color:' + (h.on ? '#C35839' : 'var(--blue3)') + ';">' + (h.power || 0) + 'W</span>' +
+                            '<span style="color:var(--blue3);">' + (h.energy ? h.energy.toFixed(1) + ' kWh' : '') + '</span>' +
+                            (h.openWindow ? '<span style="color:#F9A850;">Vindu åpent</span>' : '') +
+                            '</div>' +
+                            '<div style="display:flex;align-items:center;gap:0.5rem;">' +
+                            '<button onclick="toggleMill()" style="font-family:\'DM Mono\',monospace;font-size:0.7rem;background:' + (h.on ? '#C35839' : '#6D8345') + ';border:none;color:var(--white);padding:0.2rem 0.5rem;border-radius:4px;cursor:pointer;">' + (h.on ? 'Av' : 'På') + '</button>' +
+                            '<button onclick="adjustMill(-1)" style="font-family:\'DM Mono\',monospace;font-size:1rem;background:var(--navy);border:1px solid var(--blue2);color:var(--blue4);width:2rem;height:2rem;border-radius:6px;cursor:pointer;">−</button>' +
+                            '<span style="font-family:\'DM Mono\',monospace;font-size:0.8rem;color:var(--blue5);min-width:3rem;text-align:center;">' + (h.targetTemperature || '—') + '°C</span>' +
+                            '<button onclick="adjustMill(1)" style="font-family:\'DM Mono\',monospace;font-size:1rem;background:var(--navy);border:1px solid var(--blue2);color:var(--blue4);width:2rem;height:2rem;border-radius:6px;cursor:pointer;">+</button>' +
                             '</div></div>';
                     }
 
