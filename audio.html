@@ -31,10 +31,13 @@
         .speaker-card.is-slave { opacity:0.6; border-left:3px solid var(--blue3); margin-left:2rem; }
         .speaker-card.is-master { border-left:3px solid #6D8345; }
         .speaker-card.is-playing { border-color:var(--blue4); }
-        .btn { font-family:'DM Mono',monospace; font-size:0.65rem; background:var(--navy); border:1px solid var(--blue2); color:var(--blue4); padding:0.15rem 0.4rem; border-radius:3px; cursor:pointer; transition:all 0.15s; }
+        .btn { font-family:'DM Mono',monospace; font-size:0.7rem; background:var(--navy); border:1px solid var(--blue2); color:var(--blue4); padding:0.25rem 0.5rem; border-radius:4px; cursor:pointer; transition:all 0.15s; }
         .btn:hover { color:var(--white); border-color:var(--blue4); }
-        .btn.active { background:var(--blue2); color:var(--white); }
-        .btn-play { background:none; border:none; color:var(--blue4); cursor:pointer; font-size:0.8rem; padding:0.1rem 0.2rem; }
+        .btn.active { background:var(--blue2); color:var(--white); border-color:var(--blue4); }
+        .btn-play { background:none; border:none; color:var(--blue4); cursor:pointer; font-size:1rem; padding:0.2rem 0.3rem; transition:color 0.15s; }
+        .btn-play:hover { color:var(--white); }
+        .control-row { display:flex; align-items:center; gap:0.4rem; margin:0.3rem 0; padding-left:0.25rem; }
+        .control-label { font-size:0.65rem; color:var(--blue3); min-width:3.5rem; font-family:'DM Mono',monospace; }
         .drop-zone { border:2px dashed var(--blue2); border-radius:12px; padding:1rem; margin:0.5rem 0; text-align:center; color:var(--blue3); font-size:0.75rem; transition:all 0.2s; min-height:3rem; display:flex; align-items:center; justify-content:center; }
         .drop-zone.drag-over { border-color:var(--blue4); background:rgba(42,66,96,0.3); color:var(--blue5); }
         .group-box { background:rgba(26,45,66,0.5); border:1px solid var(--blue2); border-radius:12px; padding:0.75rem; margin-bottom:1rem; }
@@ -107,14 +110,14 @@
     function renderSpeaker(s, isSlave) {
         var isPlaying = s.state==='play'||s.state==='stream';
         var cls = 'speaker-card' + (isSlave?' is-slave':'') + (s.slaves&&s.slaves.length?' is-master':'') + (isPlaying?' is-playing':'');
-        var inputLabels = {hdmi:'HDMI',optical:'Optisk',coax:'Coax',analog:'Analog',aux:'Aux',bluetooth:'BT',tv:'TV'};
+        // Innganger kommer nå som {id, label} fra API
         var html = '<div class="'+cls+'" draggable="'+(isSlave?'false':'true')+'" data-key="'+s.key+'">';
 
         // Header
         html += '<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:0.4rem;">';
         html += '<div style="display:flex;align-items:center;gap:0.5rem;"><span style="color:'+(isPlaying?'#6D8345':'var(--blue3)')+';">♪</span>';
         html += '<span style="font-size:0.9rem;font-weight:500;color:var(--white);">'+s.name+'</span>';
-        html += '<span style="font-size:0.6rem;color:var(--blue3);">'+s.room+' · '+(s.model||'')+'</span></div>';
+        html += '<span style="font-size:0.6rem;color:var(--blue3);">'+(s.model||'')+'</span></div>';
         if (!isSlave && s.slaves && s.slaves.length) {
             html += '<button class="btn" onclick="ungrpAll(\''+s.key+'\')">Oppløs gruppe</button>';
         }
@@ -129,23 +132,23 @@
         }
 
         // Transport
-        html += '<div style="display:flex;align-items:center;gap:0.3rem;margin:0.4rem 0;">';
+        html += '<div class="control-row" style="gap:0.2rem;">';
         html += '<button class="btn-play" onclick="cmd(\''+s.key+'\',\'back\')">⏮</button>';
-        html += '<button class="btn-play" style="font-size:1.2rem;" onclick="cmd(\''+s.key+'\',\''+(isPlaying?'pause':'play')+'\')">'+(isPlaying?'⏸':'▶')+'</button>';
+        html += '<button class="btn-play" style="font-size:1.4rem;" onclick="cmd(\''+s.key+'\',\''+(isPlaying?'pause':'play')+'\')">'+(isPlaying?'⏸':'▶')+'</button>';
         html += '<button class="btn-play" onclick="cmd(\''+s.key+'\',\'skip\')">⏭</button>';
-        html += '<span style="width:1rem;"></span>';
+        html += '<span style="width:0.75rem;"></span>';
         html += '<button class="btn'+(s.shuffle?' active':'')+'" onclick="shuf(\''+s.key+'\')">Shuffle</button>';
         html += '<button class="btn'+(s.repeat?' active':'')+'" onclick="rep(\''+s.key+'\')">Repeat</button>';
         html += '<span style="width:0.5rem;"></span>';
-        html += '<span style="font-size:0.65rem;color:var(--blue3);">Sleep:</span>';
+        html += '<span class="control-label">Sleep</span>';
         [15,30,60,0].forEach(function(m) {
-            html += '<button class="btn" onclick="slp(\''+s.key+'\','+m+')">'+(m||'Av')+'</button>';
+            html += '<button class="btn" onclick="slp(\''+s.key+'\','+m+')">'+(m?m+'m':'Av')+'</button>';
         });
         html += '</div>';
 
         // Volum
-        html += '<div style="display:flex;align-items:center;gap:0.3rem;margin:0.3rem 0;font-size:0.7rem;">';
-        html += '<span style="color:var(--blue3);min-width:3rem;">Vol '+s.volume+'%</span>';
+        html += '<div class="control-row">';
+        html += '<span class="control-label">Volum '+s.volume+'%</span>';
         html += '<button class="btn" onclick="vol(\''+s.key+'\',Math.max(0,'+s.volume+'-5))">−</button>';
         [5,15,30,50,75].forEach(function(v) {
             html += '<button class="btn" onclick="vol(\''+s.key+'\','+v+')">'+v+'</button>';
@@ -155,21 +158,24 @@
 
         // Inngang
         if (s.inputs && s.inputs.length) {
-            html += '<div style="display:flex;align-items:center;gap:0.2rem;margin:0.2rem 0;">';
-            html += '<span style="font-size:0.6rem;color:var(--blue3);min-width:3rem;">Inngang</span>';
+            html += '<div class="control-row">';
+            html += '<span class="control-label">Inngang</span>';
             s.inputs.forEach(function(i) {
-                html += '<button class="btn" onclick="inp(\''+s.key+'\',\''+i+'\')">'+(inputLabels[i]||i)+'</button>';
+                var inputId = i.id || i;
+                var inputLabel = i.label || i;
+                html += '<button class="btn" onclick="inp(\''+s.key+'\',\''+inputId+'\')">'+inputLabel+'</button>';
             });
             html += '</div>';
         }
 
         // Modus (soundbar)
         if (s.isSoundbar) {
-            html += '<div style="display:flex;align-items:center;gap:0.2rem;margin:0.2rem 0;">';
-            html += '<span style="font-size:0.6rem;color:var(--blue3);min-width:3rem;">Modus</span>';
+            html += '<div class="control-row">';
+            html += '<span class="control-label">Modus</span>';
             ['off','music','movie','night'].forEach(function(m) {
+                var labels = {off:'Off',music:'Musikk',movie:'Film',night:'Natt'};
                 var act = s.mode===m?' active':'';
-                html += '<button class="btn'+act+'" onclick="mode(\''+s.key+'\',\''+m+'\')">'+m.charAt(0).toUpperCase()+m.slice(1)+'</button>';
+                html += '<button class="btn'+act+'" onclick="mode(\''+s.key+'\',\''+m+'\')">'+labels[m]+'</button>';
             });
             html += '</div>';
         }

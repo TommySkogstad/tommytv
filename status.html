@@ -271,11 +271,12 @@
                     // Lys-liste
                     var lightsList = '';
                     r.lights.forEach(function(l) {
-                        var dotColor = l.on ? '#F9A850' : (l.reachable ? 'var(--blue2)' : '#C35839');
-                        var nameColor = l.on ? 'var(--blue5)' : (l.reachable ? 'var(--blue3)' : 'var(--blue2)');
+                        var dotColor = l.on ? '#F9A850' : 'var(--blue2)';
+                        var nameColor = l.on ? 'var(--blue5)' : 'var(--blue3)';
+                        var unreachable = !l.reachable && !l.on ? ' <span style="color:var(--blue2);font-size:0.6rem;">(frakoblet)</span>' : '';
                         lightsList += '<div style="display:flex;align-items:center;gap:0.5rem;padding:0.15rem 0;cursor:pointer;" onclick="toggleLight(\'' + l.id + '\')">' +
                             '<span style="width:6px;height:6px;border-radius:50%;flex-shrink:0;background:' + dotColor + '"></span>' +
-                            '<span style="flex:1;font-size:0.75rem;color:' + nameColor + '">' + l.name + '</span>' +
+                            '<span style="flex:1;font-size:0.75rem;color:' + nameColor + '">' + l.name + unreachable + '</span>' +
                             '</div>';
                     });
 
