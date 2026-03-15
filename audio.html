@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="no">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg?v=2">
+    <meta name="theme-color" content="#0d1b2a">
+    <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@300;400;500&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500&display=swap" rel="stylesheet">
+    <title>Audio — Tommy Skogstad</title>
+    <style>
+        :root { --navy:#0d1b2a; --blue1:#1b2d42; --blue2:#2e4260; --blue3:#4a6080; --blue4:#7a96b0; --blue5:#b8cad8; --blue6:#e4eaf0; --white:#f4f5f2; }
+        * { margin:0; padding:0; box-sizing:border-box; }
+        body { font-family:'DM Sans',sans-serif; background:var(--navy); color:var(--blue5); min-height:100vh; }
+        header { max-width:900px; margin:0 auto; padding:2.5rem 1rem 2rem; display:flex; align-items:center; justify-content:space-between; gap:1.5rem; }
+        .header-brand { display:flex; align-items:center; gap:1.25rem; }
+        .header-brand img { height:4rem; width:4rem; }
+        .header-brand-text { display:flex; flex-direction:column; gap:4px; }
+        .header-brand-name { font-size:1.4rem; font-weight:400; color:var(--white); letter-spacing:-0.02em; line-height:1; }
+        .header-brand-sep { height:1px; background:var(--white); opacity:0.12; }
+        .header-brand-sub { font-family:'DM Mono',monospace; font-size:0.6rem; letter-spacing:0.14em; color:var(--blue4); text-transform:uppercase; }
+        .header-nav { display:flex; gap:0.5rem; align-items:center; flex-wrap:wrap; }
+        .header-nav a { font-family:'DM Mono',monospace; font-size:0.75rem; letter-spacing:0.08em; color:var(--blue3); text-decoration:none; padding:0.4rem 0.8rem; border:1px solid var(--blue2); border-radius:6px; transition:color 0.2s,border-color 0.2s; }
+        .header-nav a:hover { color:var(--white); border-color:var(--blue4); }
+        .header-nav a.active { color:var(--white); border-color:var(--blue4); background:var(--blue1); }
+        main { max-width:900px; margin:0 auto; padding:0 1rem 3rem; }
+        .section { margin-bottom:2.5rem; }
+        .section-header { display:flex; align-items:center; gap:0.75rem; margin-bottom:1rem; padding-bottom:0.5rem; border-bottom:1px solid var(--blue1); }
+        .section-header h2 { font-size:1.25rem; font-weight:500; color:var(--white); }
+        .badge { font-family:'DM Mono',monospace; font-size:0.65rem; text-transform:uppercase; letter-spacing:0.1em; padding:0.2rem 0.6rem; border-radius:9999px; background:var(--blue1); color:var(--blue4); }
+        .speaker-card { background:var(--blue1); border:1px solid var(--blue2); border-radius:12px; padding:1.25rem; margin-bottom:0.75rem; transition:border-color 0.2s; }
+        .speaker-card.is-slave { opacity:0.6; border-left:3px solid var(--blue3); margin-left:2rem; }
+        .speaker-card.is-master { border-left:3px solid #6D8345; }
+        .speaker-card.is-playing { border-color:var(--blue4); }
+        .btn { font-family:'DM Mono',monospace; font-size:0.65rem; background:var(--navy); border:1px solid var(--blue2); color:var(--blue4); padding:0.15rem 0.4rem; border-radius:3px; cursor:pointer; transition:all 0.15s; }
+        .btn:hover { color:var(--white); border-color:var(--blue4); }
+        .btn.active { background:var(--blue2); color:var(--white); }
+        .btn-play { background:none; border:none; color:var(--blue4); cursor:pointer; font-size:0.8rem; padding:0.1rem 0.2rem; }
+        .drop-zone { border:2px dashed var(--blue2); border-radius:12px; padding:1rem; margin:0.5rem 0; text-align:center; color:var(--blue3); font-size:0.75rem; transition:all 0.2s; min-height:3rem; display:flex; align-items:center; justify-content:center; }
+        .drop-zone.drag-over { border-color:var(--blue4); background:rgba(42,66,96,0.3); color:var(--blue5); }
+        .group-box { background:rgba(26,45,66,0.5); border:1px solid var(--blue2); border-radius:12px; padding:0.75rem; margin-bottom:1rem; }
+        .group-header { display:flex; align-items:center; justify-content:space-between; margin-bottom:0.5rem; font-size:0.7rem; color:var(--blue3); text-transform:uppercase; letter-spacing:0.1em; font-family:'DM Mono',monospace; }
+        .now-playing { display:flex; align-items:center; gap:0.75rem; margin:0.5rem 0; }
+        .now-playing img { width:48px; height:48px; border-radius:6px; }
+        .now-playing-info { flex:1; min-width:0; }
+        .now-playing-title { font-size:0.8rem; color:var(--white); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+        .now-playing-artist { font-size:0.7rem; color:var(--blue4); }
+        footer { text-align:center; padding:2rem 1rem; color:var(--blue3); font-size:0.85rem; border-top:1px solid var(--blue1); }
+        footer a { transition:color 0.2s; text-decoration:none; }
+        footer a:hover { color:var(--white); }
+        @media(max-width:600px) { header { flex-direction:column; align-items:flex-start; } }
+    </style>
+</head>
+<body>
+    <header>
+        <a href="/" style="text-decoration:none;color:inherit;">
+            <div class="header-brand">
+                <img src="favicon.svg" alt="Tommy Skogstad">
+                <div class="header-brand-text">
+                    <div class="header-brand-name">Tommy Skogstad</div>
+                    <div class="header-brand-sep"></div>
+                    <div class="header-brand-sub">ingenior · data · elektro · ledelse · produktutvikling</div>
+                </div>
+            </div>
+        </a>
+        <nav class="header-nav">
+            <a href="/">Dashboard</a>
+            <a href="status.html">Status</a>
+            <a href="audio.html" class="active">Audio</a>
+            <a href="bookmarks.html">Bokmerker</a>
+        </nav>
+    </header>
+
+    <main>
+        <section class="section">
+            <div class="section-header">
+                <h2>Bluesound Multi-Room</h2>
+                <span class="badge" id="refresh-badge">Laster...</span>
+            </div>
+            <div id="speakers-container"></div>
+        </section>
+    </main>
+
+    <footer>
+        <div style="margin-bottom:1rem;"><strong style="color:var(--white);">Tommy Skogstad</strong></div>
+        <div style="display:flex;justify-content:center;gap:1.5rem;flex-wrap:wrap;margin-bottom:1rem;">
+            <a href="tel:+4748061560" style="color:var(--blue4);">48 06 15 60</a>
+            <a href="mailto:tommyskogstad@gmail.com" style="color:var(--blue4);">tommyskogstad@gmail.com</a>
+        </div>
+    </footer>
+
+    <script>
+    var API = 'http://nuc.tommy.tv:8851';
+    var refreshTimer;
+
+    function cmd(key, action) { return fetch(API+'/api/speaker/'+key+'/'+action,{method:'POST'}).then(function(){setTimeout(loadAudio,800);}); }
+    function vol(key, level) { return fetch(API+'/api/speaker/'+key+'/volume/'+level,{method:'POST'}).then(function(){setTimeout(loadAudio,500);}); }
+    function inp(key, source) { return fetch(API+'/api/speaker/'+key+'/input/'+source,{method:'POST'}).then(function(){setTimeout(loadAudio,800);}); }
+    function mode(key, m) { return fetch(API+'/api/speaker/'+key+'/mode/'+m,{method:'POST'}).then(function(){setTimeout(loadAudio,500);}); }
+    function grp(master, slave) { return fetch(API+'/api/speaker/'+master+'/group/'+slave,{method:'POST'}).then(function(){setTimeout(loadAudio,1500);}); }
+    function ungrp(master, slave) { return fetch(API+'/api/speaker/'+master+'/ungroup/'+slave,{method:'POST'}).then(function(){setTimeout(loadAudio,1500);}); }
+    function ungrpAll(master) { return fetch(API+'/api/speaker/'+master+'/ungroup-all',{method:'POST'}).then(function(){setTimeout(loadAudio,1500);}); }
+    function slp(key, min) { return fetch(API+'/api/speaker/'+key+'/sleep/'+min,{method:'POST'}); }
+    function shuf(key) { return fetch(API+'/api/speaker/'+key+'/shuffle',{method:'POST'}).then(function(){setTimeout(loadAudio,500);}); }
+    function rep(key) { return fetch(API+'/api/speaker/'+key+'/repeat',{method:'POST'}).then(function(){setTimeout(loadAudio,500);}); }
+
+    function renderSpeaker(s, isSlave) {
+        var isPlaying = s.state==='play'||s.state==='stream';
+        var cls = 'speaker-card' + (isSlave?' is-slave':'') + (s.slaves&&s.slaves.length?' is-master':'') + (isPlaying?' is-playing':'');
+        var inputLabels = {hdmi:'HDMI',optical:'Optisk',coax:'Coax',analog:'Analog',aux:'Aux',bluetooth:'BT',tv:'TV'};
+        var html = '<div class="'+cls+'" draggable="'+(isSlave?'false':'true')+'" data-key="'+s.key+'">';
+
+        // Header
+        html += '<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:0.4rem;">';
+        html += '<div style="display:flex;align-items:center;gap:0.5rem;"><span style="color:'+(isPlaying?'#6D8345':'var(--blue3)')+';">♪</span>';
+        html += '<span style="font-size:0.9rem;font-weight:500;color:var(--white);">'+s.name+'</span>';
+        html += '<span style="font-size:0.6rem;color:var(--blue3);">'+s.room+' · '+(s.model||'')+'</span></div>';
+        if (!isSlave && s.slaves && s.slaves.length) {
+            html += '<button class="btn" onclick="ungrpAll(\''+s.key+'\')">Oppløs gruppe</button>';
+        }
+        html += '</div>';
+
+        // Nå spilles
+        if (s.artist || s.title) {
+            html += '<div class="now-playing">';
+            if (s.image) html += '<img src="'+s.image+'" alt="">';
+            html += '<div class="now-playing-info"><div class="now-playing-title">'+(s.artist||'')+'</div>';
+            html += '<div class="now-playing-artist">'+(s.album||s.title||'')+'</div></div></div>';
+        }
+
+        // Transport
+        html += '<div style="display:flex;align-items:center;gap:0.3rem;margin:0.4rem 0;">';
+        html += '<button class="btn-play" onclick="cmd(\''+s.key+'\',\'back\')">⏮</button>';
+        html += '<button class="btn-play" style="font-size:1.2rem;" onclick="cmd(\''+s.key+'\',\''+(isPlaying?'pause':'play')+'\')">'+(isPlaying?'⏸':'▶')+'</button>';
+        html += '<button class="btn-play" onclick="cmd(\''+s.key+'\',\'skip\')">⏭</button>';
+        html += '<span style="width:1rem;"></span>';
+        html += '<button class="btn'+(s.shuffle?' active':'')+'" onclick="shuf(\''+s.key+'\')">Shuffle</button>';
+        html += '<button class="btn'+(s.repeat?' active':'')+'" onclick="rep(\''+s.key+'\')">Repeat</button>';
+        html += '<span style="width:0.5rem;"></span>';
+        html += '<span style="font-size:0.65rem;color:var(--blue3);">Sleep:</span>';
+        [15,30,60,0].forEach(function(m) {
+            html += '<button class="btn" onclick="slp(\''+s.key+'\','+m+')">'+(m||'Av')+'</button>';
+        });
+        html += '</div>';
+
+        // Volum
+        html += '<div style="display:flex;align-items:center;gap:0.3rem;margin:0.3rem 0;font-size:0.7rem;">';
+        html += '<span style="color:var(--blue3);min-width:3rem;">Vol '+s.volume+'%</span>';
+        html += '<button class="btn" onclick="vol(\''+s.key+'\',Math.max(0,'+s.volume+'-5))">−</button>';
+        [5,15,30,50,75].forEach(function(v) {
+            html += '<button class="btn" onclick="vol(\''+s.key+'\','+v+')">'+v+'</button>';
+        });
+        html += '<button class="btn" onclick="vol(\''+s.key+'\',Math.min(100,'+s.volume+'+5))">+</button>';
+        html += '</div>';
+
+        // Inngang
+        if (s.inputs && s.inputs.length) {
+            html += '<div style="display:flex;align-items:center;gap:0.2rem;margin:0.2rem 0;">';
+            html += '<span style="font-size:0.6rem;color:var(--blue3);min-width:3rem;">Inngang</span>';
+            s.inputs.forEach(function(i) {
+                html += '<button class="btn" onclick="inp(\''+s.key+'\',\''+i+'\')">'+(inputLabels[i]||i)+'</button>';
+            });
+            html += '</div>';
+        }
+
+        // Modus (soundbar)
+        if (s.isSoundbar) {
+            html += '<div style="display:flex;align-items:center;gap:0.2rem;margin:0.2rem 0;">';
+            html += '<span style="font-size:0.6rem;color:var(--blue3);min-width:3rem;">Modus</span>';
+            ['off','music','movie','night'].forEach(function(m) {
+                var act = s.mode===m?' active':'';
+                html += '<button class="btn'+act+'" onclick="mode(\''+s.key+'\',\''+m+'\')">'+m.charAt(0).toUpperCase()+m.slice(1)+'</button>';
+            });
+            html += '</div>';
+        }
+
+        html += '</div>';
+        return html;
+    }
+
+    function loadAudio() {
+        fetch(API+'/api/speakers/status')
+            .then(function(r){return r.json();})
+            .then(function(speakers) {
+                document.getElementById('refresh-badge').textContent = 'Oppdatert '+new Date().toLocaleTimeString('nb-NO',{hour:'2-digit',minute:'2-digit',second:'2-digit'});
+                var container = document.getElementById('speakers-container');
+                var html = '';
+
+                // Finn grupper (masters med slaves)
+                var masters = speakers.filter(function(s){return s.slaves&&s.slaves.length>0;});
+                var slaveIps = {};
+                masters.forEach(function(m){m.slaves.forEach(function(ip){slaveIps[ip]=m.key;});});
+                var ungrouped = speakers.filter(function(s){return !s.isSlave&&(!s.slaves||!s.slaves.length);});
+
+                // Render grupper
+                masters.forEach(function(m) {
+                    html += '<div class="group-box">';
+                    html += '<div class="group-header"><span>Gruppe: '+m.name+'</span><button class="btn" onclick="ungrpAll(\''+m.key+'\')">Oppløs</button></div>';
+                    html += renderSpeaker(m, false);
+                    m.slaves.forEach(function(slaveIp) {
+                        var slave = speakers.find(function(s){return s.ip===slaveIp;});
+                        if (slave) html += renderSpeaker(slave, true);
+                    });
+                    html += '</div>';
+                });
+
+                // Render ugrupperte
+                ungrouped.forEach(function(s) {
+                    html += renderSpeaker(s, false);
+                });
+
+                // Drop-sone for gruppering
+                html += '<div class="drop-zone" id="group-drop" ondragover="event.preventDefault();this.classList.add(\'drag-over\');" ondragleave="this.classList.remove(\'drag-over\');" ondrop="handleDrop(event)">';
+                html += 'Dra en høyttaler hit for å opprette en gruppe</div>';
+
+                // Manuell gruppering
+                html += '<div style="margin-top:1rem;border-top:1px solid var(--blue1);padding-top:1rem;">';
+                html += '<div style="font-size:0.7rem;color:var(--blue3);text-transform:uppercase;letter-spacing:0.1em;margin-bottom:0.5rem;font-family:\'DM Mono\',monospace;">Grupper høyttalere</div>';
+                html += '<div style="display:flex;gap:0.5rem;flex-wrap:wrap;align-items:center;">';
+                html += '<select id="master-select" style="font-family:\'DM Mono\',monospace;font-size:0.75rem;background:var(--navy);border:1px solid var(--blue2);color:var(--blue5);padding:0.3rem 0.5rem;border-radius:4px;">';
+                html += '<option value="">Master...</option>';
+                speakers.forEach(function(s){if(!s.isSlave) html += '<option value="'+s.key+'">'+s.name+'</option>';});
+                html += '</select>';
+                html += '<span style="color:var(--blue3);font-size:0.7rem;">+</span>';
+                html += '<select id="slave-select" style="font-family:\'DM Mono\',monospace;font-size:0.75rem;background:var(--navy);border:1px solid var(--blue2);color:var(--blue5);padding:0.3rem 0.5rem;border-radius:4px;">';
+                html += '<option value="">Slave...</option>';
+                speakers.forEach(function(s){if(!s.isSlave) html += '<option value="'+s.key+'">'+s.name+'</option>';});
+                html += '</select>';
+                html += '<button class="btn" style="font-size:0.75rem;padding:0.3rem 0.8rem;" onclick="var m=document.getElementById(\'master-select\').value,s=document.getElementById(\'slave-select\').value;if(m&&s&&m!==s)grp(m,s);">Grupper</button>';
+                html += '</div></div>';
+
+                container.innerHTML = html;
+
+                // Sett opp drag
+                container.querySelectorAll('.speaker-card[draggable=true]').forEach(function(card) {
+                    card.addEventListener('dragstart', function(e) {
+                        e.dataTransfer.setData('text/plain', card.dataset.key);
+                        card.style.opacity = '0.5';
+                    });
+                    card.addEventListener('dragend', function() { card.style.opacity = '1'; });
+                });
+            })
+            .catch(function() {
+                document.getElementById('refresh-badge').textContent = 'Feil ved lasting';
+            });
+    }
+
+    function handleDrop(e) {
+        e.preventDefault();
+        e.target.classList.remove('drag-over');
+        // For drag-drop gruppering bruker vi select-boksene som fallback
+    }
+
+    loadAudio();
+    refreshTimer = setInterval(loadAudio, 5000);
+    </script>
+</body>
+</html>

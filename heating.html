@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="no">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg?v=2">
+    <meta name="theme-color" content="#0d1b2a">
+    <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@300;400;500&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500&display=swap" rel="stylesheet">
+    <title>Varme — Tommy Skogstad</title>
+    <style>
+        :root { --navy:#0d1b2a; --blue1:#1b2d42; --blue2:#2e4260; --blue3:#4a6080; --blue4:#7a96b0; --blue5:#b8cad8; --white:#f4f5f2; }
+        * { margin:0; padding:0; box-sizing:border-box; }
+        body { font-family:'DM Sans',sans-serif; background:var(--navy); color:var(--blue5); min-height:100vh; }
+        header { max-width:900px; margin:0 auto; padding:2.5rem 1rem 2rem; display:flex; align-items:center; justify-content:space-between; gap:1.5rem; }
+        .header-brand { display:flex; align-items:center; gap:1.25rem; }
+        .header-brand img { height:4rem; width:4rem; }
+        .header-brand-text { display:flex; flex-direction:column; gap:4px; }
+        .header-brand-name { font-size:1.4rem; font-weight:400; color:var(--white); letter-spacing:-0.02em; line-height:1; }
+        .header-brand-sep { height:1px; background:var(--white); opacity:0.12; }
+        .header-brand-sub { font-family:'DM Mono',monospace; font-size:0.6rem; letter-spacing:0.14em; color:var(--blue4); text-transform:uppercase; }
+        .header-nav { display:flex; gap:0.5rem; align-items:center; flex-wrap:wrap; }
+        .header-nav a { font-family:'DM Mono',monospace; font-size:0.75rem; letter-spacing:0.08em; color:var(--blue3); text-decoration:none; padding:0.4rem 0.8rem; border:1px solid var(--blue2); border-radius:6px; transition:color 0.2s,border-color 0.2s; }
+        .header-nav a:hover { color:var(--white); border-color:var(--blue4); }
+        .header-nav a.active { color:var(--white); border-color:var(--blue4); background:var(--blue1); }
+        main { max-width:900px; margin:0 auto; padding:0 1rem 3rem; }
+        .card { background:var(--blue1); border:1px solid var(--blue2); border-radius:12px; padding:1.5rem; margin-bottom:1rem; }
+        .section { margin-bottom:2.5rem; }
+        .section-header { display:flex; align-items:center; gap:0.75rem; margin-bottom:1rem; padding-bottom:0.5rem; border-bottom:1px solid var(--blue1); }
+        .section-header h2 { font-size:1.25rem; font-weight:500; color:var(--white); }
+        .badge { font-family:'DM Mono',monospace; font-size:0.65rem; text-transform:uppercase; letter-spacing:0.1em; padding:0.2rem 0.6rem; border-radius:9999px; background:var(--blue1); color:var(--blue4); }
+        .btn { font-family:'DM Mono',monospace; font-size:0.7rem; background:var(--navy); border:1px solid var(--blue2); color:var(--blue4); padding:0.2rem 0.5rem; border-radius:4px; cursor:pointer; }
+        .btn:hover { color:var(--white); border-color:var(--blue4); }
+        .temp-big { font-size:2.5rem; font-weight:500; color:var(--white); }
+        .temp-label { font-size:0.7rem; color:var(--blue4); }
+        footer { text-align:center; padding:2rem 1rem; color:var(--blue3); font-size:0.85rem; border-top:1px solid var(--blue1); }
+        footer a { transition:color 0.2s; text-decoration:none; }
+        footer a:hover { color:var(--white); }
+        @media(max-width:600px) { header { flex-direction:column; align-items:flex-start; } .temp-big { font-size:2rem; } }
+    </style>
+</head>
+<body>
+    <header>
+        <a href="/" style="text-decoration:none;color:inherit;">
+            <div class="header-brand">
+                <img src="favicon.svg" alt="Tommy Skogstad">
+                <div class="header-brand-text">
+                    <div class="header-brand-name">Tommy Skogstad</div>
+                    <div class="header-brand-sep"></div>
+                    <div class="header-brand-sub">ingenior · data · elektro · ledelse · produktutvikling</div>
+                </div>
+            </div>
+        </a>
+        <nav class="header-nav">
+            <a href="/">Dashboard</a>
+            <a href="status.html">Status</a>
+            <a href="audio.html">Audio</a>
+            <a href="heating.html" class="active">Varme</a>
+            <a href="bookmarks.html">Bokmerker</a>
+        </nav>
+    </header>
+
+    <main>
+        <section class="section">
+            <div class="section-header">
+                <h2>Oppvarming</h2>
+                <span class="badge" id="heat-badge">Laster...</span>
+            </div>
+            <div id="heating-container">Laster...</div>
+        </section>
+
+        <section class="section">
+            <div class="section-header">
+                <h2>Temperaturoversikt</h2>
+                <span class="badge">Alle sensorer</span>
+            </div>
+            <div id="temps-container">Laster...</div>
+        </section>
+    </main>
+
+    <footer>
+        <div style="margin-bottom:1rem;"><strong style="color:var(--white);">Tommy Skogstad</strong></div>
+        <div style="display:flex;justify-content:center;gap:1.5rem;flex-wrap:wrap;">
+            <a href="tel:+4748061560" style="color:var(--blue4);">48 06 15 60</a>
+            <a href="mailto:tommyskogstad@gmail.com" style="color:var(--blue4);">tommyskogstad@gmail.com</a>
+        </div>
+    </footer>
+
+    <script>
+    var API = 'http://nuc.tommy.tv:8851';
+
+    function adjustFloor(delta) {
+        fetch(API+'/api/status').then(function(r){return r.json();}).then(function(d) {
+            var th = (d.homey||{}).thermostat||{};
+            var t = Math.max(5,Math.min(40,(th.targetTemperature||25)+delta));
+            fetch(API+'/api/thermostat/set?temperature='+t,{method:'POST'}).then(function(){setTimeout(loadHeating,1000);});
+        });
+    }
+
+    function adjustMill(delta) {
+        fetch(API+'/api/status').then(function(r){return r.json();}).then(function(d) {
+            for (var i=0;i<(d.rooms||[]).length;i++) {
+                if (d.rooms[i].heater) {
+                    var t = Math.max(4,Math.min(35,(d.rooms[i].heater.targetTemperature||22)+delta));
+                    fetch(API+'/api/mill/set?temperature='+t,{method:'POST'}).then(function(){setTimeout(loadHeating,1000);});
+                    break;
+                }
+            }
+        });
+    }
+
+    function toggleMill() {
+        fetch(API+'/api/mill/toggle',{method:'POST'}).then(function(){setTimeout(loadHeating,1000);});
+    }
+
+    function loadHeating() {
+        fetch(API+'/api/status')
+            .then(function(r){return r.json();})
+            .then(function(data) {
+                document.getElementById('heat-badge').textContent = 'Oppdatert '+new Date().toLocaleTimeString('nb-NO',{hour:'2-digit',minute:'2-digit'});
+                var th = (data.homey||{}).thermostat||{};
+                var mill = null;
+                (data.rooms||[]).forEach(function(r){if(r.heater) mill=r.heater;});
+
+                // Gulvvarme
+                var hc = th.heating?'#C35839':'#6D8345';
+                var html = '<div class="card">';
+                html += '<h3 style="font-size:1.1rem;color:var(--white);margin-bottom:1rem;">🔥 Gulvvarme — Bad</h3>';
+                html += '<div style="display:flex;gap:2rem;flex-wrap:wrap;margin-bottom:1rem;">';
+                html += '<div><div class="temp-big">'+th.temperature+'°</div><div class="temp-label">Termostat (skap)</div></div>';
+                html += '<div><div class="temp-big">'+(th.floorTemperature||'—')+'°</div><div class="temp-label">Gulvsensor</div></div>';
+                html += '<div><div class="temp-big" style="color:var(--blue4);">'+th.targetTemperature+'°</div><div class="temp-label">Måltemperatur</div></div>';
+                html += '<div><div class="temp-big" style="color:'+hc+';">'+Math.round(th.power||0)+'</div><div class="temp-label">Watt '+(th.heating?'(varmer)':'(idle)')+'</div></div>';
+                html += '</div>';
+                html += '<div style="display:flex;align-items:center;gap:0.75rem;margin-bottom:0.75rem;">';
+                html += '<button class="btn" style="font-size:1.2rem;width:2.5rem;height:2.5rem;" onclick="adjustFloor(-1)">−</button>';
+                html += '<span style="font-family:\'DM Mono\',monospace;font-size:1.2rem;color:var(--white);min-width:4rem;text-align:center;">'+th.targetTemperature+'°C</span>';
+                html += '<button class="btn" style="font-size:1.2rem;width:2.5rem;height:2.5rem;" onclick="adjustFloor(1)">+</button>';
+                html += '</div>';
+                html += '<div style="font-size:0.75rem;color:var(--blue3);">Totalt forbruk: '+(th.energy?Math.round(th.energy).toLocaleString():'-')+' kWh</div>';
+                html += '</div>';
+
+                // Mill
+                if (mill) {
+                    var mc = mill.on?'#C35839':'#6D8345';
+                    html += '<div class="card">';
+                    html += '<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1rem;">';
+                    html += '<h3 style="font-size:1.1rem;color:var(--white);">🌡️ Mill Varmeovn — Stue</h3>';
+                    html += '<button class="btn" style="background:'+(mill.on?'#C35839':'#6D8345')+';border:none;color:var(--white);padding:0.3rem 0.8rem;" onclick="toggleMill()">'+(mill.on?'Slå av':'Slå på')+'</button>';
+                    html += '</div>';
+                    html += '<div style="display:flex;gap:2rem;flex-wrap:wrap;margin-bottom:1rem;">';
+                    html += '<div><div class="temp-big">'+(mill.temperature||'—')+'°</div><div class="temp-label">Romtemperatur</div></div>';
+                    html += '<div><div class="temp-big" style="color:var(--blue4);">'+(mill.targetTemperature||'—')+'°</div><div class="temp-label">Måltemperatur</div></div>';
+                    html += '<div><div class="temp-big" style="color:'+mc+';">'+(mill.power||0)+'</div><div class="temp-label">Watt</div></div>';
+                    html += '</div>';
+                    html += '<div style="display:flex;align-items:center;gap:0.75rem;margin-bottom:0.75rem;">';
+                    html += '<button class="btn" style="font-size:1.2rem;width:2.5rem;height:2.5rem;" onclick="adjustMill(-1)">−</button>';
+                    html += '<span style="font-family:\'DM Mono\',monospace;font-size:1.2rem;color:var(--white);min-width:4rem;text-align:center;">'+(mill.targetTemperature||'—')+'°C</span>';
+                    html += '<button class="btn" style="font-size:1.2rem;width:2.5rem;height:2.5rem;" onclick="adjustMill(1)">+</button>';
+                    html += '</div>';
+                    var extras = [];
+                    if (mill.openWindow) extras.push('<span style="color:#F9A850;">⚠ Åpent vindu detektert</span>');
+                    extras.push('Daglig: '+(mill.dailyPower||0).toFixed(1)+' kWh');
+                    extras.push('Totalt: '+(mill.energy||0).toFixed(1)+' kWh');
+                    html += '<div style="font-size:0.75rem;color:var(--blue3);display:flex;gap:1rem;flex-wrap:wrap;">'+extras.join('')+'</div>';
+                    html += '</div>';
+                }
+
+                document.getElementById('heating-container').innerHTML = html;
+
+                // Temperaturoversikt
+                var temps = '<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:0.75rem;">';
+                // Gulvvarme-sensorer
+                temps += '<div class="card" style="padding:1rem;"><div style="font-size:1.5rem;font-weight:500;color:var(--white);">'+th.temperature+'°C</div><div class="temp-label">Bad — Termostat (skap)</div></div>';
+                temps += '<div class="card" style="padding:1rem;"><div style="font-size:1.5rem;font-weight:500;color:var(--white);">'+(th.floorTemperature||'—')+'°C</div><div class="temp-label">Bad — Gulvsensor</div></div>';
+                // Hue-sensorer
+                (data.rooms||[]).forEach(function(r) {
+                    if (r.temperature !== undefined) {
+                        temps += '<div class="card" style="padding:1rem;"><div style="font-size:1.5rem;font-weight:500;color:var(--white);">'+r.temperature+'°C</div><div class="temp-label">'+r.name+' — Hue-sensor</div></div>';
+                    }
+                    if (r.heater && r.heater.temperature) {
+                        temps += '<div class="card" style="padding:1rem;"><div style="font-size:1.5rem;font-weight:500;color:var(--white);">'+r.heater.temperature+'°C</div><div class="temp-label">'+r.name+' — Mill</div></div>';
+                    }
+                });
+                temps += '</div>';
+                document.getElementById('temps-container').innerHTML = temps;
+            });
+    }
+
+    loadHeating();
+    setInterval(loadHeating, 15000);
+    </script>
+</body>
+</html>
