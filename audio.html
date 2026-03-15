@@ -131,7 +131,7 @@
             html += '<div class="now-playing-artist">'+(s.album||s.title||'')+'</div></div></div>';
         }
 
-        // Transport
+        // Transport + shuffle/repeat
         html += '<div class="control-row" style="gap:0.2rem;">';
         html += '<button class="btn-play" onclick="cmd(\''+s.key+'\',\'back\')">⏮</button>';
         html += '<button class="btn-play" style="font-size:1.4rem;" onclick="cmd(\''+s.key+'\',\''+(isPlaying?'pause':'play')+'\')">'+(isPlaying?'⏸':'▶')+'</button>';
@@ -139,9 +139,12 @@
         html += '<span style="width:0.75rem;"></span>';
         html += '<button class="btn'+(s.shuffle?' active':'')+'" onclick="shuf(\''+s.key+'\')">Shuffle</button>';
         html += '<button class="btn'+(s.repeat?' active':'')+'" onclick="rep(\''+s.key+'\')">Repeat</button>';
-        html += '<span style="width:0.5rem;"></span>';
+        html += '</div>';
+
+        // Sleep
+        html += '<div class="control-row">';
         html += '<span class="control-label">Sleep</span>';
-        [15,30,60,0].forEach(function(m) {
+        [15,30,60,90,0].forEach(function(m) {
             html += '<button class="btn" onclick="slp(\''+s.key+'\','+m+')">'+(m?m+'m':'Av')+'</button>';
         });
         html += '</div>';
