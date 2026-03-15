@@ -113,9 +113,15 @@
                         <div style="font-size: 0.7rem; color: var(--blue3); text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 0.35rem; font-family: 'DM Mono', monospace;">Alle enheter</div>
                         <div id="unifi-devices" style="display: flex; flex-direction: column; gap: 0.25rem; font-size: 0.75rem; margin-bottom: 0.75rem;"></div>
                         <!-- Speedtest -->
-                        <div style="border-top: 1px solid var(--blue2); padding-top: 0.75rem; display: flex; align-items: center; gap: 1rem;">
-                            <button id="speedtest-btn" onclick="runSpeedtest()" style="font-family: 'DM Mono', monospace; font-size: 0.75rem; background: var(--navy); border: 1px solid var(--blue2); color: var(--blue4); padding: 0.4rem 0.8rem; border-radius: 6px; cursor: pointer;">Kjør speedtest</button>
-                            <span id="speedtest-result" style="font-size: 0.75rem; color: var(--blue4);"></span>
+                        <div style="border-top: 1px solid var(--blue2); padding-top: 0.75rem;">
+                            <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 0.5rem;">
+                                <button id="speedtest-btn" onclick="runSpeedtest()" style="font-family: 'DM Mono', monospace; font-size: 0.75rem; background: var(--navy); border: 1px solid var(--blue2); color: var(--blue4); padding: 0.4rem 0.8rem; border-radius: 6px; cursor: pointer;">WAN speedtest</button>
+                                <span id="speedtest-result" style="font-size: 0.75rem; color: var(--blue4);"></span>
+                            </div>
+                            <div style="display: flex; align-items: center; gap: 1rem;">
+                                <a href="http://nuc.tommy.tv:3000" target="_blank" style="font-family: 'DM Mono', monospace; font-size: 0.75rem; background: var(--navy); border: 1px solid var(--blue2); color: var(--blue4); padding: 0.4rem 0.8rem; border-radius: 6px; text-decoration: none;">LAN speedtest</a>
+                                <span style="font-size: 0.65rem; color: var(--blue3);">OpenSpeedTest mot NUC lokalt</span>
+                            </div>
                         </div>
                     </div>
                 </div>
