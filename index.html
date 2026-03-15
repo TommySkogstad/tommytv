@@ -334,6 +334,40 @@
 
         <section class="section local-section" style="display: none;">
             <div class="section-header">
+                <h2>Infrastruktur</h2>
+                <span class="badge badge-local">LAN</span>
+            </div>
+            <div class="grid">
+                <div class="card" id="unifi-widget" style="grid-column: 1 / -1;">
+                    <h3>UniFi Nettverk</h3>
+                    <div id="unifi-loading" style="color: var(--blue4); font-size: 0.8rem;">Laster nettverksstatus...</div>
+                    <div id="unifi-content" style="display: none;">
+                        <div style="display: flex; gap: 1.5rem; flex-wrap: wrap; margin-bottom: 0.75rem;">
+                            <div style="text-align: center;">
+                                <div style="font-size: 1.5rem; font-weight: 500; color: var(--white);" id="unifi-clients">—</div>
+                                <div style="font-size: 0.7rem; color: var(--blue4);">Klienter</div>
+                            </div>
+                            <div style="text-align: center;">
+                                <div style="font-size: 1.5rem; font-weight: 500; color: var(--white);" id="unifi-wifi">—</div>
+                                <div style="font-size: 0.7rem; color: var(--blue4);">WiFi</div>
+                            </div>
+                            <div style="text-align: center;">
+                                <div style="font-size: 1.5rem; font-weight: 500; color: var(--white);" id="unifi-wired">—</div>
+                                <div style="font-size: 0.7rem; color: var(--blue4);">Kablet</div>
+                            </div>
+                            <div style="text-align: center;">
+                                <div style="font-size: 1.5rem; font-weight: 500;" id="unifi-devices-count">—</div>
+                                <div style="font-size: 0.7rem; color: var(--blue4);">Enheter</div>
+                            </div>
+                        </div>
+                        <div id="unifi-devices" style="display: flex; flex-direction: column; gap: 0.35rem; font-size: 0.75rem;"></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="section local-section" style="display: none;">
+            <div class="section-header">
                 <h2>Lokalt nettverk</h2>
                 <span class="badge badge-local">LAN</span>
             </div>
@@ -688,6 +722,50 @@
                     s.style.display = '';
                 });
                 document.getElementById('lan-toggle').style.display = 'none';
+
+                // Hent UniFi-status
+                fetch('http://nuc.tommy.tv:8850/api/status')
+                    .then(function(r) { return r.json(); })
+                    .then(function(data) {
+                        document.getElementById('unifi-loading').style.display = 'none';
+                        document.getElementById('unifi-content').style.display = '';
+                        document.getElementById('unifi-clients').textContent = data.totalClients;
+                        document.getElementById('unifi-wifi').textContent = data.wifiClients;
+                        document.getElementById('unifi-wired').textContent = data.wiredClients;
+
+                        var onlineCount = data.onlineDevices + '/' + data.totalDevices;
+                        var devEl = document.getElementById('unifi-devices-count');
+                        devEl.textContent = onlineCount;
+                        devEl.style.color = data.offlineDevices > 0 ? '#F9A850' : 'var(--white)';
+
+                        var container = document.getElementById('unifi-devices');
+                        container.innerHTML = '';
+                        data.devices.forEach(function(d) {
+                            var row = document.createElement('div');
+                            row.style.cssText = 'display:flex;align-items:center;gap:0.5rem;padding:0.25rem 0;';
+
+                            var dot = document.createElement('span');
+                            dot.style.cssText = 'width:6px;height:6px;border-radius:50%;flex-shrink:0;background:' +
+                                (d.status === 'online' ? '#6D8345' : '#C35839');
+                            row.appendChild(dot);
+
+                            var name = document.createElement('span');
+                            name.style.cssText = 'flex:1;color:var(--blue5);';
+                            name.textContent = d.name;
+                            row.appendChild(name);
+
+                            var model = document.createElement('span');
+                            model.style.cssText = 'color:var(--blue3);font-family:"DM Mono",monospace;font-size:0.65rem;';
+                            model.textContent = d.ip || '';
+                            row.appendChild(model);
+
+                            container.appendChild(row);
+                        });
+                    })
+                    .catch(function() {
+                        document.getElementById('unifi-loading').textContent = 'Kunne ikke hente nettverksstatus';
+                        document.getElementById('unifi-loading').style.color = '#C35839';
+                    });
             }
         })();
     </script>
