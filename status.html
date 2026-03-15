@@ -71,14 +71,7 @@
                 <h2>Smarthus</h2>
                 <span class="badge badge-local">Live</span>
             </div>
-            <div class="grid">
-                <!-- Gulvvarme -->
-                <div class="card" style="grid-column: 1 / -1;">
-                    <h3>Gulvvarme</h3>
-                    <div id="sh-thermo" style="color: var(--blue4); font-size: 0.8rem;">Laster...</div>
-                </div>
-            </div>
-            <div id="sh-loading" style="color: var(--blue4); font-size: 0.8rem; margin-top: 1rem;">Laster rom...</div>
+            <div id="sh-loading" style="color: var(--blue4); font-size: 0.8rem;">Laster rom...</div>
             <div id="sh-rooms-grid" class="grid" style="margin-top: 1rem;"></div>
         </section>
 
@@ -264,27 +257,6 @@
             .then(function(data) {
                 document.getElementById('sh-loading').style.display = 'none';
 
-                // Gulvvarme
-                var th = (data.homey || {}).thermostat || {};
-                var thermoEl = document.getElementById('sh-thermo');
-                if (th.temperature !== undefined) {
-                    var hc = th.heating ? '#C35839' : '#6D8345';
-                    thermoEl.innerHTML =
-                        '<div style="display:flex;gap:1.5rem;flex-wrap:wrap;margin-bottom:0.5rem;">' +
-                        '<div style="text-align:center"><div style="font-size:1.5rem;font-weight:500;color:var(--white)">' + th.temperature + '°</div><div style="font-size:0.7rem;color:var(--blue4)">Skap (intern)</div></div>' +
-                        '<div style="text-align:center"><div style="font-size:1.5rem;font-weight:500;color:var(--white)">' + (th.floorTemperature || '—') + '°</div><div style="font-size:0.7rem;color:var(--blue4)">Gulv</div></div>' +
-                        '<div style="text-align:center"><div style="font-size:1.5rem;font-weight:500;color:var(--blue4)">' + th.targetTemperature + '°</div><div style="font-size:0.7rem;color:var(--blue4)">Mål</div></div>' +
-                        '<div style="text-align:center"><div style="font-size:1.5rem;font-weight:500;color:' + hc + '">' + Math.round(th.power) + 'W</div><div style="font-size:0.7rem;color:var(--blue4)">' + (th.heating ? 'Varmer' : 'Idle') + '</div></div>' +
-                        '<div style="text-align:center"><div style="font-size:1.5rem;font-weight:500;color:var(--blue3)">' + (th.energy ? Math.round(th.energy).toLocaleString() : '—') + '</div><div style="font-size:0.7rem;color:var(--blue4)">kWh totalt</div></div>' +
-                        '</div>' +
-                        '<div style="display:flex;align-items:center;gap:0.5rem;">' +
-                        '<button onclick="adjustThermostat(-1)" style="font-family:\'DM Mono\',monospace;font-size:1rem;background:var(--navy);border:1px solid var(--blue2);color:var(--blue4);width:2rem;height:2rem;border-radius:6px;cursor:pointer;">−</button>' +
-                        '<span style="font-family:\'DM Mono\',monospace;font-size:0.8rem;color:var(--blue5);min-width:3rem;text-align:center;">' + th.targetTemperature + '°C</span>' +
-                        '<button onclick="adjustThermostat(1)" style="font-family:\'DM Mono\',monospace;font-size:1rem;background:var(--navy);border:1px solid var(--blue2);color:var(--blue4);width:2rem;height:2rem;border-radius:6px;cursor:pointer;">+</button>' +
-                        '<span style="font-size:0.65rem;color:var(--blue3);margin-left:0.5rem;">Juster måltemperatur</span>' +
-                        '</div>';
-                }
-
                 // Rom-kort
                 var grid = document.getElementById('sh-rooms-grid');
                 grid.innerHTML = '';
@@ -402,7 +374,53 @@
                         });
                     }
 
-                    card.innerHTML = header + sensors + lightsList + plejdHtml + nanoleafHtml + lockHtml + blindsHtml;
+                    // Gulvvarme (kun Bad)
+                    var thermoHtml = '';
+                    if (r.thermostat) {
+                        var th = r.thermostat;
+                        var hc = th.heating ? '#C35839' : '#6D8345';
+                        thermoHtml = '<div style="border-top:1px solid var(--blue2);margin-top:0.5rem;padding-top:0.5rem;">' +
+                            '<div style="font-size:0.7rem;color:var(--blue3);text-transform:uppercase;letter-spacing:0.1em;margin-bottom:0.3rem;font-family:\'DM Mono\',monospace;">Gulvvarme</div>' +
+                            '<div style="display:flex;gap:1rem;flex-wrap:wrap;margin-bottom:0.4rem;font-size:0.75rem;">' +
+                            '<span style="color:var(--blue5);">Skap ' + th.temperature + '°</span>' +
+                            '<span style="color:var(--blue5);">Gulv ' + (th.floorTemperature || '—') + '°</span>' +
+                            '<span style="color:' + hc + ';">' + Math.round(th.power || 0) + 'W ' + (th.heating ? 'varmer' : 'idle') + '</span>' +
+                            '<span style="color:var(--blue3);">' + (th.energy ? Math.round(th.energy).toLocaleString() + ' kWh' : '') + '</span>' +
+                            '</div>' +
+                            '<div style="display:flex;align-items:center;gap:0.5rem;">' +
+                            '<button onclick="adjustThermostat(-1)" style="font-family:\'DM Mono\',monospace;font-size:1rem;background:var(--navy);border:1px solid var(--blue2);color:var(--blue4);width:2rem;height:2rem;border-radius:6px;cursor:pointer;">−</button>' +
+                            '<span style="font-family:\'DM Mono\',monospace;font-size:0.8rem;color:var(--blue5);min-width:3rem;text-align:center;">' + th.targetTemperature + '°C</span>' +
+                            '<button onclick="adjustThermostat(1)" style="font-family:\'DM Mono\',monospace;font-size:1rem;background:var(--navy);border:1px solid var(--blue2);color:var(--blue4);width:2rem;height:2rem;border-radius:6px;cursor:pointer;">+</button>' +
+                            '</div></div>';
+                    }
+
+                    // Mill varmeovn (kun Stue)
+                    var heaterHtml = '';
+                    if (r.heater) {
+                        var h = r.heater;
+                        var hOn = h.on ? '#C35839' : 'var(--blue3)';
+                        heaterHtml = '<div style="border-top:1px solid var(--blue2);margin-top:0.5rem;padding-top:0.5rem;">' +
+                            '<div style="display:flex;align-items:center;gap:0.5rem;font-size:0.75rem;">' +
+                            '<span style="width:6px;height:6px;border-radius:50%;flex-shrink:0;background:' + (h.on ? '#C35839' : 'var(--blue2)') + '"></span>' +
+                            '<span style="flex:1;color:var(--blue5);">' + h.name + '</span>' +
+                            '<span style="color:var(--blue5);">' + (h.temperature || '—') + '°C</span>' +
+                            '<span style="color:var(--blue3);font-size:0.65rem;">' + (h.power || 0) + 'W</span>' +
+                            (h.openWindow ? '<span style="color:#F9A850;font-size:0.65rem;">Vindu åpent</span>' : '') +
+                            '</div></div>';
+                    }
+
+                    // Høyttalere
+                    var speakerHtml = '';
+                    if (r.speakers && r.speakers.length > 0) {
+                        r.speakers.forEach(function(s) {
+                            speakerHtml += '<div style="display:flex;align-items:center;gap:0.5rem;padding:0.1rem 0;font-size:0.7rem;">' +
+                                '<span style="color:var(--blue3);">♪</span>' +
+                                '<span style="color:var(--blue3);">' + s.name + '</span>' +
+                                '</div>';
+                        });
+                    }
+
+                    card.innerHTML = header + sensors + lightsList + thermoHtml + heaterHtml + plejdHtml + nanoleafHtml + lockHtml + blindsHtml + speakerHtml;
                     grid.appendChild(card);
                 });
             })
