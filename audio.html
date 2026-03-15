@@ -126,7 +126,10 @@
         // Nå spilles
         if (s.artist || s.title) {
             html += '<div class="now-playing">';
-            if (s.image) html += '<img src="'+s.image+'" alt="">';
+            if (s.image) {
+                var imgUrl = s.image.startsWith('/') ? 'http://'+s.ip+':11000'+s.image : s.image;
+                html += '<img src="'+imgUrl+'" alt="" onerror="this.style.display=\'none\'">';
+            }
             html += '<div class="now-playing-info"><div class="now-playing-title">'+(s.artist||'')+'</div>';
             html += '<div class="now-playing-artist">'+(s.album||s.title||'')+'</div></div></div>';
         }
