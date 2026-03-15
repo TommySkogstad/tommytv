@@ -334,6 +334,29 @@
 
         <section class="section local-section" style="display: none;">
             <div class="section-header">
+                <h2>Smarthus</h2>
+                <span class="badge badge-local">LAN</span>
+            </div>
+            <div class="grid">
+                <div class="card" id="smarthus-widget" style="grid-column: 1 / -1;">
+                    <h3>Hjem</h3>
+                    <div id="sh-loading" style="color: var(--blue4); font-size: 0.8rem;">Laster smarthus...</div>
+                    <div id="sh-content" style="display: none;">
+                        <!-- Temperaturer -->
+                        <div id="sh-temps" style="display: flex; gap: 1.5rem; flex-wrap: wrap; margin-bottom: 0.75rem;"></div>
+                        <!-- Rom-status -->
+                        <div style="font-size: 0.7rem; color: var(--blue3); text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 0.35rem; font-family: 'DM Mono', monospace;">Lys per rom</div>
+                        <div id="sh-rooms" style="display: flex; flex-direction: column; gap: 0.25rem; font-size: 0.75rem; margin-bottom: 0.75rem;"></div>
+                        <!-- Sensorer -->
+                        <div style="font-size: 0.7rem; color: var(--blue3); text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 0.35rem; font-family: 'DM Mono', monospace;">Sensorer</div>
+                        <div id="sh-sensors" style="display: flex; flex-direction: column; gap: 0.25rem; font-size: 0.75rem;"></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="section local-section" style="display: none;">
+            <div class="section-header">
                 <h2>Infrastruktur</h2>
                 <span class="badge badge-local">LAN</span>
             </div>
@@ -738,6 +761,94 @@
                     s.style.display = '';
                 });
                 document.getElementById('lan-toggle').style.display = 'none';
+
+                // Hent Smarthus-status
+                fetch('http://nuc.tommy.tv:8851/api/status')
+                    .then(function(r) { return r.json(); })
+                    .then(function(data) {
+                        document.getElementById('sh-loading').style.display = 'none';
+                        document.getElementById('sh-content').style.display = '';
+
+                        var temps = document.getElementById('sh-temps');
+                        temps.innerHTML = '';
+
+                        // Gulvvarme fra Homey
+                        var th = (data.homey || {}).thermostat || {};
+                        if (th.temperature !== undefined) {
+                            var heatingColor = th.heating ? '#C35839' : '#6D8345';
+                            temps.innerHTML += '<div style="text-align:center"><div style="font-size:1.5rem;font-weight:500;color:var(--white)">' + th.temperature + '°</div><div style="font-size:0.7rem;color:var(--blue4)">Rom</div></div>';
+                            temps.innerHTML += '<div style="text-align:center"><div style="font-size:1.5rem;font-weight:500;color:var(--white)">' + (th.floorTemperature || '—') + '°</div><div style="font-size:0.7rem;color:var(--blue4)">Gulv</div></div>';
+                            temps.innerHTML += '<div style="text-align:center"><div style="font-size:1.5rem;font-weight:500;color:var(--blue4)">' + th.targetTemperature + '°</div><div style="font-size:0.7rem;color:var(--blue4)">Mål</div></div>';
+                            temps.innerHTML += '<div style="text-align:center"><div style="font-size:1.5rem;font-weight:500;color:' + heatingColor + '">' + Math.round(th.power) + 'W</div><div style="font-size:0.7rem;color:var(--blue4)">' + (th.heating ? 'Varmer' : 'Idle') + '</div></div>';
+                        }
+
+                        // Hue-temperaturer
+                        var hue = data.hue || {};
+                        (hue.temperatures || []).forEach(function(t) {
+                            var label = t.name.replace('Hue temperature sensor ', 'Sensor ');
+                            temps.innerHTML += '<div style="text-align:center"><div style="font-size:1.5rem;font-weight:500;color:var(--white)">' + t.temperature + '°</div><div style="font-size:0.7rem;color:var(--blue4)">' + label + '</div></div>';
+                        });
+
+                        // Lys per rom
+                        var rooms = document.getElementById('sh-rooms');
+                        rooms.innerHTML = '';
+                        (hue.rooms || []).forEach(function(r) {
+                            var row = document.createElement('div');
+                            row.style.cssText = 'display:flex;align-items:center;gap:0.5rem;padding:0.2rem 0;';
+                            var dot = document.createElement('span');
+                            dot.style.cssText = 'width:6px;height:6px;border-radius:50%;flex-shrink:0;background:' + (r.anyOn ? '#F9A850' : 'var(--blue2)');
+                            row.appendChild(dot);
+                            var name = document.createElement('span');
+                            name.style.cssText = 'flex:1;color:' + (r.anyOn ? 'var(--blue5)' : 'var(--blue3)') + ';';
+                            name.textContent = r.name;
+                            row.appendChild(name);
+                            var count = document.createElement('span');
+                            count.style.cssText = 'color:var(--blue3);font-family:"DM Mono",monospace;font-size:0.65rem;';
+                            count.textContent = r.lightsOn + '/' + r.lights;
+                            row.appendChild(count);
+                            rooms.appendChild(row);
+                        });
+
+                        // Sensorer
+                        var sensors = document.getElementById('sh-sensors');
+                        sensors.innerHTML = '';
+                        (hue.motion || []).forEach(function(m) {
+                            var row = document.createElement('div');
+                            row.style.cssText = 'display:flex;align-items:center;gap:0.5rem;padding:0.2rem 0;';
+                            var dot = document.createElement('span');
+                            dot.style.cssText = 'width:6px;height:6px;border-radius:50%;flex-shrink:0;background:' + (m.presence ? '#C35839' : '#6D8345');
+                            row.appendChild(dot);
+                            var name = document.createElement('span');
+                            name.style.cssText = 'flex:1;color:var(--blue5);';
+                            name.textContent = m.name;
+                            row.appendChild(name);
+                            var val = document.createElement('span');
+                            val.style.cssText = 'color:' + (m.presence ? '#C35839' : 'var(--blue3)') + ';font-size:0.65rem;';
+                            val.textContent = m.presence ? 'Bevegelse' : 'Ingen';
+                            row.appendChild(val);
+                            sensors.appendChild(row);
+                        });
+                        (hue.lightSensors || []).forEach(function(l) {
+                            var row = document.createElement('div');
+                            row.style.cssText = 'display:flex;align-items:center;gap:0.5rem;padding:0.2rem 0;';
+                            var dot = document.createElement('span');
+                            dot.style.cssText = 'width:6px;height:6px;border-radius:50%;flex-shrink:0;background:' + (l.dark ? 'var(--blue2)' : '#F9A850');
+                            row.appendChild(dot);
+                            var name = document.createElement('span');
+                            name.style.cssText = 'flex:1;color:var(--blue5);';
+                            name.textContent = l.name;
+                            row.appendChild(name);
+                            var val = document.createElement('span');
+                            val.style.cssText = 'color:var(--blue3);font-size:0.65rem;';
+                            val.textContent = l.dark ? 'Mørkt' : 'Lyst';
+                            row.appendChild(val);
+                            sensors.appendChild(row);
+                        });
+                    })
+                    .catch(function() {
+                        document.getElementById('sh-loading').textContent = 'Kunne ikke hente smarthus-status';
+                        document.getElementById('sh-loading').style.color = '#C35839';
+                    });
 
                 // Hent UniFi-status
                 fetch('http://nuc.tommy.tv:8850/api/status')
