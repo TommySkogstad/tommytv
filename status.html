@@ -163,6 +163,22 @@
             .then(function() { setTimeout(loadSmarthus, 2000); });
     }
 
+    function togglePlejd() {
+        fetch(SH_API + '/api/plejd/toggle', { method: 'POST' })
+            .then(function() { setTimeout(loadSmarthus, 1000); });
+    }
+
+    function dimPlejd(level) {
+        fetch(SH_API + '/api/plejd/dim?level=' + level, { method: 'POST' })
+            .then(function() { setTimeout(loadSmarthus, 1000); });
+    }
+
+    function toggleLock() {
+        if (!confirm('Er du sikker på at du vil endre låsen?')) return;
+        fetch(SH_API + '/api/lock/toggle', { method: 'POST' })
+            .then(function() { setTimeout(loadSmarthus, 2000); });
+    }
+
     function runSpeedtest() {
         var btn = document.getElementById('speedtest-btn');
         var res = document.getElementById('speedtest-result');
@@ -242,6 +258,42 @@
                             '</div>';
                     });
 
+                    // Plejd lys (kun Stue)
+                    var plejdHtml = '';
+                    if (r.plejd) {
+                        var p = r.plejd;
+                        var pDot = p.on ? '#F9A850' : 'var(--blue2)';
+                        plejdHtml = '<div style="border-top:1px solid var(--blue2);margin-top:0.5rem;padding-top:0.5rem;">' +
+                            '<div style="display:flex;align-items:center;gap:0.5rem;padding:0.15rem 0;">' +
+                            '<span style="width:6px;height:6px;border-radius:50%;flex-shrink:0;background:' + pDot + '"></span>' +
+                            '<span style="flex:1;font-size:0.75rem;color:var(--blue5);cursor:pointer;" onclick="togglePlejd()">' + p.name + '</span>' +
+                            '<span style="color:var(--blue3);font-family:\'DM Mono\',monospace;font-size:0.65rem;">' + p.dim + '%</span>' +
+                            '</div>' +
+                            '<div style="display:flex;gap:0.3rem;margin-top:0.3rem;">' +
+                            '<button onclick="dimPlejd(25)" style="font-family:\'DM Mono\',monospace;font-size:0.6rem;background:var(--navy);border:1px solid var(--blue2);color:var(--blue4);padding:0.15rem 0.4rem;border-radius:3px;cursor:pointer;">25%</button>' +
+                            '<button onclick="dimPlejd(50)" style="font-family:\'DM Mono\',monospace;font-size:0.6rem;background:var(--navy);border:1px solid var(--blue2);color:var(--blue4);padding:0.15rem 0.4rem;border-radius:3px;cursor:pointer;">50%</button>' +
+                            '<button onclick="dimPlejd(75)" style="font-family:\'DM Mono\',monospace;font-size:0.6rem;background:var(--navy);border:1px solid var(--blue2);color:var(--blue4);padding:0.15rem 0.4rem;border-radius:3px;cursor:pointer;">75%</button>' +
+                            '<button onclick="dimPlejd(100)" style="font-family:\'DM Mono\',monospace;font-size:0.6rem;background:var(--navy);border:1px solid var(--blue2);color:var(--blue4);padding:0.15rem 0.4rem;border-radius:3px;cursor:pointer;">100%</button>' +
+                            '</div></div>';
+                    }
+
+                    // Yale lås (kun Entré)
+                    var lockHtml = '';
+                    if (r.lock) {
+                        var lk = r.lock;
+                        var lockColor = lk.locked ? '#6D8345' : '#C35839';
+                        var lockIcon = lk.locked ? '🔒' : '🔓';
+                        var doorStatus = lk.doorOpen ? '<span style="color:#C35839;font-size:0.65rem;margin-left:0.5rem;">Dør åpen</span>' : '';
+                        var battStatus = lk.batteryLow ? '<span style="color:#C35839;font-size:0.65rem;margin-left:0.5rem;">Lavt batteri!</span>' : '';
+                        lockHtml = '<div style="border-top:1px solid var(--blue2);margin-top:0.5rem;padding-top:0.5rem;">' +
+                            '<div style="display:flex;align-items:center;gap:0.5rem;font-size:0.75rem;">' +
+                            '<span>' + lockIcon + '</span>' +
+                            '<span style="flex:1;color:var(--blue5);">' + lk.name + '</span>' +
+                            doorStatus + battStatus +
+                            '<button onclick="toggleLock()" style="font-family:\'DM Mono\',monospace;font-size:0.65rem;background:' + lockColor + ';border:none;color:var(--white);padding:0.2rem 0.5rem;border-radius:4px;cursor:pointer;">' + (lk.locked ? 'Lås opp' : 'Lås') + '</button>' +
+                            '</div></div>';
+                    }
+
                     // Gardiner (kun Stue)
                     var blindsHtml = '';
                     if (r.blinds && r.blinds.length > 0) {
@@ -265,7 +317,7 @@
                         blindsHtml += '</div>';
                     }
 
-                    card.innerHTML = header + sensors + lightsList + blindsHtml;
+                    card.innerHTML = header + sensors + lightsList + plejdHtml + lockHtml + blindsHtml;
                     grid.appendChild(card);
                 });
             })
