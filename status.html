@@ -183,6 +183,21 @@
             .then(function() { setTimeout(loadSmarthus, 1000); });
     }
 
+    function toggleNanoleaf(key) {
+        fetch(SH_API + '/api/nanoleaf/' + key + '/toggle', { method: 'POST' })
+            .then(function() { setTimeout(loadSmarthus, 1000); });
+    }
+
+    function setNanoleafBrightness(key, level) {
+        fetch(SH_API + '/api/nanoleaf/' + key + '/brightness?level=' + level, { method: 'POST' })
+            .then(function() { setTimeout(loadSmarthus, 1000); });
+    }
+
+    function setNanoleafEffect(key, effect) {
+        fetch(SH_API + '/api/nanoleaf/' + key + '/effect?name=' + encodeURIComponent(effect), { method: 'POST' })
+            .then(function() { setTimeout(loadSmarthus, 1000); });
+    }
+
     function toggleLock() {
         if (!confirm('Er du sikker på at du vil endre låsen?')) return;
         fetch(SH_API + '/api/lock/toggle', { method: 'POST' })
@@ -343,7 +358,32 @@
                         blindsHtml += '</div>';
                     }
 
-                    card.innerHTML = header + sensors + lightsList + plejdHtml + lockHtml + blindsHtml;
+                    // Nanoleaf
+                    var nanoleafHtml = '';
+                    if (r.nanoleaf && r.nanoleaf.length > 0) {
+                        r.nanoleaf.forEach(function(nl) {
+                            var nlDot = nl.on ? '#F9A850' : 'var(--blue2)';
+                            nanoleafHtml += '<div style="border-top:1px solid var(--blue2);margin-top:0.5rem;padding-top:0.5rem;">' +
+                                '<div style="display:flex;align-items:center;gap:0.5rem;margin-bottom:0.3rem;">' +
+                                '<span style="width:6px;height:6px;border-radius:50%;flex-shrink:0;background:' + nlDot + '"></span>' +
+                                '<span style="flex:1;font-size:0.75rem;color:var(--blue5);cursor:pointer;" onclick="toggleNanoleaf(\'' + nl.key + '\')">' + nl.name + ' <span style="color:var(--blue3);font-size:0.65rem;">' + nl.panels + ' paneler</span></span>' +
+                                '<span style="color:var(--blue3);font-family:\'DM Mono\',monospace;font-size:0.65rem;">' + nl.brightness + '%</span>' +
+                                '</div>' +
+                                '<div style="display:flex;gap:0.3rem;flex-wrap:wrap;">' +
+                                '<button onclick="setNanoleafBrightness(\'' + nl.key + '\',25)" style="font-family:\'DM Mono\',monospace;font-size:0.6rem;background:var(--navy);border:1px solid var(--blue2);color:var(--blue4);padding:0.15rem 0.4rem;border-radius:3px;cursor:pointer;">25%</button>' +
+                                '<button onclick="setNanoleafBrightness(\'' + nl.key + '\',50)" style="font-family:\'DM Mono\',monospace;font-size:0.6rem;background:var(--navy);border:1px solid var(--blue2);color:var(--blue4);padding:0.15rem 0.4rem;border-radius:3px;cursor:pointer;">50%</button>' +
+                                '<button onclick="setNanoleafBrightness(\'' + nl.key + '\',100)" style="font-family:\'DM Mono\',monospace;font-size:0.6rem;background:var(--navy);border:1px solid var(--blue2);color:var(--blue4);padding:0.15rem 0.4rem;border-radius:3px;cursor:pointer;">100%</button>';
+                            if (nl.effects && nl.effects.length > 0) {
+                                nl.effects.slice(0, 5).forEach(function(fx) {
+                                    var active = nl.effect === fx ? 'background:var(--blue2);color:var(--white);' : '';
+                                    nanoleafHtml += '<button onclick="setNanoleafEffect(\'' + nl.key + '\',\'' + fx.replace(/'/g, "\\'") + '\')" style="font-family:\'DM Mono\',monospace;font-size:0.6rem;background:var(--navy);border:1px solid var(--blue2);color:var(--blue4);padding:0.15rem 0.4rem;border-radius:3px;cursor:pointer;' + active + '">' + fx + '</button>';
+                                });
+                            }
+                            nanoleafHtml += '</div></div>';
+                        });
+                    }
+
+                    card.innerHTML = header + sensors + lightsList + plejdHtml + nanoleafHtml + lockHtml + blindsHtml;
                     grid.appendChild(card);
                 });
             })
