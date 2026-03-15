@@ -72,18 +72,14 @@
                 <span class="badge badge-local">Live</span>
             </div>
             <div class="grid">
+                <!-- Gulvvarme -->
                 <div class="card" style="grid-column: 1 / -1;">
-                    <h3>Hjem</h3>
-                    <div id="sh-loading" style="color: var(--blue4); font-size: 0.8rem;">Laster smarthus...</div>
-                    <div id="sh-content" style="display: none;">
-                        <div id="sh-temps" style="display: flex; gap: 1.5rem; flex-wrap: wrap; margin-bottom: 0.75rem;"></div>
-                        <div style="font-size: 0.7rem; color: var(--blue3); text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 0.35rem; font-family: 'DM Mono', monospace;">Lys per rom</div>
-                        <div id="sh-rooms" style="display: flex; flex-direction: column; gap: 0.25rem; font-size: 0.75rem; margin-bottom: 0.75rem;"></div>
-                        <div style="font-size: 0.7rem; color: var(--blue3); text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 0.35rem; font-family: 'DM Mono', monospace;">Sensorer</div>
-                        <div id="sh-sensors" style="display: flex; flex-direction: column; gap: 0.25rem; font-size: 0.75rem;"></div>
-                    </div>
+                    <h3>Gulvvarme</h3>
+                    <div id="sh-thermo" style="color: var(--blue4); font-size: 0.8rem;">Laster...</div>
                 </div>
             </div>
+            <div id="sh-loading" style="color: var(--blue4); font-size: 0.8rem; margin-top: 1rem;">Laster rom...</div>
+            <div id="sh-rooms-grid" class="grid" style="margin-top: 1rem;"></div>
         </section>
 
         <!-- Infrastruktur -->
@@ -115,7 +111,12 @@
                             <div id="unifi-wifi-aps" style="display: flex; flex-direction: column; gap: 0.25rem; font-size: 0.75rem;"></div>
                         </div>
                         <div style="font-size: 0.7rem; color: var(--blue3); text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 0.35rem; font-family: 'DM Mono', monospace;">Alle enheter</div>
-                        <div id="unifi-devices" style="display: flex; flex-direction: column; gap: 0.25rem; font-size: 0.75rem;"></div>
+                        <div id="unifi-devices" style="display: flex; flex-direction: column; gap: 0.25rem; font-size: 0.75rem; margin-bottom: 0.75rem;"></div>
+                        <!-- Speedtest -->
+                        <div style="border-top: 1px solid var(--blue2); padding-top: 0.75rem; display: flex; align-items: center; gap: 1rem;">
+                            <button id="speedtest-btn" onclick="runSpeedtest()" style="font-family: 'DM Mono', monospace; font-size: 0.75rem; background: var(--navy); border: 1px solid var(--blue2); color: var(--blue4); padding: 0.4rem 0.8rem; border-radius: 6px; cursor: pointer;">Kjør speedtest</button>
+                            <span id="speedtest-result" style="font-size: 0.75rem; color: var(--blue4);"></span>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -134,85 +135,109 @@
     </footer>
 
     <script>
-    (function() {
-        // Smarthus
-        fetch('http://nuc.tommy.tv:8851/api/status')
+    var SH_API = 'http://nuc.tommy.tv:8851';
+
+    function toggleRoom(roomId) {
+        fetch(SH_API + '/api/room/' + roomId + '/toggle', { method: 'POST' })
+            .then(function() { setTimeout(loadSmarthus, 500); });
+    }
+
+    function toggleLight(lightId) {
+        fetch(SH_API + '/api/light/' + lightId + '/toggle', { method: 'POST' })
+            .then(function() { setTimeout(loadSmarthus, 500); });
+    }
+
+    function runSpeedtest() {
+        var btn = document.getElementById('speedtest-btn');
+        var res = document.getElementById('speedtest-result');
+        btn.disabled = true;
+        btn.textContent = 'Kjører...';
+        res.textContent = '';
+        fetch(SH_API + '/api/speedtest', { method: 'POST' });
+        var poll = setInterval(function() {
+            fetch(SH_API + '/api/speedtest').then(function(r) { return r.json(); }).then(function(d) {
+                if (!d.running && d.result) {
+                    clearInterval(poll);
+                    btn.disabled = false;
+                    btn.textContent = 'Kjør speedtest';
+                    if (d.result.error) {
+                        res.textContent = 'Feil: ' + d.result.error;
+                        res.style.color = '#C35839';
+                    } else {
+                        res.innerHTML = '<span style="color:var(--white)">' + d.result.download + ' Mbps ↓</span> <span style="color:var(--blue4)">' + d.result.upload + ' Mbps ↑</span> <span style="color:var(--blue3)">' + d.result.ping + ' ms</span> <span style="color:var(--blue3);font-size:0.65rem">(' + (d.lastRun || '') + ')</span>';
+                        res.style.color = '';
+                    }
+                }
+            });
+        }, 2000);
+    }
+
+    function loadSmarthus() {
+        fetch(SH_API + '/api/status')
             .then(function(r) { return r.json(); })
             .then(function(data) {
                 document.getElementById('sh-loading').style.display = 'none';
-                document.getElementById('sh-content').style.display = '';
-                var temps = document.getElementById('sh-temps');
-                temps.innerHTML = '';
+
+                // Gulvvarme
                 var th = (data.homey || {}).thermostat || {};
+                var thermoEl = document.getElementById('sh-thermo');
                 if (th.temperature !== undefined) {
-                    var heatingColor = th.heating ? '#C35839' : '#6D8345';
-                    temps.innerHTML += '<div style="text-align:center"><div style="font-size:1.5rem;font-weight:500;color:var(--white)">' + th.temperature + '°</div><div style="font-size:0.7rem;color:var(--blue4)">Rom</div></div>';
-                    temps.innerHTML += '<div style="text-align:center"><div style="font-size:1.5rem;font-weight:500;color:var(--white)">' + (th.floorTemperature || '—') + '°</div><div style="font-size:0.7rem;color:var(--blue4)">Gulv</div></div>';
-                    temps.innerHTML += '<div style="text-align:center"><div style="font-size:1.5rem;font-weight:500;color:var(--blue4)">' + th.targetTemperature + '°</div><div style="font-size:0.7rem;color:var(--blue4)">Mål</div></div>';
-                    temps.innerHTML += '<div style="text-align:center"><div style="font-size:1.5rem;font-weight:500;color:' + heatingColor + '">' + Math.round(th.power) + 'W</div><div style="font-size:0.7rem;color:var(--blue4)">' + (th.heating ? 'Varmer' : 'Idle') + '</div></div>';
+                    var hc = th.heating ? '#C35839' : '#6D8345';
+                    thermoEl.innerHTML =
+                        '<div style="display:flex;gap:1.5rem;flex-wrap:wrap;">' +
+                        '<div style="text-align:center"><div style="font-size:1.5rem;font-weight:500;color:var(--white)">' + th.temperature + '°</div><div style="font-size:0.7rem;color:var(--blue4)">Bad</div></div>' +
+                        '<div style="text-align:center"><div style="font-size:1.5rem;font-weight:500;color:var(--white)">' + (th.floorTemperature || '—') + '°</div><div style="font-size:0.7rem;color:var(--blue4)">Gulv</div></div>' +
+                        '<div style="text-align:center"><div style="font-size:1.5rem;font-weight:500;color:var(--blue4)">' + th.targetTemperature + '°</div><div style="font-size:0.7rem;color:var(--blue4)">Mål</div></div>' +
+                        '<div style="text-align:center"><div style="font-size:1.5rem;font-weight:500;color:' + hc + '">' + Math.round(th.power) + 'W</div><div style="font-size:0.7rem;color:var(--blue4)">' + (th.heating ? 'Varmer' : 'Idle') + '</div></div>' +
+                        '<div style="text-align:center"><div style="font-size:1.5rem;font-weight:500;color:var(--blue3)">' + (th.energy ? Math.round(th.energy).toLocaleString() : '—') + '</div><div style="font-size:0.7rem;color:var(--blue4)">kWh totalt</div></div>' +
+                        '</div>';
                 }
-                var hue = data.hue || {};
-                (hue.temperatures || []).forEach(function(t) {
-                    var label = t.name.replace('Hue temperature sensor ', 'Sensor ');
-                    temps.innerHTML += '<div style="text-align:center"><div style="font-size:1.5rem;font-weight:500;color:var(--white)">' + t.temperature + '°</div><div style="font-size:0.7rem;color:var(--blue4)">' + label + '</div></div>';
-                });
-                var rooms = document.getElementById('sh-rooms');
-                rooms.innerHTML = '';
-                (hue.rooms || []).forEach(function(r) {
-                    var row = document.createElement('div');
-                    row.style.cssText = 'display:flex;align-items:center;gap:0.5rem;padding:0.2rem 0;';
-                    var dot = document.createElement('span');
-                    dot.style.cssText = 'width:6px;height:6px;border-radius:50%;flex-shrink:0;background:' + (r.anyOn ? '#F9A850' : 'var(--blue2)');
-                    row.appendChild(dot);
-                    var name = document.createElement('span');
-                    name.style.cssText = 'flex:1;color:' + (r.anyOn ? 'var(--blue5)' : 'var(--blue3)') + ';';
-                    name.textContent = r.name;
-                    row.appendChild(name);
-                    var count = document.createElement('span');
-                    count.style.cssText = 'color:var(--blue3);font-family:"DM Mono",monospace;font-size:0.65rem;';
-                    count.textContent = r.lightsOn + '/' + r.lights;
-                    row.appendChild(count);
-                    rooms.appendChild(row);
-                });
-                var sensors = document.getElementById('sh-sensors');
-                sensors.innerHTML = '';
-                (hue.motion || []).forEach(function(m) {
-                    var row = document.createElement('div');
-                    row.style.cssText = 'display:flex;align-items:center;gap:0.5rem;padding:0.2rem 0;';
-                    var dot = document.createElement('span');
-                    dot.style.cssText = 'width:6px;height:6px;border-radius:50%;flex-shrink:0;background:' + (m.presence ? '#C35839' : '#6D8345');
-                    row.appendChild(dot);
-                    var name = document.createElement('span');
-                    name.style.cssText = 'flex:1;color:var(--blue5);';
-                    name.textContent = m.name;
-                    row.appendChild(name);
-                    var val = document.createElement('span');
-                    val.style.cssText = 'color:' + (m.presence ? '#C35839' : 'var(--blue3)') + ';font-size:0.65rem;';
-                    val.textContent = m.presence ? 'Bevegelse' : 'Ingen';
-                    row.appendChild(val);
-                    sensors.appendChild(row);
-                });
-                (hue.lightSensors || []).forEach(function(l) {
-                    var row = document.createElement('div');
-                    row.style.cssText = 'display:flex;align-items:center;gap:0.5rem;padding:0.2rem 0;';
-                    var dot = document.createElement('span');
-                    dot.style.cssText = 'width:6px;height:6px;border-radius:50%;flex-shrink:0;background:' + (l.dark ? 'var(--blue2)' : '#F9A850');
-                    row.appendChild(dot);
-                    var name = document.createElement('span');
-                    name.style.cssText = 'flex:1;color:var(--blue5);';
-                    name.textContent = l.name;
-                    row.appendChild(name);
-                    var val = document.createElement('span');
-                    val.style.cssText = 'color:var(--blue3);font-size:0.65rem;';
-                    val.textContent = l.dark ? 'Mørkt' : 'Lyst';
-                    row.appendChild(val);
-                    sensors.appendChild(row);
+
+                // Rom-kort
+                var grid = document.getElementById('sh-rooms-grid');
+                grid.innerHTML = '';
+                (data.rooms || []).forEach(function(r) {
+                    var card = document.createElement('div');
+                    card.className = 'card';
+
+                    // Header med toggle
+                    var header = '<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:0.5rem;">' +
+                        '<h3 style="margin:0;font-size:1rem;">' + r.name + '</h3>' +
+                        '<button onclick="toggleRoom(\'' + r.id + '\')" style="font-family:\'DM Mono\',monospace;font-size:0.7rem;background:' + (r.anyOn ? '#C35839' : '#6D8345') + ';border:none;color:var(--white);padding:0.3rem 0.6rem;border-radius:4px;cursor:pointer;">' + (r.anyOn ? 'Slå av' : 'Slå på') + '</button></div>';
+
+                    // Sensor-info
+                    var sensors = '';
+                    if (r.temperature !== undefined || r.motion !== undefined) {
+                        sensors = '<div style="display:flex;gap:0.75rem;margin-bottom:0.5rem;font-size:0.75rem;">';
+                        if (r.temperature !== undefined) sensors += '<span style="color:var(--blue5);">' + r.temperature + '°C</span>';
+                        if (r.motion !== undefined) sensors += '<span style="color:' + (r.motion ? '#C35839' : 'var(--blue3)') + ';">' + (r.motion ? 'Bevegelse' : 'Ingen bev.') + '</span>';
+                        if (r.dark !== undefined) sensors += '<span style="color:var(--blue3);">' + (r.dark ? 'Mørkt' : 'Lyst') + '</span>';
+                        sensors += '</div>';
+                    }
+
+                    // Lys-liste
+                    var lightsList = '';
+                    r.lights.forEach(function(l) {
+                        var dotColor = l.on ? '#F9A850' : (l.reachable ? 'var(--blue2)' : '#C35839');
+                        var nameColor = l.on ? 'var(--blue5)' : (l.reachable ? 'var(--blue3)' : 'var(--blue2)');
+                        lightsList += '<div style="display:flex;align-items:center;gap:0.5rem;padding:0.15rem 0;cursor:pointer;" onclick="toggleLight(\'' + l.id + '\')">' +
+                            '<span style="width:6px;height:6px;border-radius:50%;flex-shrink:0;background:' + dotColor + '"></span>' +
+                            '<span style="flex:1;font-size:0.75rem;color:' + nameColor + '">' + l.name + '</span>' +
+                            '</div>';
+                    });
+
+                    card.innerHTML = header + sensors + lightsList;
+                    grid.appendChild(card);
                 });
             })
             .catch(function() {
                 document.getElementById('sh-loading').textContent = 'Kunne ikke hente smarthus-status';
                 document.getElementById('sh-loading').style.color = '#C35839';
             });
+    }
+
+    (function() {
+        loadSmarthus();
 
         // UniFi
         fetch('http://nuc.tommy.tv:8850/api/status')
