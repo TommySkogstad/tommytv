@@ -478,15 +478,18 @@
                                 '<button onclick="speakerVolume(\'' + s.key + '\',50)" style="font-family:\'DM Mono\',monospace;font-size:0.55rem;background:var(--navy);border:1px solid var(--blue2);color:var(--blue4);padding:0.1rem 0.3rem;border-radius:3px;cursor:pointer;">50</button>' +
                                 '<button onclick="speakerVolume(\'' + s.key + '\',Math.min(100,' + s.volume + '+5))" style="font-family:\'DM Mono\',monospace;font-size:0.6rem;background:var(--navy);border:1px solid var(--blue2);color:var(--blue4);padding:0.1rem 0.3rem;border-radius:3px;cursor:pointer;">+</button>' +
                                 '</div>';
-                            // Soundbar: Linje 3 Inngang, Linje 4 Modus
+                            // Linje 3: Inngang (alle høyttalere)
+                            var inputs = s.isSoundbar ?
+                                [{id:'hdmi',label:'HDMI'},{id:'optical',label:'Optisk'},{id:'tv',label:'TV'},{id:'bluetooth',label:'BT'},{id:'analog',label:'Analog'}] :
+                                [{id:'optical',label:'Optisk'},{id:'bluetooth',label:'BT'},{id:'analog',label:'Analog'}];
+                            speakerHtml += '<div style="display:flex;align-items:center;gap:0.2rem;padding:0.1rem 0 0.1rem 1rem;flex-wrap:wrap;">' +
+                                '<span style="color:var(--blue3);font-size:0.6rem;min-width:3rem;">Inngang</span>';
+                            inputs.forEach(function(inp) {
+                                speakerHtml += '<button onclick="speakerInput(\'' + s.key + '\',\'' + inp.id + '\')" style="font-family:\'DM Mono\',monospace;font-size:0.55rem;background:var(--navy);border:1px solid var(--blue2);color:var(--blue4);padding:0.1rem 0.3rem;border-radius:3px;cursor:pointer;">' + inp.label + '</button>';
+                            });
+                            speakerHtml += '</div>';
+                            // Linje 4: Modus (kun Soundbar)
                             if (s.isSoundbar) {
-                                var inputs = [{id:'hdmi',label:'HDMI'},{id:'optical',label:'Optisk'},{id:'tv',label:'TV'},{id:'bluetooth',label:'BT'},{id:'analog',label:'Analog'}];
-                                speakerHtml += '<div style="display:flex;align-items:center;gap:0.2rem;padding:0.1rem 0 0.1rem 1rem;flex-wrap:wrap;">' +
-                                    '<span style="color:var(--blue3);font-size:0.6rem;min-width:3rem;">Inngang</span>';
-                                inputs.forEach(function(inp) {
-                                    speakerHtml += '<button onclick="speakerInput(\'' + s.key + '\',\'' + inp.id + '\')" style="font-family:\'DM Mono\',monospace;font-size:0.55rem;background:var(--navy);border:1px solid var(--blue2);color:var(--blue4);padding:0.1rem 0.3rem;border-radius:3px;cursor:pointer;">' + inp.label + '</button>';
-                                });
-                                speakerHtml += '</div>';
                                 var modes = [{id:'off',label:'Off'},{id:'music',label:'Music'},{id:'movie',label:'Movie'},{id:'night',label:'Night'}];
                                 speakerHtml += '<div style="display:flex;align-items:center;gap:0.2rem;padding:0.1rem 0 0.1rem 1rem;flex-wrap:wrap;">' +
                                     '<span style="color:var(--blue3);font-size:0.6rem;min-width:3rem;">Modus</span>';
