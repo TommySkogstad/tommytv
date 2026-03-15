@@ -223,6 +223,21 @@
             .then(function() { setTimeout(loadSmarthus, 1000); });
     }
 
+    function speakerVolume(key, level) {
+        fetch(SH_API + '/api/speaker/' + key + '/volume/' + level, { method: 'POST' })
+            .then(function() { setTimeout(loadSmarthus, 1000); });
+    }
+
+    function speakerInput(key, source) {
+        fetch(SH_API + '/api/speaker/' + key + '/input/' + source, { method: 'POST' })
+            .then(function() { setTimeout(loadSmarthus, 1000); });
+    }
+
+    function speakerMode(key, mode) {
+        fetch(SH_API + '/api/speaker/' + key + '/mode/' + mode, { method: 'POST' })
+            .then(function() { setTimeout(loadSmarthus, 1000); });
+    }
+
     function toggleMill() {
         fetch(SH_API + '/api/mill/toggle', { method: 'POST' })
             .then(function() { setTimeout(loadSmarthus, 1000); });
@@ -454,6 +469,21 @@
                                 '<button onclick="speakerCmd(\'' + s.key + '\',\'' + (isPlaying ? 'pause' : 'play') + '\')" style="background:none;border:none;color:var(--blue4);cursor:pointer;font-size:0.8rem;padding:0.1rem;">' + (isPlaying ? '⏸' : '▶') + '</button>' +
                                 '<button onclick="speakerCmd(\'' + s.key + '\',\'skip\')" style="background:none;border:none;color:var(--blue4);cursor:pointer;font-size:0.7rem;padding:0.1rem;">⏭</button>' +
                                 '</div>';
+                            // Soundbar-kontroller
+                            if (s.isSoundbar) {
+                                var modes = [{id:'off',label:'Off'},{id:'music',label:'Music'},{id:'movie',label:'Movie'},{id:'night',label:'Night'}];
+                                var inputs = [{id:'hdmi',label:'HDMI'},{id:'optical',label:'Optisk'},{id:'tv',label:'TV'},{id:'bluetooth',label:'BT'}];
+                                speakerHtml += '<div style="display:flex;gap:0.2rem;flex-wrap:wrap;margin-top:0.2rem;">';
+                                modes.forEach(function(m) {
+                                    var active = s.mode === m.id ? 'background:var(--blue2);color:var(--white);' : '';
+                                    speakerHtml += '<button onclick="speakerMode(\'' + s.key + '\',\'' + m.id + '\')" style="font-family:\'DM Mono\',monospace;font-size:0.55rem;background:var(--navy);border:1px solid var(--blue2);color:var(--blue4);padding:0.1rem 0.3rem;border-radius:3px;cursor:pointer;' + active + '">' + m.label + '</button>';
+                                });
+                                speakerHtml += ' ';
+                                inputs.forEach(function(inp) {
+                                    speakerHtml += '<button onclick="speakerInput(\'' + s.key + '\',\'' + inp.id + '\')" style="font-family:\'DM Mono\',monospace;font-size:0.55rem;background:var(--navy);border:1px solid var(--blue2);color:var(--blue4);padding:0.1rem 0.3rem;border-radius:3px;cursor:pointer;">' + inp.label + '</button>';
+                                });
+                                speakerHtml += '</div>';
+                            }
                         });
                         speakerHtml += '</div>';
                     }
