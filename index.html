@@ -342,6 +342,7 @@
                     <h3>UniFi Nettverk</h3>
                     <div id="unifi-loading" style="color: var(--blue4); font-size: 0.8rem;">Laster nettverksstatus...</div>
                     <div id="unifi-content" style="display: none;">
+                        <!-- Rad 1: Klienter og enheter -->
                         <div style="display: flex; gap: 1.5rem; flex-wrap: wrap; margin-bottom: 0.75rem;">
                             <div style="text-align: center;">
                                 <div style="font-size: 1.5rem; font-weight: 500; color: var(--white);" id="unifi-clients">—</div>
@@ -360,7 +361,22 @@
                                 <div style="font-size: 0.7rem; color: var(--blue4);">Enheter</div>
                             </div>
                         </div>
-                        <div id="unifi-devices" style="display: flex; flex-direction: column; gap: 0.35rem; font-size: 0.75rem;"></div>
+                        <!-- Rad 2: WAN, WiFi-kvalitet, latens -->
+                        <div style="display: flex; gap: 0.75rem; flex-wrap: wrap; margin-bottom: 0.75rem; font-size: 0.75rem;">
+                            <div id="unifi-isp" style="background: var(--blue1); padding: 0.4rem 0.6rem; border-radius: 0.375rem;"></div>
+                            <div id="unifi-wan-uptime" style="background: var(--blue1); padding: 0.4rem 0.6rem; border-radius: 0.375rem;"></div>
+                            <div id="unifi-latency" style="background: var(--blue1); padding: 0.4rem 0.6rem; border-radius: 0.375rem;"></div>
+                            <div id="unifi-txretry" style="background: var(--blue1); padding: 0.4rem 0.6rem; border-radius: 0.375rem;"></div>
+                            <div id="unifi-updates" style="background: var(--blue1); padding: 0.4rem 0.6rem; border-radius: 0.375rem; display: none;"></div>
+                        </div>
+                        <!-- Rad 3: WiFi AP-er -->
+                        <div id="unifi-wifi-section" style="margin-bottom: 0.75rem; display: none;">
+                            <div style="font-size: 0.7rem; color: var(--blue3); text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 0.35rem; font-family: 'DM Mono', monospace;">WiFi-aksesspunkter</div>
+                            <div id="unifi-wifi-aps" style="display: flex; flex-direction: column; gap: 0.25rem; font-size: 0.75rem;"></div>
+                        </div>
+                        <!-- Rad 4: Alle enheter -->
+                        <div style="font-size: 0.7rem; color: var(--blue3); text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 0.35rem; font-family: 'DM Mono', monospace;">Alle enheter</div>
+                        <div id="unifi-devices" style="display: flex; flex-direction: column; gap: 0.25rem; font-size: 0.75rem;"></div>
                     </div>
                 </div>
             </div>
@@ -729,36 +745,93 @@
                     .then(function(data) {
                         document.getElementById('unifi-loading').style.display = 'none';
                         document.getElementById('unifi-content').style.display = '';
+
+                        // Klienter
                         document.getElementById('unifi-clients').textContent = data.totalClients;
                         document.getElementById('unifi-wifi').textContent = data.wifiClients;
                         document.getElementById('unifi-wired').textContent = data.wiredClients;
 
-                        var onlineCount = data.onlineDevices + '/' + data.totalDevices;
                         var devEl = document.getElementById('unifi-devices-count');
-                        devEl.textContent = onlineCount;
+                        devEl.textContent = data.onlineDevices + '/' + data.totalDevices;
                         devEl.style.color = data.offlineDevices > 0 ? '#F9A850' : 'var(--white)';
 
+                        // ISP og WAN
+                        document.getElementById('unifi-isp').innerHTML = '<span style="color:var(--blue4)">ISP</span> <span style="color:var(--white)">' + (data.isp || '—') + '</span>';
+                        document.getElementById('unifi-wan-uptime').innerHTML = '<span style="color:var(--blue4)">WAN</span> <span style="color:' + (data.wanUptime >= 99 ? '#6D8345' : '#C35839') + '">' + data.wanUptime + '% oppe</span>';
+
+                        // Latens
+                        var latEl = document.getElementById('unifi-latency');
+                        if (data.latencyAvgMs !== null) {
+                            var latColor = data.latencyAvgMs < 20 ? '#6D8345' : data.latencyAvgMs < 40 ? '#F9A850' : '#C35839';
+                            latEl.innerHTML = '<span style="color:var(--blue4)">Latens</span> <span style="color:' + latColor + '">' + data.latencyAvgMs + ' ms</span>';
+                        } else {
+                            latEl.style.display = 'none';
+                        }
+
+                        // WiFi TX retry
+                        var retryEl = document.getElementById('unifi-txretry');
+                        var retryColor = data.txRetryPct < 10 ? '#6D8345' : data.txRetryPct < 25 ? '#F9A850' : '#C35839';
+                        retryEl.innerHTML = '<span style="color:var(--blue4)">WiFi retry</span> <span style="color:' + retryColor + '">' + data.txRetryPct + '%</span>';
+
+                        // Firmware-oppdateringer
+                        if (data.updatesAvailable > 0) {
+                            var updEl = document.getElementById('unifi-updates');
+                            updEl.style.display = '';
+                            updEl.innerHTML = '<span style="color:#F9A850">' + data.updatesAvailable + ' oppdatering' + (data.updatesAvailable > 1 ? 'er' : '') + '</span>';
+                        }
+
+                        // WiFi AP-er
+                        if (data.wifiAps && data.wifiAps.length > 0) {
+                            document.getElementById('unifi-wifi-section').style.display = '';
+                            var apContainer = document.getElementById('unifi-wifi-aps');
+                            apContainer.innerHTML = '';
+                            data.wifiAps.forEach(function(ap) {
+                                var row = document.createElement('div');
+                                row.style.cssText = 'display:flex;align-items:center;gap:0.5rem;padding:0.2rem 0;';
+                                var dot = document.createElement('span');
+                                dot.style.cssText = 'width:6px;height:6px;border-radius:50%;flex-shrink:0;background:' + (ap.status === 'online' ? '#6D8345' : '#C35839');
+                                row.appendChild(dot);
+                                var name = document.createElement('span');
+                                name.style.cssText = 'flex:1;color:var(--blue5);';
+                                name.textContent = ap.name;
+                                row.appendChild(name);
+                                if (ap.uptime) {
+                                    var ut = document.createElement('span');
+                                    ut.style.cssText = 'color:var(--blue3);font-size:0.65rem;';
+                                    ut.textContent = ap.uptime;
+                                    row.appendChild(ut);
+                                }
+                                var ver = document.createElement('span');
+                                ver.style.cssText = 'color:var(--blue3);font-family:"DM Mono",monospace;font-size:0.65rem;min-width:3rem;text-align:right;';
+                                ver.textContent = ap.version ? 'v' + ap.version : '';
+                                row.appendChild(ver);
+                                apContainer.appendChild(row);
+                            });
+                        }
+
+                        // Alle enheter
                         var container = document.getElementById('unifi-devices');
                         container.innerHTML = '';
                         data.devices.forEach(function(d) {
                             var row = document.createElement('div');
-                            row.style.cssText = 'display:flex;align-items:center;gap:0.5rem;padding:0.25rem 0;';
-
+                            row.style.cssText = 'display:flex;align-items:center;gap:0.5rem;padding:0.2rem 0;';
                             var dot = document.createElement('span');
-                            dot.style.cssText = 'width:6px;height:6px;border-radius:50%;flex-shrink:0;background:' +
-                                (d.status === 'online' ? '#6D8345' : '#C35839');
+                            dot.style.cssText = 'width:6px;height:6px;border-radius:50%;flex-shrink:0;background:' + (d.status === 'online' ? '#6D8345' : '#C35839');
                             row.appendChild(dot);
-
                             var name = document.createElement('span');
                             name.style.cssText = 'flex:1;color:var(--blue5);';
                             name.textContent = d.name;
                             row.appendChild(name);
-
-                            var model = document.createElement('span');
-                            model.style.cssText = 'color:var(--blue3);font-family:"DM Mono",monospace;font-size:0.65rem;';
-                            model.textContent = d.ip || '';
-                            row.appendChild(model);
-
+                            if (d.uptime) {
+                                var ut = document.createElement('span');
+                                ut.style.cssText = 'color:var(--blue3);font-size:0.65rem;';
+                                ut.textContent = d.uptime;
+                                row.appendChild(ut);
+                            }
+                            var ip = document.createElement('span');
+                            ip.style.cssText = 'color:var(--blue3);font-family:"DM Mono",monospace;font-size:0.65rem;min-width:7rem;text-align:right;';
+                            ip.textContent = d.ip || '';
+                            row.appendChild(ip);
                             container.appendChild(row);
                         });
                     })
