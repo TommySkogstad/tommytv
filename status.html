@@ -218,6 +218,11 @@
         });
     }
 
+    function speakerCmd(key, action) {
+        fetch(SH_API + '/api/speaker/' + key + '/' + action, { method: 'POST' })
+            .then(function() { setTimeout(loadSmarthus, 1000); });
+    }
+
     function toggleMill() {
         fetch(SH_API + '/api/mill/toggle', { method: 'POST' })
             .then(function() { setTimeout(loadSmarthus, 1000); });
@@ -436,12 +441,21 @@
                     // Høyttalere
                     var speakerHtml = '';
                     if (r.speakers && r.speakers.length > 0) {
+                        speakerHtml = '<div style="border-top:1px solid var(--blue2);margin-top:0.5rem;padding-top:0.5rem;">';
                         r.speakers.forEach(function(s) {
-                            speakerHtml += '<div style="display:flex;align-items:center;gap:0.5rem;padding:0.1rem 0;font-size:0.7rem;">' +
-                                '<span style="color:var(--blue3);">♪</span>' +
-                                '<span style="color:var(--blue3);">' + s.name + '</span>' +
+                            var isPlaying = s.state === 'play' || s.state === 'stream';
+                            var stateIcon = isPlaying ? '▶' : '⏸';
+                            var nowPlaying = s.artist ? s.artist + ' — ' + (s.title || '') : '';
+                            speakerHtml += '<div style="display:flex;align-items:center;gap:0.4rem;padding:0.2rem 0;font-size:0.7rem;">' +
+                                '<span style="color:' + (isPlaying ? '#6D8345' : 'var(--blue3)') + ';">♪</span>' +
+                                '<span style="flex:1;color:var(--blue5);">' + s.name + (nowPlaying ? ' <span style="color:var(--blue3);">' + nowPlaying + '</span>' : '') + '</span>' +
+                                '<span style="color:var(--blue3);font-family:\'DM Mono\',monospace;font-size:0.6rem;">' + s.volume + '%</span>' +
+                                '<button onclick="speakerCmd(\'' + s.key + '\',\'back\')" style="background:none;border:none;color:var(--blue4);cursor:pointer;font-size:0.7rem;padding:0.1rem;">⏮</button>' +
+                                '<button onclick="speakerCmd(\'' + s.key + '\',\'' + (isPlaying ? 'pause' : 'play') + '\')" style="background:none;border:none;color:var(--blue4);cursor:pointer;font-size:0.8rem;padding:0.1rem;">' + (isPlaying ? '⏸' : '▶') + '</button>' +
+                                '<button onclick="speakerCmd(\'' + s.key + '\',\'skip\')" style="background:none;border:none;color:var(--blue4);cursor:pointer;font-size:0.7rem;padding:0.1rem;">⏭</button>' +
                                 '</div>';
                         });
+                        speakerHtml += '</div>';
                     }
 
                     card.innerHTML = header + sensors + lightsList + thermoHtml + heaterHtml + plejdHtml + nanoleafHtml + lockHtml + blindsHtml + speakerHtml;
