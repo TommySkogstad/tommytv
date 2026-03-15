@@ -478,10 +478,9 @@
                                 '<button onclick="speakerVolume(\'' + s.key + '\',50)" style="font-family:\'DM Mono\',monospace;font-size:0.55rem;background:var(--navy);border:1px solid var(--blue2);color:var(--blue4);padding:0.1rem 0.3rem;border-radius:3px;cursor:pointer;">50</button>' +
                                 '<button onclick="speakerVolume(\'' + s.key + '\',Math.min(100,' + s.volume + '+5))" style="font-family:\'DM Mono\',monospace;font-size:0.6rem;background:var(--navy);border:1px solid var(--blue2);color:var(--blue4);padding:0.1rem 0.3rem;border-radius:3px;cursor:pointer;">+</button>' +
                                 '</div>';
-                            // Linje 3: Inngang (alle høyttalere)
-                            var inputs = s.isSoundbar ?
-                                [{id:'hdmi',label:'HDMI'},{id:'optical',label:'Optisk'},{id:'tv',label:'TV'},{id:'bluetooth',label:'BT'},{id:'analog',label:'Analog'}] :
-                                [{id:'optical',label:'Optisk'},{id:'bluetooth',label:'BT'},{id:'analog',label:'Analog'}];
+                            // Linje 3: Inngang (basert på modell)
+                            var inputLabels = {hdmi:'HDMI',optical:'Optisk',coax:'Coax',analog:'Analog',aux:'Aux',bluetooth:'BT',tv:'TV'};
+                            var inputs = (s.inputs || []).map(function(id) { return {id:id, label:inputLabels[id]||id}; });
                             speakerHtml += '<div style="display:flex;align-items:center;gap:0.2rem;padding:0.1rem 0 0.1rem 1rem;flex-wrap:wrap;">' +
                                 '<span style="color:var(--blue3);font-size:0.6rem;min-width:3rem;">Inngang</span>';
                             inputs.forEach(function(inp) {
