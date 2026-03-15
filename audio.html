@@ -98,9 +98,11 @@
     function vol(key, level) { return fetch(API+'/api/speaker/'+key+'/volume/'+level,{method:'POST'}).then(function(){setTimeout(loadAudio,500);}); }
     function inp(key, source) { return fetch(API+'/api/speaker/'+key+'/input/'+source,{method:'POST'}).then(function(){setTimeout(loadAudio,800);}); }
     function mode(key, m) { return fetch(API+'/api/speaker/'+key+'/mode/'+m,{method:'POST'}).then(function(){setTimeout(loadAudio,500);}); }
-    function grp(master, slave) { return fetch(API+'/api/speaker/'+master+'/group/'+slave,{method:'POST'}).then(function(){setTimeout(loadAudio,1500);}); }
-    function ungrp(master, slave) { return fetch(API+'/api/speaker/'+master+'/ungroup/'+slave,{method:'POST'}).then(function(){setTimeout(loadAudio,1500);}); }
-    function ungrpAll(master) { return fetch(API+'/api/speaker/'+master+'/ungroup-all',{method:'POST'}).then(function(){setTimeout(loadAudio,1500);}); }
+    function grp(master, slave) { return fetch(API+'/api/speaker/'+master+'/group/'+slave,{method:'POST'}).then(function(){setTimeout(loadAudio,2000);}); }
+    function ungrp(master, slave) { return fetch(API+'/api/speaker/'+master+'/ungroup/'+slave,{method:'POST'}).then(function(){setTimeout(loadAudio,2000);}); }
+    function ungrpAll(master) { return fetch(API+'/api/speaker/'+master+'/ungroup-all',{method:'POST'}).then(function(){setTimeout(loadAudio,2000);}); }
+    function grpAll(master) { return fetch(API+'/api/speaker/'+master+'/group-all',{method:'POST'}).then(function(){setTimeout(loadAudio,2000);}); }
+    function resync(master) { return fetch(API+'/api/speaker/'+master+'/resync',{method:'POST'}).then(function(){setTimeout(loadAudio,3000);}); }
     function slp(key, min) { return fetch(API+'/api/speaker/'+key+'/sleep/'+min,{method:'POST'}); }
     function shuf(key) { return fetch(API+'/api/speaker/'+key+'/shuffle',{method:'POST'}).then(function(){setTimeout(loadAudio,500);}); }
     function rep(key) { return fetch(API+'/api/speaker/'+key+'/repeat',{method:'POST'}).then(function(){setTimeout(loadAudio,500);}); }
@@ -202,7 +204,7 @@
                 // Render grupper
                 masters.forEach(function(m) {
                     html += '<div class="group-box">';
-                    html += '<div class="group-header"><span>Gruppe: '+m.name+'</span><button class="btn" onclick="ungrpAll(\''+m.key+'\')">Oppløs</button></div>';
+                    html += '<div class="group-header"><span>Gruppe: '+m.name+' ('+m.slaves.length+' slaver)</span><div style="display:flex;gap:0.3rem;"><button class="btn" onclick="resync(\''+m.key+'\')">Resync</button><button class="btn" onclick="ungrpAll(\''+m.key+'\')">Oppløs</button></div></div>';
                     html += renderSpeaker(m, false);
                     m.slaves.forEach(function(slaveIp) {
                         var slave = speakers.find(function(s){return s.ip===slaveIp;});
@@ -231,6 +233,12 @@
                 speakers.forEach(function(s){if(!s.isSlave) html += '<option value="'+s.key+'">'+s.name+'</option>';});
                 html += '</select>';
                 html += '<button class="btn" style="font-size:0.75rem;padding:0.3rem 0.8rem;" onclick="var m=document.getElementById(\'master-select\').value,s=document.getElementById(\'slave-select\').value;if(m&&s&&m!==s)grp(m,s);">Grupper</button>';
+                html += '</div>';
+                html += '<div style="display:flex;gap:0.5rem;flex-wrap:wrap;margin-top:0.75rem;">';
+                html += '<span style="font-size:0.7rem;color:var(--blue3);line-height:2;">Grupper alle med:</span>';
+                speakers.forEach(function(s) {
+                    if (!s.isSlave) html += '<button class="btn" onclick="grpAll(\''+s.key+'\')">'+s.name+'</button>';
+                });
                 html += '</div></div>';
 
                 container.innerHTML = html;
