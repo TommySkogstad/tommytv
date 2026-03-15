@@ -162,11 +162,14 @@
         // Inngang
         if (s.inputs && s.inputs.length) {
             html += '<div class="control-row">';
+            var iconMap = {tv:'📺',vinyl:'🎵',laptop:'💻',speaker:'🔊',optical:'🔵',bt:'📶',cable:'🔌'};
             html += '<span class="control-label">Inngang</span>';
             s.inputs.forEach(function(i) {
                 var inputId = i.id || i;
                 var inputLabel = i.label || i;
-                html += '<button class="btn" onclick="inp(\''+s.key+'\',\''+inputId+'\')">'+inputLabel+'</button>';
+                var icon = iconMap[i.icon] || '';
+                var isActive = s.activeInput && s.activeInput.toLowerCase() === inputId.toLowerCase();
+                html += '<button class="btn'+(isActive?' active':'')+'" onclick="inp(\''+s.key+'\',\''+inputId+'\')">'+(icon?icon+' ':'')+inputLabel+'</button>';
             });
             html += '</div>';
         }
