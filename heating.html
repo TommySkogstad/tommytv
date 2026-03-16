@@ -238,22 +238,27 @@
                 var mill = null;
                 (data.rooms||[]).forEach(function(r){if(r.heater) mill=r.heater;});
 
-                var hc = th.heating?'#C35839':'#6D8345';
-                var html = '<div class="card">';
-                html += '<h3 style="font-size:1.1rem;color:var(--white);margin-bottom:1rem;">Gulvvarme — Bad</h3>';
-                html += '<div style="display:flex;gap:2rem;flex-wrap:wrap;margin-bottom:1rem;">';
-                html += '<div><div class="temp-big">'+th.temperature+'°</div><div class="temp-label">Termostat (skap)</div></div>';
-                html += '<div><div class="temp-big">'+(th.floorTemperature||'—')+'°</div><div class="temp-label">Gulvsensor</div></div>';
-                html += '<div><div class="temp-big" style="color:var(--blue4);">'+th.targetTemperature+'°</div><div class="temp-label">Måltemperatur</div></div>';
-                html += '<div><div class="temp-big" style="color:'+hc+';">'+Math.round(th.power||0)+'</div><div class="temp-label">Watt '+(th.heating?'(varmer)':'(idle)')+'</div></div>';
-                html += '</div>';
-                html += '<div style="display:flex;align-items:center;gap:0.75rem;margin-bottom:0.75rem;">';
-                html += '<button class="btn" style="font-size:1.2rem;width:2.5rem;height:2.5rem;" onclick="adjustFloor(-1)">−</button>';
-                html += '<span style="font-family:\'DM Mono\',monospace;font-size:1.2rem;color:var(--white);min-width:4rem;text-align:center;">'+th.targetTemperature+'°C</span>';
-                html += '<button class="btn" style="font-size:1.2rem;width:2.5rem;height:2.5rem;" onclick="adjustFloor(1)">+</button>';
-                html += '</div>';
-                html += '<div style="font-size:0.75rem;color:var(--blue3);">Totalt forbruk: '+(th.energy?Math.round(th.energy).toLocaleString():'-')+' kWh</div>';
-                html += '</div>';
+                var html = '';
+                if (th.temperature != null) {
+                    var hc = th.heating?'#C35839':'#6D8345';
+                    html += '<div class="card">';
+                    html += '<h3 style="font-size:1.1rem;color:var(--white);margin-bottom:1rem;">Gulvvarme — Bad</h3>';
+                    html += '<div style="display:flex;gap:2rem;flex-wrap:wrap;margin-bottom:1rem;">';
+                    html += '<div><div class="temp-big">'+(th.temperature||'—')+'°</div><div class="temp-label">Termostat (skap)</div></div>';
+                    html += '<div><div class="temp-big">'+(th.floorTemperature||'—')+'°</div><div class="temp-label">Gulvsensor</div></div>';
+                    html += '<div><div class="temp-big" style="color:var(--blue4);">'+(th.targetTemperature||'—')+'°</div><div class="temp-label">Måltemperatur</div></div>';
+                    html += '<div><div class="temp-big" style="color:'+hc+';">'+Math.round(th.power||0)+'</div><div class="temp-label">Watt '+(th.heating?'(varmer)':'(idle)')+'</div></div>';
+                    html += '</div>';
+                    html += '<div style="display:flex;align-items:center;gap:0.75rem;margin-bottom:0.75rem;">';
+                    html += '<button class="btn" style="font-size:1.2rem;width:2.5rem;height:2.5rem;" onclick="adjustFloor(-1)">−</button>';
+                    html += '<span style="font-family:\'DM Mono\',monospace;font-size:1.2rem;color:var(--white);min-width:4rem;text-align:center;">'+(th.targetTemperature||'—')+'°C</span>';
+                    html += '<button class="btn" style="font-size:1.2rem;width:2.5rem;height:2.5rem;" onclick="adjustFloor(1)">+</button>';
+                    html += '</div>';
+                    html += '<div style="font-size:0.75rem;color:var(--blue3);">Totalt forbruk: '+(th.energy?Math.round(th.energy).toLocaleString():'-')+' kWh</div>';
+                    html += '</div>';
+                } else {
+                    html += '<div class="card" style="padding:1rem;color:var(--blue3);">Gulvvarme utilgjengelig (Homey frakoblet)</div>';
+                }
 
                 if (mill) {
                     var mc = mill.on?'#C35839':'#6D8345';
@@ -284,9 +289,11 @@
 
                 // === Temperaturoversikt ===
                 var temps = '<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:0.75rem;">';
-                // Gulvvarme-sensorer
-                temps += '<div class="card" style="padding:1rem;"><div style="font-size:1.5rem;font-weight:500;color:var(--white);">'+th.temperature+'°C</div><div class="temp-label">Bad — Termostat (skap)</div></div>';
-                temps += '<div class="card" style="padding:1rem;"><div style="font-size:1.5rem;font-weight:500;color:var(--white);">'+(th.floorTemperature||'—')+'°C</div><div class="temp-label">Bad — Gulvsensor</div></div>';
+                // Gulvvarme-sensorer (kun hvis tilgjengelig)
+                if (th.temperature != null) {
+                    temps += '<div class="card" style="padding:1rem;"><div style="font-size:1.5rem;font-weight:500;color:var(--white);">'+th.temperature+'°C</div><div class="temp-label">Bad — Termostat (skap)</div></div>';
+                    temps += '<div class="card" style="padding:1rem;"><div style="font-size:1.5rem;font-weight:500;color:var(--white);">'+(th.floorTemperature||'—')+'°C</div><div class="temp-label">Bad — Gulvsensor</div></div>';
+                }
                 // Hue-sensorer
                 (data.rooms||[]).forEach(function(r) {
                     if (r.temperature !== undefined) {
