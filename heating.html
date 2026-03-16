@@ -6,7 +6,7 @@
     <link rel="icon" type="image/svg+xml" href="/favicon.svg?v=2">
     <meta name="theme-color" content="#0d1b2a">
     <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@300;400;500&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500&display=swap" rel="stylesheet">
-    <title>Varme — Tommy Skogstad</title>
+    <title>Varme og Sikkerhet — Tommy Skogstad</title>
     <style>
         :root { --navy:#0d1b2a; --blue1:#1b2d42; --blue2:#2e4260; --blue3:#4a6080; --blue4:#7a96b0; --blue5:#b8cad8; --white:#f4f5f2; }
         * { margin:0; padding:0; box-sizing:border-box; }
@@ -28,10 +28,18 @@
         .section-header { display:flex; align-items:center; gap:0.75rem; margin-bottom:1rem; padding-bottom:0.5rem; border-bottom:1px solid var(--blue1); }
         .section-header h2 { font-size:1.25rem; font-weight:500; color:var(--white); }
         .badge { font-family:'DM Mono',monospace; font-size:0.65rem; text-transform:uppercase; letter-spacing:0.1em; padding:0.2rem 0.6rem; border-radius:9999px; background:var(--blue1); color:var(--blue4); }
+        .badge-ok { background:#1a2e1a; color:#6D8345; }
+        .badge-warn { background:#2e2510; color:#F9A850; }
+        .badge-alarm { background:#2e1515; color:#C35839; }
         .btn { font-family:'DM Mono',monospace; font-size:0.7rem; background:var(--navy); border:1px solid var(--blue2); color:var(--blue4); padding:0.2rem 0.5rem; border-radius:4px; cursor:pointer; }
         .btn:hover { color:var(--white); border-color:var(--blue4); }
         .temp-big { font-size:2.5rem; font-weight:500; color:var(--white); }
         .temp-label { font-size:0.7rem; color:var(--blue4); }
+        .status-dot { display:inline-block; width:8px; height:8px; border-radius:50%; margin-right:6px; }
+        .dot-ok { background:#6D8345; }
+        .dot-warn { background:#F9A850; }
+        .dot-alarm { background:#C35839; animation:pulse 1s infinite; }
+        @keyframes pulse { 0%,100%{opacity:1;} 50%{opacity:0.4;} }
         footer { text-align:center; padding:2rem 1rem; color:var(--blue3); font-size:0.85rem; border-top:1px solid var(--blue1); }
         footer a { transition:color 0.2s; text-decoration:none; }
         footer a:hover { color:var(--white); }
@@ -54,12 +62,28 @@
             <a href="/">Dashboard</a>
             <a href="status.html">Status</a>
             <a href="audio.html">Audio</a>
-            <a href="heating.html" class="active">Varme</a>
+            <a href="heating.html" class="active">Varme &amp; Sikkerhet</a>
             <a href="bookmarks.html">Bokmerker</a>
         </nav>
     </header>
 
     <main>
+        <section class="section">
+            <div class="section-header">
+                <h2>Brannsikkerhet</h2>
+                <span class="badge" id="nest-badge">Laster...</span>
+            </div>
+            <div id="nest-container">Laster...</div>
+        </section>
+
+        <section class="section">
+            <div class="section-header">
+                <h2>Lås</h2>
+                <span class="badge" id="lock-badge"></span>
+            </div>
+            <div id="lock-container">Laster...</div>
+        </section>
+
         <section class="section">
             <div class="section-header">
                 <h2>Oppvarming</h2>
@@ -74,6 +98,14 @@
                 <span class="badge">Alle sensorer</span>
             </div>
             <div id="temps-container">Laster...</div>
+        </section>
+
+        <section class="section">
+            <div class="section-header">
+                <h2>Batteristatus</h2>
+                <span class="badge">Trådløse enheter</span>
+            </div>
+            <div id="battery-container">Laster...</div>
         </section>
     </main>
 
@@ -92,7 +124,7 @@
         fetch(API+'/api/status').then(function(r){return r.json();}).then(function(d) {
             var th = (d.homey||{}).thermostat||{};
             var t = Math.max(5,Math.min(40,(th.targetTemperature||25)+delta));
-            fetch(API+'/api/thermostat/set?temperature='+t,{method:'POST'}).then(function(){setTimeout(loadHeating,1000);});
+            fetch(API+'/api/thermostat/set?temperature='+t,{method:'POST'}).then(function(){setTimeout(loadAll,1000);});
         });
     }
 
@@ -101,7 +133,7 @@
             for (var i=0;i<(d.rooms||[]).length;i++) {
                 if (d.rooms[i].heater) {
                     var t = Math.max(4,Math.min(35,(d.rooms[i].heater.targetTemperature||22)+delta));
-                    fetch(API+'/api/mill/set?temperature='+t,{method:'POST'}).then(function(){setTimeout(loadHeating,1000);});
+                    fetch(API+'/api/mill/set?temperature='+t,{method:'POST'}).then(function(){setTimeout(loadAll,1000);});
                     break;
                 }
             }
@@ -109,22 +141,106 @@
     }
 
     function toggleMill() {
-        fetch(API+'/api/mill/toggle',{method:'POST'}).then(function(){setTimeout(loadHeating,1000);});
+        fetch(API+'/api/mill/toggle',{method:'POST'}).then(function(){setTimeout(loadAll,1000);});
     }
 
-    function loadHeating() {
+    function toggleLock() {
+        if (!confirm('Er du sikker på at du vil endre låsen?')) return;
+        fetch(API+'/api/lock/toggle',{method:'POST'}).then(function(){setTimeout(loadAll,1000);});
+    }
+
+    function loadAll() {
         fetch(API+'/api/status')
             .then(function(r){return r.json();})
             .then(function(data) {
-                document.getElementById('heat-badge').textContent = 'Oppdatert '+new Date().toLocaleTimeString('nb-NO',{hour:'2-digit',minute:'2-digit'});
+                var now = new Date().toLocaleTimeString('nb-NO',{hour:'2-digit',minute:'2-digit'});
+
+                // === Nest Protect ===
+                var nest = data.nestProtect || [];
+                var nestHtml = '';
+                if (nest.length > 0) {
+                    var allOk = nest.every(function(d){ return d.smokeStatus===0 && d.coStatus===0 && d.heatStatus===0; });
+                    document.getElementById('nest-badge').textContent = allOk ? 'Alt OK' : 'ALARM';
+                    document.getElementById('nest-badge').className = 'badge ' + (allOk ? 'badge-ok' : 'badge-alarm');
+
+                    nestHtml = '<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:0.75rem;">';
+                    nest.forEach(function(d) {
+                        var statusMap = {0:'OK',1:'Advarsel',2:'ALARM'};
+                        var smokeOk = d.smokeStatus === 0;
+                        var coOk = d.coStatus === 0;
+                        var heatOk = d.heatStatus === 0;
+                        var deviceOk = smokeOk && coOk && heatOk;
+                        var borderColor = deviceOk ? 'var(--blue2)' : '#C35839';
+
+                        nestHtml += '<div class="card" style="padding:1.25rem;border-color:'+borderColor+';">';
+                        nestHtml += '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1rem;">';
+                        nestHtml += '<h3 style="font-size:1.1rem;color:var(--white);">'+d.room+'</h3>';
+                        nestHtml += '<span class="badge '+(deviceOk?'badge-ok':'badge-alarm')+'">'+(deviceOk?'OK':'ALARM')+'</span>';
+                        nestHtml += '</div>';
+
+                        nestHtml += '<div style="display:flex;flex-direction:column;gap:0.5rem;">';
+                        nestHtml += '<div><span class="status-dot '+(smokeOk?'dot-ok':'dot-alarm')+'"></span>Røyk: '+(statusMap[d.smokeStatus]||'?')+'</div>';
+                        nestHtml += '<div><span class="status-dot '+(coOk?'dot-ok':'dot-alarm')+'"></span>CO: '+(statusMap[d.coStatus]||'?')+'</div>';
+                        nestHtml += '<div><span class="status-dot '+(d.batteryOk?'dot-ok':'dot-warn')+'"></span>Batteri: '+d.batteryLevel+'%</div>';
+                        nestHtml += '<div><span class="status-dot '+(d.selfTestOk?'dot-ok':'dot-warn')+'"></span>Selvtest: '+(d.selfTestOk?'OK':'Sjekk')+'</div>';
+                        nestHtml += '</div>';
+
+                        nestHtml += '<div style="margin-top:0.75rem;font-size:0.7rem;color:var(--blue3);display:flex;gap:1rem;flex-wrap:wrap;">';
+                        nestHtml += '<span>'+d.model+'</span>';
+                        nestHtml += '<span>v'+d.software+'</span>';
+                        nestHtml += '<span>'+d.ip+'</span>';
+                        nestHtml += '</div>';
+                        nestHtml += '</div>';
+                    });
+                    nestHtml += '</div>';
+                } else {
+                    nestHtml = '<div class="card" style="padding:1rem;color:var(--blue3);">Ingen Nest Protect-enheter tilgjengelig</div>';
+                    document.getElementById('nest-badge').textContent = 'Utilgjengelig';
+                    document.getElementById('nest-badge').className = 'badge';
+                }
+                document.getElementById('nest-container').innerHTML = nestHtml;
+
+                // === Yale Lås ===
+                var lockHtml = '';
+                var lockData = null;
+                (data.rooms||[]).forEach(function(r){ if(r.lock) lockData=r.lock; });
+                if (lockData) {
+                    var lk = lockData;
+                    var lockColor = lk.locked ? '#6D8345' : '#C35839';
+                    var lockIcon = lk.locked ? '🔒' : '🔓';
+                    document.getElementById('lock-badge').textContent = lk.locked ? 'Låst' : 'ÅPEN';
+                    document.getElementById('lock-badge').className = 'badge ' + (lk.locked ? 'badge-ok' : 'badge-alarm');
+
+                    lockHtml = '<div class="card">';
+                    lockHtml += '<div style="display:flex;align-items:center;justify-content:space-between;">';
+                    lockHtml += '<div style="display:flex;align-items:center;gap:1rem;">';
+                    lockHtml += '<span style="font-size:2rem;">'+lockIcon+'</span>';
+                    lockHtml += '<div>';
+                    lockHtml += '<div style="font-size:1.1rem;color:var(--white);font-weight:500;">Yale Doorman — Entré</div>';
+                    lockHtml += '<div style="display:flex;gap:1rem;margin-top:0.4rem;">';
+                    lockHtml += '<span><span class="status-dot '+(lk.locked?'dot-ok':'dot-alarm')+'"></span>'+(lk.locked?'Låst':'ÅPEN')+'</span>';
+                    lockHtml += '<span><span class="status-dot '+(lk.doorOpen?'dot-alarm':'dot-ok')+'"></span>Dør: '+(lk.doorOpen?'ÅPEN':'Lukket')+'</span>';
+                    lockHtml += '<span><span class="status-dot '+(lk.batteryLow?'dot-warn':'dot-ok')+'"></span>Batteri: '+(lk.batteryLow?'LAVT':'OK')+'</span>';
+                    lockHtml += '</div>';
+                    lockHtml += '</div>';
+                    lockHtml += '</div>';
+                    lockHtml += '<button onclick="toggleLock()" style="font-family:\'DM Mono\',monospace;font-size:0.75rem;background:'+lockColor+';border:none;color:var(--white);padding:0.5rem 1rem;border-radius:6px;cursor:pointer;">'+(lk.locked?'Lås opp':'Lås')+'</button>';
+                    lockHtml += '</div>';
+                    lockHtml += '</div>';
+                } else {
+                    lockHtml = '<div class="card" style="padding:1rem;color:var(--blue3);">Yale-lås utilgjengelig</div>';
+                }
+                document.getElementById('lock-container').innerHTML = lockHtml;
+
+                // === Oppvarming ===
+                document.getElementById('heat-badge').textContent = 'Oppdatert '+now;
                 var th = (data.homey||{}).thermostat||{};
                 var mill = null;
                 (data.rooms||[]).forEach(function(r){if(r.heater) mill=r.heater;});
 
-                // Gulvvarme
                 var hc = th.heating?'#C35839':'#6D8345';
                 var html = '<div class="card">';
-                html += '<h3 style="font-size:1.1rem;color:var(--white);margin-bottom:1rem;">🔥 Gulvvarme — Bad</h3>';
+                html += '<h3 style="font-size:1.1rem;color:var(--white);margin-bottom:1rem;">Gulvvarme — Bad</h3>';
                 html += '<div style="display:flex;gap:2rem;flex-wrap:wrap;margin-bottom:1rem;">';
                 html += '<div><div class="temp-big">'+th.temperature+'°</div><div class="temp-label">Termostat (skap)</div></div>';
                 html += '<div><div class="temp-big">'+(th.floorTemperature||'—')+'°</div><div class="temp-label">Gulvsensor</div></div>';
@@ -139,12 +255,11 @@
                 html += '<div style="font-size:0.75rem;color:var(--blue3);">Totalt forbruk: '+(th.energy?Math.round(th.energy).toLocaleString():'-')+' kWh</div>';
                 html += '</div>';
 
-                // Mill
                 if (mill) {
                     var mc = mill.on?'#C35839':'#6D8345';
                     html += '<div class="card">';
                     html += '<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1rem;">';
-                    html += '<h3 style="font-size:1.1rem;color:var(--white);">🌡️ Mill Varmeovn — Stue</h3>';
+                    html += '<h3 style="font-size:1.1rem;color:var(--white);">Mill Varmeovn — Stue</h3>';
                     html += '<button class="btn" style="background:'+(mill.on?'#C35839':'#6D8345')+';border:none;color:var(--white);padding:0.3rem 0.8rem;" onclick="toggleMill()">'+(mill.on?'Slå av':'Slå på')+'</button>';
                     html += '</div>';
                     html += '<div style="display:flex;gap:2rem;flex-wrap:wrap;margin-bottom:1rem;">';
@@ -167,7 +282,7 @@
 
                 document.getElementById('heating-container').innerHTML = html;
 
-                // Temperaturoversikt
+                // === Temperaturoversikt ===
                 var temps = '<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:0.75rem;">';
                 // Gulvvarme-sensorer
                 temps += '<div class="card" style="padding:1rem;"><div style="font-size:1.5rem;font-weight:500;color:var(--white);">'+th.temperature+'°C</div><div class="temp-label">Bad — Termostat (skap)</div></div>';
@@ -181,13 +296,41 @@
                         temps += '<div class="card" style="padding:1rem;"><div style="font-size:1.5rem;font-weight:500;color:var(--white);">'+r.heater.temperature+'°C</div><div class="temp-label">'+r.name+' — Mill</div></div>';
                     }
                 });
+                // Nest Protect temperatursensorer (hvis tilgjengelig)
+                nest.forEach(function(d) {
+                    if (d.temperature) {
+                        temps += '<div class="card" style="padding:1rem;"><div style="font-size:1.5rem;font-weight:500;color:var(--white);">'+d.temperature+'°C</div><div class="temp-label">'+d.room+' — Nest Protect</div></div>';
+                    }
+                });
                 temps += '</div>';
                 document.getElementById('temps-container').innerHTML = temps;
+
+                // === Batteristatus ===
+                var bat = '<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:0.75rem;">';
+                nest.forEach(function(d) {
+                    var pct = d.batteryLevel;
+                    var color = pct > 50 ? '#6D8345' : pct > 20 ? '#F9A850' : '#C35839';
+                    bat += '<div class="card" style="padding:1rem;">';
+                    bat += '<div style="font-size:1.5rem;font-weight:500;color:'+color+';">'+pct+'%</div>';
+                    bat += '<div class="temp-label">'+d.room+' — Nest Protect</div>';
+                    bat += '<div style="margin-top:0.5rem;height:4px;background:var(--blue2);border-radius:2px;"><div style="height:100%;width:'+pct+'%;background:'+color+';border-radius:2px;"></div></div>';
+                    bat += '</div>';
+                });
+                if (lockData) {
+                    var batOk = !lockData.batteryLow;
+                    bat += '<div class="card" style="padding:1rem;">';
+                    bat += '<div style="font-size:1.5rem;font-weight:500;color:'+(batOk?'#6D8345':'#C35839')+';">'+(batOk?'OK':'LAVT')+'</div>';
+                    bat += '<div class="temp-label">Entré — Yale Doorman</div>';
+                    bat += '<div style="margin-top:0.5rem;height:4px;background:var(--blue2);border-radius:2px;"><div style="height:100%;width:'+(batOk?'80':'15')+'%;background:'+(batOk?'#6D8345':'#C35839')+';border-radius:2px;"></div></div>';
+                    bat += '</div>';
+                }
+                bat += '</div>';
+                document.getElementById('battery-container').innerHTML = bat;
             });
     }
 
-    loadHeating();
-    setInterval(loadHeating, 15000);
+    loadAll();
+    setInterval(loadAll, 15000);
     </script>
 </body>
 </html>
