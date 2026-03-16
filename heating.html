@@ -70,14 +70,6 @@
     <main>
         <section class="section">
             <div class="section-header">
-                <h2>Brannsikkerhet</h2>
-                <span class="badge" id="nest-badge">Laster...</span>
-            </div>
-            <div id="nest-container">Laster...</div>
-        </section>
-
-        <section class="section">
-            <div class="section-header">
                 <h2>Lås</h2>
                 <span class="badge" id="lock-badge"></span>
             </div>
@@ -106,6 +98,14 @@
                 <span class="badge">Trådløse enheter</span>
             </div>
             <div id="battery-container">Laster...</div>
+        </section>
+
+        <section class="section">
+            <div class="section-header">
+                <h2>Printer</h2>
+                <span class="badge" id="printer-badge"></span>
+            </div>
+            <div id="printer-container">Laster...</div>
         </section>
     </main>
 
@@ -154,51 +154,6 @@
             .then(function(r){return r.json();})
             .then(function(data) {
                 var now = new Date().toLocaleTimeString('nb-NO',{hour:'2-digit',minute:'2-digit'});
-
-                // === Nest Protect ===
-                var nest = data.nestProtect || [];
-                var nestHtml = '';
-                if (nest.length > 0) {
-                    var allOk = nest.every(function(d){ return d.smokeStatus===0 && d.coStatus===0 && d.heatStatus===0; });
-                    document.getElementById('nest-badge').textContent = allOk ? 'Alt OK' : 'ALARM';
-                    document.getElementById('nest-badge').className = 'badge ' + (allOk ? 'badge-ok' : 'badge-alarm');
-
-                    nestHtml = '<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:0.75rem;">';
-                    nest.forEach(function(d) {
-                        var statusMap = {0:'OK',1:'Advarsel',2:'ALARM'};
-                        var smokeOk = d.smokeStatus === 0;
-                        var coOk = d.coStatus === 0;
-                        var heatOk = d.heatStatus === 0;
-                        var deviceOk = smokeOk && coOk && heatOk;
-                        var borderColor = deviceOk ? 'var(--blue2)' : '#C35839';
-
-                        nestHtml += '<div class="card" style="padding:1.25rem;border-color:'+borderColor+';">';
-                        nestHtml += '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1rem;">';
-                        nestHtml += '<h3 style="font-size:1.1rem;color:var(--white);">'+d.room+'</h3>';
-                        nestHtml += '<span class="badge '+(deviceOk?'badge-ok':'badge-alarm')+'">'+(deviceOk?'OK':'ALARM')+'</span>';
-                        nestHtml += '</div>';
-
-                        nestHtml += '<div style="display:flex;flex-direction:column;gap:0.5rem;">';
-                        nestHtml += '<div><span class="status-dot '+(smokeOk?'dot-ok':'dot-alarm')+'"></span>Røyk: '+(statusMap[d.smokeStatus]||'?')+'</div>';
-                        nestHtml += '<div><span class="status-dot '+(coOk?'dot-ok':'dot-alarm')+'"></span>CO: '+(statusMap[d.coStatus]||'?')+'</div>';
-                        nestHtml += '<div><span class="status-dot '+(d.batteryOk?'dot-ok':'dot-warn')+'"></span>Batteri: '+d.batteryLevel+'%</div>';
-                        nestHtml += '<div><span class="status-dot '+(d.selfTestOk?'dot-ok':'dot-warn')+'"></span>Selvtest: '+(d.selfTestOk?'OK':'Sjekk')+'</div>';
-                        nestHtml += '</div>';
-
-                        nestHtml += '<div style="margin-top:0.75rem;font-size:0.7rem;color:var(--blue3);display:flex;gap:1rem;flex-wrap:wrap;">';
-                        nestHtml += '<span>'+d.model+'</span>';
-                        nestHtml += '<span>v'+d.software+'</span>';
-                        nestHtml += '<span>'+d.ip+'</span>';
-                        nestHtml += '</div>';
-                        nestHtml += '</div>';
-                    });
-                    nestHtml += '</div>';
-                } else {
-                    nestHtml = '<div class="card" style="padding:1rem;color:var(--blue3);">Ingen Nest Protect-enheter tilgjengelig</div>';
-                    document.getElementById('nest-badge').textContent = 'Utilgjengelig';
-                    document.getElementById('nest-badge').className = 'badge';
-                }
-                document.getElementById('nest-container').innerHTML = nestHtml;
 
                 // === Yale Lås ===
                 var lockHtml = '';
@@ -289,12 +244,10 @@
 
                 // === Temperaturoversikt ===
                 var temps = '<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:0.75rem;">';
-                // Gulvvarme-sensorer (kun hvis tilgjengelig)
                 if (th.temperature != null) {
                     temps += '<div class="card" style="padding:1rem;"><div style="font-size:1.5rem;font-weight:500;color:var(--white);">'+th.temperature+'°C</div><div class="temp-label">Bad — Termostat (skap)</div></div>';
                     temps += '<div class="card" style="padding:1rem;"><div style="font-size:1.5rem;font-weight:500;color:var(--white);">'+(th.floorTemperature||'—')+'°C</div><div class="temp-label">Bad — Gulvsensor</div></div>';
                 }
-                // Hue-sensorer
                 (data.rooms||[]).forEach(function(r) {
                     if (r.temperature !== undefined) {
                         temps += '<div class="card" style="padding:1rem;"><div style="font-size:1.5rem;font-weight:500;color:var(--white);">'+r.temperature+'°C</div><div class="temp-label">'+r.name+' — Hue-sensor</div></div>';
@@ -303,26 +256,24 @@
                         temps += '<div class="card" style="padding:1rem;"><div style="font-size:1.5rem;font-weight:500;color:var(--white);">'+r.heater.temperature+'°C</div><div class="temp-label">'+r.name+' — Mill</div></div>';
                     }
                 });
-                // Nest Protect temperatursensorer (hvis tilgjengelig)
-                nest.forEach(function(d) {
-                    if (d.temperature) {
-                        temps += '<div class="card" style="padding:1rem;"><div style="font-size:1.5rem;font-weight:500;color:var(--white);">'+d.temperature+'°C</div><div class="temp-label">'+d.room+' — Nest Protect</div></div>';
-                    }
-                });
                 temps += '</div>';
                 document.getElementById('temps-container').innerHTML = temps;
 
                 // === Batteristatus ===
                 var bat = '<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:0.75rem;">';
-                nest.forEach(function(d) {
-                    var pct = d.batteryLevel;
-                    var color = pct > 50 ? '#6D8345' : pct > 20 ? '#F9A850' : '#C35839';
-                    bat += '<div class="card" style="padding:1rem;">';
-                    bat += '<div style="font-size:1.5rem;font-weight:500;color:'+color+';">'+pct+'%</div>';
-                    bat += '<div class="temp-label">'+d.room+' — Nest Protect</div>';
-                    bat += '<div style="margin-top:0.5rem;height:4px;background:var(--blue2);border-radius:2px;"><div style="height:100%;width:'+pct+'%;background:'+color+';border-radius:2px;"></div></div>';
-                    bat += '</div>';
+                // Hue-enheter (dimmere + sensorer)
+                (data.rooms||[]).forEach(function(r) {
+                    (r.batteries||[]).forEach(function(b) {
+                        var pct = b.level;
+                        var color = pct > 50 ? '#6D8345' : pct > 20 ? '#F9A850' : '#C35839';
+                        bat += '<div class="card" style="padding:1rem;">';
+                        bat += '<div style="font-size:1.5rem;font-weight:500;color:'+color+';">'+pct+'%</div>';
+                        bat += '<div class="temp-label">'+r.name+' — '+b.device+'</div>';
+                        bat += '<div style="margin-top:0.5rem;height:4px;background:var(--blue2);border-radius:2px;"><div style="height:100%;width:'+pct+'%;background:'+color+';border-radius:2px;"></div></div>';
+                        bat += '</div>';
+                    });
                 });
+                // Yale lås
                 if (lockData) {
                     var batOk = !lockData.batteryLow;
                     bat += '<div class="card" style="padding:1rem;">';
@@ -333,6 +284,36 @@
                 }
                 bat += '</div>';
                 document.getElementById('battery-container').innerHTML = bat;
+
+                // === Printer ===
+                var pr = data.printer;
+                var prHtml = '';
+                if (pr) {
+                    var inkPct = pr.inkBlack != null ? pr.inkBlack : null;
+                    var inkColor = inkPct > 50 ? '#6D8345' : inkPct > 20 ? '#F9A850' : '#C35839';
+                    var stateMap = {idle:'Klar',printing:'Skriver',unknown:'Ukjent'};
+                    document.getElementById('printer-badge').textContent = stateMap[pr.state] || pr.state;
+                    document.getElementById('printer-badge').className = 'badge badge-ok';
+
+                    prHtml = '<div class="card" style="padding:1.25rem;">';
+                    prHtml += '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1rem;">';
+                    prHtml += '<h3 style="font-size:1.1rem;color:var(--white);">'+pr.name+'</h3>';
+                    prHtml += '<span class="badge badge-ok">'+(stateMap[pr.state]||pr.state)+'</span>';
+                    prHtml += '</div>';
+                    if (inkPct != null) {
+                        prHtml += '<div style="font-size:0.85rem;color:var(--blue4);margin-bottom:0.5rem;">Svart toner</div>';
+                        prHtml += '<div style="display:flex;align-items:center;gap:1rem;">';
+                        prHtml += '<div style="flex:1;height:8px;background:var(--blue2);border-radius:4px;"><div style="height:100%;width:'+inkPct+'%;background:'+inkColor+';border-radius:4px;"></div></div>';
+                        prHtml += '<span style="font-size:1.2rem;font-weight:500;color:'+inkColor+';">'+inkPct+'%</span>';
+                        prHtml += '</div>';
+                    }
+                    prHtml += '</div>';
+                } else {
+                    prHtml = '<div class="card" style="padding:1rem;color:var(--blue3);">Printer utilgjengelig</div>';
+                    document.getElementById('printer-badge').textContent = 'Utilgjengelig';
+                }
+                document.getElementById('printer-container').innerHTML = prHtml;
+
             });
     }
 
