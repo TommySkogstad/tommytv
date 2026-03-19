@@ -308,29 +308,45 @@
             </div>
             <div class="grid">
                 <div class="card">
-                    <h3>lo-finans.no</h3>
-                    <p>Domene-epost via Cloudflare Email Routing</p>
-                    <span class="url">f.eks. post@lo-finans.no</span>
+                    <h3>leienbiolog.no</h3>
+                    <p>Utgående: Postfix DKIM (selector: portal + styre). Innkommende: Google Workspace → Cloudflare Worker → webhook</p>
+                    <span class="url">noreply@leienbiolog.no</span>
+                    <span class="url">oppdrag@leienbiolog.no</span>
                     <div>
-                        <span class="tech">DNS auto-oppdatering hvert 5. min</span>
-                    </div>
-                </div>
-
-                <div class="card">
-                    <h3>tommytv.no</h3>
-                    <p>Domene-epost via Cloudflare Email Routing</p>
-                    <span class="url">f.eks. post@tommytv.no</span>
-                    <div>
-                        <span class="tech">DNS auto-oppdatering hvert 5. min</span>
+                        <span class="tech">Postfix</span>
+                        <span class="tech">DKIM</span>
+                        <span class="tech">Google Workspace</span>
                     </div>
                 </div>
 
                 <div class="card">
                     <h3>6810.no</h3>
-                    <p>Domene-epost via Postfix med DKIM (selector: hwa)</p>
+                    <p>Utgående: Postfix DKIM (selector: hwa + styre). Innkommende: Cloudflare Email Worker → webhook</p>
                     <span class="url">noreply@6810.no</span>
                     <div>
-                        <span class="tech">Cloudflare Tunnel</span>
+                        <span class="tech">Postfix</span>
+                        <span class="tech">DKIM</span>
+                        <span class="tech">Cloudflare Worker</span>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h3>lo-finans.no</h3>
+                    <p>Utgående: Postfix DKIM (selector: mail + styre). Innkommende: Cloudflare Email Routing</p>
+                    <span class="url">noreply@lo-finans.no</span>
+                    <div>
+                        <span class="tech">Postfix</span>
+                        <span class="tech">DKIM</span>
+                        <span class="tech">Cloudflare</span>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h3>tommytv.no</h3>
+                    <p>Cloudflare Email Routing for relay (biologportal innkommende)</p>
+                    <span class="url">oppdrag.portal@tommytv.no</span>
+                    <div>
+                        <span class="tech">Cloudflare Email Routing</span>
                     </div>
                 </div>
             </div>
