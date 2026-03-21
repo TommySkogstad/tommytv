@@ -792,6 +792,7 @@
                     // Kalenderforslag
                     const calItems = pendingRes.filter(p => p.type === 'calendar');
                     const calUpdates = pendingRes.filter(p => p.type === 'calendar_update');
+                    const calCleanups = pendingRes.filter(p => p.type === 'calendar_cleanup');
                     const draftItems = pendingRes.filter(p => p.type === 'draft' || p.type === 'reply');
                     const unsubItems = pendingRes.filter(p => p.type === 'unsubscribe');
 
@@ -826,16 +827,54 @@
                     }
 
                     if (calUpdates.length > 0) {
-                        html += '<h3 style="color:var(--blue5);margin:12px 0 8px;font-size:0.95rem;">Kalender-korreksjoner</h3>';
-                        calUpdates.forEach(p => {
-                            html += '<div style="background:var(--blue1);border:1px solid #eab308;border-radius:8px;padding:12px;margin-bottom:8px;">';
-                            html += '<div style="color:#eab308;font-size:0.75rem;font-weight:500;margin-bottom:4px;">KORREKSJON</div>';
-                            html += '<div style="color:var(--white);font-size:0.85rem;">Nåværende: <span style="text-decoration:line-through;">' + escHtml(p.existingEventSummary || '') + '</span></div>';
-                            html += '<div style="color:#22c55e;font-size:0.85rem;">Foreslått: ' + escHtml(p.suggestedTitle || '') + '</div>';
+                        const deletes = calUpdates.filter(p => p.suggestedAction === 'delete');
+                        const updates = calUpdates.filter(p => p.suggestedAction !== 'delete');
+
+                        if (deletes.length > 0) {
+                            html += '<h3 style="color:var(--blue5);margin:12px 0 8px;font-size:0.95rem;">Feilaktige kalenderoppføringer (slett)</h3>';
+                            deletes.forEach(p => {
+                                const existStart = p.existingStart ? new Date(p.existingStart).toLocaleDateString('nb-NO', {day:'numeric',month:'short',hour:'2-digit',minute:'2-digit'}) : '';
+                                html += '<div style="background:var(--blue1);border:1px solid #ef4444;border-radius:8px;padding:10px;margin-bottom:6px;display:flex;justify-content:space-between;align-items:center;">';
+                                html += '<div style="flex:1;">';
+                                html += '<div style="color:var(--white);font-size:0.85rem;text-decoration:line-through;">"' + escHtml(p.existingEventSummary || '') + '" — ' + existStart + '</div>';
+                                html += '<div style="color:var(--blue4);font-size:0.7rem;font-style:italic;">' + escHtml((p.reason || '').substring(0, 120)) + '</div>';
+                                html += '</div>';
+                                html += '<div style="display:flex;gap:4px;">';
+                                html += '<button onclick="deleteCalendarEvent(' + p.id + ')" style="padding:4px 8px;border-radius:4px;border:none;background:#ef4444;color:white;cursor:pointer;font-size:0.8rem;">Slett</button>';
+                                html += '<button onclick="rejectItem(' + p.id + ',this)" style="padding:4px 8px;border-radius:4px;border:none;background:var(--blue2);color:var(--blue4);cursor:pointer;font-size:0.75rem;border:1px solid var(--blue3);">Behold</button>';
+                                html += '</div></div>';
+                            });
+                        }
+
+                        if (updates.length > 0) {
+                            html += '<h3 style="color:var(--blue5);margin:12px 0 8px;font-size:0.95rem;">Kalender-korreksjoner</h3>';
+                            updates.forEach(p => {
+                                html += '<div style="background:var(--blue1);border:1px solid #eab308;border-radius:8px;padding:12px;margin-bottom:8px;">';
+                                html += '<div style="color:#eab308;font-size:0.75rem;font-weight:500;margin-bottom:4px;">KORREKSJON</div>';
+                                html += '<div style="color:var(--white);font-size:0.85rem;">Nåværende: <span style="text-decoration:line-through;">' + escHtml(p.existingEventSummary || '') + '</span></div>';
+                                html += '<div style="color:#22c55e;font-size:0.85rem;">Foreslått: ' + escHtml(p.suggestedTitle || '') + '</div>';
+                                if (p.reason) html += '<div style="color:var(--blue4);font-size:0.75rem;margin-top:4px;font-style:italic;">' + escHtml(p.reason) + '</div>';
+                                html += '<div style="display:flex;gap:4px;margin-top:8px;">';
+                                html += '<button onclick="approveCalendar(' + p.id + ')" style="padding:4px 8px;border-radius:4px;border:none;background:#22c55e;color:white;cursor:pointer;font-size:0.8rem;">Godkjenn</button>';
+                                html += '<button onclick="rejectItem(' + p.id + ',this)" style="padding:4px 8px;border-radius:4px;border:none;background:#ef4444;color:white;cursor:pointer;font-size:0.8rem;">Avvis</button>';
+                                html += '</div></div>';
+                            });
+                        }
+                    }
+
+                    if (calCleanups.length > 0) {
+                        html += '<h3 style="color:var(--blue5);margin:12px 0 8px;font-size:0.95rem;">Duplikater i kalender (' + calCleanups.length + ')</h3>';
+                        calCleanups.forEach(p => {
+                            html += '<div style="background:var(--blue1);border:1px solid #f97316;border-radius:8px;padding:12px;margin-bottom:8px;">';
+                            html += '<div style="color:#f97316;font-size:0.75rem;font-weight:500;margin-bottom:4px;">DUPLIKAT-OPPRYDDING</div>';
+                            html += '<div style="color:#22c55e;font-size:0.85rem;">Beholde: ' + escHtml(p.keep?.summary || '?') + ' [' + escHtml(p.keep?.calendar || '') + ']</div>';
+                            (p.delete || []).forEach(d => {
+                                html += '<div style="color:#ef4444;font-size:0.8rem;text-decoration:line-through;">Slette: ' + escHtml(d.summary) + ' [' + escHtml(d.calendar || '') + ']</div>';
+                            });
                             if (p.reason) html += '<div style="color:var(--blue4);font-size:0.75rem;margin-top:4px;font-style:italic;">' + escHtml(p.reason) + '</div>';
                             html += '<div style="display:flex;gap:4px;margin-top:8px;">';
-                            html += '<button onclick="approveCalendar(' + p.id + ')" style="padding:4px 8px;border-radius:4px;border:none;background:#22c55e;color:white;cursor:pointer;font-size:0.8rem;">Godkjenn</button>';
-                            html += '<button onclick="rejectItem(' + p.id + ',this)" style="padding:4px 8px;border-radius:4px;border:none;background:#ef4444;color:white;cursor:pointer;font-size:0.8rem;">Avvis</button>';
+                            html += '<button onclick="approveCleanup(' + p.id + ')" style="padding:4px 8px;border-radius:4px;border:none;background:#f97316;color:white;cursor:pointer;font-size:0.8rem;">Rydd opp</button>';
+                            html += '<button onclick="rejectItem(' + p.id + ',this)" style="padding:4px 8px;border-radius:4px;border:none;background:var(--blue2);color:var(--blue4);cursor:pointer;font-size:0.8rem;border:1px solid var(--blue3);">Behold alle</button>';
                             html += '</div></div>';
                         });
                     }
@@ -1033,6 +1072,30 @@
                 btn.style.borderColor = isActive ? '#22c55e' : 'var(--blue3)';
                 btn.style.background = isActive ? '#22c55e22' : 'transparent';
                 btn.style.color = isActive ? '#22c55e' : 'var(--blue4)';
+            } catch (err) { alert('Feil: ' + err.message); }
+        }
+
+        async function deleteCalendarEvent(id) {
+            if (!confirm('Slette denne kalenderoppføringen?')) return;
+            try {
+                const res = await fetch(SEC_API + '/api/delete-event/' + id, { method: 'POST' });
+                const data = await res.json();
+                if (data.success) { loadSecretary(); }
+                else { alert('Feil: ' + (data.error || 'Ukjent')); }
+            } catch (err) { alert('Feil: ' + err.message); }
+        }
+
+        async function approveCleanup(id) {
+            if (!confirm('Slette duplikatene?')) return;
+            try {
+                const res = await fetch(SEC_API + '/api/cleanup/' + id, { method: 'POST' });
+                const data = await res.json();
+                if (data.success) {
+                    alert(data.deleted + ' duplikat(er) slettet');
+                    loadSecretary();
+                } else {
+                    alert('Feil: ' + (data.error || 'Ukjent'));
+                }
             } catch (err) { alert('Feil: ' + err.message); }
         }
 
