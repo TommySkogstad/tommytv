@@ -800,12 +800,19 @@
                                 '<option value="' + c.id + '"' + (c.id === p.suggestedCalendarId ? ' selected' : '') + '>' + c.name + '</option>'
                             ).join('');
 
+                            const title = p.suggestedTitle || p.subject;
+                            const startStr = p.suggestedStart ? new Date(p.suggestedStart).toLocaleDateString('nb-NO', {day:'numeric',month:'short',year:'numeric',hour:'2-digit',minute:'2-digit'}) : '';
+                            const loc = p.suggestedLocation || '';
+
                             html += '<div style="background:var(--blue1);border:1px solid var(--blue2);border-radius:8px;padding:12px;margin-bottom:8px;">';
                             html += '<div style="display:flex;justify-content:space-between;align-items:start;gap:8px;">';
                             html += '<div style="flex:1;">';
-                            html += '<div style="color:var(--white);font-weight:500;">' + escHtml(p.subject) + '</div>';
-                            html += '<div style="color:var(--blue4);font-size:0.8rem;margin-top:2px;">Fra: ' + escHtml(p.from) + '</div>';
-                            html += '<div style="color:var(--blue4);font-size:0.8rem;margin-top:4px;">' + escHtml(p.snippet.substring(0, 120)) + '</div>';
+                            html += '<div style="display:flex;align-items:center;gap:6px;">';
+                            html += '<input id="title-' + p.id + '" value="' + escHtml(title) + '" style="flex:1;padding:3px 6px;border-radius:4px;border:1px solid var(--blue3);background:var(--blue2);color:var(--white);font-size:0.9rem;font-weight:500;" />';
+                            html += '</div>';
+                            if (startStr) html += '<div style="color:var(--blue5);font-size:0.8rem;margin-top:4px;">' + startStr + (loc ? ' — ' + escHtml(loc) : '') + '</div>';
+                            html += '<div style="color:var(--blue4);font-size:0.75rem;margin-top:2px;">Fra: ' + escHtml(p.from) + '</div>';
+                            if (p.reason) html += '<div style="color:var(--blue4);font-size:0.75rem;margin-top:2px;font-style:italic;">' + escHtml(p.reason) + '</div>';
                             html += '</div>';
                             html += '<div style="display:flex;flex-direction:column;gap:4px;min-width:180px;">';
                             html += '<select id="cal-' + p.id + '" style="padding:4px 6px;border-radius:4px;border:1px solid var(--blue3);background:var(--blue2);color:var(--white);font-size:0.8rem;">' + calOptions + '</select>';
@@ -889,12 +896,14 @@
 
         async function approveCalendar(id) {
             const calSelect = document.getElementById('cal-' + id);
+            const titleInput = document.getElementById('title-' + id);
             const calendarId = calSelect ? calSelect.value : null;
+            const title = titleInput ? titleInput.value.trim() : null;
             try {
                 const res = await fetch(SEC_API + '/api/approve/' + id, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ calendarId })
+                    body: JSON.stringify({ calendarId, title })
                 });
                 const data = await res.json();
                 if (data.success) {
