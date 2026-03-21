@@ -979,7 +979,7 @@
                 if (data.success) {
                     loadSecretary();
                 } else {
-                    alert('Feil: ' + (data.error || 'Ukjent feil'));
+                    alert(data.message || data.error || 'Kunne ikke opprette event');
                 }
             } catch (err) { alert('Feil: ' + err.message); }
         }
@@ -1081,7 +1081,8 @@
                 const res = await fetch(SEC_API + '/api/delete-event/' + id, { method: 'POST' });
                 const data = await res.json();
                 if (data.success) { loadSecretary(); }
-                else { alert('Feil: ' + (data.error || 'Ukjent')); }
+                else if (data.message) { alert(data.message); loadSecretary(); }
+                else { alert('Feil: ' + (data.error || 'Kunne ikke slette')); }
             } catch (err) { alert('Feil: ' + err.message); }
         }
 
