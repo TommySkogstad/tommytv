@@ -854,6 +854,12 @@
                     }
                 } catch(e) {}
 
+                // Trenings-toggle
+                html += '<div style="margin-top:12px;border-top:1px solid var(--blue2);padding-top:8px;">';
+                html += '<button onclick="toggleTraining()" id="training-toggle" style="padding:4px 12px;border-radius:6px;border:1px solid var(--blue3);background:var(--blue1);color:var(--blue5);cursor:pointer;font-size:0.8rem;">Label-trening (siste 100 e-poster)</button>';
+                html += '<div id="training-section" style="display:none;margin-top:8px;max-height:400px;overflow-y:auto;"></div>';
+                html += '</div>';
+
                 // Siste rapport-sammendrag
                 if (reportRes.content) {
                     const lines = reportRes.content.split('\n');
@@ -923,6 +929,70 @@
                 } else {
                     alert('Feil: ' + (data.error || 'Ukjent feil'));
                 }
+            } catch (err) { alert('Feil: ' + err.message); }
+        }
+
+        const LABELS = ['Faktura', 'Reise', 'Git', 'Sameiet', 'Jobb', 'ENK'];
+
+        async function toggleTraining() {
+            const section = document.getElementById('training-section');
+            if (section.style.display !== 'none') {
+                section.style.display = 'none';
+                return;
+            }
+            section.style.display = '';
+            section.innerHTML = '<p style="color:var(--blue4)">Laster e-poster...</p>';
+
+            try {
+                const data = await fetch(SEC_API + '/api/training').then(r => r.json());
+                let h = '';
+                data.emails.forEach(email => {
+                    h += '<div style="background:var(--blue1);border:1px solid var(--blue2);border-radius:6px;padding:8px;margin-bottom:4px;display:flex;align-items:center;gap:8px;">';
+                    h += '<div style="flex:1;min-width:0;">';
+                    h += '<div style="color:var(--white);font-size:0.8rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">' + escHtml(email.subject.substring(0, 60)) + '</div>';
+                    h += '<div style="color:var(--blue4);font-size:0.7rem;">' + escHtml(email.from.substring(0, 40)) + '</div>';
+                    h += '</div>';
+                    h += '<div style="display:flex;gap:2px;flex-wrap:wrap;">';
+                    LABELS.forEach(label => {
+                        const active = email.labelNames.includes(label);
+                        h += '<button onclick="toggleLabel(\'' + email.id + '\',\'' + label + '\',this)" style="padding:2px 6px;border-radius:3px;border:1px solid ' + (active ? '#22c55e' : 'var(--blue3)') + ';background:' + (active ? '#22c55e22' : 'transparent') + ';color:' + (active ? '#22c55e' : 'var(--blue4)') + ';cursor:pointer;font-size:0.65rem;">' + label + '</button>';
+                    });
+                    h += '</div></div>';
+                });
+                section.innerHTML = h;
+            } catch (err) {
+                section.innerHTML = '<p style="color:#ef4444;">Feil: ' + err.message + '</p>';
+            }
+        }
+
+        async function toggleLabel(messageId, label, btn) {
+            // Hent nåværende labels fra knappene i samme rad
+            const row = btn.closest('div[style*="background:var(--blue1)"]');
+            const buttons = row.querySelectorAll('button');
+            const currentLabels = [];
+            buttons.forEach(b => {
+                if (b.style.borderColor === 'rgb(34, 197, 94)' || b.style.borderColor === '#22c55e') {
+                    currentLabels.push(b.textContent);
+                }
+            });
+
+            // Toggle
+            const idx = currentLabels.indexOf(label);
+            if (idx >= 0) currentLabels.splice(idx, 1);
+            else currentLabels.push(label);
+
+            try {
+                await fetch(SEC_API + '/api/training/' + messageId, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ labels: currentLabels })
+                });
+
+                // Oppdater knapp-styling
+                const isActive = currentLabels.includes(label);
+                btn.style.borderColor = isActive ? '#22c55e' : 'var(--blue3)';
+                btn.style.background = isActive ? '#22c55e22' : 'transparent';
+                btn.style.color = isActive ? '#22c55e' : 'var(--blue4)';
             } catch (err) { alert('Feil: ' + err.message); }
         }
 
