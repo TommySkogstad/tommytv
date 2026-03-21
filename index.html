@@ -358,6 +358,17 @@
 
         <section class="section local-section" style="display: none;">
             <div class="section-header">
+                <h2>Sekretær — daglig oversikt</h2>
+                <span class="badge badge-local">LAN</span>
+                <button onclick="refreshSecretary()" style="margin-left:auto;padding:4px 12px;border-radius:6px;border:1px solid var(--blue3);background:var(--blue1);color:var(--blue5);cursor:pointer;font-size:0.8rem;">Oppdater</button>
+            </div>
+            <div id="secretary-dashboard" style="padding: 0 4px;">
+                <p style="color:var(--blue4)">Laster sekretærrapport...</p>
+            </div>
+        </section>
+
+        <section class="section local-section" style="display: none;">
+            <div class="section-header">
                 <h2>Lokalt nettverk</h2>
                 <span class="badge badge-local">LAN</span>
             </div>
@@ -404,14 +415,17 @@
                     </div>
                 </a>
 
-                <a href="http://nuc.tommy.tv:9401" class="card" target="_blank">
-                    <h3>Styreportal PROD</h3>
-                    <p>Produksjonsmiljø</p>
-                    <span class="url">nuc.tommy.tv:9401</span>
-                    <span class="url">styreportal.leienbiolog.no</span>
-                    <span class="url">styreportal.6810.no</span>
-                    <span class="url">styreportal.lo-finans.no</span>
-                </a>
+                <div class="card">
+                    <a href="http://nuc.tommy.tv:9401" target="_blank" style="text-decoration:none;color:inherit">
+                        <h3>Styreportal PROD</h3>
+                        <p>Produksjonsmiljø — multi-tenant styreportal</p>
+                        <span class="url">nuc.tommy.tv:9401</span>
+                    </a>
+                    <a href="https://styreportal.tommytv.no" target="_blank"><span class="url">styreportal.tommytv.no</span></a>
+                    <a href="https://styreportal.leienbiolog.no" target="_blank"><span class="url">styreportal.leienbiolog.no</span></a>
+                    <a href="https://styreportal.6810.no" target="_blank"><span class="url">styreportal.6810.no</span></a>
+                    <a href="https://styreportal.lo-finans.no" target="_blank"><span class="url">styreportal.lo-finans.no</span></a>
+                </div>
 
                 <div class="card">
                     <a href="http://nuc.tommy.tv" target="_blank" style="text-decoration:none;color:inherit">
@@ -594,18 +608,21 @@
                     </div>
                 </a>
 
-                <a href="https://styreportal.leienbiolog.no" class="card" target="_blank">
-                    <h3>Styreportal</h3>
-                    <p>Multi-tenant styreportal for styremøter, dokumenter, signering og oppmøte</p>
-                    <span class="url">styreportal.leienbiolog.no</span>
-                    <span class="url">styreportal.6810.no</span>
-                    <span class="url">styreportal.lo-finans.no</span>
+                <div class="card">
+                    <a href="https://styreportal.leienbiolog.no" target="_blank" style="text-decoration:none;color:inherit">
+                        <h3>Styreportal</h3>
+                        <p>Multi-tenant styreportal for styremøter, dokumenter, signering og oppmøte</p>
+                    </a>
+                    <a href="https://styreportal.tommytv.no" target="_blank"><span class="url">styreportal.tommytv.no</span></a>
+                    <a href="https://styreportal.leienbiolog.no" target="_blank"><span class="url">styreportal.leienbiolog.no</span></a>
+                    <a href="https://styreportal.6810.no" target="_blank"><span class="url">styreportal.6810.no</span></a>
+                    <a href="https://styreportal.lo-finans.no" target="_blank"><span class="url">styreportal.lo-finans.no</span></a>
                     <div>
                         <span class="tech">Kotlin/Ktor</span>
                         <span class="tech">React</span>
                         <span class="tech">Multi-tenant</span>
                     </div>
-                </a>
+                </div>
 
                 <a href="https://ntfy.tommytv.no" class="card" target="_blank">
                     <h3><img src="https://ntfy.tommytv.no/static/images/ntfy.png" alt="">Ntfy</h3>
@@ -748,7 +765,168 @@
                 document.getElementById('audio-toggle').style.display = '';
                 document.getElementById('heating-toggle').style.display = '';
             }
+            // Sekretær-dashboard (kun LAN)
+            if (location.hostname !== 'tommytv.no') {
+                loadSecretary();
+            }
         })();
+
+        const SEC_API = 'http://nuc.tommy.tv:8860';
+
+        async function loadSecretary() {
+            const dash = document.getElementById('secretary-dashboard');
+            if (!dash) return;
+
+            try {
+                const [pendingRes, calendarsRes, reportRes] = await Promise.all([
+                    fetch(SEC_API + '/api/pending').then(r => r.json()).catch(() => []),
+                    fetch(SEC_API + '/api/calendars').then(r => r.json()).catch(() => []),
+                    fetch(SEC_API + '/api/report').then(r => r.json()).catch(() => ({ date: '', content: '' }))
+                ]);
+
+                let html = '';
+
+                if (pendingRes.length === 0) {
+                    html += '<p style="color:var(--blue4);padding:8px 0;">Ingen ventende forslag.</p>';
+                } else {
+                    // Kalenderforslag
+                    const calItems = pendingRes.filter(p => p.type === 'calendar');
+                    const draftItems = pendingRes.filter(p => p.type === 'draft');
+
+                    if (calItems.length > 0) {
+                        html += '<h3 style="color:var(--blue5);margin:12px 0 8px;font-size:0.95rem;">Kalenderforslag</h3>';
+                        calItems.forEach(p => {
+                            const calOptions = calendarsRes.map(c =>
+                                '<option value="' + c.id + '"' + (c.id === p.suggestedCalendarId ? ' selected' : '') + '>' + c.name + '</option>'
+                            ).join('');
+
+                            html += '<div style="background:var(--blue1);border:1px solid var(--blue2);border-radius:8px;padding:12px;margin-bottom:8px;">';
+                            html += '<div style="display:flex;justify-content:space-between;align-items:start;gap:8px;">';
+                            html += '<div style="flex:1;">';
+                            html += '<div style="color:var(--white);font-weight:500;">' + escHtml(p.subject) + '</div>';
+                            html += '<div style="color:var(--blue4);font-size:0.8rem;margin-top:2px;">Fra: ' + escHtml(p.from) + '</div>';
+                            html += '<div style="color:var(--blue4);font-size:0.8rem;margin-top:4px;">' + escHtml(p.snippet.substring(0, 120)) + '</div>';
+                            html += '</div>';
+                            html += '<div style="display:flex;flex-direction:column;gap:4px;min-width:180px;">';
+                            html += '<select id="cal-' + p.id + '" style="padding:4px 6px;border-radius:4px;border:1px solid var(--blue3);background:var(--blue2);color:var(--white);font-size:0.8rem;">' + calOptions + '</select>';
+                            html += '<div style="display:flex;gap:4px;">';
+                            html += '<button onclick="approveCalendar(' + p.id + ')" style="flex:1;padding:4px 8px;border-radius:4px;border:none;background:#22c55e;color:white;cursor:pointer;font-size:0.8rem;">Godkjenn</button>';
+                            html += '<button onclick="rejectItem(' + p.id + ',this)" style="flex:1;padding:4px 8px;border-radius:4px;border:none;background:#ef4444;color:white;cursor:pointer;font-size:0.8rem;">Avvis</button>';
+                            html += '</div></div></div></div>';
+                        });
+                    }
+
+                    if (draftItems.length > 0) {
+                        html += '<h3 style="color:var(--blue5);margin:12px 0 8px;font-size:0.95rem;">E-poster som krever svar</h3>';
+                        draftItems.forEach(p => {
+                            html += '<div style="background:var(--blue1);border:1px solid var(--blue2);border-radius:8px;padding:12px;margin-bottom:8px;">';
+                            html += '<div style="color:var(--white);font-weight:500;">' + escHtml(p.subject) + '</div>';
+                            html += '<div style="color:var(--blue4);font-size:0.8rem;margin-top:2px;">Fra: ' + escHtml(p.from) + '</div>';
+                            html += '<div style="color:var(--blue4);font-size:0.8rem;margin-top:4px;">' + escHtml(p.snippet.substring(0, 150)) + '</div>';
+                            html += '<div style="margin-top:8px;display:flex;gap:4px;align-items:end;">';
+                            html += '<textarea id="reply-' + p.id + '" placeholder="Skriv svar..." style="flex:1;padding:6px;border-radius:4px;border:1px solid var(--blue3);background:var(--blue2);color:var(--white);font-size:0.8rem;min-height:50px;resize:vertical;"></textarea>';
+                            html += '<div style="display:flex;flex-direction:column;gap:4px;">';
+                            html += '<button onclick="createDraft(' + p.id + ')" style="padding:4px 8px;border-radius:4px;border:none;background:#3b82f6;color:white;cursor:pointer;font-size:0.8rem;">Lag utkast</button>';
+                            html += '<button onclick="rejectItem(' + p.id + ',this)" style="padding:4px 8px;border-radius:4px;border:none;background:#ef4444;color:white;cursor:pointer;font-size:0.8rem;">Avvis</button>';
+                            html += '</div></div></div>';
+                        });
+                    }
+                }
+
+                // Fakturaer
+                try {
+                    const invoices = await fetch(SEC_API + '/api/invoices').then(r => r.json()).catch(() => []);
+                    if (invoices.length > 0) {
+                        html += '<h3 style="color:var(--blue5);margin:12px 0 8px;font-size:0.95rem;">Fakturaer siste 7 dager (' + invoices.length + ')</h3>';
+                        invoices.forEach(inv => {
+                            html += '<div style="background:var(--blue1);border:1px solid var(--blue2);border-radius:8px;padding:10px;margin-bottom:6px;display:flex;justify-content:space-between;align-items:center;">';
+                            html += '<div style="flex:1;">';
+                            html += '<div style="color:var(--white);font-size:0.85rem;">' + escHtml(inv.subject.substring(0, 80)) + '</div>';
+                            html += '<div style="color:var(--blue4);font-size:0.75rem;">' + escHtml(inv.from.substring(0, 50)) + ' — ' + escHtml(inv.date.substring(0, 16)) + '</div>';
+                            html += '</div>';
+                            if (inv.hasAttachment) {
+                                html += '<a href="' + SEC_API + '/api/invoices/' + inv.id + '/attachment" style="padding:4px 10px;border-radius:4px;background:var(--blue2);color:var(--blue5);text-decoration:none;font-size:0.75rem;border:1px solid var(--blue3);">Last ned</a>';
+                            }
+                            html += '</div>';
+                        });
+                    }
+                } catch(e) {}
+
+                // Siste rapport-sammendrag
+                if (reportRes.content) {
+                    const lines = reportRes.content.split('\n');
+                    const statsLine = lines.find(l => l.includes('Totalt e-poster'));
+                    if (statsLine) {
+                        html += '<div style="color:var(--blue4);font-size:0.75rem;padding:8px 0;border-top:1px solid var(--blue2);margin-top:8px;">';
+                        html += 'Rapport ' + reportRes.date + ' — ';
+                        html += lines.filter(l => l.startsWith('- ')).join(' | ');
+                        html += '</div>';
+                    }
+                }
+
+                dash.innerHTML = html || '<p style="color:var(--blue4)">Ingen data.</p>';
+
+            } catch (err) {
+                dash.innerHTML = '<p style="color:#ef4444;">Kunne ikke laste sekretærdata: ' + err.message + '</p>';
+            }
+        }
+
+        function refreshSecretary() {
+            const dash = document.getElementById('secretary-dashboard');
+            if (dash) dash.innerHTML = '<p style="color:var(--blue4)">Oppdaterer...</p>';
+            fetch(SEC_API + '/api/run', { method: 'POST' })
+                .then(() => setTimeout(loadSecretary, 2000))
+                .catch(() => loadSecretary());
+        }
+
+        async function approveCalendar(id) {
+            const calSelect = document.getElementById('cal-' + id);
+            const calendarId = calSelect ? calSelect.value : null;
+            try {
+                const res = await fetch(SEC_API + '/api/approve/' + id, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ calendarId })
+                });
+                const data = await res.json();
+                if (data.success) {
+                    loadSecretary();
+                } else {
+                    alert('Feil: ' + (data.error || 'Ukjent feil'));
+                }
+            } catch (err) { alert('Feil: ' + err.message); }
+        }
+
+        async function rejectItem(id, btn) {
+            try {
+                await fetch(SEC_API + '/api/reject/' + id, { method: 'POST' });
+                if (btn) btn.closest('div[style*="background:var(--blue1)"]').remove();
+            } catch (err) { alert('Feil: ' + err.message); }
+        }
+
+        async function createDraft(id) {
+            const textarea = document.getElementById('reply-' + id);
+            const text = textarea ? textarea.value.trim() : '';
+            if (!text) { alert('Skriv et svar først.'); return; }
+            try {
+                const res = await fetch(SEC_API + '/api/draft/' + id, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ replyText: text })
+                });
+                const data = await res.json();
+                if (data.success) {
+                    alert('Utkast opprettet! Gå til Gmail → Kladder for å sende.');
+                    loadSecretary();
+                } else {
+                    alert('Feil: ' + (data.error || 'Ukjent feil'));
+                }
+            } catch (err) { alert('Feil: ' + err.message); }
+        }
+
+        function escHtml(s) {
+            return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+        }
     </script>
 </body>
 </html>
