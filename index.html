@@ -791,7 +791,9 @@
                 } else {
                     // Kalenderforslag
                     const calItems = pendingRes.filter(p => p.type === 'calendar');
-                    const draftItems = pendingRes.filter(p => p.type === 'draft');
+                    const calUpdates = pendingRes.filter(p => p.type === 'calendar_update');
+                    const draftItems = pendingRes.filter(p => p.type === 'draft' || p.type === 'reply');
+                    const unsubItems = pendingRes.filter(p => p.type === 'unsubscribe');
 
                     if (calItems.length > 0) {
                         html += '<h3 style="color:var(--blue5);margin:12px 0 8px;font-size:0.95rem;">Kalenderforslag</h3>';
@@ -820,6 +822,35 @@
                             html += '<button onclick="approveCalendar(' + p.id + ')" style="flex:1;padding:4px 8px;border-radius:4px;border:none;background:#22c55e;color:white;cursor:pointer;font-size:0.8rem;">Godkjenn</button>';
                             html += '<button onclick="rejectItem(' + p.id + ',this)" style="flex:1;padding:4px 8px;border-radius:4px;border:none;background:#ef4444;color:white;cursor:pointer;font-size:0.8rem;">Avvis</button>';
                             html += '</div></div></div></div>';
+                        });
+                    }
+
+                    if (calUpdates.length > 0) {
+                        html += '<h3 style="color:var(--blue5);margin:12px 0 8px;font-size:0.95rem;">Kalender-korreksjoner</h3>';
+                        calUpdates.forEach(p => {
+                            html += '<div style="background:var(--blue1);border:1px solid #eab308;border-radius:8px;padding:12px;margin-bottom:8px;">';
+                            html += '<div style="color:#eab308;font-size:0.75rem;font-weight:500;margin-bottom:4px;">KORREKSJON</div>';
+                            html += '<div style="color:var(--white);font-size:0.85rem;">Nåværende: <span style="text-decoration:line-through;">' + escHtml(p.existingEventSummary || '') + '</span></div>';
+                            html += '<div style="color:#22c55e;font-size:0.85rem;">Foreslått: ' + escHtml(p.suggestedTitle || '') + '</div>';
+                            if (p.reason) html += '<div style="color:var(--blue4);font-size:0.75rem;margin-top:4px;font-style:italic;">' + escHtml(p.reason) + '</div>';
+                            html += '<div style="display:flex;gap:4px;margin-top:8px;">';
+                            html += '<button onclick="approveCalendar(' + p.id + ')" style="padding:4px 8px;border-radius:4px;border:none;background:#22c55e;color:white;cursor:pointer;font-size:0.8rem;">Godkjenn</button>';
+                            html += '<button onclick="rejectItem(' + p.id + ',this)" style="padding:4px 8px;border-radius:4px;border:none;background:#ef4444;color:white;cursor:pointer;font-size:0.8rem;">Avvis</button>';
+                            html += '</div></div>';
+                        });
+                    }
+
+                    if (unsubItems.length > 0) {
+                        html += '<h3 style="color:var(--blue5);margin:12px 0 8px;font-size:0.95rem;">Foreslåtte avmeldinger</h3>';
+                        unsubItems.forEach(p => {
+                            html += '<div style="background:var(--blue1);border:1px solid var(--blue2);border-radius:8px;padding:10px;margin-bottom:6px;display:flex;justify-content:space-between;align-items:center;">';
+                            html += '<div style="flex:1;">';
+                            html += '<div style="color:var(--white);font-size:0.85rem;">' + escHtml(p.subject || '') + '</div>';
+                            html += '<div style="color:var(--blue4);font-size:0.75rem;">' + escHtml(p.from || '') + '</div>';
+                            if (p.reason) html += '<div style="color:var(--blue4);font-size:0.7rem;font-style:italic;">' + escHtml(p.reason) + '</div>';
+                            html += '</div>';
+                            html += '<button onclick="rejectItem(' + p.id + ',this)" style="padding:4px 10px;border-radius:4px;border:1px solid #ef4444;background:transparent;color:#ef4444;cursor:pointer;font-size:0.75rem;">Meld av</button>';
+                            html += '</div>';
                         });
                     }
 
