@@ -7,9 +7,12 @@
 - **Start**: `docker compose down && docker compose up -d`
 
 ## Filstruktur
-- `index.html` — Hoveddashboard med egne tjenester
+- `index.html` — Hoveddashboard med egne tjenester og Immich-fotointegrasjon
 - `status.html` — Status-side (LAN): Smarthus (Hue + Homey + Nanoleaf + Plejd + Yale + gardiner) + Infrastruktur (UniFi + speedtest + WiFi restart)
 - `bookmarks.html` — Bokmerkeside med eksterne tjenester og lenker
+- `secretary.html` — LAN dashboard for calendar sync, Gmail, invoices, Tasks
+- `heating.html` — Heating system dashboard
+- `tommy_skogstad_brand_guide.html` — Brand guide page
 - `logo.svg` — SVG-tekstlogo med gradient (Tommy=blå gradient, TV=hvit)
 - `nginx.conf` — Nginx-konfigurasjon
 - `docker-compose.yml` — Cloudflared + Nginx, port 8880 eksponert for LAN
@@ -19,6 +22,18 @@
 - Nginx serverer statiske filer, cloudflared kobler til Cloudflare Tunnel
 - Port 8880 eksponert på host for direkte LAN-tilgang
 - Alle HTML-filer må mountes som volumes i docker-compose.yml
+
+## Immich-fotointegrasjon (index.html)
+- Viser siste bilder fra Immich via API (port 2283)
+- Bildegalleriet er integrert i hoveddashboardet
+
+## Tasks-sync (secretary.html)
+- Synkroniserer med Google Tasks via secretary API (port 8860)
+- Viser oppgaver, kalender, Gmail og fakturaer i et LAN-dashboard
+
+## Navigasjon
+Hovednavigasjonen inneholder: Hjem, Status, Sekretær, Bokmerker.
+(Audio er fjernet fra navigasjonen.)
 
 ## LAN-logikk
 - Seksjoner med klasse `local-section` og `style="display: none;"` er skjult som standard
