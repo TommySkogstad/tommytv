@@ -21,7 +21,6 @@ services:
       - ./index.html:/usr/share/nginx/html/index.html:ro
       - ./bookmarks.html:/usr/share/nginx/html/bookmarks.html:ro
       - ./status.html:/usr/share/nginx/html/status.html:ro
-      - ./secretary.html:/usr/share/nginx/html/secretary.html:ro
       - ./heating.html:/usr/share/nginx/html/heating.html:ro
       - ./logo.svg:/usr/share/nginx/html/logo.svg:ro
       - ./favicon.svg:/usr/share/nginx/html/favicon.svg:ro

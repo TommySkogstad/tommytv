@@ -10,7 +10,6 @@
 - `index.html` — Hoveddashboard med egne tjenester og Immich-fotointegrasjon
 - `status.html` — Status-side (LAN): Smarthus (Hue + Homey + Nanoleaf + Plejd + Yale + gardiner) + Infrastruktur (UniFi + speedtest + WiFi restart)
 - `bookmarks.html` — Bokmerkeside med eksterne tjenester og lenker
-- `secretary.html` — LAN dashboard for calendar sync, Gmail, invoices, Tasks
 - `heating.html` — Heating system dashboard
 - `tommy_skogstad_brand_guide.html` — Brand guide page
 - `logo.svg` — SVG-tekstlogo med gradient (Tommy=blå gradient, TV=hvit)
@@ -27,12 +26,8 @@
 - Viser siste bilder fra Immich via API (port 2283)
 - Bildegalleriet er integrert i hoveddashboardet
 
-## Tasks-sync (secretary.html)
-- Synkroniserer med Google Tasks via secretary API (port 8860)
-- Viser oppgaver, kalender, Gmail og fakturaer i et LAN-dashboard
-
 ## Navigasjon
-Hovednavigasjonen inneholder: Hjem, Status, Sekretær, Bokmerker.
+Hovednavigasjonen inneholder: Hjem, Status, Varme & Sikkerhet, Bokmerker.
 (Audio er fjernet fra navigasjonen.)
 
 ## LAN-logikk
