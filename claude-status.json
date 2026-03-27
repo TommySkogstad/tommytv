@@ -1,0 +1,26 @@
+{
+  "generated": "2026-03-27T10:15:01",
+  "active": [
+    {
+      "job": "issue-triage",
+      "description": "Triage av lo-finans #60",
+      "started": "2026-03-27T11:11:18+01:00",
+      "pid": 2819627
+    },
+    {
+      "job": "issue-triage",
+      "description": "Triage av nye GitHub-issues",
+      "started": "2026-03-27T10:15:04+01:00",
+      "pid": 2819627
+    }
+  ],
+  "recent_calls": [],
+  "recent_jobs": [],
+  "today": {
+    "calls": 0,
+    "cost_usd": 0,
+    "input_tokens": 0,
+    "output_tokens": 0,
+    "duration_s": 0
+  }
+}

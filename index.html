@@ -717,6 +717,15 @@
                 </a>
             </div>
         </section>
+        <section class="section local-section" style="display: none;" id="claude-section">
+            <div class="section-header">
+                <h2>Claude Automatisering</h2>
+                <span class="badge badge-local" id="claude-badge">Laster...</span>
+            </div>
+            <div id="claude-active" style="margin-bottom: 1rem;"></div>
+            <div id="claude-today" style="margin-bottom: 1rem;"></div>
+            <div id="claude-history"></div>
+        </section>
     </main>
 
     <footer>
@@ -764,6 +773,92 @@
                 document.getElementById('heating-toggle').style.display = '';
             }
         })();
+
+        // Claude Automatisering-widget
+        function loadClaude() {
+            fetch('/claude-status.json?' + Date.now())
+                .then(function(r) { return r.json(); })
+                .then(function(d) {
+                    var badge = document.getElementById('claude-badge');
+                    var activeEl = document.getElementById('claude-active');
+                    var todayEl = document.getElementById('claude-today');
+                    var historyEl = document.getElementById('claude-history');
+
+                    // Aktive jobber
+                    var issues = d.active.filter(function(a) { return a.job !== a.description && a.description.indexOf('Triage av nye') === -1; });
+                    if (issues.length > 0) {
+                        badge.textContent = 'Aktiv';
+                        badge.style.background = '#065f46';
+                        badge.style.color = '#6ee7b7';
+                        var html = '';
+                        issues.forEach(function(a) {
+                            var started = new Date(a.started);
+                            var mins = Math.round((Date.now() - started.getTime()) / 60000);
+                            html += '<div class="card" style="margin-bottom:0.5rem;">';
+                            html += '<h3 style="font-size:0.95rem;">&#128296; ' + a.description + '</h3>';
+                            html += '<div style="display:flex;gap:1rem;margin-top:0.4rem;">';
+                            html += '<span class="tech">' + a.job + '</span>';
+                            html += '<span style="font-family:DM Mono,monospace;font-size:0.75rem;color:var(--blue4);">' + mins + ' min</span>';
+                            html += '</div></div>';
+                        });
+                        activeEl.innerHTML = html;
+                    } else {
+                        badge.textContent = 'Idle';
+                        badge.style.background = 'var(--blue1)';
+                        badge.style.color = 'var(--blue4)';
+                        activeEl.innerHTML = '<div style="font-size:0.85rem;color:var(--blue3);padding:0.5rem 0;">Ingen aktive oppgaver</div>';
+                    }
+
+                    // Dagens totaler
+                    var t = d.today;
+                    if (t.calls > 0) {
+                        todayEl.innerHTML = '<div style="display:flex;gap:1.5rem;flex-wrap:wrap;padding:0.75rem;background:var(--blue1);border-radius:8px;border:1px solid var(--blue2);">'
+                            + '<div><div style="font-size:1.4rem;font-weight:500;color:var(--white);">' + t.calls + '</div><div style="font-size:0.65rem;color:var(--blue4);font-family:DM Mono,monospace;">KALL</div></div>'
+                            + '<div><div style="font-size:1.4rem;font-weight:500;color:var(--white);">$' + t.cost_usd.toFixed(2) + '</div><div style="font-size:0.65rem;color:var(--blue4);font-family:DM Mono,monospace;">KOSTNAD</div></div>'
+                            + '<div><div style="font-size:1.4rem;font-weight:500;color:var(--white);">' + Math.round(t.duration_s / 60) + 'm</div><div style="font-size:0.65rem;color:var(--blue4);font-family:DM Mono,monospace;">VARIGHET</div></div>'
+                            + '<div><div style="font-size:1.4rem;font-weight:500;color:var(--white);">' + ((t.input_tokens + t.output_tokens) / 1000).toFixed(0) + 'k</div><div style="font-size:0.65rem;color:var(--blue4);font-family:DM Mono,monospace;">TOKENS</div></div>'
+                            + '</div>';
+                    } else {
+                        todayEl.innerHTML = '';
+                    }
+
+                    // Siste kall (med tokens)
+                    var calls = d.recent_calls || [];
+                    var jobs = d.recent_jobs || [];
+                    var items = calls.length > 0 ? calls : jobs;
+                    if (items.length > 0) {
+                        var html = '<div style="font-size:0.75rem;color:var(--blue4);margin-bottom:0.5rem;font-family:DM Mono,monospace;">SISTE JOBBER</div>';
+                        html += '<table style="width:100%;font-family:DM Mono,monospace;font-size:0.7rem;border-collapse:collapse;">';
+                        html += '<tr style="color:var(--blue3);text-align:left;"><th style="padding:0.3rem 0.5rem;">Jobb</th><th>Oppgave</th><th style="text-align:right;">Tid</th><th style="text-align:right;">Tokens</th><th style="text-align:right;">Kost</th></tr>';
+                        items.slice(0, 10).forEach(function(c) {
+                            var ok = (c.exit_code === 0);
+                            var dot = ok ? '<span style="color:#6ee7b7;">&#9679;</span>' : '<span style="color:#f87171;">&#9679;</span>';
+                            var dur = c.duration_s ? (c.duration_s >= 60 ? Math.round(c.duration_s / 60) + 'm' : c.duration_s + 's') : '—';
+                            var tokens = (c.input_tokens || 0) + (c.output_tokens || 0);
+                            var tokStr = tokens > 0 ? (tokens / 1000).toFixed(1) + 'k' : '—';
+                            var cost = c.cost_usd ? '$' + c.cost_usd.toFixed(3) : '—';
+                            var task = c.task || c.job || '—';
+                            if (task.length > 35) task = task.substring(0, 35) + '...';
+                            html += '<tr style="color:var(--blue5);border-top:1px solid var(--blue1);">';
+                            html += '<td style="padding:0.3rem 0.5rem;">' + dot + ' ' + (c.job || '—') + '</td>';
+                            html += '<td style="color:var(--blue4);">' + task + '</td>';
+                            html += '<td style="text-align:right;">' + dur + '</td>';
+                            html += '<td style="text-align:right;">' + tokStr + '</td>';
+                            html += '<td style="text-align:right;">' + cost + '</td>';
+                            html += '</tr>';
+                        });
+                        html += '</table>';
+                        historyEl.innerHTML = html;
+                    }
+                })
+                .catch(function() {
+                    document.getElementById('claude-badge').textContent = 'Offline';
+                });
+        }
+        if (location.hostname !== 'tommytv.no') {
+            loadClaude();
+            setInterval(loadClaude, 30000);
+        }
     </script>
 </body>
 </html>

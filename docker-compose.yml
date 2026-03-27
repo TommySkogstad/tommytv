@@ -30,6 +30,7 @@ services:
       - ./tommy_skogstad_favicon_16.svg:/usr/share/nginx/html/tommy_skogstad_favicon_16.svg:ro
       - ./tommy_skogstad_favicon_32.svg:/usr/share/nginx/html/tommy_skogstad_favicon_32.svg:ro
       - ./icons:/usr/share/nginx/html/icons:ro
+      - ./claude-status.json:/usr/share/nginx/html/claude-status.json:ro
       - ./nginx.conf:/etc/nginx/nginx.conf:ro
     healthcheck:
       test: ["CMD-SHELL", "wget -q --spider http://127.0.0.1:80/ || exit 1"]
