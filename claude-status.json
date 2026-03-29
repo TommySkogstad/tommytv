@@ -1,26 +1,236 @@
 {
-  "generated": "2026-03-27T10:15:01",
-  "active": [
+  "generated": "2026-03-29T11:36:01",
+  "active": [],
+  "queue": [],
+  "recent_calls": [
     {
+      "timestamp": "2026-03-29T10:30:28",
       "job": "issue-triage",
-      "description": "Triage av lo-finans #60",
-      "started": "2026-03-27T11:11:18+01:00",
-      "pid": 2819627
+      "task": "biologportal #177: test bilde",
+      "duration_s": 20,
+      "duration_api_ms": 17228,
+      "turns": 2,
+      "cost_usd": 0.183735,
+      "input_tokens": 4,
+      "output_tokens": 480,
+      "cache_read": 45880,
+      "cache_creation": 23804,
+      "model": "claude-opus-4-6[1m]",
+      "exit_code": 0,
+      "session_id": "87a1245c-29d0-4901-a013-1434b3f0bb60"
     },
     {
+      "timestamp": "2026-03-29T10:15:55",
       "job": "issue-triage",
-      "description": "Triage av nye GitHub-issues",
-      "started": "2026-03-27T10:15:04+01:00",
-      "pid": 2819627
+      "task": "biologportal #175: ny bilde test",
+      "duration_s": 21,
+      "duration_api_ms": 19129,
+      "turns": 2,
+      "cost_usd": 0.188294,
+      "input_tokens": 4,
+      "output_tokens": 671,
+      "cache_read": 45798,
+      "cache_creation": 23776,
+      "model": "claude-opus-4-6[1m]",
+      "exit_code": 0,
+      "session_id": "d17b34c3-0f64-43b0-a83b-d8c55bf3ac74"
+    },
+    {
+      "timestamp": "2026-03-29T10:15:33",
+      "job": "issue-triage",
+      "task": "biologportal #176: ny biledelenke test",
+      "duration_s": 25,
+      "duration_api_ms": 21905,
+      "turns": 3,
+      "cost_usd": 0.20709874999999997,
+      "input_tokens": 5,
+      "output_tokens": 686,
+      "cache_read": 80885,
+      "cache_creation": 23917,
+      "model": "claude-opus-4-6[1m]",
+      "exit_code": 0,
+      "session_id": "5da73214-45b6-43d8-811c-b34ebd16acfa"
+    },
+    {
+      "timestamp": "2026-03-29T10:00:34",
+      "job": "issue-triage",
+      "task": "biologportal #175: ny bilde test",
+      "duration_s": 27,
+      "duration_api_ms": 23185,
+      "turns": 3,
+      "cost_usd": 0.20854450000000002,
+      "input_tokens": 5,
+      "output_tokens": 751,
+      "cache_read": 80839,
+      "cache_creation": 23892,
+      "model": "claude-opus-4-6[1m]",
+      "exit_code": 0,
+      "session_id": "3717c679-e32e-44c9-9df4-48625ba20e48"
+    },
+    {
+      "timestamp": "2026-03-29T06:00:36",
+      "job": "issue-triage",
+      "task": "biologportal #160: Gmail API: Fjern Cloudflare Email Worker og videresendingsregel",
+      "duration_s": 25,
+      "duration_api_ms": 22337,
+      "turns": 2,
+      "cost_usd": 0.062639,
+      "input_tokens": 4,
+      "output_tokens": 908,
+      "cache_read": 69488,
+      "cache_creation": 828,
+      "model": "claude-opus-4-6[1m]",
+      "exit_code": 0,
+      "session_id": "13b7d0c0-5b5c-4d9e-b5dd-45b5efca4983"
+    },
+    {
+      "timestamp": "2026-03-29T05:45:35",
+      "job": "issue-triage",
+      "task": "biologportal #160: Gmail API: Fjern Cloudflare Email Worker og videresendingsregel",
+      "duration_s": 23,
+      "duration_api_ms": 21553,
+      "turns": 2,
+      "cost_usd": 0.05960775,
+      "input_tokens": 4,
+      "output_tokens": 817,
+      "cache_read": 69488,
+      "cache_creation": 707,
+      "model": "claude-opus-4-6[1m]",
+      "exit_code": 0,
+      "session_id": "2102efb6-1965-4ef4-b00f-13902cc76caf"
+    },
+    {
+      "timestamp": "2026-03-29T05:30:34",
+      "job": "issue-triage",
+      "task": "biologportal #160: Gmail API: Fjern Cloudflare Email Worker og videresendingsregel",
+      "duration_s": 23,
+      "duration_api_ms": 20605,
+      "turns": 2,
+      "cost_usd": 0.058332749999999996,
+      "input_tokens": 4,
+      "output_tokens": 765,
+      "cache_read": 69488,
+      "cache_creation": 711,
+      "model": "claude-opus-4-6[1m]",
+      "exit_code": 0,
+      "session_id": "73a2b660-f941-45e0-9d38-105e060e79b2"
+    },
+    {
+      "timestamp": "2026-03-29T05:15:37",
+      "job": "issue-triage",
+      "task": "biologportal #160: Gmail API: Fjern Cloudflare Email Worker og videresendingsregel",
+      "duration_s": 25,
+      "duration_api_ms": 23130,
+      "turns": 2,
+      "cost_usd": 0.059739,
+      "input_tokens": 4,
+      "output_tokens": 820,
+      "cache_read": 69488,
+      "cache_creation": 716,
+      "model": "claude-opus-4-6[1m]",
+      "exit_code": 0,
+      "session_id": "9313eda3-007c-4102-99fd-fe98f05b79f2"
+    },
+    {
+      "timestamp": "2026-03-29T05:00:36",
+      "job": "issue-triage",
+      "task": "biologportal #160: Gmail API: Fjern Cloudflare Email Worker og videresendingsregel",
+      "duration_s": 25,
+      "duration_api_ms": 22637,
+      "turns": 2,
+      "cost_usd": 0.05943899999999999,
+      "input_tokens": 4,
+      "output_tokens": 804,
+      "cache_read": 69488,
+      "cache_creation": 732,
+      "model": "claude-opus-4-6[1m]",
+      "exit_code": 0,
+      "session_id": "9a6225a0-b5c8-4a01-a217-859aa3dcb6c4"
+    },
+    {
+      "timestamp": "2026-03-29T04:45:45",
+      "job": "issue-triage",
+      "task": "biologportal #160: Gmail API: Fjern Cloudflare Email Worker og videresendingsregel",
+      "duration_s": 33,
+      "duration_api_ms": 30207,
+      "turns": 3,
+      "cost_usd": 0.08802199999999999,
+      "input_tokens": 5,
+      "output_tokens": 1168,
+      "cache_read": 104719,
+      "cache_creation": 1030,
+      "model": "claude-opus-4-6[1m]",
+      "exit_code": 0,
+      "session_id": "4aa475a2-1141-4529-8778-bf2b352ed5ba"
     }
   ],
-  "recent_calls": [],
-  "recent_jobs": [],
+  "recent_jobs": [
+    {
+      "timestamp": "2026-03-29T13:30:07+02:00",
+      "job": "issue-triage",
+      "duration_s": 6,
+      "exit_code": 0
+    },
+    {
+      "timestamp": "2026-03-29T13:15:07+02:00",
+      "job": "issue-triage",
+      "duration_s": 6,
+      "exit_code": 0
+    },
+    {
+      "timestamp": "2026-03-29T13:00:07+02:00",
+      "job": "issue-triage",
+      "duration_s": 6,
+      "exit_code": 0
+    },
+    {
+      "timestamp": "2026-03-29T12:45:07+02:00",
+      "job": "issue-triage",
+      "duration_s": 6,
+      "exit_code": 0
+    },
+    {
+      "timestamp": "2026-03-29T12:30:32+02:00",
+      "job": "issue-triage",
+      "duration_s": 31,
+      "exit_code": 0
+    },
+    {
+      "timestamp": "2026-03-29T12:16:00+02:00",
+      "job": "issue-triage",
+      "duration_s": 59,
+      "exit_code": 0
+    },
+    {
+      "timestamp": "2026-03-29T12:00:41+02:00",
+      "job": "issue-triage",
+      "duration_s": 40,
+      "exit_code": 0
+    },
+    {
+      "timestamp": "2026-03-29T11:45:06+02:00",
+      "job": "issue-triage",
+      "duration_s": 5,
+      "exit_code": 0
+    },
+    {
+      "timestamp": "2026-03-29T11:30:06+02:00",
+      "job": "issue-triage",
+      "duration_s": 5,
+      "exit_code": 0
+    },
+    {
+      "timestamp": "2026-03-29T11:15:07+02:00",
+      "job": "issue-triage",
+      "duration_s": 6,
+      "exit_code": 0
+    }
+  ],
   "today": {
-    "calls": 0,
-    "cost_usd": 0,
-    "input_tokens": 0,
-    "output_tokens": 0,
-    "duration_s": 0
+    "calls": 27,
+    "cost_usd": 2.31086975,
+    "input_tokens": 115,
+    "output_tokens": 23372,
+    "duration_s": 724
   }
 }
