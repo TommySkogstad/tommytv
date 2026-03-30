@@ -1,0 +1,3261 @@
+{
+  "accounts": [
+    {
+      "id": "innskuddspensjon",
+      "name": "Innskuddspensjon",
+      "provider": "SpareBank 1",
+      "color": "#818cf8",
+      "category": "pensjon"
+    },
+    {
+      "id": "fond",
+      "name": "Fond",
+      "provider": "SpareBank 1",
+      "color": "#60a5fa",
+      "category": "investering"
+    },
+    {
+      "id": "ask",
+      "name": "ASK",
+      "provider": "SpareBank 1",
+      "color": "#22d3ee",
+      "category": "investering"
+    },
+    {
+      "id": "ips",
+      "name": "IPS",
+      "provider": "SpareBank 1",
+      "color": "#a78bfa",
+      "category": "pensjon"
+    },
+    {
+      "id": "bsu",
+      "name": "BSU",
+      "provider": "SpareBank 1",
+      "color": "#F9A850",
+      "category": "sparing",
+      "active": false
+    },
+    {
+      "id": "pensjonskapitalbevis",
+      "name": "Pensjonskapitalbevis",
+      "provider": "SpareBank 1",
+      "color": "#f472b6",
+      "category": "pensjon",
+      "active": false
+    },
+    {
+      "id": "crowdfunding",
+      "name": "Crowdfunding",
+      "provider": "Monner",
+      "color": "#34d399",
+      "category": "investering"
+    },
+    {
+      "id": "krypto",
+      "name": "Krypto",
+      "provider": "Firi",
+      "color": "#fb923c",
+      "category": "investering"
+    },
+    {
+      "id": "cashback",
+      "name": "Mastercard Cashback",
+      "provider": "SpareBank 1",
+      "color": "#7a96b0",
+      "category": "annet",
+      "active": false
+    },
+    {
+      "id": "coop",
+      "name": "Coop Fordelsregnskap",
+      "provider": "Coop",
+      "color": "#84cc16",
+      "category": "annet"
+    }
+  ],
+  "entries": [
+    {
+      "month": "2020-01",
+      "innskuddspensjon": [
+        16700,
+        3220
+      ],
+      "fond": [
+        3005,
+        2000
+      ],
+      "ask": [
+        6100,
+        3500
+      ],
+      "ips": [
+        3100,
+        500
+      ],
+      "bsu": [
+        35542,
+        2100
+      ],
+      "pensjonskapitalbevis": [
+        7400,
+        0
+      ],
+      "crowdfunding": [
+        1000,
+        1000
+      ],
+      "krypto": [
+        0,
+        0
+      ],
+      "cashback": [
+        0,
+        0
+      ],
+      "coop": [
+        0,
+        0
+      ]
+    },
+    {
+      "month": "2020-02",
+      "innskuddspensjon": [
+        18173,
+        3220
+      ],
+      "fond": [
+        5422,
+        2000
+      ],
+      "ask": [
+        6634,
+        1000
+      ],
+      "ips": [
+        3490,
+        500
+      ],
+      "bsu": [
+        37642,
+        2100
+      ],
+      "pensjonskapitalbevis": [
+        6690,
+        0
+      ],
+      "crowdfunding": [
+        3000,
+        2000
+      ],
+      "krypto": [
+        0,
+        0
+      ],
+      "cashback": [
+        0,
+        0
+      ],
+      "coop": [
+        0,
+        0
+      ]
+    },
+    {
+      "month": "2020-03",
+      "innskuddspensjon": [
+        18127,
+        3220
+      ],
+      "fond": [
+        6984,
+        2000
+      ],
+      "ask": [
+        7565,
+        1400
+      ],
+      "ips": [
+        3585,
+        500
+      ],
+      "bsu": [
+        39742,
+        2100
+      ],
+      "pensjonskapitalbevis": [
+        5463,
+        0
+      ],
+      "crowdfunding": [
+        4015,
+        1000
+      ],
+      "krypto": [
+        0,
+        0
+      ],
+      "cashback": [
+        0,
+        0
+      ],
+      "coop": [
+        0,
+        0
+      ]
+    },
+    {
+      "month": "2020-04",
+      "innskuddspensjon": [
+        23515,
+        3220
+      ],
+      "fond": [
+        9346,
+        2000
+      ],
+      "ask": [
+        9639,
+        1000
+      ],
+      "ips": [
+        4540,
+        500
+      ],
+      "bsu": [
+        41842,
+        2100
+      ],
+      "pensjonskapitalbevis": [
+        6085,
+        0
+      ],
+      "crowdfunding": [
+        4044,
+        0
+      ],
+      "krypto": [
+        0,
+        0
+      ],
+      "cashback": [
+        0,
+        0
+      ],
+      "coop": [
+        0,
+        0
+      ]
+    },
+    {
+      "month": "2020-05",
+      "innskuddspensjon": [
+        28541,
+        3220
+      ],
+      "fond": [
+        11577,
+        2000
+      ],
+      "ask": [
+        11022,
+        1000
+      ],
+      "ips": [
+        5282,
+        500
+      ],
+      "bsu": [
+        43942,
+        2100
+      ],
+      "pensjonskapitalbevis": [
+        6519,
+        0
+      ],
+      "crowdfunding": [
+        4074,
+        0
+      ],
+      "krypto": [
+        0,
+        0
+      ],
+      "cashback": [
+        0,
+        0
+      ],
+      "coop": [
+        0,
+        0
+      ]
+    },
+    {
+      "month": "2020-06",
+      "innskuddspensjon": [
+        31684,
+        3220
+      ],
+      "fond": [
+        14236,
+        2500
+      ],
+      "ask": [
+        12045,
+        1000
+      ],
+      "ips": [
+        5833,
+        500
+      ],
+      "bsu": [
+        46042,
+        2100
+      ],
+      "pensjonskapitalbevis": [
+        6510,
+        0
+      ],
+      "crowdfunding": [
+        5104,
+        1000
+      ],
+      "krypto": [
+        0,
+        0
+      ],
+      "cashback": [
+        252,
+        252
+      ],
+      "coop": [
+        0,
+        0
+      ]
+    },
+    {
+      "month": "2020-07",
+      "innskuddspensjon": [
+        36502,
+        3220
+      ],
+      "fond": [
+        28154,
+        13700
+      ],
+      "ask": [
+        13365,
+        1000
+      ],
+      "ips": [
+        6556,
+        500
+      ],
+      "bsu": [
+        48142,
+        2100
+      ],
+      "pensjonskapitalbevis": [
+        6836,
+        0
+      ],
+      "crowdfunding": [
+        11135,
+        6000
+      ],
+      "krypto": [
+        0,
+        0
+      ],
+      "cashback": [
+        396,
+        144
+      ],
+      "coop": [
+        0,
+        0
+      ]
+    },
+    {
+      "month": "2020-08",
+      "innskuddspensjon": [
+        41116,
+        3220
+      ],
+      "fond": [
+        30918,
+        2400
+      ],
+      "ask": [
+        13671,
+        0
+      ],
+      "ips": [
+        7280,
+        500
+      ],
+      "bsu": [
+        42242,
+        -5900
+      ],
+      "pensjonskapitalbevis": [
+        7086,
+        0
+      ],
+      "crowdfunding": [
+        12185,
+        1000
+      ],
+      "krypto": [
+        0,
+        0
+      ],
+      "cashback": [
+        574,
+        178
+      ],
+      "coop": [
+        0,
+        0
+      ]
+    },
+    {
+      "month": "2020-09",
+      "innskuddspensjon": [
+        43576,
+        3220
+      ],
+      "fond": [
+        38759,
+        7500
+      ],
+      "ask": [
+        15289,
+        1000
+      ],
+      "ips": [
+        8029,
+        500
+      ],
+      "bsu": [
+        52342,
+        10100
+      ],
+      "pensjonskapitalbevis": [
+        6957,
+        0
+      ],
+      "crowdfunding": [
+        15264,
+        3000
+      ],
+      "krypto": [
+        0,
+        0
+      ],
+      "cashback": [
+        747,
+        173
+      ],
+      "coop": [
+        97,
+        97
+      ]
+    },
+    {
+      "month": "2020-10",
+      "innskuddspensjon": [
+        45645,
+        3220
+      ],
+      "fond": [
+        40774,
+        2400
+      ],
+      "ask": [
+        15028,
+        0
+      ],
+      "ips": [
+        8156,
+        500
+      ],
+      "bsu": [
+        54442,
+        2100
+      ],
+      "pensjonskapitalbevis": [
+        6797,
+        0
+      ],
+      "crowdfunding": [
+        16349,
+        1000
+      ],
+      "krypto": [
+        0,
+        0
+      ],
+      "cashback": [
+        932,
+        185
+      ],
+      "coop": [
+        180,
+        83
+      ]
+    },
+    {
+      "month": "2020-11",
+      "innskuddspensjon": [
+        56464,
+        3220
+      ],
+      "fond": [
+        44117,
+        2500
+      ],
+      "ask": [
+        15526,
+        0
+      ],
+      "ips": [
+        9164,
+        500
+      ],
+      "bsu": [
+        56442,
+        2000
+      ],
+      "pensjonskapitalbevis": [
+        7910,
+        0
+      ],
+      "crowdfunding": [
+        17442,
+        1000
+      ],
+      "krypto": [
+        0,
+        0
+      ],
+      "cashback": [
+        1082,
+        150
+      ],
+      "coop": [
+        249,
+        69
+      ]
+    },
+    {
+      "month": "2020-12",
+      "innskuddspensjon": [
+        61870,
+        3311
+      ],
+      "fond": [
+        49088,
+        4500
+      ],
+      "ask": [
+        16956,
+        1000
+      ],
+      "ips": [
+        9939,
+        500
+      ],
+      "bsu": [
+        60029,
+        2000
+      ],
+      "pensjonskapitalbevis": [
+        8195,
+        0
+      ],
+      "crowdfunding": [
+        21590,
+        4000
+      ],
+      "krypto": [
+        0,
+        0
+      ],
+      "cashback": [
+        1280,
+        198
+      ],
+      "coop": [
+        480,
+        231
+      ]
+    },
+    {
+      "month": "2021-01",
+      "innskuddspensjon": [
+        67269,
+        4328
+      ],
+      "fond": [
+        53062,
+        4000
+      ],
+      "ask": [
+        16811,
+        0
+      ],
+      "ips": [
+        10441,
+        600
+      ],
+      "bsu": [
+        62329,
+        2300
+      ],
+      "pensjonskapitalbevis": [
+        8344,
+        0
+      ],
+      "crowdfunding": [
+        25638,
+        3910
+      ],
+      "krypto": [
+        0,
+        0
+      ],
+      "cashback": [
+        146,
+        -1134
+      ],
+      "coop": [
+        0,
+        -480
+      ]
+    },
+    {
+      "month": "2021-02",
+      "innskuddspensjon": [
+        73138,
+        2765
+      ],
+      "fond": [
+        56044,
+        2600
+      ],
+      "ask": [
+        17162,
+        0
+      ],
+      "ips": [
+        10672,
+        0
+      ],
+      "bsu": [
+        64629,
+        2300
+      ],
+      "pensjonskapitalbevis": [
+        8864,
+        0
+      ],
+      "crowdfunding": [
+        25987,
+        201
+      ],
+      "krypto": [
+        0,
+        0
+      ],
+      "cashback": [
+        148,
+        2
+      ],
+      "coop": [
+        86,
+        86
+      ]
+    },
+    {
+      "month": "2021-03",
+      "innskuddspensjon": [
+        78478,
+        3288
+      ],
+      "fond": [
+        58972,
+        2600
+      ],
+      "ask": [
+        17516,
+        0
+      ],
+      "ips": [
+        11480,
+        600
+      ],
+      "bsu": [
+        66929,
+        2300
+      ],
+      "pensjonskapitalbevis": [
+        8900,
+        0
+      ],
+      "crowdfunding": [
+        26203,
+        0
+      ],
+      "krypto": [
+        0,
+        0
+      ],
+      "cashback": [
+        391,
+        243
+      ],
+      "coop": [
+        250,
+        164
+      ]
+    },
+    {
+      "month": "2021-04",
+      "innskuddspensjon": [
+        84008,
+        3320
+      ],
+      "fond": [
+        71390,
+        11600
+      ],
+      "ask": [
+        20284,
+        2000
+      ],
+      "ips": [
+        13223,
+        1200
+      ],
+      "bsu": [
+        69229,
+        2300
+      ],
+      "pensjonskapitalbevis": [
+        9193,
+        0
+      ],
+      "crowdfunding": [
+        30392,
+        4000
+      ],
+      "krypto": [
+        2472,
+        2000
+      ],
+      "cashback": [
+        525,
+        134
+      ],
+      "coop": [
+        368,
+        118
+      ]
+    },
+    {
+      "month": "2021-05",
+      "innskuddspensjon": [
+        88876,
+        3288
+      ],
+      "fond": [
+        90267,
+        18400
+      ],
+      "ask": [
+        24409,
+        3600
+      ],
+      "ips": [
+        14154,
+        700
+      ],
+      "bsu": [
+        71529,
+        2300
+      ],
+      "pensjonskapitalbevis": [
+        9233,
+        0
+      ],
+      "crowdfunding": [
+        35993,
+        5400
+      ],
+      "krypto": [
+        1907,
+        -687
+      ],
+      "cashback": [
+        358,
+        -167
+      ],
+      "coop": [
+        485,
+        117
+      ]
+    },
+    {
+      "month": "2021-06",
+      "innskuddspensjon": [
+        95234,
+        3288
+      ],
+      "fond": [
+        95735,
+        4500
+      ],
+      "ask": [
+        25177,
+        0
+      ],
+      "ips": [
+        15358,
+        700
+      ],
+      "bsu": [
+        73829,
+        2300
+      ],
+      "pensjonskapitalbevis": [
+        9445,
+        0
+      ],
+      "crowdfunding": [
+        32214,
+        -4000
+      ],
+      "krypto": [
+        1655,
+        0
+      ],
+      "cashback": [
+        617,
+        259
+      ],
+      "coop": [
+        538,
+        53
+      ]
+    },
+    {
+      "month": "2021-07",
+      "innskuddspensjon": [
+        101875,
+        3278
+      ],
+      "fond": [
+        97387,
+        0
+      ],
+      "ask": [
+        26759,
+        -300
+      ],
+      "ips": [
+        17276,
+        1000
+      ],
+      "bsu": [
+        76129,
+        2300
+      ],
+      "pensjonskapitalbevis": [
+        9444,
+        0
+      ],
+      "crowdfunding": [
+        24515,
+        -8000
+      ],
+      "krypto": [
+        1816,
+        0
+      ],
+      "cashback": [
+        962,
+        345
+      ],
+      "coop": [
+        577,
+        39
+      ]
+    },
+    {
+      "month": "2021-08",
+      "innskuddspensjon": [
+        107665,
+        3660
+      ],
+      "fond": [
+        97870,
+        0
+      ],
+      "ask": [
+        27362,
+        0
+      ],
+      "ips": [
+        18530,
+        1000
+      ],
+      "bsu": [
+        78129,
+        2000
+      ],
+      "pensjonskapitalbevis": [
+        9543,
+        0
+      ],
+      "crowdfunding": [
+        23192,
+        -1500
+      ],
+      "krypto": [
+        2320,
+        0
+      ],
+      "cashback": [
+        817,
+        -145
+      ],
+      "coop": [
+        676,
+        99
+      ]
+    },
+    {
+      "month": "2021-09",
+      "innskuddspensjon": [
+        106557,
+        3320
+      ],
+      "fond": [
+        37418,
+        -60000
+      ],
+      "ask": [
+        1702,
+        -25606
+      ],
+      "ips": [
+        18615,
+        1000
+      ],
+      "bsu": [
+        78429,
+        300
+      ],
+      "pensjonskapitalbevis": [
+        9385,
+        0
+      ],
+      "crowdfunding": [
+        19860,
+        -3500
+      ],
+      "krypto": [
+        2061,
+        0
+      ],
+      "cashback": [
+        1094,
+        277
+      ],
+      "coop": [
+        791,
+        115
+      ]
+    },
+    {
+      "month": "2021-10",
+      "innskuddspensjon": [
+        115049,
+        5191
+      ],
+      "fond": [
+        39719,
+        2000
+      ],
+      "ask": [
+        23554,
+        21606
+      ],
+      "ips": [
+        20229,
+        1000
+      ],
+      "bsu": [
+        80729,
+        2300
+      ],
+      "pensjonskapitalbevis": [
+        9554,
+        0
+      ],
+      "crowdfunding": [
+        19985,
+        0
+      ],
+      "krypto": [
+        2628,
+        200
+      ],
+      "cashback": [
+        1462,
+        368
+      ],
+      "coop": [
+        851,
+        60
+      ]
+    },
+    {
+      "month": "2021-11",
+      "innskuddspensjon": [
+        122009,
+        4258
+      ],
+      "fond": [
+        14745,
+        -25352
+      ],
+      "ask": [
+        19222,
+        -5500
+      ],
+      "ips": [
+        22242,
+        1000
+      ],
+      "bsu": [
+        85029,
+        4300
+      ],
+      "pensjonskapitalbevis": [
+        9509,
+        0
+      ],
+      "crowdfunding": [
+        20030,
+        0
+      ],
+      "krypto": [
+        2914,
+        200
+      ],
+      "cashback": [
+        1905,
+        443
+      ],
+      "coop": [
+        929,
+        78
+      ]
+    },
+    {
+      "month": "2021-12",
+      "innskuddspensjon": [
+        129649,
+        4258
+      ],
+      "fond": [
+        24105,
+        9267
+      ],
+      "ask": [
+        21977,
+        2500
+      ],
+      "ips": [
+        23640,
+        1250
+      ],
+      "bsu": [
+        87529,
+        2500
+      ],
+      "pensjonskapitalbevis": [
+        9690,
+        0
+      ],
+      "crowdfunding": [
+        20543,
+        250
+      ],
+      "krypto": [
+        2739,
+        300
+      ],
+      "cashback": [
+        455,
+        -1450
+      ],
+      "coop": [
+        1015,
+        86
+      ]
+    },
+    {
+      "month": "2022-01",
+      "innskuddspensjon": [
+        121979,
+        4310
+      ],
+      "fond": [
+        19863,
+        -2500
+      ],
+      "ask": [
+        21807,
+        2500
+      ],
+      "ips": [
+        22653,
+        1250
+      ],
+      "bsu": [
+        89839,
+        0
+      ],
+      "pensjonskapitalbevis": [
+        9088,
+        0
+      ],
+      "crowdfunding": [
+        20880,
+        250
+      ],
+      "krypto": [
+        2345,
+        300
+      ],
+      "cashback": [
+        644,
+        189
+      ],
+      "coop": [
+        0,
+        -1015
+      ]
+    },
+    {
+      "month": "2022-02",
+      "innskuddspensjon": [
+        120878,
+        4258
+      ],
+      "fond": [
+        25468,
+        6000
+      ],
+      "ask": [
+        23498,
+        2500
+      ],
+      "ips": [
+        22577,
+        1250
+      ],
+      "bsu": [
+        89839,
+        0
+      ],
+      "pensjonskapitalbevis": [
+        9039,
+        0
+      ],
+      "crowdfunding": [
+        21315,
+        250
+      ],
+      "krypto": [
+        2640,
+        300
+      ],
+      "cashback": [
+        948,
+        304
+      ],
+      "coop": [
+        244,
+        244
+      ]
+    },
+    {
+      "month": "2022-03",
+      "innskuddspensjon": [
+        133207,
+        4311
+      ],
+      "fond": [
+        31600,
+        6000
+      ],
+      "ask": [
+        26409,
+        2500
+      ],
+      "ips": [
+        24804,
+        1250
+      ],
+      "bsu": [
+        89839,
+        0
+      ],
+      "pensjonskapitalbevis": [
+        9403,
+        0
+      ],
+      "crowdfunding": [
+        21648,
+        250
+      ],
+      "krypto": [
+        3848,
+        600
+      ],
+      "cashback": [
+        1339,
+        391
+      ],
+      "coop": [
+        467,
+        223
+      ]
+    },
+    {
+      "month": "2022-04",
+      "innskuddspensjon": [
+        130599,
+        4258
+      ],
+      "fond": [
+        37514,
+        6000
+      ],
+      "ask": [
+        28759,
+        2500
+      ],
+      "ips": [
+        25708,
+        1250
+      ],
+      "bsu": [
+        89839,
+        0
+      ],
+      "pensjonskapitalbevis": [
+        8937,
+        0
+      ],
+      "crowdfunding": [
+        22088,
+        250
+      ],
+      "krypto": [
+        3629,
+        300
+      ],
+      "cashback": [
+        1632,
+        293
+      ],
+      "coop": [
+        619,
+        152
+      ]
+    },
+    {
+      "month": "2022-05",
+      "innskuddspensjon": [
+        135790,
+        4258
+      ],
+      "fond": [
+        23622,
+        -13540
+      ],
+      "ask": [
+        25068,
+        -3069
+      ],
+      "ips": [
+        26799,
+        1250
+      ],
+      "bsu": [
+        0,
+        -90268
+      ],
+      "pensjonskapitalbevis": [
+        9015,
+        0
+      ],
+      "crowdfunding": [
+        22445,
+        250
+      ],
+      "krypto": [
+        3159,
+        300
+      ],
+      "cashback": [
+        2332,
+        700
+      ],
+      "coop": [
+        895,
+        276
+      ]
+    },
+    {
+      "month": "2022-06",
+      "innskuddspensjon": [
+        132722,
+        4258
+      ],
+      "fond": [
+        8481,
+        -15000
+      ],
+      "ask": [
+        14458,
+        -10000
+      ],
+      "ips": [
+        27269,
+        1250
+      ],
+      "bsu": [
+        0,
+        0
+      ],
+      "pensjonskapitalbevis": [
+        8483,
+        0
+      ],
+      "crowdfunding": [
+        18207,
+        -4600
+      ],
+      "krypto": [
+        2694,
+        300
+      ],
+      "cashback": [
+        2865,
+        533
+      ],
+      "coop": [
+        1116,
+        221
+      ]
+    },
+    {
+      "month": "2022-07",
+      "innskuddspensjon": [
+        144108,
+        4195
+      ],
+      "fond": [
+        8602,
+        0
+      ],
+      "ask": [
+        15617,
+        0
+      ],
+      "ips": [
+        29408,
+        1250
+      ],
+      "bsu": [
+        0,
+        0
+      ],
+      "pensjonskapitalbevis": [
+        8749,
+        0
+      ],
+      "crowdfunding": [
+        18294,
+        0
+      ],
+      "krypto": [
+        3798,
+        500
+      ],
+      "cashback": [
+        3251,
+        386
+      ],
+      "coop": [
+        1333,
+        217
+      ]
+    },
+    {
+      "month": "2022-08",
+      "innskuddspensjon": [
+        145998,
+        6205
+      ],
+      "fond": [
+        10249,
+        1750
+      ],
+      "ask": [
+        6373,
+        -10978
+      ],
+      "ips": [
+        29766,
+        1250
+      ],
+      "bsu": [
+        0,
+        0
+      ],
+      "pensjonskapitalbevis": [
+        8496,
+        0
+      ],
+      "crowdfunding": [
+        16986,
+        -1320
+      ],
+      "krypto": [
+        3884,
+        500
+      ],
+      "cashback": [
+        346,
+        -2905
+      ],
+      "coop": [
+        1444,
+        111
+      ]
+    },
+    {
+      "month": "2022-09",
+      "innskuddspensjon": [
+        144747,
+        5188
+      ],
+      "fond": [
+        11776,
+        1750
+      ],
+      "ask": [
+        6117,
+        0
+      ],
+      "ips": [
+        29883,
+        1250
+      ],
+      "bsu": [
+        0,
+        0
+      ],
+      "pensjonskapitalbevis": [
+        8123,
+        0
+      ],
+      "crowdfunding": [
+        17089,
+        0
+      ],
+      "krypto": [
+        4284,
+        0
+      ],
+      "cashback": [
+        347,
+        1
+      ],
+      "coop": [
+        1508,
+        64
+      ]
+    },
+    {
+      "month": "2022-10",
+      "innskuddspensjon": [
+        158636,
+        11789
+      ],
+      "fond": [
+        13559,
+        1750
+      ],
+      "ask": [
+        6280,
+        0
+      ],
+      "ips": [
+        31641,
+        1250
+      ],
+      "bsu": [
+        0,
+        0
+      ],
+      "pensjonskapitalbevis": [
+        0,
+        0
+      ],
+      "crowdfunding": [
+        11619,
+        -5650
+      ],
+      "krypto": [
+        4187,
+        0
+      ],
+      "cashback": [
+        349,
+        2
+      ],
+      "coop": [
+        1585,
+        77
+      ]
+    },
+    {
+      "month": "2022-11",
+      "innskuddspensjon": [
+        171534,
+        4723
+      ],
+      "fond": [
+        15561,
+        1750
+      ],
+      "ask": [
+        511,
+        -5971
+      ],
+      "ips": [
+        34125,
+        1250
+      ],
+      "bsu": [
+        0,
+        0
+      ],
+      "pensjonskapitalbevis": [
+        0,
+        0
+      ],
+      "crowdfunding": [
+        10591,
+        -1100
+      ],
+      "krypto": [
+        3721,
+        0
+      ],
+      "cashback": [
+        350,
+        1
+      ],
+      "coop": [
+        1430,
+        -155
+      ]
+    },
+    {
+      "month": "2022-12",
+      "innskuddspensjon": [
+        169976,
+        4723
+      ],
+      "fond": [
+        19562,
+        4000
+      ],
+      "ask": [
+        1975,
+        1500
+      ],
+      "ips": [
+        34628,
+        1250
+      ],
+      "bsu": [
+        0,
+        0
+      ],
+      "pensjonskapitalbevis": [
+        0,
+        0
+      ],
+      "crowdfunding": [
+        10455,
+        -240
+      ],
+      "krypto": [
+        3387,
+        0
+      ],
+      "cashback": [
+        1,
+        -349
+      ],
+      "coop": [
+        1647,
+        217
+      ]
+    },
+    {
+      "month": "2023-01",
+      "innskuddspensjon": [
+        188020,
+        4794
+      ],
+      "fond": [
+        22029,
+        2000
+      ],
+      "ask": [
+        2820,
+        750
+      ],
+      "ips": [
+        38115,
+        1250
+      ],
+      "bsu": [
+        0,
+        0
+      ],
+      "pensjonskapitalbevis": [
+        0,
+        0
+      ],
+      "crowdfunding": [
+        10527,
+        0
+      ],
+      "krypto": [
+        4436,
+        0
+      ],
+      "cashback": [
+        361,
+        360
+      ],
+      "coop": [
+        3,
+        -1644
+      ]
+    },
+    {
+      "month": "2023-02",
+      "innskuddspensjon": [
+        194754,
+        4723
+      ],
+      "fond": [
+        14258,
+        -8000
+      ],
+      "ask": [
+        3658,
+        750
+      ],
+      "ips": [
+        40721,
+        1250
+      ],
+      "bsu": [
+        0,
+        0
+      ],
+      "pensjonskapitalbevis": [
+        0,
+        0
+      ],
+      "crowdfunding": [
+        9050,
+        -1500
+      ],
+      "krypto": [
+        4599,
+        0
+      ],
+      "cashback": [
+        695,
+        334
+      ],
+      "coop": [
+        21,
+        18
+      ]
+    },
+    {
+      "month": "2023-03",
+      "innskuddspensjon": [
+        197010,
+        4723
+      ],
+      "fond": [
+        8216,
+        -6000
+      ],
+      "ask": [
+        4362,
+        750
+      ],
+      "ips": [
+        41688,
+        1250
+      ],
+      "bsu": [
+        0,
+        0
+      ],
+      "pensjonskapitalbevis": [
+        0,
+        0
+      ],
+      "crowdfunding": [
+        9093,
+        0
+      ],
+      "krypto": [
+        5064,
+        0
+      ],
+      "cashback": [
+        1024,
+        329
+      ],
+      "coop": [
+        39,
+        18
+      ]
+    },
+    {
+      "month": "2023-04",
+      "innskuddspensjon": [
+        209725,
+        4724
+      ],
+      "fond": [
+        12383,
+        4000
+      ],
+      "ask": [
+        5415,
+        750
+      ],
+      "ips": [
+        45383,
+        1250
+      ],
+      "bsu": [
+        0,
+        0
+      ],
+      "pensjonskapitalbevis": [
+        0,
+        0
+      ],
+      "crowdfunding": [
+        9126,
+        0
+      ],
+      "krypto": [
+        5223,
+        0
+      ],
+      "cashback": [
+        1271,
+        247
+      ],
+      "coop": [
+        105,
+        66
+      ]
+    },
+    {
+      "month": "2023-05",
+      "innskuddspensjon": [
+        219218,
+        4721
+      ],
+      "fond": [
+        16501,
+        4000
+      ],
+      "ask": [
+        6317,
+        750
+      ],
+      "ips": [
+        48200,
+        1250
+      ],
+      "bsu": [
+        0,
+        0
+      ],
+      "pensjonskapitalbevis": [
+        0,
+        0
+      ],
+      "crowdfunding": [
+        9151,
+        0
+      ],
+      "krypto": [
+        5368,
+        0
+      ],
+      "cashback": [
+        1664,
+        393
+      ],
+      "coop": [
+        217,
+        112
+      ]
+    },
+    {
+      "month": "2023-06",
+      "innskuddspensjon": [
+        227672,
+        4834
+      ],
+      "fond": [
+        71378,
+        55000
+      ],
+      "ask": [
+        7741,
+        1500
+      ],
+      "ips": [
+        48835,
+        1250
+      ],
+      "bsu": [
+        0,
+        0
+      ],
+      "pensjonskapitalbevis": [
+        0,
+        0
+      ],
+      "crowdfunding": [
+        9167,
+        0
+      ],
+      "krypto": [
+        5331,
+        0
+      ],
+      "cashback": [
+        2182,
+        518
+      ],
+      "coop": [
+        242,
+        25
+      ]
+    },
+    {
+      "month": "2023-07",
+      "innskuddspensjon": [
+        237328,
+        4759
+      ],
+      "fond": [
+        74306,
+        3000
+      ],
+      "ask": [
+        8346,
+        750
+      ],
+      "ips": [
+        47444,
+        0
+      ],
+      "bsu": [
+        0,
+        0
+      ],
+      "pensjonskapitalbevis": [
+        0,
+        0
+      ],
+      "crowdfunding": [
+        7509,
+        -1700
+      ],
+      "krypto": [
+        5178,
+        0
+      ],
+      "cashback": [
+        2417,
+        235
+      ],
+      "coop": [
+        334,
+        92
+      ]
+    },
+    {
+      "month": "2023-08",
+      "innskuddspensjon": [
+        241817,
+        4762
+      ],
+      "fond": [
+        76912,
+        2000
+      ],
+      "ask": [
+        9255,
+        750
+      ],
+      "ips": [
+        47993,
+        0
+      ],
+      "bsu": [
+        0,
+        0
+      ],
+      "pensjonskapitalbevis": [
+        0,
+        0
+      ],
+      "crowdfunding": [
+        6461,
+        0
+      ],
+      "krypto": [
+        4734,
+        0
+      ],
+      "cashback": [
+        2594,
+        177
+      ],
+      "coop": [
+        392,
+        58
+      ]
+    },
+    {
+      "month": "2023-09",
+      "innskuddspensjon": [
+        241424,
+        4469
+      ],
+      "fond": [
+        78562,
+        2000
+      ],
+      "ask": [
+        9744,
+        750
+      ],
+      "ips": [
+        46197,
+        0
+      ],
+      "bsu": [
+        0,
+        0
+      ],
+      "pensjonskapitalbevis": [
+        0,
+        0
+      ],
+      "crowdfunding": [
+        5188,
+        -1300
+      ],
+      "krypto": [
+        4661,
+        0
+      ],
+      "cashback": [
+        2919,
+        325
+      ],
+      "coop": [
+        424,
+        32
+      ]
+    },
+    {
+      "month": "2023-10",
+      "innskuddspensjon": [
+        244556,
+        10452
+      ],
+      "fond": [
+        12251,
+        -66485
+      ],
+      "ask": [
+        10519,
+        750
+      ],
+      "ips": [
+        45794,
+        0
+      ],
+      "bsu": [
+        0,
+        0
+      ],
+      "pensjonskapitalbevis": [
+        0,
+        0
+      ],
+      "crowdfunding": [
+        5189,
+        0
+      ],
+      "krypto": [
+        5534,
+        0
+      ],
+      "cashback": [
+        3104,
+        185
+      ],
+      "coop": [
+        505,
+        81
+      ]
+    },
+    {
+      "month": "2023-11",
+      "innskuddspensjon": [
+        264935,
+        3617
+      ],
+      "fond": [
+        14497,
+        2500
+      ],
+      "ask": [
+        11819,
+        750
+      ],
+      "ips": [
+        49305,
+        0
+      ],
+      "bsu": [
+        0,
+        0
+      ],
+      "pensjonskapitalbevis": [
+        0,
+        0
+      ],
+      "crowdfunding": [
+        5188,
+        0
+      ],
+      "krypto": [
+        2754,
+        -3260
+      ],
+      "cashback": [
+        0,
+        -3104
+      ],
+      "coop": [
+        584,
+        79
+      ]
+    },
+    {
+      "month": "2023-12",
+      "innskuddspensjon": [
+        277269,
+        5402
+      ],
+      "fond": [
+        24721,
+        10000
+      ],
+      "ask": [
+        12700,
+        750
+      ],
+      "ips": [
+        52442,
+        2500
+      ],
+      "bsu": [
+        0,
+        0
+      ],
+      "pensjonskapitalbevis": [
+        0,
+        0
+      ],
+      "crowdfunding": [
+        2173,
+        -2950
+      ],
+      "krypto": [
+        2956,
+        0
+      ],
+      "cashback": [
+        6,
+        6
+      ],
+      "coop": [
+        635,
+        51
+      ]
+    },
+    {
+      "month": "2024-01",
+      "innskuddspensjon": [
+        290013,
+        5378
+      ],
+      "fond": [
+        31918,
+        7000
+      ],
+      "ask": [
+        13818,
+        750
+      ],
+      "ips": [
+        53214,
+        0
+      ],
+      "bsu": [
+        0,
+        0
+      ],
+      "pensjonskapitalbevis": [
+        0,
+        0
+      ],
+      "crowdfunding": [
+        2173,
+        0
+      ],
+      "krypto": [
+        3033,
+        0
+      ],
+      "cashback": [
+        128,
+        122
+      ],
+      "coop": [
+        13,
+        -622
+      ]
+    },
+    {
+      "month": "2024-02",
+      "innskuddspensjon": [
+        302038,
+        5267
+      ],
+      "fond": [
+        34202,
+        2000
+      ],
+      "ask": [
+        14882,
+        750
+      ],
+      "ips": [
+        55315,
+        0
+      ],
+      "bsu": [
+        0,
+        0
+      ],
+      "pensjonskapitalbevis": [
+        0,
+        0
+      ],
+      "crowdfunding": [
+        2173,
+        0
+      ],
+      "krypto": [
+        4551,
+        0
+      ],
+      "cashback": [
+        316,
+        188
+      ],
+      "coop": [
+        30,
+        17
+      ]
+    },
+    {
+      "month": "2024-03",
+      "innskuddspensjon": [
+        318718,
+        5387
+      ],
+      "fond": [
+        29613,
+        -5000
+      ],
+      "ask": [
+        16383,
+        750
+      ],
+      "ips": [
+        57304,
+        0
+      ],
+      "bsu": [
+        0,
+        0
+      ],
+      "pensjonskapitalbevis": [
+        0,
+        0
+      ],
+      "crowdfunding": [
+        663,
+        -1642
+      ],
+      "krypto": [
+        5088,
+        0
+      ],
+      "cashback": [
+        410,
+        94
+      ],
+      "coop": [
+        75,
+        45
+      ]
+    },
+    {
+      "month": "2024-04",
+      "innskuddspensjon": [
+        318807,
+        0
+      ],
+      "fond": [
+        31725,
+        2000
+      ],
+      "ask": [
+        17248,
+        750
+      ],
+      "ips": [
+        57234,
+        0
+      ],
+      "bsu": [
+        0,
+        0
+      ],
+      "pensjonskapitalbevis": [
+        0,
+        0
+      ],
+      "crowdfunding": [
+        663,
+        0
+      ],
+      "krypto": [
+        4380,
+        0
+      ],
+      "cashback": [
+        571,
+        161
+      ],
+      "coop": [
+        117,
+        42
+      ]
+    },
+    {
+      "month": "2024-05",
+      "innskuddspensjon": [
+        328221,
+        4899
+      ],
+      "fond": [
+        0,
+        -31836
+      ],
+      "ask": [
+        17422,
+        204
+      ],
+      "ips": [
+        56887,
+        0
+      ],
+      "bsu": [
+        0,
+        0
+      ],
+      "pensjonskapitalbevis": [
+        0,
+        0
+      ],
+      "crowdfunding": [
+        663,
+        0
+      ],
+      "krypto": [
+        4901,
+        0
+      ],
+      "cashback": [
+        1065,
+        494
+      ],
+      "coop": [
+        190,
+        73
+      ]
+    },
+    {
+      "month": "2024-06",
+      "innskuddspensjon": [
+        348571,
+        11327
+      ],
+      "fond": [
+        2003,
+        2000
+      ],
+      "ask": [
+        18447,
+        750
+      ],
+      "ips": [
+        57857,
+        0
+      ],
+      "bsu": [
+        0,
+        0
+      ],
+      "pensjonskapitalbevis": [
+        0,
+        0
+      ],
+      "crowdfunding": [
+        663,
+        0
+      ],
+      "krypto": [
+        4508,
+        0
+      ],
+      "cashback": [
+        1276,
+        211
+      ],
+      "coop": [
+        259,
+        69
+      ]
+    },
+    {
+      "month": "2024-07",
+      "innskuddspensjon": [
+        357264,
+        5159
+      ],
+      "fond": [
+        4542,
+        2500
+      ],
+      "ask": [
+        20193,
+        1000
+      ],
+      "ips": [
+        60938,
+        300
+      ],
+      "bsu": [
+        0,
+        0
+      ],
+      "pensjonskapitalbevis": [
+        0,
+        0
+      ],
+      "crowdfunding": [
+        663,
+        0
+      ],
+      "krypto": [
+        4789,
+        0
+      ],
+      "cashback": [
+        1507,
+        231
+      ],
+      "coop": [
+        327,
+        68
+      ]
+    },
+    {
+      "month": "2024-08",
+      "innskuddspensjon": [
+        366660,
+        6952
+      ],
+      "fond": [
+        7058,
+        2500
+      ],
+      "ask": [
+        21583,
+        1500
+      ],
+      "ips": [
+        60389,
+        300
+      ],
+      "bsu": [
+        0,
+        0
+      ],
+      "pensjonskapitalbevis": [
+        0,
+        0
+      ],
+      "crowdfunding": [
+        663,
+        0
+      ],
+      "krypto": [
+        3087,
+        -1000
+      ],
+      "cashback": [
+        6,
+        -1501
+      ],
+      "coop": [
+        366,
+        39
+      ]
+    },
+    {
+      "month": "2024-09",
+      "innskuddspensjon": [
+        378139,
+        5728
+      ],
+      "fond": [
+        9600,
+        2500
+      ],
+      "ask": [
+        23191,
+        1500
+      ],
+      "ips": [
+        61562,
+        300
+      ],
+      "bsu": [
+        0,
+        0
+      ],
+      "pensjonskapitalbevis": [
+        0,
+        0
+      ],
+      "crowdfunding": [
+        663,
+        0
+      ],
+      "krypto": [
+        3244,
+        0
+      ],
+      "cashback": [
+        6,
+        0
+      ],
+      "coop": [
+        418,
+        52
+      ]
+    },
+    {
+      "month": "2024-10",
+      "innskuddspensjon": [
+        392771,
+        5726
+      ],
+      "fond": [
+        12169,
+        2500
+      ],
+      "ask": [
+        25238,
+        1500
+      ],
+      "ips": [
+        62544,
+        300
+      ],
+      "bsu": [
+        0,
+        0
+      ],
+      "pensjonskapitalbevis": [
+        0,
+        0
+      ],
+      "crowdfunding": [
+        663,
+        0
+      ],
+      "krypto": [
+        3581,
+        0
+      ],
+      "cashback": [
+        6,
+        0
+      ],
+      "coop": [
+        460,
+        42
+      ]
+    },
+    {
+      "month": "2024-11",
+      "innskuddspensjon": [
+        406745,
+        5729
+      ],
+      "fond": [
+        14747,
+        2500
+      ],
+      "ask": [
+        27016,
+        1500
+      ],
+      "ips": [
+        63412,
+        300
+      ],
+      "bsu": [
+        0,
+        0
+      ],
+      "pensjonskapitalbevis": [
+        0,
+        0
+      ],
+      "crowdfunding": [
+        663,
+        0
+      ],
+      "krypto": [
+        5056,
+        0
+      ],
+      "cashback": [
+        6,
+        0
+      ],
+      "coop": [
+        497,
+        37
+      ]
+    },
+    {
+      "month": "2024-12",
+      "innskuddspensjon": [
+        419539,
+        12370
+      ],
+      "fond": [
+        19791,
+        5000
+      ],
+      "ask": [
+        28737,
+        1500
+      ],
+      "ips": [
+        64292,
+        300
+      ],
+      "bsu": [
+        0,
+        0
+      ],
+      "pensjonskapitalbevis": [
+        0,
+        0
+      ],
+      "crowdfunding": [
+        663,
+        0
+      ],
+      "krypto": [
+        4983,
+        0
+      ],
+      "cashback": [
+        6,
+        0
+      ],
+      "coop": [
+        528,
+        31
+      ]
+    },
+    {
+      "month": "2025-01",
+      "innskuddspensjon": [
+        430176,
+        -233
+      ],
+      "fond": [
+        32486,
+        12500
+      ],
+      "ask": [
+        31327,
+        1500
+      ],
+      "ips": [
+        66000,
+        300
+      ],
+      "bsu": [
+        0,
+        0
+      ],
+      "pensjonskapitalbevis": [
+        0,
+        0
+      ],
+      "crowdfunding": [
+        663,
+        0
+      ],
+      "krypto": [
+        5147,
+        0
+      ],
+      "cashback": [
+        156,
+        150
+      ],
+      "coop": [
+        17,
+        -511
+      ]
+    },
+    {
+      "month": "2025-02",
+      "innskuddspensjon": [
+        428644,
+        5940
+      ],
+      "fond": [
+        35100,
+        2500
+      ],
+      "ask": [
+        32548,
+        1500
+      ],
+      "ips": [
+        65517,
+        300
+      ],
+      "bsu": [
+        0,
+        0
+      ],
+      "pensjonskapitalbevis": [
+        0,
+        0
+      ],
+      "crowdfunding": [
+        663,
+        0
+      ],
+      "krypto": [
+        3803,
+        0
+      ],
+      "cashback": [
+        359,
+        203
+      ],
+      "coop": [
+        32,
+        15
+      ]
+    },
+    {
+      "month": "2025-03",
+      "innskuddspensjon": [
+        414384,
+        5904
+      ],
+      "fond": [
+        37114,
+        2500
+      ],
+      "ask": [
+        32430,
+        1500
+      ],
+      "ips": [
+        61151,
+        300
+      ],
+      "bsu": [
+        0,
+        0
+      ],
+      "pensjonskapitalbevis": [
+        0,
+        0
+      ],
+      "crowdfunding": [
+        663,
+        0
+      ],
+      "krypto": [
+        3288,
+        0
+      ],
+      "cashback": [
+        0,
+        -359
+      ],
+      "coop": [
+        40,
+        8
+      ]
+    },
+    {
+      "month": "2025-04",
+      "innskuddspensjon": [
+        413020,
+        5893
+      ],
+      "fond": [
+        39362,
+        2500
+      ],
+      "ask": [
+        33560,
+        1500
+      ],
+      "ips": [
+        60835,
+        300
+      ],
+      "bsu": [
+        0,
+        0
+      ],
+      "pensjonskapitalbevis": [
+        0,
+        0
+      ],
+      "crowdfunding": [
+        663,
+        0
+      ],
+      "krypto": [
+        3503,
+        0
+      ],
+      "cashback": [
+        0,
+        0
+      ],
+      "coop": [
+        43,
+        3
+      ]
+    },
+    {
+      "month": "2025-05",
+      "innskuddspensjon": [
+        442230,
+        5841
+      ],
+      "fond": [
+        44974,
+        5000
+      ],
+      "ask": [
+        37282,
+        3000
+      ],
+      "ips": [
+        63472,
+        300
+      ],
+      "bsu": [
+        0,
+        0
+      ],
+      "pensjonskapitalbevis": [
+        0,
+        0
+      ],
+      "crowdfunding": [
+        663,
+        0
+      ],
+      "krypto": [
+        4110,
+        0
+      ],
+      "cashback": [
+        0,
+        0
+      ],
+      "coop": [
+        98,
+        55
+      ]
+    },
+    {
+      "month": "2025-06",
+      "innskuddspensjon": [
+        463201,
+        5820
+      ],
+      "fond": [
+        47957,
+        2500
+      ],
+      "ask": [
+        40483,
+        1500
+      ],
+      "ips": [
+        65241,
+        300
+      ],
+      "bsu": [
+        0,
+        0
+      ],
+      "pensjonskapitalbevis": [
+        0,
+        0
+      ],
+      "crowdfunding": [
+        663,
+        0
+      ],
+      "krypto": [
+        4084,
+        0
+      ],
+      "cashback": [
+        0,
+        0
+      ],
+      "coop": [
+        154,
+        56
+      ]
+    },
+    {
+      "month": "2025-07",
+      "innskuddspensjon": [
+        482830,
+        5529
+      ],
+      "fond": [
+        50887,
+        2500
+      ],
+      "ask": [
+        42658,
+        1500
+      ],
+      "ips": [
+        76987,
+        10300
+      ],
+      "bsu": [
+        0,
+        0
+      ],
+      "pensjonskapitalbevis": [
+        0,
+        0
+      ],
+      "crowdfunding": [
+        663,
+        0
+      ],
+      "krypto": [
+        5159,
+        0
+      ],
+      "cashback": [
+        0,
+        0
+      ],
+      "coop": [
+        168,
+        14
+      ]
+    },
+    {
+      "month": "2025-08",
+      "innskuddspensjon": [
+        493850,
+        5255
+      ],
+      "fond": [
+        53537,
+        2500
+      ],
+      "ask": [
+        43974,
+        1500
+      ],
+      "ips": [
+        76946,
+        300
+      ],
+      "bsu": [
+        0,
+        0
+      ],
+      "pensjonskapitalbevis": [
+        0,
+        0
+      ],
+      "crowdfunding": [
+        663,
+        0
+      ],
+      "krypto": [
+        5084,
+        0
+      ],
+      "cashback": [
+        0,
+        0
+      ],
+      "coop": [
+        168,
+        0
+      ]
+    },
+    {
+      "month": "2025-09",
+      "innskuddspensjon": [
+        510291,
+        8317
+      ],
+      "fond": [
+        56154,
+        2500
+      ],
+      "ask": [
+        45692,
+        1500
+      ],
+      "ips": [
+        76087,
+        300
+      ],
+      "bsu": [
+        0,
+        0
+      ],
+      "pensjonskapitalbevis": [
+        0,
+        0
+      ],
+      "crowdfunding": [
+        663,
+        0
+      ],
+      "krypto": [
+        5004,
+        0
+      ],
+      "cashback": [
+        0,
+        0
+      ],
+      "coop": [
+        169,
+        1
+      ]
+    },
+    {
+      "month": "2025-10",
+      "innskuddspensjon": [
+        524700,
+        6323
+      ],
+      "fond": [
+        58885,
+        2500
+      ],
+      "ask": [
+        59847,
+        13500
+      ],
+      "ips": [
+        77512,
+        300
+      ],
+      "bsu": [
+        0,
+        0
+      ],
+      "pensjonskapitalbevis": [
+        0,
+        0
+      ],
+      "crowdfunding": [
+        663,
+        0
+      ],
+      "krypto": [
+        4850,
+        0
+      ],
+      "cashback": [
+        0,
+        0
+      ],
+      "coop": [
+        169,
+        0
+      ]
+    },
+    {
+      "month": "2025-11",
+      "innskuddspensjon": [
+        534305,
+        6151
+      ],
+      "fond": [
+        61666,
+        2500
+      ],
+      "ask": [
+        61875,
+        1500
+      ],
+      "ips": [
+        78288,
+        300
+      ],
+      "bsu": [
+        0,
+        0
+      ],
+      "pensjonskapitalbevis": [
+        0,
+        0
+      ],
+      "crowdfunding": [
+        663,
+        0
+      ],
+      "krypto": [
+        3948,
+        0
+      ],
+      "cashback": [
+        0,
+        0
+      ],
+      "coop": [
+        172,
+        3
+      ]
+    },
+    {
+      "month": "2025-12",
+      "innskuddspensjon": [
+        549344,
+        6218
+      ],
+      "fond": [
+        67057,
+        5000
+      ],
+      "ask": [
+        75454,
+        11500
+      ],
+      "ips": [
+        81270,
+        1700
+      ],
+      "bsu": [
+        0,
+        0
+      ],
+      "pensjonskapitalbevis": [
+        0,
+        0
+      ],
+      "crowdfunding": [
+        663,
+        0
+      ],
+      "krypto": [
+        3813,
+        0
+      ],
+      "cashback": [
+        0,
+        0
+      ],
+      "coop": [
+        193,
+        21
+      ]
+    },
+    {
+      "month": "2026-01",
+      "innskuddspensjon": [
+        558151,
+        6232
+      ],
+      "fond": [
+        69893,
+        2500
+      ],
+      "ask": [
+        88297,
+        12000
+      ],
+      "ips": [
+        80169,
+        500
+      ],
+      "bsu": [
+        0,
+        0
+      ],
+      "pensjonskapitalbevis": [
+        0,
+        0
+      ],
+      "crowdfunding": [
+        663,
+        0
+      ],
+      "krypto": [
+        3332,
+        0
+      ],
+      "cashback": [
+        0,
+        0
+      ],
+      "coop": [
+        13,
+        -180
+      ]
+    },
+    {
+      "month": "2026-02",
+      "innskuddspensjon": [
+        568057,
+        6256
+      ],
+      "fond": [
+        72700,
+        2500
+      ],
+      "ask": [
+        93265,
+        2000
+      ],
+      "ips": [
+        80073,
+        500
+      ],
+      "bsu": [
+        0,
+        0
+      ],
+      "pensjonskapitalbevis": [
+        0,
+        0
+      ],
+      "crowdfunding": [
+        663,
+        0
+      ],
+      "krypto": [
+        2461,
+        0
+      ],
+      "cashback": [
+        0,
+        0
+      ],
+      "coop": [
+        14,
+        1
+      ]
+    }
+  ]
+}

@@ -31,6 +31,7 @@
         .header-nav a { font-family: 'DM Mono', monospace; font-size: 0.75rem; letter-spacing: 0.08em; color: var(--blue3); text-decoration: none; padding: 0.4rem 0.8rem; border: 1px solid var(--blue2); border-radius: 6px; transition: color 0.2s, border-color 0.2s; }
         .header-nav a:hover { color: var(--white); border-color: var(--blue4); }
         .header-nav a.active { color: var(--white); border-color: var(--blue4); background: var(--blue1); }
+        .nav-sep { width:1px; height:1.2rem; background:var(--blue2); }
         main { max-width: 900px; margin: 0 auto; padding: 0 1rem 3rem; }
         .section { margin-bottom: 2.5rem; }
         .section-header { display: flex; align-items: center; gap: 0.75rem; margin-bottom: 1rem; padding-bottom: 0.5rem; border-bottom: 1px solid var(--blue1); }
@@ -39,32 +40,15 @@
         .badge-local { background: var(--blue1); color: var(--blue4); }
         .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 1rem; }
         .card { background: var(--blue1); border: 1px solid var(--blue2); border-radius: 12px; padding: 1.5rem; text-decoration: none; color: inherit; display: block; }
-        footer { text-align: center; padding: 2rem 1rem; color: var(--blue3); font-size: 0.85rem; border-top: 1px solid var(--blue1); }
+        footer { text-align: center; padding: 2rem 1rem; color: var(--blue3); font-size: 0.85rem; border-top: 1px solid var(--blue1); max-width: 900px; margin: 0 auto; }
         footer a { transition: color 0.2s; text-decoration: none; }
         footer a:hover { color: var(--white); }
         @media (max-width: 600px) { .grid { grid-template-columns: 1fr; } header { flex-direction: column; align-items: flex-start; } }
     </style>
 </head>
 <body>
-    <header>
-        <a href="/" style="text-decoration: none; color: inherit;">
-            <div class="header-brand">
-                <img src="favicon.svg" alt="Tommy Skogstad">
-                <div class="header-brand-text">
-                    <div class="header-brand-name">Tommy Skogstad</div>
-                    <div class="header-brand-sep"></div>
-                    <div class="header-brand-sub">ingenior · data · elektro · ledelse · produktutvikling</div>
-                </div>
-            </div>
-        </a>
-        <nav class="header-nav">
-            <a href="/">Dashboard</a>
-            <a href="status.html" class="active">Status</a>
-            <a href="secretary.html">Sekretær</a>
-            <a href="heating.html">Varme &amp; Sikkerhet</a>
-            <a href="bookmarks.html">Bokmerker</a>
-        </nav>
-    </header>
+    <div id="site-header"></div>
+    <script src="/header.js?v=2"></script>
 
     <main>
         <!-- Smarthus -->
@@ -138,16 +122,8 @@
         </section>
     </main>
 
-    <footer>
-        <div style="margin-bottom: 1rem;"><strong style="color: var(--white);">Tommy Skogstad</strong></div>
-        <div style="display: flex; justify-content: center; gap: 1.5rem; flex-wrap: wrap; margin-bottom: 1rem;">
-            <a href="tel:+4748061560" style="color: var(--blue4);">48 06 15 60</a>
-            <a href="mailto:tommyskogstad@gmail.com" style="color: var(--blue4);">tommyskogstad@gmail.com</a>
-            <a href="https://www.linkedin.com/in/tommy-skogstad-79b04864/" style="color: var(--blue5);">LinkedIn</a>
-            <a href="https://github.com/TommySkogstad" style="color: var(--blue5);">GitHub</a>
-        </div>
-        <div style="font-family: 'DM Mono', monospace; font-size: 0.7rem; letter-spacing: 0.1em; color: var(--blue3);">Ingeniør Tommy Skogstad &middot; org.nr. 921 954 565 &middot; &copy; 2026</div>
-    </footer>
+    <div id="site-footer"></div>
+    <script src="/footer.js?v=2"></script>
 
     <script>
     var SH_API = 'http://nuc.tommy.tv:8851';

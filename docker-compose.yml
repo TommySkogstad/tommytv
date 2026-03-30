@@ -22,6 +22,7 @@ services:
       - ./bookmarks.html:/usr/share/nginx/html/bookmarks.html:ro
       - ./status.html:/usr/share/nginx/html/status.html:ro
       - ./heating.html:/usr/share/nginx/html/heating.html:ro
+      - ./sparing.html:/usr/share/nginx/html/sparing.html:ro
       - ./logo.svg:/usr/share/nginx/html/logo.svg:ro
       - ./favicon.svg:/usr/share/nginx/html/favicon.svg:ro
       - ./tommy_skogstad_brand_guide.html:/usr/share/nginx/html/tommy_skogstad_brand_guide.html:ro
@@ -29,8 +30,10 @@ services:
       - ./tommy_skogstad_logo_mork.svg:/usr/share/nginx/html/tommy_skogstad_logo_mork.svg:ro
       - ./tommy_skogstad_favicon_16.svg:/usr/share/nginx/html/tommy_skogstad_favicon_16.svg:ro
       - ./tommy_skogstad_favicon_32.svg:/usr/share/nginx/html/tommy_skogstad_favicon_32.svg:ro
+      - ./header.js:/usr/share/nginx/html/header.js:ro
+      - ./footer.js:/usr/share/nginx/html/footer.js:ro
       - ./icons:/usr/share/nginx/html/icons:ro
-      - ./claude-status.json:/usr/share/nginx/html/claude-status.json:ro
+      - ./sparing-data.json:/usr/share/nginx/html/sparing-data.json:ro
       - ./nginx.conf:/etc/nginx/nginx.conf:ro
     healthcheck:
       test: ["CMD-SHELL", "wget -q --spider http://127.0.0.1:80/ || exit 1"]
@@ -45,6 +48,33 @@ services:
         limits:
           memory: 64M
           cpus: '0.10'
+
+  sparing-api:
+    image: python:3.12-alpine
+    restart: unless-stopped
+    command: python /app/sparing-api.py
+    volumes:
+      - ./sparing-api.py:/app/sparing-api.py:ro
+      - ./sparing-data.json:/data/sparing-data.json
+      - sparing-backups:/data/backups
+    ports:
+      - "8881:8881"
+    healthcheck:
+      test: ["CMD-SHELL", "wget -q --spider http://127.0.0.1:8881/health || exit 1"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 5s
+    networks:
+      - tommytv-network
+    deploy:
+      resources:
+        limits:
+          memory: 32M
+          cpus: '0.05'
+
+volumes:
+  sparing-backups:
 
 networks:
   tommytv-network:

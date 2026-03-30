@@ -1,0 +1,651 @@
+<!DOCTYPE html>
+<html lang="no">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg?v=2">
+    <meta name="theme-color" content="#0d1b2a">
+    <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@300;400;500&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500&display=swap" rel="stylesheet">
+    <title>Sparing — Tommy Skogstad</title>
+    <style>
+        :root { --navy:#0d1b2a; --blue1:#1b2d42; --blue2:#2e4260; --blue3:#4a6080; --blue4:#7a96b0; --blue5:#b8cad8; --white:#f4f5f2; }
+        * { margin:0; padding:0; box-sizing:border-box; }
+        body { font-family:'DM Sans',sans-serif; background:var(--navy); color:var(--blue5); min-height:100vh; }
+        header { max-width:900px; margin:0 auto; padding:2.5rem 1rem 2rem; display:flex; align-items:center; justify-content:space-between; gap:1.5rem; }
+        .header-brand { display:flex; align-items:center; gap:1.25rem; }
+        .header-brand img { height:4rem; width:4rem; }
+        .header-brand-text { display:flex; flex-direction:column; gap:4px; }
+        .header-brand-name { font-size:1.4rem; font-weight:400; color:var(--white); letter-spacing:-0.02em; line-height:1; }
+        .header-brand-sep { height:1px; background:var(--white); opacity:0.12; }
+        .header-brand-sub { font-family:'DM Mono',monospace; font-size:0.6rem; letter-spacing:0.14em; color:var(--blue4); text-transform:uppercase; }
+        .header-nav { display:flex; gap:0.5rem; align-items:center; flex-wrap:wrap; }
+        .header-nav a { font-family:'DM Mono',monospace; font-size:0.75rem; letter-spacing:0.08em; color:var(--blue3); text-decoration:none; padding:0.4rem 0.8rem; border:1px solid var(--blue2); border-radius:6px; transition:color 0.2s,border-color 0.2s; }
+        .header-nav a:hover { color:var(--white); border-color:var(--blue4); }
+        .header-nav a.active { color:var(--white); border-color:var(--blue4); background:var(--blue1); }
+        .nav-sep { width:1px; height:1.2rem; background:var(--blue2); }
+        main { max-width:900px; margin:0 auto; padding:0 1rem 3rem; }
+        .section { margin-bottom:2.5rem; }
+        .section-header { display:flex; align-items:center; gap:0.75rem; margin-bottom:1rem; padding-bottom:0.5rem; border-bottom:1px solid var(--blue1); }
+        .section-header h2 { font-size:1.25rem; font-weight:500; color:var(--white); }
+        .badge { font-family:'DM Mono',monospace; font-size:0.65rem; text-transform:uppercase; letter-spacing:0.1em; padding:0.2rem 0.6rem; border-radius:9999px; background:var(--blue1); color:var(--blue4); }
+        .badge-ok { background:#1a2e1a; color:#6D8345; }
+        .badge-local { background:#1a2a3e; color:#60a5fa; }
+        .card { background:var(--blue1); border:1px solid var(--blue2); border-radius:12px; padding:1.25rem; }
+        .card canvas { width:100%!important; }
+        .card-title { font-family:'DM Mono',monospace; font-size:0.7rem; color:var(--blue4); text-transform:uppercase; letter-spacing:0.08em; margin-bottom:0.75rem; }
+        .kpi-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(140px,1fr)); gap:0.75rem; }
+        .kpi { background:var(--blue1); border:1px solid var(--blue2); border-radius:12px; padding:1rem 1.25rem; text-align:center; transition:border-color 0.2s; }
+        .kpi:hover { border-color:var(--blue3); }
+        .kpi-label { font-family:'DM Mono',monospace; font-size:0.6rem; color:var(--blue4); text-transform:uppercase; letter-spacing:0.1em; margin-bottom:0.4rem; }
+        .kpi-value { font-size:1.35rem; font-weight:500; color:var(--white); }
+        .kpi-sub { font-family:'DM Mono',monospace; font-size:0.55rem; color:var(--blue3); margin-top:0.3rem; }
+        .row { display:grid; grid-template-columns:1fr 1fr; gap:0.75rem; }
+        .milestones { display:grid; grid-template-columns:repeat(auto-fit,minmax(150px,1fr)); gap:0.75rem; }
+        .ms { background:var(--blue1); border:1px solid var(--blue2); border-radius:12px; padding:1rem; text-align:center; }
+        .ms-amount { font-size:1.2rem; font-weight:500; color:#F9A850; }
+        .ms-date { font-family:'DM Mono',monospace; font-size:0.7rem; color:var(--blue4); margin-top:0.25rem; }
+        .ms-sub { font-family:'DM Mono',monospace; font-size:0.6rem; color:var(--blue3); margin-top:0.15rem; }
+        .insight-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(280px,1fr)); gap:0.75rem; }
+        .insight { background:var(--blue1); border:1px solid var(--blue2); border-left:3px solid var(--blue3); border-radius:12px; padding:1rem 1.25rem; }
+        .insight.good { border-left-color:#6D8345; }
+        .insight.warn { border-left-color:#F9A850; }
+        .insight.info { border-left-color:#60a5fa; }
+        .insight h3 { font-size:0.85rem; color:var(--white); font-weight:500; margin-bottom:0.3rem; }
+        .insight p { font-size:0.75rem; color:var(--blue4); line-height:1.5; }
+        .timeline { position:relative; padding-left:20px; border-left:2px solid var(--blue2); }
+        .evt { position:relative; margin-bottom:1rem; padding:0.75rem 1rem; background:var(--blue1); border:1px solid var(--blue2); border-radius:10px; }
+        .evt::before { content:''; position:absolute; left:-27px; top:14px; width:10px; height:10px; border-radius:50%; border:2px solid var(--blue3); background:var(--navy); }
+        .evt.big::before { border-color:#F9A850; background:#F9A850; }
+        .evt.sell::before { border-color:#C35839; }
+        .evt-date { font-family:'DM Mono',monospace; font-size:0.6rem; color:var(--blue3); }
+        .evt-title { font-size:0.8rem; color:var(--white); font-weight:500; }
+        .evt-desc { font-size:0.7rem; color:var(--blue4); margin-top:0.15rem; }
+        footer { text-align:center; padding:2rem 1rem; color:var(--blue3); font-size:0.85rem; border-top:1px solid var(--blue1); max-width:900px; margin:0 auto; }
+        footer a { transition:color 0.2s; text-decoration:none; }
+        footer a:hover { color:var(--white); }
+
+        /* Edit mode */
+        .edit-section { display:none; }
+        .edit-bar { display:flex; gap:0.5rem; align-items:center; flex-wrap:wrap; margin-bottom:1rem; }
+        .btn { font-family:'DM Mono',monospace; font-size:0.75rem; letter-spacing:0.05em; padding:0.5rem 1rem; border:1px solid var(--blue2); border-radius:8px; background:var(--blue1); color:var(--blue5); cursor:pointer; transition:all 0.2s; }
+        .btn:hover { border-color:var(--blue4); color:var(--white); }
+        .btn-primary { background:#1a3a5c; border-color:#2563eb; color:#60a5fa; }
+        .btn-primary:hover { background:#1e4a7a; color:var(--white); }
+        .btn-success { background:#1a2e1a; border-color:#6D8345; color:#6D8345; }
+        .btn-success:hover { background:#223d22; color:#a3c76a; }
+        .btn-danger { background:#2a1a1a; border-color:#C35839; color:#C35839; }
+        .btn-danger:hover { background:#3a2222; color:#e06b4f; }
+        .edit-table-wrap { overflow-x:auto; border-radius:12px; border:1px solid var(--blue2); }
+        .edit-table { width:100%; border-collapse:collapse; font-size:0.75rem; }
+        .edit-table th { position:sticky; top:0; background:var(--blue1); color:var(--blue4); font-family:'DM Mono',monospace; font-size:0.6rem; text-transform:uppercase; letter-spacing:0.08em; padding:0.6rem 0.5rem; text-align:right; border-bottom:1px solid var(--blue2); white-space:nowrap; }
+        .edit-table th:first-child { text-align:left; position:sticky; left:0; z-index:2; background:var(--blue1); }
+        .edit-table td { padding:0.3rem 0.25rem; border-bottom:1px solid #1a2535; text-align:right; white-space:nowrap; }
+        .edit-table td:first-child { text-align:left; position:sticky; left:0; background:var(--navy); font-family:'DM Mono',monospace; font-size:0.65rem; color:var(--blue4); padding-left:0.5rem; z-index:1; }
+        .edit-table tr:hover td { background:#0f2236; }
+        .edit-table tr:hover td:first-child { background:#0f2236; }
+        .edit-table input { width:75px; background:#0a1520; border:1px solid var(--blue2); border-radius:4px; color:var(--blue5); font-family:'DM Mono',monospace; font-size:0.7rem; padding:0.3rem 0.4rem; text-align:right; }
+        .edit-table input:focus { outline:none; border-color:#2563eb; background:#0d1f35; }
+        .edit-table .col-bal { color:var(--white); }
+        .edit-table .col-dep { color:var(--blue3); font-size:0.65rem; }
+        .edit-table .col-group { border-bottom:2px solid var(--blue2); }
+        .month-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(220px,1fr)); gap:0.75rem; }
+        .month-card { background:var(--blue1); border:1px solid var(--blue2); border-radius:12px; padding:1rem; transition:border-color 0.2s; }
+        .month-card:hover { border-color:var(--blue3); }
+        .month-card-header { display:flex; align-items:center; gap:0.5rem; margin-bottom:0.75rem; }
+        .month-card-dot { width:8px; height:8px; border-radius:50%; flex-shrink:0; }
+        .month-card-name { font-size:0.85rem; font-weight:500; color:var(--white); }
+        .month-card-provider { font-family:'DM Mono',monospace; font-size:0.55rem; color:var(--blue3); text-transform:uppercase; letter-spacing:0.08em; }
+        .month-card-fields { display:grid; grid-template-columns:1fr 1fr; gap:0.5rem; }
+        .month-field label { display:block; font-family:'DM Mono',monospace; font-size:0.55rem; color:var(--blue4); text-transform:uppercase; letter-spacing:0.06em; margin-bottom:0.2rem; }
+        .month-field input { width:100%; background:#0a1520; border:1px solid var(--blue2); border-radius:6px; color:var(--white); font-family:'DM Mono',monospace; font-size:0.8rem; padding:0.4rem 0.5rem; text-align:right; }
+        .month-field input:focus { outline:none; border-color:#2563eb; background:#0d1f35; }
+        .btn-icon { background:none; border:none; color:var(--blue3); cursor:pointer; font-size:0.7rem; padding:0.2rem 0.4rem; border-radius:4px; transition:color 0.2s,background 0.2s; }
+        .btn-icon:hover { color:#C35839; background:rgba(195,88,57,0.1); }
+        .month-total { margin-top:0.75rem; padding-top:0.75rem; border-top:1px solid var(--blue2); display:flex; justify-content:space-between; align-items:center; }
+        .month-total-label { font-family:'DM Mono',monospace; font-size:0.6rem; color:var(--blue4); text-transform:uppercase; }
+        .month-total-value { font-size:1.1rem; font-weight:500; color:var(--white); }
+        .toast { position:fixed; bottom:2rem; right:2rem; background:#1a2e1a; border:1px solid #6D8345; color:#6D8345; padding:0.75rem 1.5rem; border-radius:10px; font-family:'DM Mono',monospace; font-size:0.8rem; z-index:100; opacity:0; transition:opacity 0.3s; }
+        .toast.show { opacity:1; }
+        .toast.error { background:#2a1a1a; border-color:#C35839; color:#C35839; }
+
+        /* Modal */
+        .modal-bg { display:none; position:fixed; top:0; left:0; right:0; bottom:0; background:rgba(0,0,0,0.6); z-index:50; align-items:center; justify-content:center; }
+        .modal-bg.show { display:flex; }
+        .modal { background:var(--navy); border:1px solid var(--blue2); border-radius:16px; padding:2rem; width:90%; max-width:420px; }
+        .modal h3 { color:var(--white); font-size:1rem; margin-bottom:1rem; }
+        .modal label { display:block; font-family:'DM Mono',monospace; font-size:0.65rem; color:var(--blue4); text-transform:uppercase; letter-spacing:0.08em; margin-bottom:0.3rem; margin-top:0.75rem; }
+        .modal input, .modal select { width:100%; background:var(--blue1); border:1px solid var(--blue2); border-radius:8px; color:var(--white); font-size:0.85rem; padding:0.5rem 0.75rem; }
+        .modal input:focus, .modal select:focus { outline:none; border-color:#2563eb; }
+        .modal .btn-row { display:flex; gap:0.5rem; margin-top:1.5rem; justify-content:flex-end; }
+
+        @media(max-width:600px) { header{flex-direction:column;align-items:flex-start} .row{grid-template-columns:1fr} .kpi-grid{grid-template-columns:repeat(3,1fr)} }
+        @media(max-width:500px) { .kpi-grid{grid-template-columns:repeat(2,1fr)} }
+    </style>
+</head>
+<body>
+    <div id="site-header"></div>
+    <script src="/header.js?v=2"></script>
+
+    <main>
+        <!-- Edit section (LAN only) -->
+        <section class="section edit-section" id="editSection">
+            <div class="section-header">
+                <h2>Rediger data</h2>
+                <span class="badge badge-local">LAN</span>
+            </div>
+            <div class="edit-bar">
+                <select id="editMonthSelect" onchange="renderMonthEditor()" style="background:var(--blue1);border:1px solid var(--blue2);border-radius:8px;color:var(--white);font-family:'DM Mono',monospace;font-size:0.8rem;padding:0.45rem 0.75rem;cursor:pointer;"></select>
+                <button class="btn btn-primary" onclick="addMonth()">+ Ny måned</button>
+                <button class="btn btn-primary" onclick="showAccountModal()">+ Ny konto</button>
+                <button class="btn btn-success" id="saveBtn" onclick="saveData()">Lagre</button>
+                <button class="btn" onclick="exportJSON()">Eksporter JSON</button>
+            </div>
+            <div id="monthEditor"></div>
+        </section>
+
+        <section class="section">
+            <div class="section-header">
+                <h2>Spareoversikt</h2>
+                <span class="badge" id="dateRange"></span>
+            </div>
+            <div class="kpi-grid" id="kpis"></div>
+        </section>
+
+        <section class="section">
+            <div class="section-header">
+                <h2>Årsoversikt</h2>
+                <span class="badge">Per år</span>
+            </div>
+            <div class="card" style="overflow-x:auto;">
+                <table class="edit-table" id="yearTable" style="font-size:0.75rem;"></table>
+            </div>
+        </section>
+
+        <section class="section">
+            <div class="section-header">
+                <h2>Portefølje-utvikling</h2>
+                <span class="badge">Alle kontoer</span>
+            </div>
+            <div class="card"><canvas id="stackedChart" height="120"></canvas></div>
+        </section>
+
+        <section class="section">
+            <div class="section-header">
+                <h2>Fordeling og avkastning</h2>
+                <span class="badge">Analyse</span>
+            </div>
+            <div class="row">
+                <div class="card">
+                    <div class="card-title" id="donutTitle">Fordeling</div>
+                    <canvas id="donutChart" height="160"></canvas>
+                </div>
+                <div class="card">
+                    <div class="card-title">Innskudd vs portefolje-verdi</div>
+                    <canvas id="contribChart" height="160"></canvas>
+                </div>
+            </div>
+        </section>
+
+        <section class="section">
+            <div class="section-header">
+                <h2>Månedlig sparing</h2>
+                <span class="badge">Netto innskudd</span>
+            </div>
+            <div class="card"><canvas id="barChart" height="75"></canvas></div>
+        </section>
+
+        <section class="section">
+            <div class="section-header">
+                <h2>Milepæler</h2>
+                <span class="badge badge-ok">Passert</span>
+            </div>
+            <div class="milestones" id="milestones"></div>
+        </section>
+
+        <section class="section">
+            <div class="section-header">
+                <h2>Innsikter</h2>
+                <span class="badge">Analyse</span>
+            </div>
+            <div class="insight-grid" id="insights"></div>
+        </section>
+
+        <section class="section">
+            <div class="section-header">
+                <h2>Tidslinje</h2>
+                <span class="badge">Nøkkelbegivenheter</span>
+            </div>
+            <div class="timeline" id="timeline"></div>
+        </section>
+    </main>
+
+    <div id="site-footer"></div>
+    <script src="/footer.js?v=2"></script>
+
+    <div class="toast" id="toast"></div>
+
+    <!-- Account modal -->
+    <div class="modal-bg" id="accountModal">
+        <div class="modal">
+            <h3 id="modalTitle">Ny sparekonto</h3>
+            <label>Navn</label>
+            <input type="text" id="accName" placeholder="F.eks. Aksjesparekonto">
+            <label>Leverandør</label>
+            <input type="text" id="accProvider" placeholder="F.eks. SpareBank 1">
+            <label>Kategori</label>
+            <select id="accCategory">
+                <option value="investering">Investering</option>
+                <option value="pensjon">Pensjon</option>
+                <option value="sparing">Sparing</option>
+                <option value="annet">Annet</option>
+            </select>
+            <label>Farge</label>
+            <input type="color" id="accColor" value="#60a5fa" style="height:38px;padding:4px;">
+            <div class="btn-row">
+                <button class="btn" onclick="closeAccountModal()">Avbryt</button>
+                <button class="btn btn-primary" onclick="addAccount()">Legg til</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+/* ── LAN-only gate ── */
+if (location.hostname === 'tommytv.no') {
+    document.body.innerHTML = '<div style="display:flex;align-items:center;justify-content:center;height:100vh;color:#7a96b0;font-family:DM Mono,monospace;font-size:0.9rem;text-align:center;padding:2rem;"><div><p style="margin-bottom:1rem;">Spareoversikten er kun tilgjengelig på lokalnett.</p><a href="http://nuc.tommy.tv:8880/sparing.html" style="color:#60a5fa;">Åpne på LAN</a> · <a href="/" style="color:#60a5fa;">Tilbake</a></div></div>';
+}
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
+    <script>
+if (location.hostname === 'tommytv.no') throw new Error('LAN only');
+/* ── State ── */
+let DATA = null;
+const isLAN = true;
+const API_BASE = location.protocol + '//' + location.hostname + ':8881';
+const MONTH_NAMES = ['jan','feb','mar','apr','mai','jun','jul','aug','sep','okt','nov','des'];
+
+/* ── Load ── */
+fetch('/sparing-data.json').then(r => r.json()).then(data => {
+    DATA = data;
+    if (isLAN) {
+        document.getElementById('editSection').style.display = 'block';
+        populateMonthSelect();
+        renderMonthEditor();
+    }
+    renderCharts();
+}).catch(e => {
+    document.getElementById('kpis').innerHTML = '<div class="kpi" style="grid-column:1/-1"><div class="kpi-label">Feil</div><div class="kpi-value">Kunne ikke laste data</div><div class="kpi-sub">' + e.message + '</div></div>';
+});
+
+/* ── Helpers ── */
+function fmt(n) { return Math.round(n).toLocaleString('nb-NO') + ' kr' }
+function fmtK(n) { return n >= 1e6 ? (n/1e6).toFixed(1) + ' M' : (n/1e3).toFixed(0) + 'k' }
+function pct(n) { return (n >= 0 ? '+' : '') + n.toFixed(1) + '%' }
+function monthLabel(m) { var p = m.split('-'); return MONTH_NAMES[parseInt(p[1])-1] + ' ' + p[0].slice(2) }
+function nextMonth(m) {
+    var p = m.split('-'), y = parseInt(p[0]), mo = parseInt(p[1]);
+    mo++; if (mo > 12) { mo = 1; y++ }
+    return y + '-' + String(mo).padStart(2, '0');
+}
+
+function toast(msg, isError) {
+    var t = document.getElementById('toast');
+    t.textContent = msg;
+    t.className = 'toast show' + (isError ? ' error' : '');
+    setTimeout(function() { t.className = 'toast' }, 3000);
+}
+
+/* ── Transform data for charts ── */
+function getArrays() {
+    var accounts = DATA.accounts;
+    var entries = DATA.entries;
+    var N = entries.length;
+    var L = entries.map(function(e) { return monthLabel(e.month) });
+    var A = accounts.map(function(acc) {
+        return {
+            name: acc.name, color: acc.color, id: acc.id,
+            provider: acc.provider, category: acc.category,
+            v: entries.map(function(e) { return (e[acc.id] || [0,0])[0] }),
+            m: entries.map(function(e) { return (e[acc.id] || [0,0])[1] })
+        };
+    });
+    var totalV = Array(N).fill(0), totalM = Array(N).fill(0), cumContrib = Array(N).fill(0);
+    A.forEach(function(a) { for (var i = 0; i < N; i++) { totalV[i] += a.v[i]; totalM[i] += a.m[i] } });
+    var cc = 0; for (var i = 0; i < N; i++) { cc += totalM[i]; cumContrib[i] = cc }
+    var hypoSav = Array(N).fill(0), hs = 0;
+    for (var i = 0; i < N; i++) { hs = hs * (1 + 0.03/12) + totalM[i]; hypoSav[i] = hs }
+    return { A: A, L: L, N: N, totalV: totalV, totalM: totalM, cumContrib: cumContrib, hypoSav: hypoSav };
+}
+
+/* ── Charts ── */
+var charts = {};
+function renderCharts() {
+    // Destroy old charts
+    Object.values(charts).forEach(function(c) { c.destroy() });
+    charts = {};
+
+    var d = getArrays();
+    var A = d.A, L = d.L, N = d.N, totalV = d.totalV, totalM = d.totalM, cumContrib = d.cumContrib, hypoSav = d.hypoSav;
+
+    var lastMonth = monthLabel(DATA.entries[N-1].month);
+    var firstMonth = monthLabel(DATA.entries[0].month);
+    document.getElementById('dateRange').textContent = firstMonth.charAt(0).toUpperCase() + firstMonth.slice(1) + ' — ' + lastMonth;
+    document.getElementById('donutTitle').textContent = 'Fordeling ' + lastMonth;
+
+    // KPIs
+    var latest = totalV[N-1], totalContrib = cumContrib[N-1];
+    var totalReturn = latest - totalContrib, returnPct = totalContrib > 0 ? (totalReturn/totalContrib*100) : 0;
+    var years = N/12;
+    // Avkastning i % av gjennomsnittlig investert kapital, annualisert
+    var avgInvested = cumContrib.reduce(function(a,b){return a+b}, 0) / N;
+    var totalReturnRate = avgInvested > 0 ? (totalReturn / avgInvested) : 0;
+    var cagr = years > 0 ? ((Math.pow(1 + totalReturnRate, 1/years) - 1) * 100) : 0;
+    var posMonths = totalM.filter(function(x) { return x > 0 });
+    var avgSave = posMonths.length > 0 ? posMonths.reduce(function(a,b) { return a+b }, 0) / posMonths.length : 0;
+    var bestMonth = 0, bestIdx = 0;
+    for (var i = 1; i < N; i++) { var ch = totalV[i] - totalV[i-1]; if (ch > bestMonth) { bestMonth = ch; bestIdx = i } }
+
+    document.getElementById('kpis').innerHTML = [
+        {l:'Total verdi', v:fmt(latest), s:lastMonth},
+        {l:'Avkastning', v:fmt(totalReturn), s:pct(returnPct)+' av innskudd'},
+        {l:'Innbetalt', v:fmt(totalContrib), s:N+' måneder'},
+        {l:'CAGR', v:pct(cagr), s:'Årlig vekst'},
+        {l:'Snitt sparing', v:fmt(avgSave), s:'Per måned'},
+        {l:'Beste måned', v:'+'+fmt(bestMonth), s:L[bestIdx]}
+    ].map(function(k) { return '<div class="kpi"><div class="kpi-label">'+k.l+'</div><div class="kpi-value">'+k.v+'</div><div class="kpi-sub">'+k.s+'</div></div>' }).join('');
+
+    // Chart defaults
+    Chart.defaults.color = '#7a96b0';
+    Chart.defaults.borderColor = '#1b2d42';
+    Chart.defaults.font.family = "'DM Sans',system-ui,sans-serif";
+    var tt = {backgroundColor:'#1b2d42',titleColor:'#f4f5f2',bodyColor:'#b8cad8',borderColor:'#2e4260',borderWidth:1,padding:10,cornerRadius:8,callbacks:{label:function(c){return ' '+c.dataset.label+': '+fmt(c.parsed.y)}}};
+
+    // Exclude minor accounts from stacked chart
+    var minorNames = ['Mastercard Cashback','Coop Fordelsregnskap'];
+
+    // Stacked area
+    charts.stacked = new Chart(document.getElementById('stackedChart'), {
+        type:'line',
+        data:{labels:L, datasets:A.filter(function(a){return minorNames.indexOf(a.name)===-1}).map(function(a){return {label:a.name,fill:true,data:a.v,backgroundColor:a.color+'25',borderColor:a.color,borderWidth:1.5,pointRadius:0,pointHitRadius:8,tension:.3}})},
+        options:{responsive:true,interaction:{mode:'index',intersect:false},
+            scales:{x:{grid:{display:false},ticks:{maxTicksLimit:16,font:{size:10}}},y:{stacked:true,grid:{color:'#1b2d4288'},ticks:{callback:function(v){return fmtK(v)}},beginAtZero:true}},
+            plugins:{tooltip:{...tt,callbacks:{label:function(c){return ' '+c.dataset.label+': '+fmt(c.parsed.y)},footer:function(items){return 'Total: '+fmt(items.reduce(function(a,b){return a+b.parsed.y},0))}},footerColor:'#f4f5f2',footerFont:{weight:'bold'}},legend:{position:'bottom',labels:{usePointStyle:true,pointStyle:'circle',padding:10,font:{size:11}}}}}
+    });
+
+    // Donut
+    var lastVals = A.map(function(a){return {name:a.name,color:a.color,val:a.v[N-1]}}).filter(function(x){return x.val > 0}).sort(function(a,b){return b.val - a.val});
+    charts.donut = new Chart(document.getElementById('donutChart'), {
+        type:'doughnut',
+        data:{labels:lastVals.map(function(x){return x.name}),datasets:[{data:lastVals.map(function(x){return x.val}),backgroundColor:lastVals.map(function(x){return x.color}),borderColor:'#1b2d42',borderWidth:2,hoverOffset:6}]},
+        options:{responsive:true,cutout:'60%',plugins:{tooltip:{...tt,callbacks:{label:function(c){var t=c.dataset.data.reduce(function(a,b){return a+b},0);return ' '+c.label+': '+fmt(c.parsed)+' ('+((c.parsed/t)*100).toFixed(1)+'%)'}}},legend:{position:'right',labels:{usePointStyle:true,pointStyle:'circle',padding:8,font:{size:10}}}}}
+    });
+
+    // Contrib vs value
+    charts.contrib = new Chart(document.getElementById('contribChart'), {
+        type:'line',
+        data:{labels:L,datasets:[
+            {label:'Portefolje',data:totalV,borderColor:'#60a5fa',backgroundColor:'#60a5fa18',fill:true,tension:.3,pointRadius:0,borderWidth:2},
+            {label:'Innbetalt',data:cumContrib,borderColor:'#a78bfa',backgroundColor:'#a78bfa10',fill:true,tension:.3,pointRadius:0,borderWidth:2,borderDash:[5,3]},
+            {label:'Sparekonto 3%',data:hypoSav,borderColor:'#4a6080',fill:false,tension:.3,pointRadius:0,borderWidth:1.5,borderDash:[2,4]}
+        ]},
+        options:{responsive:true,interaction:{mode:'index',intersect:false},
+            scales:{x:{grid:{display:false},ticks:{maxTicksLimit:10,font:{size:9}}},y:{grid:{color:'#1b2d4288'},ticks:{callback:function(v){return fmtK(v)}}}},
+            plugins:{tooltip:tt,legend:{position:'bottom',labels:{usePointStyle:true,pointStyle:'circle',padding:8,font:{size:10}}}}}
+    });
+
+    // Monthly bar
+    charts.bar = new Chart(document.getElementById('barChart'), {
+        type:'bar',
+        data:{labels:L,datasets:[{label:'Netto innskudd',data:totalM,backgroundColor:totalM.map(function(v){return v>=0?'#6D834560':'#C3583940'}),borderColor:totalM.map(function(v){return v>=0?'#6D8345':'#C35839'}),borderWidth:1,borderRadius:2}]},
+        options:{responsive:true,
+            scales:{x:{grid:{display:false},ticks:{maxTicksLimit:16,font:{size:10}}},y:{grid:{color:'#1b2d4288'},ticks:{callback:function(v){return fmtK(v)}}}},
+            plugins:{tooltip:tt,legend:{display:false}}}
+    });
+
+    // Milestones
+    var thresholds = [100000,250000,500000,750000,1000000];
+    var msHTML = '', prevT = 0;
+    thresholds.forEach(function(t) {
+        var idx = totalV.findIndex(function(v) { return v >= t });
+        if (idx >= 0) {
+            var mSince = prevT > 0 ? idx - totalV.findIndex(function(v) { return v >= prevT }) : idx;
+            msHTML += '<div class="ms"><div class="ms-amount">' + fmtK(t) + '</div><div class="ms-date">' + L[idx] + '</div><div class="ms-sub">' +
+                (idx+1) + ' mnd fra start' + (prevT > 0 ? ' · ' + mSince + ' mnd fra ' + fmtK(prevT) : '') + '</div></div>';
+            prevT = t;
+        }
+    });
+    document.getElementById('milestones').innerHTML = msHTML;
+
+    // Insights
+    var pensjonAccs = A.filter(function(a) { return a.category === 'pensjon' });
+    var pensjonTotal = pensjonAccs.reduce(function(s, a) { return s + a.v[N-1] }, 0);
+    var pensjonPct = (pensjonTotal / latest * 100).toFixed(1);
+    var posM = totalM.filter(function(x) { return x > 0 }).length;
+
+    var yearlyData = [];
+    var startYear = parseInt(DATA.entries[0].month.split('-')[0]);
+    var endYear = parseInt(DATA.entries[N-1].month.split('-')[0]);
+    for (var y = startYear; y <= endYear; y++) {
+        var si = DATA.entries.findIndex(function(e) { return e.month.startsWith(y + '-') });
+        var ei = -1; for (var j = DATA.entries.length - 1; j >= 0; j--) { if (DATA.entries[j].month.startsWith(y + '-')) { ei = j; break } }
+        if (si >= 0) {
+            var sv = totalV[si], ev = totalV[ei], yc = totalM.slice(si, ei+1).reduce(function(a,b){return a+b}, 0), yr = ev - sv - yc;
+            yearlyData.push({year:y, start:sv, end:ev, contrib:yc, ret:yr, pct:sv>0?((ev-sv)/sv*100):0});
+        }
+    }
+    var bestY = yearlyData.reduce(function(a,b) { return b.pct > a.pct ? b : a });
+    var worstY = yearlyData.reduce(function(a,b) { return b.pct < a.pct ? b : a });
+
+    // Year table
+    var ytHTML = '<thead><tr><th style="text-align:left">År</th><th>Start</th><th>Innbetalt</th><th>Avkastning</th><th>Slutt</th><th>Vekst</th></tr></thead><tbody>';
+    yearlyData.forEach(function(y) {
+        var retColor = y.ret >= 0 ? '#6D8345' : '#C35839';
+        ytHTML += '<tr><td style="text-align:left;font-weight:500;color:var(--white)">' + y.year + '</td><td>' + fmt(y.start) + '</td><td>' + fmt(y.contrib) + '</td><td style="color:' + retColor + '">' + fmt(y.ret) + '</td><td style="font-weight:500;color:var(--white)">' + fmt(y.end) + '</td><td style="color:' + retColor + '">' + pct(y.pct) + '</td></tr>';
+    });
+    ytHTML += '</tbody>';
+    document.getElementById('yearTable').innerHTML = ytHTML;
+
+    // Find highest-value account
+    var topAcc = A.reduce(function(best, a) { return a.v[N-1] > best.v[N-1] ? a : best });
+
+    document.getElementById('insights').innerHTML = [
+        {c:'info', t:'Pensjon dominerer', p:'Pensjonssparing utgjør ' + pensjonPct + '% av porteføljen (' + fmt(pensjonTotal) + ').'},
+        {c:'good', t:topAcc.name + ' størst', p:topAcc.name + ' er den største kontoen med ' + fmt(topAcc.v[N-1]) + '.'},
+        {c:'good', t:'Beste år: ' + bestY.year, p:'Porteføljen vokste ' + pct(bestY.pct) + ' (' + fmt(bestY.start) + ' → ' + fmt(bestY.end) + '). Avkastning: ' + fmt(bestY.ret) + '.'},
+        {c:'warn', t:'Svakeste år: ' + worstY.year, p:'Vekst på ' + pct(worstY.pct) + ' (' + fmt(worstY.start) + ' → ' + fmt(worstY.end) + '). ' + (worstY.ret < 0 ? 'Negativ avkastning: ' + fmt(worstY.ret) + '.' : 'Avkastning: ' + fmt(worstY.ret) + '.')},
+        {c:'info', t:'Sparekonto-sammenligning', p:'Med 3% rente: ' + fmt(hypoSav[N-1]) + '. Faktisk: ' + fmt(latest) + '. Differanse: ' + fmt(latest - hypoSav[N-1]) + ' ' + (latest > hypoSav[N-1] ? 'i din favor' : 'i minus') + '.'},
+        {c:'good', t:'Sparedisiplin', p:'Netto positive innskudd i ' + posM + ' av ' + N + ' måneder (' + (posM/N*100).toFixed(0) + '%). Snitt: ' + fmt(avgSave) + ' per måned.'}
+    ].map(function(i) { return '<div class="insight ' + i.c + '"><h3>' + i.t + '</h3><p>' + i.p + '</p></div>' }).join('');
+
+    // Timeline — auto-generate significant events
+    var events = [];
+    for (var i = 1; i < N; i++) {
+        var diff = totalV[i] - totalV[i-1];
+        var netDep = totalM[i];
+        var pctChange = totalV[i-1] > 0 ? (diff / totalV[i-1] * 100) : 0;
+        if (Math.abs(pctChange) > 8) {
+            events.push({d: L[i], t: (diff > 0 ? 'Stor økning' : 'Stor nedgang'), p: fmt(Math.abs(diff)) + ' (' + pct(pctChange) + ') ' + (diff > 0 ? 'økning' : 'nedgang') + '.', c: diff > 0 ? 'big' : 'sell'});
+        } else if (Math.abs(netDep) > 20000) {
+            events.push({d: L[i], t: (netDep > 0 ? 'Stort innskudd' : 'Stort uttak'), p: 'Netto ' + fmt(Math.abs(netDep)) + (netDep > 0 ? ' inn.' : ' ut.'), c: netDep > 0 ? 'big' : 'sell'});
+        }
+    }
+    // Add milestones to timeline
+    thresholds.forEach(function(t) {
+        var idx = totalV.findIndex(function(v) { return v >= t });
+        if (idx >= 0) events.push({d: L[idx], t: 'Passerte ' + fmtK(t), p: 'Total porteføljeverdi passerte ' + fmt(t) + '.', c: 'big'});
+    });
+    // Current value
+    events.push({d: L[N-1], t: 'Portefølje i dag', p: 'Total verdi: ' + fmt(latest) + '. ' + DATA.accounts.length + ' kontoer.', c: 'big'});
+    // Sort by index (approximate by label)
+    events.sort(function(a,b) { return L.indexOf(a.d) - L.indexOf(b.d) });
+    // Keep last 12
+    events = events.slice(-12);
+
+    document.getElementById('timeline').innerHTML = events.map(function(e) {
+        return '<div class="evt ' + e.c + '"><div class="evt-date">' + e.d + '</div><div class="evt-title">' + e.t + '</div><div class="evt-desc">' + e.p + '</div></div>';
+    }).join('');
+}
+
+/* ── Month editor ── */
+function populateMonthSelect() {
+    var sel = document.getElementById('editMonthSelect');
+    sel.innerHTML = '';
+    for (var i = DATA.entries.length - 1; i >= 0; i--) {
+        var opt = document.createElement('option');
+        opt.value = i;
+        opt.textContent = monthLabel(DATA.entries[i].month);
+        sel.appendChild(opt);
+    }
+}
+
+function renderMonthEditor() {
+    if (!DATA) return;
+    var sel = document.getElementById('editMonthSelect');
+    var mi = parseInt(sel.value);
+    var e = DATA.entries[mi];
+    var accs = DATA.accounts;
+    var total = 0;
+
+    var activeAccs = accs.filter(function(a) { return a.active !== false });
+    var inactiveAccs = accs.filter(function(a) { return a.active === false });
+
+    var html = '<div class="month-grid">';
+    activeAccs.forEach(function(a) {
+        var vals = e[a.id] || [0, 0];
+        total += vals[0];
+        html += '<div class="month-card">' +
+            '<div class="month-card-header">' +
+                '<div class="month-card-dot" style="background:' + a.color + '"></div>' +
+                '<div style="flex:1"><div class="month-card-name">' + a.name + '</div>' +
+                '<div class="month-card-provider">' + a.provider + '</div></div>' +
+                '<button class="btn-icon" onclick="toggleAccount(\'' + a.id + '\')" title="Deaktiver">&#10005;</button>' +
+            '</div>' +
+            '<div class="month-card-fields">' +
+                '<div class="month-field"><label>Saldo</label>' +
+                    '<input type="number" value="' + vals[0] + '" data-month="' + mi + '" data-acc="' + a.id + '" data-field="0" onchange="cardChanged(this)">' +
+                '</div>' +
+                '<div class="month-field"><label>Innskudd</label>' +
+                    '<input type="number" value="' + vals[1] + '" data-month="' + mi + '" data-acc="' + a.id + '" data-field="1" onchange="cardChanged(this)">' +
+                '</div>' +
+            '</div>' +
+        '</div>';
+    });
+    html += '</div>';
+    html += '<div class="month-total"><span class="month-total-label">Total saldo</span><span class="month-total-value" id="monthTotal">' + fmt(total) + '</span></div>';
+
+    if (inactiveAccs.length > 0) {
+        html += '<div style="margin-top:1rem;padding-top:0.75rem;border-top:1px solid var(--blue2);">' +
+            '<div style="font-family:\'DM Mono\',monospace;font-size:0.6rem;color:var(--blue3);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:0.5rem;">Deaktiverte kontoer</div>' +
+            '<div style="display:flex;flex-wrap:wrap;gap:0.4rem;">';
+        inactiveAccs.forEach(function(a) {
+            html += '<button class="btn" style="font-size:0.7rem;padding:0.3rem 0.6rem;opacity:0.6;" onclick="toggleAccount(\'' + a.id + '\')">' +
+                '<span style="display:inline-block;width:6px;height:6px;border-radius:50%;background:' + a.color + ';margin-right:0.4rem;"></span>' +
+                a.name + ' &#8634;</button>';
+        });
+        html += '</div></div>';
+    }
+
+    document.getElementById('monthEditor').innerHTML = html;
+}
+
+function cardChanged(input) {
+    var mi = parseInt(input.dataset.month);
+    var acc = input.dataset.acc;
+    var fi = parseInt(input.dataset.field);
+    if (!DATA.entries[mi][acc]) DATA.entries[mi][acc] = [0, 0];
+    DATA.entries[mi][acc][fi] = parseFloat(input.value) || 0;
+    // Update total
+    var total = 0;
+    DATA.accounts.forEach(function(a) { total += (DATA.entries[mi][a.id] || [0,0])[0] });
+    var te = document.getElementById('monthTotal');
+    if (te) te.textContent = fmt(total);
+    // Mark unsaved
+    var saveBtn = document.getElementById('saveBtn');
+    saveBtn.textContent = 'Lagre *';
+    saveBtn.style.borderColor = '#F9A850';
+    saveBtn.style.color = '#F9A850';
+}
+
+function toggleAccount(accId) {
+    var acc = DATA.accounts.find(function(a) { return a.id === accId });
+    if (!acc) return;
+    acc.active = acc.active === false ? true : false;
+    renderMonthEditor();
+    var saveBtn = document.getElementById('saveBtn');
+    saveBtn.textContent = 'Lagre *';
+    saveBtn.style.borderColor = '#F9A850';
+    saveBtn.style.color = '#F9A850';
+    toast(acc.name + (acc.active ? ' aktivert' : ' deaktivert'));
+}
+
+function addMonth() {
+    var lastMonth = DATA.entries[DATA.entries.length - 1].month;
+    var nm = nextMonth(lastMonth);
+    var entry = { month: nm };
+    // Pre-fill active accounts with last month's balances, zero deposits
+    DATA.accounts.forEach(function(a) {
+        if (a.active === false) { entry[a.id] = [0, 0]; return; }
+        var lastVals = DATA.entries[DATA.entries.length - 1][a.id] || [0, 0];
+        entry[a.id] = [lastVals[0], 0];
+    });
+    DATA.entries.push(entry);
+    populateMonthSelect();
+    document.getElementById('editMonthSelect').value = DATA.entries.length - 1;
+    renderMonthEditor();
+    renderCharts();
+    toast('Lagt til ' + monthLabel(nm));
+}
+
+function showAccountModal() {
+    document.getElementById('accountModal').classList.add('show');
+    document.getElementById('accName').value = '';
+    document.getElementById('accProvider').value = '';
+    document.getElementById('accName').focus();
+}
+
+function closeAccountModal() {
+    document.getElementById('accountModal').classList.remove('show');
+}
+
+function addAccount() {
+    var name = document.getElementById('accName').value.trim();
+    var provider = document.getElementById('accProvider').value.trim();
+    var category = document.getElementById('accCategory').value;
+    var color = document.getElementById('accColor').value;
+    if (!name) { toast('Skriv inn et navn', true); return }
+    var id = name.toLowerCase().replace(/[^a-z0-9]+/g, '_').replace(/^_|_$/g, '');
+    // Check uniqueness
+    if (DATA.accounts.some(function(a) { return a.id === id })) {
+        toast('Kontoen finnes allerede', true); return;
+    }
+    DATA.accounts.push({ id: id, name: name, provider: provider, color: color, category: category });
+    // Add zero values to all entries
+    DATA.entries.forEach(function(e) { e[id] = [0, 0] });
+    closeAccountModal();
+    renderMonthEditor();
+    renderCharts();
+    toast('Lagt til ' + name);
+}
+
+function saveData() {
+    fetch(API_BASE + '/save', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(DATA)
+    }).then(function(r) {
+        if (r.ok) { toast('Lagret!'); var sb=document.getElementById('saveBtn'); sb.textContent='Lagre'; sb.style.borderColor=''; sb.style.color=''; }
+        else r.json().then(function(d) { toast('Feil: ' + d.status, true) });
+    }).catch(function(e) {
+        toast('Kunne ikke lagre: ' + e.message, true);
+    });
+}
+
+function exportJSON() {
+    var blob = new Blob([JSON.stringify(DATA, null, 2)], { type: 'application/json' });
+    var a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = 'sparing-data.json';
+    a.click();
+}
+    </script>
+</body>
+</html>

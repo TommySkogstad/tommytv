@@ -22,6 +22,7 @@
         .header-nav a { font-family:'DM Mono',monospace; font-size:0.75rem; letter-spacing:0.08em; color:var(--blue3); text-decoration:none; padding:0.4rem 0.8rem; border:1px solid var(--blue2); border-radius:6px; transition:color 0.2s,border-color 0.2s; }
         .header-nav a:hover { color:var(--white); border-color:var(--blue4); }
         .header-nav a.active { color:var(--white); border-color:var(--blue4); background:var(--blue1); }
+        .nav-sep { width:1px; height:1.2rem; background:var(--blue2); }
         main { max-width:900px; margin:0 auto; padding:0 1rem 3rem; }
         .card { background:var(--blue1); border:1px solid var(--blue2); border-radius:12px; padding:1.5rem; margin-bottom:1rem; }
         .section { margin-bottom:2.5rem; }
@@ -40,32 +41,15 @@
         .dot-warn { background:#F9A850; }
         .dot-alarm { background:#C35839; animation:pulse 1s infinite; }
         @keyframes pulse { 0%,100%{opacity:1;} 50%{opacity:0.4;} }
-        footer { text-align:center; padding:2rem 1rem; color:var(--blue3); font-size:0.85rem; border-top:1px solid var(--blue1); }
+        footer { text-align:center; padding:2rem 1rem; color:var(--blue3); font-size:0.85rem; border-top:1px solid var(--blue1); max-width:900px; margin:0 auto; }
         footer a { transition:color 0.2s; text-decoration:none; }
         footer a:hover { color:var(--white); }
         @media(max-width:600px) { header { flex-direction:column; align-items:flex-start; } .temp-big { font-size:2rem; } }
     </style>
 </head>
 <body>
-    <header>
-        <a href="/" style="text-decoration:none;color:inherit;">
-            <div class="header-brand">
-                <img src="favicon.svg" alt="Tommy Skogstad">
-                <div class="header-brand-text">
-                    <div class="header-brand-name">Tommy Skogstad</div>
-                    <div class="header-brand-sep"></div>
-                    <div class="header-brand-sub">ingenior · data · elektro · ledelse · produktutvikling</div>
-                </div>
-            </div>
-        </a>
-        <nav class="header-nav">
-            <a href="/">Dashboard</a>
-            <a href="status.html">Status</a>
-            <a href="secretary.html">Sekretær</a>
-            <a href="heating.html" class="active">Varme &amp; Sikkerhet</a>
-            <a href="bookmarks.html">Bokmerker</a>
-        </nav>
-    </header>
+    <div id="site-header"></div>
+    <script src="/header.js?v=2"></script>
 
     <main>
         <section class="section">
@@ -109,13 +93,8 @@
         </section>
     </main>
 
-    <footer>
-        <div style="margin-bottom:1rem;"><strong style="color:var(--white);">Tommy Skogstad</strong></div>
-        <div style="display:flex;justify-content:center;gap:1.5rem;flex-wrap:wrap;">
-            <a href="tel:+4748061560" style="color:var(--blue4);">48 06 15 60</a>
-            <a href="mailto:tommyskogstad@gmail.com" style="color:var(--blue4);">tommyskogstad@gmail.com</a>
-        </div>
-    </footer>
+    <div id="site-footer"></div>
+    <script src="/footer.js?v=2"></script>
 
     <script>
     var API = 'http://nuc.tommy.tv:8851';
