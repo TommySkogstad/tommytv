@@ -563,12 +563,40 @@ function renderCharts() {
             prevT = t;
         }
     });
-    // Neste milepæl
-    var nextT = thresholds.find(function(t) { return totalV[totalV.length-1] < t });
-    if (nextT) {
-        var pctToNext = ((totalV[totalV.length-1] / nextT) * 100).toFixed(0);
-        msHTML += '<div class="ms" style="border-style:dashed;opacity:0.6"><div class="ms-amount">' + fmtK(nextT) + '</div><div class="ms-date">neste mål</div><div class="ms-sub">' + pctToNext + '% dit</div></div>';
-    }
+    // Estimer fremtidige milepæler med månedlig sparing + 7% avkastning
+    var projAgreements = DATA.savingsAgreements || {};
+    var projMonthlyAgr = 0;
+    Object.keys(projAgreements).forEach(function(k) { projMonthlyAgr += projAgreements[k]; });
+    var projRecentOwn = ownM.slice(-6).filter(function(x) { return x > 0; });
+    var projAvgOwn = projRecentOwn.length > 0 ? projRecentOwn.reduce(function(a,b){return a+b},0) / projRecentOwn.length : projMonthlyAgr;
+    var projAvgExtra = Math.max(projAvgOwn - projMonthlyAgr, 0);
+    var projRecentEmp = totalEmployer.slice(-12).filter(function(x) { return x > 0; });
+    var projAvgEmp = projRecentEmp.length > 0 ? projRecentEmp.reduce(function(a,b){return a+b},0) / projRecentEmp.length : 0;
+    var projMonthlySave = projMonthlyAgr + projAvgExtra + projAvgEmp;
+    var projRate = 0.07 / 12;
+
+    var futureThresholds = thresholds.filter(function(t) { return t > latest; });
+    var projMonth = DATA.entries[N-1].month;
+    var projVal = latest;
+    futureThresholds.forEach(function(t) {
+        // Simuler måned for måned til vi når terskelen
+        var months = 0;
+        var v = projVal;
+        while (v < t && months < 600) { v = v * (1 + projRate) + projMonthlySave; months++; }
+        if (months < 600) {
+            // Beregn estimert dato
+            var estMonth = projMonth;
+            for (var i = 0; i < months; i++) estMonth = nextMonth(estMonth);
+            var ep = estMonth.split('-');
+            var estLabel = MONTH_NAMES[parseInt(ep[1])-1] + ' ' + ep[0];
+            var mSince = prevT > 0 ? '~' + months + ' mnd' : '';
+            msHTML += '<div class="ms" style="border-style:dashed;border-color:#60a5fa44;">' +
+                '<div class="ms-amount" style="color:#60a5fa;">' + fmtK(t) + '</div>' +
+                '<div class="ms-date" style="color:#60a5fa;">' + estLabel + '</div>' +
+                '<div class="ms-sub">~' + months + ' mnd · 7% avk.</div></div>';
+            prevT = t;
+        }
+    });
     document.getElementById('milestones').innerHTML = msHTML;
 
     // Fondseksponering med kontofilter
