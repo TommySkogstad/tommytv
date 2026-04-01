@@ -6139,7 +6139,7 @@
           "Frankrike": 2.52,
           "Taiwan": 2.51,
           "Sveits": 1.8,
-          "Sør-Korea": 1.78,
+          "Sor-Korea": 1.78,
           "Finland": 1.6,
           "Japan": 1.29,
           "Kina": 1.26,
@@ -6147,10 +6147,10 @@
           "Spania": 1.02,
           "India": 1,
           "Nederland": 0.91,
+          "southAfrica": 0.87,
           "Italia": 0.87,
           "Canada": 0.85,
-          "Andre": 3.17,
-          "Sør-Afrika": 0.87
+          "Andre": 3.17
         },
         "sectors": {
           "IT": 21.6,
@@ -6230,7 +6230,7 @@
           "Norge": 48.67,
           "Sverige": 12.15,
           "Frankrike": 11.88,
-          "Sør-Korea": 5.93,
+          "Sor-Korea": 5.93,
           "Danmark": 4.43,
           "Spania": 3.73,
           "Sveits": 3.73,
@@ -6266,7 +6266,7 @@
           "Frankrike": 2.52,
           "Taiwan": 2.51,
           "Sveits": 1.8,
-          "Sør-Korea": 1.78,
+          "Sor-Korea": 1.78,
           "Finland": 1.6,
           "Japan": 1.29,
           "Kina": 1.26,
@@ -6274,10 +6274,10 @@
           "Spania": 1.02,
           "India": 1,
           "Nederland": 0.91,
+          "southAfrica": 0.87,
           "Italia": 0.87,
           "Canada": 0.85,
-          "Andre": 3.17,
-          "Sør-Afrika": 0.87
+          "Andre": 3.17
         },
         "sectors": {
           "IT": 21.3,
@@ -6409,6 +6409,38 @@
         },
         "sectors": {
           "Crowdfunding": 100
+        }
+      },
+      "ask_klp_fremvoksende_markeder_indeks_n": {
+        "regions": {
+          "Kina": 25.95,
+          "Taiwan": 18.76,
+          "Sør-Korea": 18.13,
+          "India": 11.61,
+          "Malaysia": 4.91,
+          "Thailand": 3.17,
+          "Brasil": 2.64,
+          "Indonesia": 2.24,
+          "Hellas": 1.59,
+          "Sør-Afrika": 1.15,
+          "Hong Kong": 0.99,
+          "Ungarn": 0.99,
+          "Mexico": 0.79,
+          "Polen": 0.56,
+          "Andre": 6.52
+        },
+        "sectors": {
+          "IT": 25,
+          "Finans": 22,
+          "Forbruksvarer": 12,
+          "Telekom": 8,
+          "Materialer": 7,
+          "Industri": 7,
+          "Energi": 6,
+          "Konsumvarer": 5,
+          "Helse": 4,
+          "Forsyning": 3,
+          "Eiendom": 1
         }
       }
     }
