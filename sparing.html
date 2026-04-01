@@ -142,10 +142,10 @@
         .rec-card .rec-handle p { color:#6D8345; font-size:0.8rem; }
         .rec-card .rec-handle strong { color:#a3c76a; }
         /* World map */
-        .world-map-svg { width:100%; height:auto; }
-        .world-map-svg .country { transition:fill 0.2s,stroke 0.2s; cursor:pointer; stroke:var(--blue1); stroke-width:0.5; }
-        .world-map-svg .country:hover { stroke:var(--white); stroke-width:1.5; filter:brightness(1.3); }
-        .world-map-svg .country.no-alloc { fill:var(--blue2); }
+        .world-map-svg { width:100%; height:auto; background:var(--navy); border-radius:8px; }
+        .world-map-svg .country { stroke:#0d1b2a; stroke-width:0.3; transition:fill 0.2s,stroke 0.2s,stroke-width 0.2s; }
+        .world-map-svg .country.has-alloc { cursor:pointer; }
+        .world-map-svg .country.has-alloc:hover { stroke:var(--white); stroke-width:1.2; filter:brightness(1.4); }
         .map-tooltip { position:absolute; background:var(--blue1); border:1px solid var(--blue2); border-radius:8px; padding:0.5rem 0.75rem; font-size:0.75rem; color:var(--blue5); pointer-events:none; z-index:20; white-space:nowrap; opacity:0; transition:opacity 0.15s; }
         .map-tooltip.show { opacity:1; }
         .map-tooltip strong { color:var(--white); }
@@ -335,6 +335,9 @@ if (location.hostname === 'tommytv.no') {
 }
     </script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/d3-array@3/dist/d3-array.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/d3-geo@3/dist/d3-geo.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/topojson-client@3/dist/topojson-client.min.js"></script>
     <script>
 if (location.hostname === 'tommytv.no') throw new Error('LAN only');
 /* ── State ── */
@@ -650,8 +653,26 @@ function renderCharts() {
                     return Object.entries(obj).sort(function(a,b) { return b[1] - a[1] });
                 }
 
-                // Verdenskart i stedet for regionChart
-                renderWorldMap(regionKr, totalVal);
+                // Beregn "Andre"-breakdown per fond
+                var andreBreakdown = [];
+                if (regionKr['Andre'] > 0) {
+                    Object.keys(fundWeights).forEach(function(fid) {
+                        var fund = fa.funds[fid];
+                        var andrePct = fund.regions['Andre'] || 0;
+                        if (andrePct > 0) {
+                            var kr = fundWeights[fid] * andrePct / 100;
+                            var name = fid;
+                            // Finn lesbart navn
+                            if (CHILD_NAMES[fid]) name = CHILD_NAMES[fid];
+                            else { var acc = DATA.accounts.find(function(a){return a.id===fid}); if (acc) name = acc.name; }
+                            andreBreakdown.push({name: name, kr: kr, pct: andrePct});
+                        }
+                    });
+                    andreBreakdown.sort(function(a,b) { return b.kr - a.kr; });
+                }
+
+                // Verdenskart
+                renderWorldMap(regionKr, totalVal, andreBreakdown);
 
                 var sSorted = sortedEntries(sectorKr);
                 if (charts.sector) charts.sector.destroy();
@@ -773,127 +794,119 @@ function renderCharts() {
     renderAllocation();
 }
 
-/* ── World map (choropleth) ── */
+/* ── World map (choropleth via D3-geo + TopoJSON) ── */
+var _worldTopoCache = null;
 function renderWorldMap(regionKr, totalVal) {
-    // Forenklet equirectangular kart-paths for relevante land
-    // Koordinater: x=0..800, y=0..400 (lon -180..180 → x, lat 90..-90 → y)
-    function lonlat(lon, lat) { return [(lon + 180) * (800/360), (90 - lat) * (400/180)]; }
-
-    var countryPaths = {
-        'USA': 'M 45,120 L 140,120 155,135 155,155 145,175 130,180 115,175 100,180 80,175 55,170 40,160 35,145 Z',
-        'Canada': 'M 48,60 L 160,55 175,70 170,90 160,105 155,115 140,118 48,118 35,110 30,90 35,70 Z',
-        'Storbritannia': 'M 350,100 L 356,95 360,100 358,112 354,118 350,115 348,108 Z',
-        'Frankrike': 'M 352,130 L 365,125 372,130 375,145 368,155 355,155 348,145 Z',
-        'Tyskland': 'M 368,115 L 380,110 388,118 386,132 375,135 365,128 366,118 Z',
-        'Nederland': 'M 362,108 L 370,105 374,112 368,115 362,112 Z',
-        'Belgia': 'M 358,118 L 368,115 370,122 363,125 356,122 Z',
-        'Sveits': 'M 368,135 L 378,132 382,138 376,143 368,142 Z',
-        'Italia': 'M 378,138 L 385,132 392,138 388,158 382,168 378,162 380,148 Z',
-        'Spania': 'M 335,148 L 360,145 365,155 358,168 340,170 330,162 Z',
-        'Sverige': 'M 385,55 L 392,48 396,60 394,85 388,95 382,90 380,70 Z',
-        'Norge': 'M 372,50 L 384,42 388,55 385,80 378,90 372,82 370,62 Z',
-        'Danmark': 'M 378,100 L 386,96 388,104 382,108 376,105 Z',
-        'Finland': 'M 398,45 L 408,40 412,55 408,75 400,80 396,70 395,52 Z',
-        'Japan': 'M 690,140 L 700,130 705,140 703,160 697,168 690,160 Z',
-        'Sør-Korea': 'M 680,148 L 688,142 692,150 688,160 682,158 Z',
-        'Taiwan': 'M 685,175 L 690,170 693,178 689,184 685,181 Z',
-        'India': 'M 570,175 L 590,160 605,170 610,195 600,220 585,230 572,218 565,195 Z',
-        'Australia': 'M 650,280 L 710,270 730,290 725,320 700,335 660,330 640,310 645,290 Z'
+    // Mapping: norske navn → ISO 3166 landnavn i Natural Earth
+    var nameToIso = {
+        'USA':'United States of America','Storbritannia':'United Kingdom','Sveits':'Switzerland',
+        'Tyskland':'Germany','Frankrike':'France','Japan':'Japan','Canada':'Canada',
+        'Australia':'Australia','Nederland':'Netherlands','Sverige':'Sweden','Norge':'Norway',
+        'Danmark':'Denmark','Finland':'Finland','Italia':'Italy','Spania':'Spain',
+        'India':'India','Taiwan':'Taiwan','Sør-Korea':'South Korea','Belgia':'Belgium',
+        'Kina':'China','Sør-Afrika':'South Africa','Irland':'Ireland','Brasil':'Brazil',
+        'Hong Kong':'Hong Kong','Singapore':'Singapore','Mexico':'Mexico',
+        'Østerrike':'Austria','Portugal':'Portugal'
     };
+    var isoToName = {};
+    Object.keys(nameToIso).forEach(function(k) { isoToName[nameToIso[k]] = k; });
 
-    // Finn maks-verdi for fargeskala
+    // Fargeskala
     var maxKr = 0;
     Object.keys(regionKr).forEach(function(r) {
         if (r !== 'Global' && r !== 'Andre' && regionKr[r] > maxKr) maxKr = regionKr[r];
     });
-
-    // Fargeskala: --blue2 (#2e4260) → #60a5fa
     function allocColor(kr) {
-        if (!kr || kr <= 0) return '#2e4260';
-        var t = Math.min(kr / maxKr, 1);
-        t = Math.pow(t, 0.5); // square root for bedre spredning
-        // Interpoler fra #2e4260 til #60a5fa
-        var r = Math.round(0x2e + t * (0x60 - 0x2e));
-        var g = Math.round(0x42 + t * (0xa5 - 0x42));
-        var b = Math.round(0x60 + t * (0xfa - 0x60));
-        return 'rgb(' + r + ',' + g + ',' + b + ')';
+        if (!kr || kr <= 0) return '#1b2d42';
+        var t = Math.pow(Math.min(kr / maxKr, 1), 0.5);
+        return 'rgb(' + Math.round(0x1b + t * (0x60 - 0x1b)) + ',' +
+            Math.round(0x2d + t * (0xa5 - 0x2d)) + ',' +
+            Math.round(0x42 + t * (0xfa - 0x42)) + ')';
     }
 
-    // Bygg SVG
-    var svgPaths = '';
-    // Bakgrunnskontinenter (fyllfarger for land uten data)
-    var allCountries = Object.keys(countryPaths);
-    allCountries.forEach(function(name) {
-        var kr = regionKr[name] || 0;
-        var fill = allocColor(kr);
-        var cls = kr > 0 ? 'country' : 'country no-alloc';
-        var pctVal = totalVal > 0 ? (kr / totalVal * 100).toFixed(1) : '0.0';
-        svgPaths += '<path class="' + cls + '" d="' + countryPaths[name] + '" fill="' + fill + '" ' +
-            'data-country="' + name + '" data-kr="' + Math.round(kr) + '" data-pct="' + pctVal + '"/>';
-    });
+    function draw(topo) {
+        var W = 800, H = 420;
+        var projection = d3.geoNaturalEarth1().fitSize([W, H], topojson.feature(topo, topo.objects.countries));
+        var path = d3.geoPath(projection);
+        var countries = topojson.feature(topo, topo.objects.countries).features;
 
-    // «Global» og «Andre» som egne bokser under kartet
-    var extraHTML = '';
-    ['Global', 'Andre'].forEach(function(label) {
-        var kr = regionKr[label] || 0;
-        if (kr > 0) {
+        var svgPaths = '';
+        countries.forEach(function(f) {
+            var isoName = f.properties.name;
+            var norskName = isoToName[isoName];
+            var kr = norskName ? (regionKr[norskName] || 0) : 0;
+            var fill = allocColor(kr);
+            var cls = kr > 0 ? 'country has-alloc' : 'country';
+            var d = path(f);
+            if (!d) return;
             var pctVal = totalVal > 0 ? (kr / totalVal * 100).toFixed(1) : '0.0';
-            extraHTML += '<div style="display:inline-flex;align-items:center;gap:0.5rem;padding:0.35rem 0.75rem;background:var(--blue2);border-radius:6px;font-size:0.7rem;">' +
-                '<span style="color:var(--white);">' + label + '</span>' +
-                '<span style="font-family:\'DM Mono\',monospace;font-size:0.65rem;color:var(--blue4);">' + fmt(Math.round(kr)) + ' · ' + pctVal + '%</span>' +
+            var label = norskName || isoName;
+            svgPaths += '<path class="' + cls + '" d="' + d + '" fill="' + fill + '" ' +
+                'data-country="' + label + '" data-kr="' + Math.round(kr) + '" data-pct="' + pctVal + '"/>';
+        });
+
+        // «Global» og «Andre» badges
+        var extraHTML = '';
+        ['Global', 'Andre'].forEach(function(label) {
+            var kr = regionKr[label] || 0;
+            if (kr > 0) {
+                var pctVal = totalVal > 0 ? (kr / totalVal * 100).toFixed(1) : '0.0';
+                extraHTML += '<div style="display:inline-flex;align-items:center;gap:0.5rem;padding:0.35rem 0.75rem;background:var(--blue2);border-radius:6px;font-size:0.7rem;">' +
+                    '<span style="color:var(--white);">' + label + '</span>' +
+                    '<span style="font-family:\'DM Mono\',monospace;font-size:0.65rem;color:var(--blue4);">' + fmt(Math.round(kr)) + ' · ' + pctVal + '%</span>' +
+                '</div>';
+            }
+        });
+
+        var wrap = document.getElementById('worldMapWrap');
+        wrap.innerHTML =
+            '<div style="position:relative;">' +
+                '<svg viewBox="0 0 ' + W + ' ' + H + '" class="world-map-svg">' + svgPaths + '</svg>' +
+                '<div class="map-tooltip" id="mapTooltip"></div>' +
+                (extraHTML ? '<div style="display:flex;gap:0.5rem;flex-wrap:wrap;margin-top:0.5rem;">' + extraHTML + '</div>' : '') +
             '</div>';
-        }
-    });
 
-    var wrap = document.getElementById('worldMapWrap');
-    wrap.innerHTML =
-        '<div style="position:relative;">' +
-            '<svg viewBox="0 0 800 400" class="world-map-svg" style="background:var(--navy);border-radius:8px;">' +
-                // Enkel bakgrunn med gridlinjer
-                '<line x1="0" y1="200" x2="800" y2="200" stroke="#1b2d42" stroke-width="0.5" stroke-dasharray="4,4"/>' +
-                '<line x1="400" y1="0" x2="400" y2="400" stroke="#1b2d42" stroke-width="0.5" stroke-dasharray="4,4"/>' +
-                svgPaths +
-            '</svg>' +
-            '<div class="map-tooltip" id="mapTooltip"></div>' +
-            (extraHTML ? '<div style="display:flex;gap:0.5rem;flex-wrap:wrap;margin-top:0.5rem;">' + extraHTML + '</div>' : '') +
-        '</div>';
+        // Hover
+        var tooltip = document.getElementById('mapTooltip');
+        wrap.querySelectorAll('.country').forEach(function(p) {
+            p.addEventListener('mouseenter', function() {
+                var kr = parseInt(p.dataset.kr);
+                tooltip.innerHTML = '<strong>' + p.dataset.country + '</strong>' + (kr > 0 ? '<br>' + fmt(kr) + ' · ' + p.dataset.pct + '%' : '');
+                tooltip.classList.add('show');
+            });
+            p.addEventListener('mousemove', function(e) {
+                var rect = wrap.getBoundingClientRect();
+                tooltip.style.left = (e.clientX - rect.left + 12) + 'px';
+                tooltip.style.top = (e.clientY - rect.top - 10) + 'px';
+            });
+            p.addEventListener('mouseleave', function() { tooltip.classList.remove('show'); });
+        });
+    }
 
-    // Hover-events
-    var tooltip = document.getElementById('mapTooltip');
-    var paths = wrap.querySelectorAll('.country');
-    paths.forEach(function(p) {
-        p.addEventListener('mouseenter', function(e) {
-            var name = p.dataset.country;
-            var kr = parseInt(p.dataset.kr);
-            var pct = p.dataset.pct;
-            tooltip.innerHTML = '<strong>' + name + '</strong><br>' + fmt(kr) + ' · ' + pct + '%';
-            tooltip.classList.add('show');
-        });
-        p.addEventListener('mousemove', function(e) {
-            var rect = wrap.getBoundingClientRect();
-            tooltip.style.left = (e.clientX - rect.left + 12) + 'px';
-            tooltip.style.top = (e.clientY - rect.top - 10) + 'px';
-        });
-        p.addEventListener('mouseleave', function() {
-            tooltip.classList.remove('show');
-        });
-    });
-
-    // Legend
+    // Legend (rendres uavhengig av kartlasting)
     var sorted = Object.entries(regionKr).sort(function(a, b) { return b[1] - a[1]; });
     var legendHTML = '<ul class="region-legend">';
     sorted.forEach(function(entry) {
         var name = entry[0], kr = entry[1];
         var pctVal = totalVal > 0 ? (kr / totalVal * 100).toFixed(1) : '0.0';
-        var color = allocColor(kr);
         legendHTML += '<li>' +
-            '<span class="dot" style="background:' + color + ';"></span>' +
+            '<span class="dot" style="background:' + allocColor(kr) + ';"></span>' +
             '<span class="name">' + name + '</span>' +
             '<span class="val">' + fmt(Math.round(kr)) + ' · ' + pctVal + '%</span>' +
         '</li>';
     });
     legendHTML += '</ul>';
     document.getElementById('regionLegend').innerHTML = legendHTML;
+
+    // Last kartdata (cache)
+    if (_worldTopoCache) { draw(_worldTopoCache); return; }
+    fetch('https://cdn.jsdelivr.net/npm/world-atlas@2/countries-110m.json')
+        .then(function(r) { return r.json(); })
+        .then(function(topo) { _worldTopoCache = topo; draw(topo); })
+        .catch(function() {
+            document.getElementById('worldMapWrap').innerHTML =
+                '<div style="text-align:center;padding:2rem;color:var(--blue3);font-size:0.8rem;">Kunne ikke laste kart</div>';
+        });
 }
 
 /* ── Allocation dashboard ── */

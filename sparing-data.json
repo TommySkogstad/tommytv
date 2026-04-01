@@ -6142,7 +6142,15 @@
           "Sør-Korea": 1.78,
           "Finland": 1.6,
           "Japan": 1.29,
-          "Andre": 11.04
+          "Kina": 1.26,
+          "Tyskland": 1.09,
+          "Spania": 1.02,
+          "India": 1,
+          "Nederland": 0.91,
+          "Italia": 0.87,
+          "Canada": 0.85,
+          "Andre": 3.17,
+          "Sør-Afrika": 0.87
         },
         "sectors": {
           "IT": 21.6,
@@ -6175,7 +6183,8 @@
           "Nederland": 1.42,
           "Spania": 1.16,
           "Sverige": 1.01,
-          "Andre": 3.65
+          "Italia": 0.87,
+          "Andre": 2.78
         },
         "sectors": {
           "IT": 26,
@@ -6249,17 +6258,26 @@
       "fond": {
         "name": "SB1 Alt-i-ett 20 N",
         "regions": {
-          "USA": 44.94,
-          "Norge": 17.26,
-          "Sverige": 8.12,
-          "Danmark": 4.47,
+          "USA": 46.04,
+          "Norge": 17.12,
+          "Sverige": 7.22,
+          "Danmark": 4.05,
           "Storbritannia": 3.03,
-          "Taiwan": 2.5,
-          "Frankrike": 2.46,
-          "Finland": 1.82,
-          "Sør-Korea": 1.72,
-          "Sveits": 1.63,
-          "Andre": 12.05
+          "Frankrike": 2.52,
+          "Taiwan": 2.51,
+          "Sveits": 1.8,
+          "Sør-Korea": 1.78,
+          "Finland": 1.6,
+          "Japan": 1.29,
+          "Kina": 1.26,
+          "Tyskland": 1.09,
+          "Spania": 1.02,
+          "India": 1,
+          "Nederland": 0.91,
+          "Italia": 0.87,
+          "Canada": 0.85,
+          "Andre": 3.17,
+          "Sør-Afrika": 0.87
         },
         "sectors": {
           "IT": 21.3,
@@ -6292,7 +6310,8 @@
           "Nederland": 1.42,
           "Spania": 1.16,
           "Sverige": 1.01,
-          "Andre": 3.65
+          "Italia": 0.87,
+          "Andre": 2.78
         },
         "sectors": {
           "IT": 26,
@@ -6325,7 +6344,8 @@
           "Nederland": 1.42,
           "Spania": 1.16,
           "Sverige": 1.01,
-          "Andre": 3.65
+          "Italia": 0.87,
+          "Andre": 2.78
         },
         "sectors": {
           "IT": 26,
