@@ -567,12 +567,9 @@ function renderCharts() {
     var projAgreements = DATA.savingsAgreements || {};
     var projMonthlyAgr = 0;
     Object.keys(projAgreements).forEach(function(k) { projMonthlyAgr += projAgreements[k]; });
-    var projRecentOwn = ownM.slice(-6).filter(function(x) { return x > 0; });
-    var projAvgOwn = projRecentOwn.length > 0 ? projRecentOwn.reduce(function(a,b){return a+b},0) / projRecentOwn.length : projMonthlyAgr;
-    var projAvgExtra = Math.max(projAvgOwn - projMonthlyAgr, 0);
     var projRecentEmp = totalEmployer.slice(-12).filter(function(x) { return x > 0; });
     var projAvgEmp = projRecentEmp.length > 0 ? projRecentEmp.reduce(function(a,b){return a+b},0) / projRecentEmp.length : 0;
-    var projMonthlySave = projMonthlyAgr + projAvgExtra + projAvgEmp;
+    var projMonthlySave = projMonthlyAgr + projAvgEmp;
     var projRate = 0.07 / 12;
 
     var futureThresholds = thresholds.filter(function(t) { return t > latest; });
@@ -792,21 +789,16 @@ function renderCharts() {
     // Projection / Prognose
     (function() {
         var currentVal = latest;
-        // Månedlig sparing: spareavtaler + snitt ekstra (siste 6 mnd)
+        // Månedlig sparing: kun faste avtaler + arbeidsgiver (ekstra er uforutsigbart)
         var agreements = DATA.savingsAgreements || {};
         var monthlyAgreement = 0;
         Object.keys(agreements).forEach(function(k) { monthlyAgreement += agreements[k]; });
-
-        // Snitt ekstra (egen sparing minus avtale, siste 6 mnd)
-        var recentOwn = ownM.slice(-6).filter(function(x) { return x > 0; });
-        var avgOwn = recentOwn.length > 0 ? recentOwn.reduce(function(a,b){return a+b},0) / recentOwn.length : monthlyAgreement;
-        var avgExtra = Math.max(avgOwn - monthlyAgreement, 0);
 
         // Snitt arbeidsgiver (siste 12 mnd)
         var recentEmp = totalEmployer.slice(-12).filter(function(x) { return x > 0; });
         var avgEmp = recentEmp.length > 0 ? recentEmp.reduce(function(a,b){return a+b},0) / recentEmp.length : 0;
 
-        var monthlySave = monthlyAgreement + avgExtra + avgEmp;
+        var monthlySave = monthlyAgreement + avgEmp;
 
         // Tre scenarier: konservativ (3%), moderat (7%), optimistisk (10%)
         var scenarios = [
@@ -909,10 +901,10 @@ function renderCharts() {
         });
         // Vis forutsetninger
         kpiHTML += '<div class="kpi"><div class="kpi-label">Forutsetninger</div>' +
-            '<div class="kpi-sub" style="line-height:1.6;">Avtale: ' + fmt(monthlyAgreement) + '/mnd<br>' +
-            'Ekstra: ~' + fmt(Math.round(avgExtra)) + '/mnd<br>' +
+            '<div class="kpi-sub" style="line-height:1.6;">Spareavtaler: ' + fmt(monthlyAgreement) + '/mnd<br>' +
             'Arbeidsgiver: ~' + fmt(Math.round(avgEmp)) + '/mnd<br>' +
-            '<strong style="color:var(--white);">Totalt: ' + fmt(Math.round(monthlySave)) + '/mnd</strong></div></div>';
+            '<strong style="color:var(--white);">Totalt: ' + fmt(Math.round(monthlySave)) + '/mnd</strong><br>' +
+            '<span style="color:var(--blue3);">Ekstra inkluderes ikke</span></div></div>';
 
         document.getElementById('projectionKpis').innerHTML = kpiHTML;
     })();
