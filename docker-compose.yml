@@ -23,6 +23,7 @@ services:
       - ./status.html:/usr/share/nginx/html/status.html:ro
       - ./heating.html:/usr/share/nginx/html/heating.html:ro
       - ./sparing.html:/usr/share/nginx/html/sparing.html:ro
+      - ./photos.html:/usr/share/nginx/html/photos.html:ro
       - ./logo.svg:/usr/share/nginx/html/logo.svg:ro
       - ./favicon.svg:/usr/share/nginx/html/favicon.svg:ro
       - ./tommy_skogstad_brand_guide.html:/usr/share/nginx/html/tommy_skogstad_brand_guide.html:ro
@@ -34,7 +35,10 @@ services:
       - ./footer.js:/usr/share/nginx/html/footer.js:ro
       - ./icons:/usr/share/nginx/html/icons:ro
       - ./sparing-data.json:/usr/share/nginx/html/sparing-data.json:ro
+      - ./sparing-anbefaling.json:/usr/share/nginx/html/sparing-anbefaling.json:ro
       - ./nginx.conf:/etc/nginx/nginx.conf:ro
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
     healthcheck:
       test: ["CMD-SHELL", "wget -q --spider http://127.0.0.1:80/ || exit 1"]
       interval: 30s

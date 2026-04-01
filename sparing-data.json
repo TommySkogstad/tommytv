@@ -19,7 +19,14 @@
       "name": "ASK",
       "provider": "SpareBank 1",
       "color": "#22d3ee",
-      "category": "investering"
+      "category": "investering",
+      "children": [
+        "ask_odin_global_d",
+        "ask_sb1_alt_i_ett_100",
+        "ask_sb1_indeks_global",
+        "ask_sb1_norge_verdi",
+        "ask_sb1_utbytte"
+      ]
     },
     {
       "id": "ips",
@@ -56,6 +63,13 @@
       "name": "Krypto",
       "provider": "Firi",
       "color": "#fb923c",
+      "category": "investering"
+    },
+    {
+      "id": "gull",
+      "name": "Gull",
+      "provider": "Nordnet",
+      "color": "#fbbf24",
       "category": "investering"
     },
     {
@@ -116,6 +130,30 @@
       "coop": [
         0,
         0
+      ],
+      "ask_odin_global_d": [
+        0,
+        0
+      ],
+      "ask_sb1_alt_i_ett_100": [
+        0,
+        0
+      ],
+      "ask_sb1_indeks_global": [
+        0,
+        0
+      ],
+      "ask_sb1_norge_verdi": [
+        0,
+        0
+      ],
+      "ask_sb1_utbytte": [
+        0,
+        0
+      ],
+      "gull": [
+        0,
+        0
       ]
     },
     {
@@ -157,6 +195,30 @@
         0
       ],
       "coop": [
+        0,
+        0
+      ],
+      "ask_odin_global_d": [
+        0,
+        0
+      ],
+      "ask_sb1_alt_i_ett_100": [
+        0,
+        0
+      ],
+      "ask_sb1_indeks_global": [
+        0,
+        0
+      ],
+      "ask_sb1_norge_verdi": [
+        0,
+        0
+      ],
+      "ask_sb1_utbytte": [
+        0,
+        0
+      ],
+      "gull": [
         0,
         0
       ]
@@ -202,6 +264,30 @@
       "coop": [
         0,
         0
+      ],
+      "ask_odin_global_d": [
+        0,
+        0
+      ],
+      "ask_sb1_alt_i_ett_100": [
+        0,
+        0
+      ],
+      "ask_sb1_indeks_global": [
+        0,
+        0
+      ],
+      "ask_sb1_norge_verdi": [
+        0,
+        0
+      ],
+      "ask_sb1_utbytte": [
+        0,
+        0
+      ],
+      "gull": [
+        0,
+        0
       ]
     },
     {
@@ -243,6 +329,30 @@
         0
       ],
       "coop": [
+        0,
+        0
+      ],
+      "ask_odin_global_d": [
+        0,
+        0
+      ],
+      "ask_sb1_alt_i_ett_100": [
+        0,
+        0
+      ],
+      "ask_sb1_indeks_global": [
+        0,
+        0
+      ],
+      "ask_sb1_norge_verdi": [
+        0,
+        0
+      ],
+      "ask_sb1_utbytte": [
+        0,
+        0
+      ],
+      "gull": [
         0,
         0
       ]
@@ -288,6 +398,30 @@
       "coop": [
         0,
         0
+      ],
+      "ask_odin_global_d": [
+        0,
+        0
+      ],
+      "ask_sb1_alt_i_ett_100": [
+        0,
+        0
+      ],
+      "ask_sb1_indeks_global": [
+        0,
+        0
+      ],
+      "ask_sb1_norge_verdi": [
+        0,
+        0
+      ],
+      "ask_sb1_utbytte": [
+        0,
+        0
+      ],
+      "gull": [
+        0,
+        0
       ]
     },
     {
@@ -329,6 +463,30 @@
         252
       ],
       "coop": [
+        0,
+        0
+      ],
+      "ask_odin_global_d": [
+        0,
+        0
+      ],
+      "ask_sb1_alt_i_ett_100": [
+        0,
+        0
+      ],
+      "ask_sb1_indeks_global": [
+        0,
+        0
+      ],
+      "ask_sb1_norge_verdi": [
+        0,
+        0
+      ],
+      "ask_sb1_utbytte": [
+        0,
+        0
+      ],
+      "gull": [
         0,
         0
       ]
@@ -374,6 +532,30 @@
       "coop": [
         0,
         0
+      ],
+      "ask_odin_global_d": [
+        0,
+        0
+      ],
+      "ask_sb1_alt_i_ett_100": [
+        0,
+        0
+      ],
+      "ask_sb1_indeks_global": [
+        0,
+        0
+      ],
+      "ask_sb1_norge_verdi": [
+        0,
+        0
+      ],
+      "ask_sb1_utbytte": [
+        0,
+        0
+      ],
+      "gull": [
+        0,
+        0
       ]
     },
     {
@@ -415,6 +597,30 @@
         178
       ],
       "coop": [
+        0,
+        0
+      ],
+      "ask_odin_global_d": [
+        0,
+        0
+      ],
+      "ask_sb1_alt_i_ett_100": [
+        0,
+        0
+      ],
+      "ask_sb1_indeks_global": [
+        0,
+        0
+      ],
+      "ask_sb1_norge_verdi": [
+        0,
+        0
+      ],
+      "ask_sb1_utbytte": [
+        0,
+        0
+      ],
+      "gull": [
         0,
         0
       ]
@@ -460,6 +666,30 @@
       "coop": [
         97,
         97
+      ],
+      "ask_odin_global_d": [
+        0,
+        0
+      ],
+      "ask_sb1_alt_i_ett_100": [
+        0,
+        0
+      ],
+      "ask_sb1_indeks_global": [
+        0,
+        0
+      ],
+      "ask_sb1_norge_verdi": [
+        0,
+        0
+      ],
+      "ask_sb1_utbytte": [
+        0,
+        0
+      ],
+      "gull": [
+        0,
+        0
       ]
     },
     {
@@ -503,6 +733,30 @@
       "coop": [
         180,
         83
+      ],
+      "ask_odin_global_d": [
+        0,
+        0
+      ],
+      "ask_sb1_alt_i_ett_100": [
+        0,
+        0
+      ],
+      "ask_sb1_indeks_global": [
+        0,
+        0
+      ],
+      "ask_sb1_norge_verdi": [
+        0,
+        0
+      ],
+      "ask_sb1_utbytte": [
+        0,
+        0
+      ],
+      "gull": [
+        0,
+        0
       ]
     },
     {
@@ -546,6 +800,30 @@
       "coop": [
         249,
         69
+      ],
+      "ask_odin_global_d": [
+        0,
+        0
+      ],
+      "ask_sb1_alt_i_ett_100": [
+        0,
+        0
+      ],
+      "ask_sb1_indeks_global": [
+        0,
+        0
+      ],
+      "ask_sb1_norge_verdi": [
+        0,
+        0
+      ],
+      "ask_sb1_utbytte": [
+        0,
+        0
+      ],
+      "gull": [
+        0,
+        0
       ]
     },
     {
@@ -589,6 +867,30 @@
       "coop": [
         480,
         231
+      ],
+      "ask_odin_global_d": [
+        0,
+        0
+      ],
+      "ask_sb1_alt_i_ett_100": [
+        0,
+        0
+      ],
+      "ask_sb1_indeks_global": [
+        0,
+        0
+      ],
+      "ask_sb1_norge_verdi": [
+        0,
+        0
+      ],
+      "ask_sb1_utbytte": [
+        0,
+        0
+      ],
+      "gull": [
+        0,
+        0
       ]
     },
     {
@@ -632,6 +934,30 @@
       "coop": [
         0,
         -480
+      ],
+      "ask_odin_global_d": [
+        0,
+        0
+      ],
+      "ask_sb1_alt_i_ett_100": [
+        0,
+        0
+      ],
+      "ask_sb1_indeks_global": [
+        0,
+        0
+      ],
+      "ask_sb1_norge_verdi": [
+        0,
+        0
+      ],
+      "ask_sb1_utbytte": [
+        0,
+        0
+      ],
+      "gull": [
+        0,
+        0
       ]
     },
     {
@@ -675,6 +1001,30 @@
       "coop": [
         86,
         86
+      ],
+      "ask_odin_global_d": [
+        0,
+        0
+      ],
+      "ask_sb1_alt_i_ett_100": [
+        0,
+        0
+      ],
+      "ask_sb1_indeks_global": [
+        0,
+        0
+      ],
+      "ask_sb1_norge_verdi": [
+        0,
+        0
+      ],
+      "ask_sb1_utbytte": [
+        0,
+        0
+      ],
+      "gull": [
+        0,
+        0
       ]
     },
     {
@@ -718,6 +1068,30 @@
       "coop": [
         250,
         164
+      ],
+      "ask_odin_global_d": [
+        0,
+        0
+      ],
+      "ask_sb1_alt_i_ett_100": [
+        0,
+        0
+      ],
+      "ask_sb1_indeks_global": [
+        0,
+        0
+      ],
+      "ask_sb1_norge_verdi": [
+        0,
+        0
+      ],
+      "ask_sb1_utbytte": [
+        0,
+        0
+      ],
+      "gull": [
+        0,
+        0
       ]
     },
     {
@@ -761,6 +1135,31 @@
       "coop": [
         368,
         118
+      ],
+      "ask_odin_global_d": [
+        0,
+        0
+      ],
+      "ask_sb1_alt_i_ett_100": [
+        0,
+        0
+      ],
+      "ask_sb1_indeks_global": [
+        0,
+        0
+      ],
+      "ask_sb1_norge_verdi": [
+        0,
+        0
+      ],
+      "ask_sb1_utbytte": [
+        0,
+        0
+      ],
+      "krypto_holdings": {},
+      "gull": [
+        0,
+        0
       ]
     },
     {
@@ -804,6 +1203,31 @@
       "coop": [
         485,
         117
+      ],
+      "ask_odin_global_d": [
+        0,
+        0
+      ],
+      "ask_sb1_alt_i_ett_100": [
+        0,
+        0
+      ],
+      "ask_sb1_indeks_global": [
+        0,
+        0
+      ],
+      "ask_sb1_norge_verdi": [
+        0,
+        0
+      ],
+      "ask_sb1_utbytte": [
+        0,
+        0
+      ],
+      "krypto_holdings": {},
+      "gull": [
+        0,
+        0
       ]
     },
     {
@@ -847,6 +1271,31 @@
       "coop": [
         538,
         53
+      ],
+      "ask_odin_global_d": [
+        0,
+        0
+      ],
+      "ask_sb1_alt_i_ett_100": [
+        0,
+        0
+      ],
+      "ask_sb1_indeks_global": [
+        0,
+        0
+      ],
+      "ask_sb1_norge_verdi": [
+        0,
+        0
+      ],
+      "ask_sb1_utbytte": [
+        0,
+        0
+      ],
+      "krypto_holdings": {},
+      "gull": [
+        0,
+        0
       ]
     },
     {
@@ -890,6 +1339,31 @@
       "coop": [
         577,
         39
+      ],
+      "ask_odin_global_d": [
+        0,
+        0
+      ],
+      "ask_sb1_alt_i_ett_100": [
+        0,
+        0
+      ],
+      "ask_sb1_indeks_global": [
+        0,
+        0
+      ],
+      "ask_sb1_norge_verdi": [
+        0,
+        0
+      ],
+      "ask_sb1_utbytte": [
+        0,
+        0
+      ],
+      "krypto_holdings": {},
+      "gull": [
+        0,
+        0
       ]
     },
     {
@@ -933,6 +1407,31 @@
       "coop": [
         676,
         99
+      ],
+      "ask_odin_global_d": [
+        0,
+        0
+      ],
+      "ask_sb1_alt_i_ett_100": [
+        0,
+        0
+      ],
+      "ask_sb1_indeks_global": [
+        0,
+        0
+      ],
+      "ask_sb1_norge_verdi": [
+        0,
+        0
+      ],
+      "ask_sb1_utbytte": [
+        0,
+        0
+      ],
+      "krypto_holdings": {},
+      "gull": [
+        0,
+        0
       ]
     },
     {
@@ -976,6 +1475,31 @@
       "coop": [
         791,
         115
+      ],
+      "ask_odin_global_d": [
+        0,
+        0
+      ],
+      "ask_sb1_alt_i_ett_100": [
+        0,
+        0
+      ],
+      "ask_sb1_indeks_global": [
+        0,
+        0
+      ],
+      "ask_sb1_norge_verdi": [
+        0,
+        0
+      ],
+      "ask_sb1_utbytte": [
+        0,
+        0
+      ],
+      "krypto_holdings": {},
+      "gull": [
+        0,
+        0
       ]
     },
     {
@@ -1019,6 +1543,31 @@
       "coop": [
         851,
         60
+      ],
+      "ask_odin_global_d": [
+        0,
+        0
+      ],
+      "ask_sb1_alt_i_ett_100": [
+        0,
+        0
+      ],
+      "ask_sb1_indeks_global": [
+        0,
+        0
+      ],
+      "ask_sb1_norge_verdi": [
+        0,
+        0
+      ],
+      "ask_sb1_utbytte": [
+        0,
+        0
+      ],
+      "krypto_holdings": {},
+      "gull": [
+        0,
+        0
       ]
     },
     {
@@ -1062,6 +1611,31 @@
       "coop": [
         929,
         78
+      ],
+      "ask_odin_global_d": [
+        0,
+        0
+      ],
+      "ask_sb1_alt_i_ett_100": [
+        0,
+        0
+      ],
+      "ask_sb1_indeks_global": [
+        0,
+        0
+      ],
+      "ask_sb1_norge_verdi": [
+        0,
+        0
+      ],
+      "ask_sb1_utbytte": [
+        0,
+        0
+      ],
+      "krypto_holdings": {},
+      "gull": [
+        0,
+        0
       ]
     },
     {
@@ -1105,6 +1679,31 @@
       "coop": [
         1015,
         86
+      ],
+      "ask_odin_global_d": [
+        0,
+        0
+      ],
+      "ask_sb1_alt_i_ett_100": [
+        0,
+        0
+      ],
+      "ask_sb1_indeks_global": [
+        0,
+        0
+      ],
+      "ask_sb1_norge_verdi": [
+        0,
+        0
+      ],
+      "ask_sb1_utbytte": [
+        0,
+        0
+      ],
+      "krypto_holdings": {},
+      "gull": [
+        0,
+        0
       ]
     },
     {
@@ -1148,6 +1747,31 @@
       "coop": [
         0,
         -1015
+      ],
+      "ask_odin_global_d": [
+        0,
+        0
+      ],
+      "ask_sb1_alt_i_ett_100": [
+        0,
+        0
+      ],
+      "ask_sb1_indeks_global": [
+        0,
+        0
+      ],
+      "ask_sb1_norge_verdi": [
+        0,
+        0
+      ],
+      "ask_sb1_utbytte": [
+        0,
+        0
+      ],
+      "krypto_holdings": {},
+      "gull": [
+        0,
+        0
       ]
     },
     {
@@ -1191,6 +1815,31 @@
       "coop": [
         244,
         244
+      ],
+      "ask_odin_global_d": [
+        0,
+        0
+      ],
+      "ask_sb1_alt_i_ett_100": [
+        0,
+        0
+      ],
+      "ask_sb1_indeks_global": [
+        0,
+        0
+      ],
+      "ask_sb1_norge_verdi": [
+        0,
+        0
+      ],
+      "ask_sb1_utbytte": [
+        0,
+        0
+      ],
+      "krypto_holdings": {},
+      "gull": [
+        0,
+        0
       ]
     },
     {
@@ -1234,6 +1883,31 @@
       "coop": [
         467,
         223
+      ],
+      "ask_odin_global_d": [
+        0,
+        0
+      ],
+      "ask_sb1_alt_i_ett_100": [
+        0,
+        0
+      ],
+      "ask_sb1_indeks_global": [
+        0,
+        0
+      ],
+      "ask_sb1_norge_verdi": [
+        0,
+        0
+      ],
+      "ask_sb1_utbytte": [
+        0,
+        0
+      ],
+      "krypto_holdings": {},
+      "gull": [
+        0,
+        0
       ]
     },
     {
@@ -1277,6 +1951,31 @@
       "coop": [
         619,
         152
+      ],
+      "ask_odin_global_d": [
+        0,
+        0
+      ],
+      "ask_sb1_alt_i_ett_100": [
+        0,
+        0
+      ],
+      "ask_sb1_indeks_global": [
+        0,
+        0
+      ],
+      "ask_sb1_norge_verdi": [
+        0,
+        0
+      ],
+      "ask_sb1_utbytte": [
+        0,
+        0
+      ],
+      "krypto_holdings": {},
+      "gull": [
+        0,
+        0
       ]
     },
     {
@@ -1320,6 +2019,31 @@
       "coop": [
         895,
         276
+      ],
+      "ask_odin_global_d": [
+        0,
+        0
+      ],
+      "ask_sb1_alt_i_ett_100": [
+        0,
+        0
+      ],
+      "ask_sb1_indeks_global": [
+        0,
+        0
+      ],
+      "ask_sb1_norge_verdi": [
+        0,
+        0
+      ],
+      "ask_sb1_utbytte": [
+        0,
+        0
+      ],
+      "krypto_holdings": {},
+      "gull": [
+        0,
+        0
       ]
     },
     {
@@ -1363,6 +2087,31 @@
       "coop": [
         1116,
         221
+      ],
+      "ask_odin_global_d": [
+        0,
+        0
+      ],
+      "ask_sb1_alt_i_ett_100": [
+        0,
+        0
+      ],
+      "ask_sb1_indeks_global": [
+        0,
+        0
+      ],
+      "ask_sb1_norge_verdi": [
+        0,
+        0
+      ],
+      "ask_sb1_utbytte": [
+        0,
+        0
+      ],
+      "krypto_holdings": {},
+      "gull": [
+        0,
+        0
       ]
     },
     {
@@ -1406,6 +2155,31 @@
       "coop": [
         1333,
         217
+      ],
+      "ask_odin_global_d": [
+        0,
+        0
+      ],
+      "ask_sb1_alt_i_ett_100": [
+        0,
+        0
+      ],
+      "ask_sb1_indeks_global": [
+        0,
+        0
+      ],
+      "ask_sb1_norge_verdi": [
+        0,
+        0
+      ],
+      "ask_sb1_utbytte": [
+        0,
+        0
+      ],
+      "krypto_holdings": {},
+      "gull": [
+        0,
+        0
       ]
     },
     {
@@ -1449,6 +2223,31 @@
       "coop": [
         1444,
         111
+      ],
+      "ask_odin_global_d": [
+        0,
+        0
+      ],
+      "ask_sb1_alt_i_ett_100": [
+        0,
+        0
+      ],
+      "ask_sb1_indeks_global": [
+        0,
+        0
+      ],
+      "ask_sb1_norge_verdi": [
+        0,
+        0
+      ],
+      "ask_sb1_utbytte": [
+        0,
+        0
+      ],
+      "krypto_holdings": {},
+      "gull": [
+        0,
+        0
       ]
     },
     {
@@ -1492,6 +2291,31 @@
       "coop": [
         1508,
         64
+      ],
+      "ask_odin_global_d": [
+        0,
+        0
+      ],
+      "ask_sb1_alt_i_ett_100": [
+        0,
+        0
+      ],
+      "ask_sb1_indeks_global": [
+        0,
+        0
+      ],
+      "ask_sb1_norge_verdi": [
+        0,
+        0
+      ],
+      "ask_sb1_utbytte": [
+        0,
+        0
+      ],
+      "krypto_holdings": {},
+      "gull": [
+        0,
+        0
       ]
     },
     {
@@ -1535,6 +2359,31 @@
       "coop": [
         1585,
         77
+      ],
+      "ask_odin_global_d": [
+        0,
+        0
+      ],
+      "ask_sb1_alt_i_ett_100": [
+        0,
+        0
+      ],
+      "ask_sb1_indeks_global": [
+        0,
+        0
+      ],
+      "ask_sb1_norge_verdi": [
+        0,
+        0
+      ],
+      "ask_sb1_utbytte": [
+        0,
+        0
+      ],
+      "krypto_holdings": {},
+      "gull": [
+        0,
+        0
       ]
     },
     {
@@ -1578,6 +2427,31 @@
       "coop": [
         1430,
         -155
+      ],
+      "ask_odin_global_d": [
+        0,
+        0
+      ],
+      "ask_sb1_alt_i_ett_100": [
+        0,
+        0
+      ],
+      "ask_sb1_indeks_global": [
+        0,
+        0
+      ],
+      "ask_sb1_norge_verdi": [
+        0,
+        0
+      ],
+      "ask_sb1_utbytte": [
+        0,
+        0
+      ],
+      "krypto_holdings": {},
+      "gull": [
+        0,
+        0
       ]
     },
     {
@@ -1621,6 +2495,31 @@
       "coop": [
         1647,
         217
+      ],
+      "ask_odin_global_d": [
+        0,
+        0
+      ],
+      "ask_sb1_alt_i_ett_100": [
+        0,
+        0
+      ],
+      "ask_sb1_indeks_global": [
+        0,
+        0
+      ],
+      "ask_sb1_norge_verdi": [
+        0,
+        0
+      ],
+      "ask_sb1_utbytte": [
+        0,
+        0
+      ],
+      "krypto_holdings": {},
+      "gull": [
+        0,
+        0
       ]
     },
     {
@@ -1664,6 +2563,31 @@
       "coop": [
         3,
         -1644
+      ],
+      "ask_odin_global_d": [
+        0,
+        0
+      ],
+      "ask_sb1_alt_i_ett_100": [
+        0,
+        0
+      ],
+      "ask_sb1_indeks_global": [
+        0,
+        0
+      ],
+      "ask_sb1_norge_verdi": [
+        0,
+        0
+      ],
+      "ask_sb1_utbytte": [
+        0,
+        0
+      ],
+      "krypto_holdings": {},
+      "gull": [
+        0,
+        0
       ]
     },
     {
@@ -1707,6 +2631,31 @@
       "coop": [
         21,
         18
+      ],
+      "ask_odin_global_d": [
+        0,
+        0
+      ],
+      "ask_sb1_alt_i_ett_100": [
+        0,
+        0
+      ],
+      "ask_sb1_indeks_global": [
+        0,
+        0
+      ],
+      "ask_sb1_norge_verdi": [
+        0,
+        0
+      ],
+      "ask_sb1_utbytte": [
+        0,
+        0
+      ],
+      "krypto_holdings": {},
+      "gull": [
+        0,
+        0
       ]
     },
     {
@@ -1750,6 +2699,31 @@
       "coop": [
         39,
         18
+      ],
+      "ask_odin_global_d": [
+        0,
+        0
+      ],
+      "ask_sb1_alt_i_ett_100": [
+        0,
+        0
+      ],
+      "ask_sb1_indeks_global": [
+        0,
+        0
+      ],
+      "ask_sb1_norge_verdi": [
+        0,
+        0
+      ],
+      "ask_sb1_utbytte": [
+        0,
+        0
+      ],
+      "krypto_holdings": {},
+      "gull": [
+        0,
+        0
       ]
     },
     {
@@ -1793,6 +2767,31 @@
       "coop": [
         105,
         66
+      ],
+      "ask_odin_global_d": [
+        0,
+        0
+      ],
+      "ask_sb1_alt_i_ett_100": [
+        0,
+        0
+      ],
+      "ask_sb1_indeks_global": [
+        0,
+        0
+      ],
+      "ask_sb1_norge_verdi": [
+        0,
+        0
+      ],
+      "ask_sb1_utbytte": [
+        0,
+        0
+      ],
+      "krypto_holdings": {},
+      "gull": [
+        0,
+        0
       ]
     },
     {
@@ -1836,6 +2835,31 @@
       "coop": [
         217,
         112
+      ],
+      "ask_odin_global_d": [
+        0,
+        0
+      ],
+      "ask_sb1_alt_i_ett_100": [
+        0,
+        0
+      ],
+      "ask_sb1_indeks_global": [
+        0,
+        0
+      ],
+      "ask_sb1_norge_verdi": [
+        0,
+        0
+      ],
+      "ask_sb1_utbytte": [
+        0,
+        0
+      ],
+      "krypto_holdings": {},
+      "gull": [
+        0,
+        0
       ]
     },
     {
@@ -1879,6 +2903,31 @@
       "coop": [
         242,
         25
+      ],
+      "ask_odin_global_d": [
+        0,
+        0
+      ],
+      "ask_sb1_alt_i_ett_100": [
+        0,
+        0
+      ],
+      "ask_sb1_indeks_global": [
+        0,
+        0
+      ],
+      "ask_sb1_norge_verdi": [
+        0,
+        0
+      ],
+      "ask_sb1_utbytte": [
+        0,
+        0
+      ],
+      "krypto_holdings": {},
+      "gull": [
+        0,
+        0
       ]
     },
     {
@@ -1922,6 +2971,31 @@
       "coop": [
         334,
         92
+      ],
+      "ask_odin_global_d": [
+        0,
+        0
+      ],
+      "ask_sb1_alt_i_ett_100": [
+        0,
+        0
+      ],
+      "ask_sb1_indeks_global": [
+        0,
+        0
+      ],
+      "ask_sb1_norge_verdi": [
+        0,
+        0
+      ],
+      "ask_sb1_utbytte": [
+        0,
+        0
+      ],
+      "krypto_holdings": {},
+      "gull": [
+        0,
+        0
       ]
     },
     {
@@ -1965,6 +3039,31 @@
       "coop": [
         392,
         58
+      ],
+      "ask_odin_global_d": [
+        0,
+        0
+      ],
+      "ask_sb1_alt_i_ett_100": [
+        0,
+        0
+      ],
+      "ask_sb1_indeks_global": [
+        0,
+        0
+      ],
+      "ask_sb1_norge_verdi": [
+        0,
+        0
+      ],
+      "ask_sb1_utbytte": [
+        0,
+        0
+      ],
+      "krypto_holdings": {},
+      "gull": [
+        0,
+        0
       ]
     },
     {
@@ -2008,6 +3107,31 @@
       "coop": [
         424,
         32
+      ],
+      "ask_odin_global_d": [
+        0,
+        0
+      ],
+      "ask_sb1_alt_i_ett_100": [
+        0,
+        0
+      ],
+      "ask_sb1_indeks_global": [
+        0,
+        0
+      ],
+      "ask_sb1_norge_verdi": [
+        0,
+        0
+      ],
+      "ask_sb1_utbytte": [
+        0,
+        0
+      ],
+      "krypto_holdings": {},
+      "gull": [
+        0,
+        0
       ]
     },
     {
@@ -2051,6 +3175,31 @@
       "coop": [
         505,
         81
+      ],
+      "ask_odin_global_d": [
+        0,
+        0
+      ],
+      "ask_sb1_alt_i_ett_100": [
+        0,
+        0
+      ],
+      "ask_sb1_indeks_global": [
+        0,
+        0
+      ],
+      "ask_sb1_norge_verdi": [
+        0,
+        0
+      ],
+      "ask_sb1_utbytte": [
+        0,
+        0
+      ],
+      "krypto_holdings": {},
+      "gull": [
+        0,
+        0
       ]
     },
     {
@@ -2094,6 +3243,31 @@
       "coop": [
         584,
         79
+      ],
+      "ask_odin_global_d": [
+        0,
+        0
+      ],
+      "ask_sb1_alt_i_ett_100": [
+        0,
+        0
+      ],
+      "ask_sb1_indeks_global": [
+        0,
+        0
+      ],
+      "ask_sb1_norge_verdi": [
+        0,
+        0
+      ],
+      "ask_sb1_utbytte": [
+        0,
+        0
+      ],
+      "krypto_holdings": {},
+      "gull": [
+        0,
+        0
       ]
     },
     {
@@ -2137,6 +3311,31 @@
       "coop": [
         635,
         51
+      ],
+      "ask_odin_global_d": [
+        0,
+        0
+      ],
+      "ask_sb1_alt_i_ett_100": [
+        0,
+        0
+      ],
+      "ask_sb1_indeks_global": [
+        0,
+        0
+      ],
+      "ask_sb1_norge_verdi": [
+        0,
+        0
+      ],
+      "ask_sb1_utbytte": [
+        0,
+        0
+      ],
+      "krypto_holdings": {},
+      "gull": [
+        0,
+        0
       ]
     },
     {
@@ -2180,6 +3379,31 @@
       "coop": [
         13,
         -622
+      ],
+      "ask_odin_global_d": [
+        0,
+        0
+      ],
+      "ask_sb1_alt_i_ett_100": [
+        0,
+        0
+      ],
+      "ask_sb1_indeks_global": [
+        0,
+        0
+      ],
+      "ask_sb1_norge_verdi": [
+        0,
+        0
+      ],
+      "ask_sb1_utbytte": [
+        0,
+        0
+      ],
+      "krypto_holdings": {},
+      "gull": [
+        0,
+        0
       ]
     },
     {
@@ -2223,6 +3447,31 @@
       "coop": [
         30,
         17
+      ],
+      "ask_odin_global_d": [
+        0,
+        0
+      ],
+      "ask_sb1_alt_i_ett_100": [
+        0,
+        0
+      ],
+      "ask_sb1_indeks_global": [
+        0,
+        0
+      ],
+      "ask_sb1_norge_verdi": [
+        0,
+        0
+      ],
+      "ask_sb1_utbytte": [
+        0,
+        0
+      ],
+      "krypto_holdings": {},
+      "gull": [
+        0,
+        0
       ]
     },
     {
@@ -2266,6 +3515,31 @@
       "coop": [
         75,
         45
+      ],
+      "ask_odin_global_d": [
+        0,
+        0
+      ],
+      "ask_sb1_alt_i_ett_100": [
+        0,
+        0
+      ],
+      "ask_sb1_indeks_global": [
+        0,
+        0
+      ],
+      "ask_sb1_norge_verdi": [
+        0,
+        0
+      ],
+      "ask_sb1_utbytte": [
+        0,
+        0
+      ],
+      "krypto_holdings": {},
+      "gull": [
+        0,
+        0
       ]
     },
     {
@@ -2309,6 +3583,31 @@
       "coop": [
         117,
         42
+      ],
+      "ask_odin_global_d": [
+        0,
+        0
+      ],
+      "ask_sb1_alt_i_ett_100": [
+        0,
+        0
+      ],
+      "ask_sb1_indeks_global": [
+        0,
+        0
+      ],
+      "ask_sb1_norge_verdi": [
+        0,
+        0
+      ],
+      "ask_sb1_utbytte": [
+        0,
+        0
+      ],
+      "krypto_holdings": {},
+      "gull": [
+        0,
+        0
       ]
     },
     {
@@ -2352,6 +3651,31 @@
       "coop": [
         190,
         73
+      ],
+      "ask_odin_global_d": [
+        0,
+        0
+      ],
+      "ask_sb1_alt_i_ett_100": [
+        0,
+        0
+      ],
+      "ask_sb1_indeks_global": [
+        0,
+        0
+      ],
+      "ask_sb1_norge_verdi": [
+        0,
+        0
+      ],
+      "ask_sb1_utbytte": [
+        0,
+        0
+      ],
+      "krypto_holdings": {},
+      "gull": [
+        0,
+        0
       ]
     },
     {
@@ -2395,6 +3719,31 @@
       "coop": [
         259,
         69
+      ],
+      "ask_odin_global_d": [
+        0,
+        0
+      ],
+      "ask_sb1_alt_i_ett_100": [
+        0,
+        0
+      ],
+      "ask_sb1_indeks_global": [
+        0,
+        0
+      ],
+      "ask_sb1_norge_verdi": [
+        0,
+        0
+      ],
+      "ask_sb1_utbytte": [
+        0,
+        0
+      ],
+      "krypto_holdings": {},
+      "gull": [
+        0,
+        0
       ]
     },
     {
@@ -2438,6 +3787,31 @@
       "coop": [
         327,
         68
+      ],
+      "ask_odin_global_d": [
+        0,
+        0
+      ],
+      "ask_sb1_alt_i_ett_100": [
+        0,
+        0
+      ],
+      "ask_sb1_indeks_global": [
+        0,
+        0
+      ],
+      "ask_sb1_norge_verdi": [
+        0,
+        0
+      ],
+      "ask_sb1_utbytte": [
+        0,
+        0
+      ],
+      "krypto_holdings": {},
+      "gull": [
+        0,
+        0
       ]
     },
     {
@@ -2481,6 +3855,31 @@
       "coop": [
         366,
         39
+      ],
+      "ask_odin_global_d": [
+        0,
+        0
+      ],
+      "ask_sb1_alt_i_ett_100": [
+        0,
+        0
+      ],
+      "ask_sb1_indeks_global": [
+        0,
+        0
+      ],
+      "ask_sb1_norge_verdi": [
+        0,
+        0
+      ],
+      "ask_sb1_utbytte": [
+        0,
+        0
+      ],
+      "krypto_holdings": {},
+      "gull": [
+        0,
+        0
       ]
     },
     {
@@ -2524,6 +3923,31 @@
       "coop": [
         418,
         52
+      ],
+      "ask_odin_global_d": [
+        0,
+        0
+      ],
+      "ask_sb1_alt_i_ett_100": [
+        0,
+        0
+      ],
+      "ask_sb1_indeks_global": [
+        0,
+        0
+      ],
+      "ask_sb1_norge_verdi": [
+        0,
+        0
+      ],
+      "ask_sb1_utbytte": [
+        0,
+        0
+      ],
+      "krypto_holdings": {},
+      "gull": [
+        0,
+        0
       ]
     },
     {
@@ -2567,6 +3991,31 @@
       "coop": [
         460,
         42
+      ],
+      "ask_odin_global_d": [
+        0,
+        0
+      ],
+      "ask_sb1_alt_i_ett_100": [
+        0,
+        0
+      ],
+      "ask_sb1_indeks_global": [
+        0,
+        0
+      ],
+      "ask_sb1_norge_verdi": [
+        0,
+        0
+      ],
+      "ask_sb1_utbytte": [
+        0,
+        0
+      ],
+      "krypto_holdings": {},
+      "gull": [
+        0,
+        0
       ]
     },
     {
@@ -2610,6 +4059,31 @@
       "coop": [
         497,
         37
+      ],
+      "ask_odin_global_d": [
+        0,
+        0
+      ],
+      "ask_sb1_alt_i_ett_100": [
+        0,
+        0
+      ],
+      "ask_sb1_indeks_global": [
+        0,
+        0
+      ],
+      "ask_sb1_norge_verdi": [
+        0,
+        0
+      ],
+      "ask_sb1_utbytte": [
+        0,
+        0
+      ],
+      "krypto_holdings": {},
+      "gull": [
+        0,
+        0
       ]
     },
     {
@@ -2653,6 +4127,31 @@
       "coop": [
         528,
         31
+      ],
+      "ask_odin_global_d": [
+        0,
+        0
+      ],
+      "ask_sb1_alt_i_ett_100": [
+        0,
+        0
+      ],
+      "ask_sb1_indeks_global": [
+        0,
+        0
+      ],
+      "ask_sb1_norge_verdi": [
+        0,
+        0
+      ],
+      "ask_sb1_utbytte": [
+        0,
+        0
+      ],
+      "krypto_holdings": {},
+      "gull": [
+        0,
+        0
       ]
     },
     {
@@ -2696,6 +4195,31 @@
       "coop": [
         17,
         -511
+      ],
+      "ask_odin_global_d": [
+        0,
+        0
+      ],
+      "ask_sb1_alt_i_ett_100": [
+        0,
+        0
+      ],
+      "ask_sb1_indeks_global": [
+        0,
+        0
+      ],
+      "ask_sb1_norge_verdi": [
+        0,
+        0
+      ],
+      "ask_sb1_utbytte": [
+        0,
+        0
+      ],
+      "krypto_holdings": {},
+      "gull": [
+        0,
+        0
       ]
     },
     {
@@ -2739,6 +4263,31 @@
       "coop": [
         32,
         15
+      ],
+      "ask_odin_global_d": [
+        0,
+        0
+      ],
+      "ask_sb1_alt_i_ett_100": [
+        0,
+        0
+      ],
+      "ask_sb1_indeks_global": [
+        0,
+        0
+      ],
+      "ask_sb1_norge_verdi": [
+        0,
+        0
+      ],
+      "ask_sb1_utbytte": [
+        0,
+        0
+      ],
+      "krypto_holdings": {},
+      "gull": [
+        0,
+        0
       ]
     },
     {
@@ -2782,6 +4331,31 @@
       "coop": [
         40,
         8
+      ],
+      "ask_odin_global_d": [
+        0,
+        0
+      ],
+      "ask_sb1_alt_i_ett_100": [
+        0,
+        0
+      ],
+      "ask_sb1_indeks_global": [
+        0,
+        0
+      ],
+      "ask_sb1_norge_verdi": [
+        0,
+        0
+      ],
+      "ask_sb1_utbytte": [
+        0,
+        0
+      ],
+      "krypto_holdings": {},
+      "gull": [
+        0,
+        0
       ]
     },
     {
@@ -2825,6 +4399,31 @@
       "coop": [
         43,
         3
+      ],
+      "ask_odin_global_d": [
+        0,
+        0
+      ],
+      "ask_sb1_alt_i_ett_100": [
+        0,
+        0
+      ],
+      "ask_sb1_indeks_global": [
+        0,
+        0
+      ],
+      "ask_sb1_norge_verdi": [
+        0,
+        0
+      ],
+      "ask_sb1_utbytte": [
+        0,
+        0
+      ],
+      "krypto_holdings": {},
+      "gull": [
+        0,
+        0
       ]
     },
     {
@@ -2868,6 +4467,31 @@
       "coop": [
         98,
         55
+      ],
+      "ask_odin_global_d": [
+        0,
+        0
+      ],
+      "ask_sb1_alt_i_ett_100": [
+        0,
+        0
+      ],
+      "ask_sb1_indeks_global": [
+        0,
+        0
+      ],
+      "ask_sb1_norge_verdi": [
+        0,
+        0
+      ],
+      "ask_sb1_utbytte": [
+        0,
+        0
+      ],
+      "krypto_holdings": {},
+      "gull": [
+        0,
+        0
       ]
     },
     {
@@ -2911,6 +4535,31 @@
       "coop": [
         154,
         56
+      ],
+      "ask_odin_global_d": [
+        0,
+        0
+      ],
+      "ask_sb1_alt_i_ett_100": [
+        0,
+        0
+      ],
+      "ask_sb1_indeks_global": [
+        0,
+        0
+      ],
+      "ask_sb1_norge_verdi": [
+        0,
+        0
+      ],
+      "ask_sb1_utbytte": [
+        0,
+        0
+      ],
+      "krypto_holdings": {},
+      "gull": [
+        0,
+        0
       ]
     },
     {
@@ -2954,6 +4603,31 @@
       "coop": [
         168,
         14
+      ],
+      "ask_odin_global_d": [
+        0,
+        0
+      ],
+      "ask_sb1_alt_i_ett_100": [
+        0,
+        0
+      ],
+      "ask_sb1_indeks_global": [
+        0,
+        0
+      ],
+      "ask_sb1_norge_verdi": [
+        0,
+        0
+      ],
+      "ask_sb1_utbytte": [
+        0,
+        0
+      ],
+      "krypto_holdings": {},
+      "gull": [
+        0,
+        0
       ]
     },
     {
@@ -2996,6 +4670,31 @@
       ],
       "coop": [
         168,
+        0
+      ],
+      "ask_odin_global_d": [
+        0,
+        0
+      ],
+      "ask_sb1_alt_i_ett_100": [
+        0,
+        0
+      ],
+      "ask_sb1_indeks_global": [
+        0,
+        0
+      ],
+      "ask_sb1_norge_verdi": [
+        0,
+        0
+      ],
+      "ask_sb1_utbytte": [
+        0,
+        0
+      ],
+      "krypto_holdings": {},
+      "gull": [
+        0,
         0
       ]
     },
@@ -3040,6 +4739,31 @@
       "coop": [
         169,
         1
+      ],
+      "ask_odin_global_d": [
+        0,
+        0
+      ],
+      "ask_sb1_alt_i_ett_100": [
+        0,
+        0
+      ],
+      "ask_sb1_indeks_global": [
+        0,
+        0
+      ],
+      "ask_sb1_norge_verdi": [
+        0,
+        0
+      ],
+      "ask_sb1_utbytte": [
+        0,
+        0
+      ],
+      "krypto_holdings": {},
+      "gull": [
+        0,
+        0
       ]
     },
     {
@@ -3082,6 +4806,31 @@
       ],
       "coop": [
         169,
+        0
+      ],
+      "ask_odin_global_d": [
+        0,
+        0
+      ],
+      "ask_sb1_alt_i_ett_100": [
+        0,
+        0
+      ],
+      "ask_sb1_indeks_global": [
+        0,
+        0
+      ],
+      "ask_sb1_norge_verdi": [
+        0,
+        0
+      ],
+      "ask_sb1_utbytte": [
+        0,
+        0
+      ],
+      "krypto_holdings": {},
+      "gull": [
+        0,
         0
       ]
     },
@@ -3126,6 +4875,31 @@
       "coop": [
         172,
         3
+      ],
+      "ask_odin_global_d": [
+        0,
+        0
+      ],
+      "ask_sb1_alt_i_ett_100": [
+        0,
+        0
+      ],
+      "ask_sb1_indeks_global": [
+        0,
+        0
+      ],
+      "ask_sb1_norge_verdi": [
+        0,
+        0
+      ],
+      "ask_sb1_utbytte": [
+        0,
+        0
+      ],
+      "krypto_holdings": {},
+      "gull": [
+        0,
+        0
       ]
     },
     {
@@ -3169,6 +4943,31 @@
       "coop": [
         193,
         21
+      ],
+      "ask_odin_global_d": [
+        0,
+        0
+      ],
+      "ask_sb1_alt_i_ett_100": [
+        0,
+        0
+      ],
+      "ask_sb1_indeks_global": [
+        0,
+        0
+      ],
+      "ask_sb1_norge_verdi": [
+        0,
+        0
+      ],
+      "ask_sb1_utbytte": [
+        0,
+        0
+      ],
+      "krypto_holdings": {},
+      "gull": [
+        0,
+        0
       ]
     },
     {
@@ -3212,6 +5011,31 @@
       "coop": [
         13,
         -180
+      ],
+      "ask_odin_global_d": [
+        0,
+        0
+      ],
+      "ask_sb1_alt_i_ett_100": [
+        0,
+        0
+      ],
+      "ask_sb1_indeks_global": [
+        0,
+        0
+      ],
+      "ask_sb1_norge_verdi": [
+        0,
+        0
+      ],
+      "ask_sb1_utbytte": [
+        0,
+        0
+      ],
+      "krypto_holdings": {},
+      "gull": [
+        0,
+        0
       ]
     },
     {
@@ -3255,7 +5079,431 @@
       "coop": [
         14,
         1
+      ],
+      "ask_odin_global_d": [
+        0,
+        0
+      ],
+      "ask_sb1_alt_i_ett_100": [
+        0,
+        0
+      ],
+      "ask_sb1_indeks_global": [
+        0,
+        0
+      ],
+      "ask_sb1_norge_verdi": [
+        0,
+        0
+      ],
+      "ask_sb1_utbytte": [
+        0,
+        0
+      ],
+      "krypto_holdings": {
+        "BTC": 0.00252848,
+        "DOGE": 108.51241815,
+        "ETH": 0.00022417,
+        "ETH_staking": 0.04659498
+      },
+      "gull": [
+        0,
+        0
       ]
+    },
+    {
+      "month": "2026-03",
+      "innskuddspensjon": [
+        557390,
+        6229
+      ],
+      "fond": [
+        74132,
+        2500
+      ],
+      "ask": [
+        104464,
+        12000
+      ],
+      "ask_odin_global_d": [
+        8064,
+        200
+      ],
+      "ask_sb1_alt_i_ett_100": [
+        10459,
+        500
+      ],
+      "ask_sb1_indeks_global": [
+        9794,
+        200
+      ],
+      "ask_sb1_norge_verdi": [
+        6386,
+        100
+      ],
+      "ask_sb1_utbytte": [
+        69761,
+        11000
+      ],
+      "ips": [
+        76086,
+        500
+      ],
+      "bsu": [
+        0,
+        0
+      ],
+      "pensjonskapitalbevis": [
+        0,
+        0
+      ],
+      "crowdfunding": [
+        663,
+        0
+      ],
+      "krypto": [
+        2715,
+        0
+      ],
+      "gull": [
+        0,
+        0
+      ],
+      "cashback": [
+        0,
+        0
+      ],
+      "coop": [
+        17,
+        0
+      ],
+      "krypto_holdings": {
+        "BTC": 0.00252848,
+        "DOGE": 108.51241815,
+        "ETH": 0.00022417,
+        "ETH_staking": 0.04659498
+      }
     }
-  ]
+  ],
+  "fundAllocations": {
+    "updatedAt": "2026-04",
+    "funds": {
+      "ask_odin_global_d": {
+        "name": "ODIN Global D",
+        "regions": {
+          "USA": 53.76,
+          "Storbritannia": 15.92,
+          "Taiwan": 4.69,
+          "Sveits": 4.56,
+          "Nederland": 4.07,
+          "Sverige": 3.37,
+          "Canada": 3.36,
+          "India": 3.13,
+          "Danmark": 2.44,
+          "Italia": 2.42,
+          "Tyskland": 2.28
+        },
+        "sectors": {
+          "IT": 32.13,
+          "Industri": 23.35,
+          "Helse": 15.74,
+          "Finans": 14.03,
+          "Materialer": 6.31,
+          "Telekom": 4.21,
+          "Forbruksvarer": 2.16,
+          "Konsumvarer": 2.08
+        },
+        "riskScore": 4,
+        "riskLabel": "Høy",
+        "riskNote": "Aktivt forvaltet, konsentrert"
+      },
+      "ask_sb1_alt_i_ett_100": {
+        "name": "SB1 Alt-i-ett 100 N",
+        "regions": {
+          "USA": 46.04,
+          "Norge": 17.12,
+          "Sverige": 7.22,
+          "Danmark": 4.05,
+          "Storbritannia": 3.03,
+          "Frankrike": 2.52,
+          "Taiwan": 2.51,
+          "Sveits": 1.8,
+          "Sør-Korea": 1.78,
+          "Finland": 1.6,
+          "Japan": 1.29,
+          "Andre": 11.04
+        },
+        "sectors": {
+          "IT": 21.6,
+          "Industri": 18.93,
+          "Finans": 17.4,
+          "Helse": 9.38,
+          "Forbruksvarer": 7.83,
+          "Konsumvarer": 7.65,
+          "Telekom": 6.24,
+          "Materialer": 4.72,
+          "Energi": 4.28,
+          "Forsyning": 1.53,
+          "Eiendom": 0.45
+        },
+        "riskScore": 3,
+        "riskLabel": "Moderat",
+        "riskNote": "100% aksjer, bredt diversifisert"
+      },
+      "ask_sb1_indeks_global": {
+        "name": "SB1 Indeks Global N",
+        "regions": {
+          "USA": 69.67,
+          "Japan": 6.31,
+          "Storbritannia": 3.82,
+          "Canada": 3.37,
+          "Sveits": 2.92,
+          "Tyskland": 2.59,
+          "Frankrike": 2.33,
+          "Australia": 1.75,
+          "Nederland": 1.42,
+          "Spania": 1.16,
+          "Sverige": 1.01,
+          "Andre": 3.65
+        },
+        "sectors": {
+          "IT": 26,
+          "Finans": 16.24,
+          "Industri": 11.74,
+          "Helse": 9.99,
+          "Konsumvarer": 9.32,
+          "Telekom": 8.83,
+          "Forbruksvarer": 5.67,
+          "Energi": 4.06,
+          "Materialer": 3.6,
+          "Forsyning": 2.64,
+          "Eiendom": 1.9
+        },
+        "riskScore": 3,
+        "riskLabel": "Moderat",
+        "riskNote": "Bredt globalt indeksfond"
+      },
+      "ask_sb1_norge_verdi": {
+        "name": "SB1 Norge Verdi N",
+        "regions": {
+          "Norge": 99.3,
+          "Sveits": 0.7
+        },
+        "sectors": {
+          "Finans": 19.05,
+          "Industri": 18.74,
+          "Energi": 18.55,
+          "Konsumvarer": 16.34,
+          "Materialer": 7.99,
+          "Telekom": 6.02,
+          "IT": 5.22,
+          "Forbruksvarer": 5.16,
+          "Forsyning": 2.92
+        },
+        "riskScore": 4,
+        "riskLabel": "Høy",
+        "riskNote": "Aktivt, 99% Norge"
+      },
+      "ask_sb1_utbytte": {
+        "name": "SB1 Utbytte U",
+        "regions": {
+          "Norge": 48.67,
+          "Sverige": 12.15,
+          "Frankrike": 11.88,
+          "Sør-Korea": 5.93,
+          "Danmark": 4.43,
+          "Spania": 3.73,
+          "Sveits": 3.73,
+          "USA": 3.49,
+          "Finland": 2.85,
+          "Belgia": 1.79,
+          "Tyskland": 1.34
+        },
+        "sectors": {
+          "Finans": 25.22,
+          "Forbruksvarer": 17.31,
+          "Energi": 13.63,
+          "Industri": 12.58,
+          "Materialer": 8.88,
+          "IT": 7.56,
+          "Helse": 4.99,
+          "Forsyning": 4.79,
+          "Telekom": 3.7,
+          "Konsumvarer": 1.34
+        },
+        "riskScore": 2,
+        "riskLabel": "Lav-moderat",
+        "riskNote": "Utbyttefokus, defensiv"
+      },
+      "fond": {
+        "name": "SB1 Alt-i-ett 20 N",
+        "regions": {
+          "USA": 44.94,
+          "Norge": 17.26,
+          "Sverige": 8.12,
+          "Danmark": 4.47,
+          "Storbritannia": 3.03,
+          "Taiwan": 2.5,
+          "Frankrike": 2.46,
+          "Finland": 1.82,
+          "Sør-Korea": 1.72,
+          "Sveits": 1.63,
+          "Andre": 12.05
+        },
+        "sectors": {
+          "IT": 21.3,
+          "Industri": 19.94,
+          "Finans": 17.17,
+          "Helse": 9.56,
+          "Forbruksvarer": 7.88,
+          "Konsumvarer": 7.46,
+          "Telekom": 6.08,
+          "Materialer": 4.66,
+          "Energi": 4.13,
+          "Forsyning": 1.43,
+          "Eiendom": 0.39
+        },
+        "riskScore": 1,
+        "riskLabel": "Lav",
+        "riskNote": "80% obligasjoner, 20% aksjer"
+      },
+      "innskuddspensjon": {
+        "name": "SB1 Indeks Aksjer (pensjon)",
+        "regions": {
+          "USA": 69.67,
+          "Japan": 6.31,
+          "Storbritannia": 3.82,
+          "Canada": 3.37,
+          "Sveits": 2.92,
+          "Tyskland": 2.59,
+          "Frankrike": 2.33,
+          "Australia": 1.75,
+          "Nederland": 1.42,
+          "Spania": 1.16,
+          "Sverige": 1.01,
+          "Andre": 3.65
+        },
+        "sectors": {
+          "IT": 26,
+          "Finans": 16.24,
+          "Industri": 11.74,
+          "Helse": 9.99,
+          "Konsumvarer": 9.32,
+          "Telekom": 8.83,
+          "Forbruksvarer": 5.67,
+          "Energi": 4.06,
+          "Materialer": 3.6,
+          "Forsyning": 2.64,
+          "Eiendom": 1.9
+        },
+        "riskScore": 3,
+        "riskLabel": "Moderat",
+        "riskNote": "Bredt globalt indeksfond"
+      },
+      "ips": {
+        "name": "SB1 Indeks Aksjer (IPS)",
+        "regions": {
+          "USA": 69.67,
+          "Japan": 6.31,
+          "Storbritannia": 3.82,
+          "Canada": 3.37,
+          "Sveits": 2.92,
+          "Tyskland": 2.59,
+          "Frankrike": 2.33,
+          "Australia": 1.75,
+          "Nederland": 1.42,
+          "Spania": 1.16,
+          "Sverige": 1.01,
+          "Andre": 3.65
+        },
+        "sectors": {
+          "IT": 26,
+          "Finans": 16.24,
+          "Industri": 11.74,
+          "Helse": 9.99,
+          "Konsumvarer": 9.32,
+          "Telekom": 8.83,
+          "Forbruksvarer": 5.67,
+          "Energi": 4.06,
+          "Materialer": 3.6,
+          "Forsyning": 2.64,
+          "Eiendom": 1.9
+        },
+        "riskScore": 3,
+        "riskLabel": "Moderat",
+        "riskNote": "Bredt globalt indeksfond"
+      },
+      "krypto": {
+        "name": "Krypto (Firi)",
+        "holdings": [
+          {
+            "symbol": "BTC",
+            "name": "Bitcoin",
+            "amount": 0.00252848
+          },
+          {
+            "symbol": "DOGE",
+            "name": "Dogecoin",
+            "amount": 108.51241815
+          },
+          {
+            "symbol": "ETH",
+            "name": "Ethereum",
+            "amount": 0.00022417
+          },
+          {
+            "symbol": "ETH-staking",
+            "name": "Ethereum (staking)",
+            "amount": 0.04659498,
+            "rewards": 0.00360128
+          }
+        ],
+        "regions": {},
+        "sectors": {
+          "Krypto": 100
+        },
+        "riskScore": 5,
+        "riskLabel": "Svært høy",
+        "riskNote": "Kryptovaluta, ekstrem volatilitet"
+      }
+    }
+  },
+  "allocationTargets": {
+    "krypto": {
+      "target": 1,
+      "max": true,
+      "label": "Krypto",
+      "color": "#fb923c"
+    },
+    "gull": {
+      "target": 3,
+      "max": false,
+      "label": "Gull / Råvarer",
+      "color": "#fbbf24"
+    },
+    "emerging_markets": {
+      "target": 3,
+      "max": false,
+      "label": "Emerging Markets",
+      "color": "#34d399"
+    },
+    "norge": {
+      "target": 10,
+      "max": false,
+      "label": "Norge",
+      "color": "#60a5fa"
+    },
+    "usa": {
+      "target": 55,
+      "max": true,
+      "label": "USA",
+      "color": "#818cf8"
+    },
+    "aksjer_fond": {
+      "target": 90,
+      "max": false,
+      "label": "Aksjer / Fond",
+      "color": "#a78bfa"
+    }
+  }
 }

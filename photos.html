@@ -1,0 +1,1056 @@
+<!DOCTYPE html>
+<html lang="no">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg?v=2">
+    <meta name="theme-color" content="#0d1b2a">
+    <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@300;400;500&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500&display=swap" rel="stylesheet">
+    <title>Bildefremvisning — Tommy Skogstad</title>
+    <style>
+        :root {
+            --navy:   #0d1b2a;
+            --blue1:  #1b2d42;
+            --blue2:  #2e4260;
+            --blue3:  #4a6080;
+            --blue4:  #7a96b0;
+            --blue5:  #b8cad8;
+            --blue6:  #e4eaf0;
+            --white:  #f4f5f2;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'DM Sans', sans-serif;
+            background: var(--navy);
+            color: var(--blue5);
+            min-height: 100vh;
+        }
+
+        header {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 2.5rem 1rem 2rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 1.5rem;
+        }
+
+        .header-brand {
+            display: flex;
+            align-items: center;
+            gap: 1.25rem;
+        }
+
+        .header-brand img {
+            height: 4rem;
+            width: 4rem;
+        }
+
+        .header-brand-text {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .header-brand-name {
+            font-family: 'DM Sans', sans-serif;
+            font-size: 1.4rem;
+            font-weight: 400;
+            color: var(--white);
+            letter-spacing: -0.02em;
+            line-height: 1;
+        }
+
+        .header-brand-sep {
+            height: 1px;
+            background: var(--white);
+            opacity: 0.12;
+        }
+
+        .header-brand-sub {
+            font-family: 'DM Mono', monospace;
+            font-size: 0.6rem;
+            letter-spacing: 0.14em;
+            color: var(--blue4);
+            text-transform: uppercase;
+        }
+
+        .header-nav {
+            display: flex;
+            gap: 0.5rem;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .header-nav a {
+            font-family: 'DM Mono', monospace;
+            font-size: 0.75rem;
+            letter-spacing: 0.08em;
+            color: var(--blue3);
+            text-decoration: none;
+            padding: 0.4rem 0.8rem;
+            border: 1px solid var(--blue2);
+            border-radius: 6px;
+            transition: color 0.2s, border-color 0.2s;
+        }
+
+        .header-nav a:hover {
+            color: var(--white);
+            border-color: var(--blue4);
+        }
+
+        .header-nav a.active {
+            color: var(--white);
+            border-color: var(--blue4);
+            background: var(--blue1);
+        }
+
+        .nav-sep { width:1px; height:1.2rem; background:var(--blue2); }
+
+        main {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 0 1rem 3rem;
+        }
+
+        footer {
+            text-align: center;
+            padding: 2rem 1rem;
+            color: var(--blue3);
+            font-size: 0.85rem;
+            border-top: 1px solid var(--blue1);
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        footer a {
+            transition: color 0.2s;
+            text-decoration: none;
+        }
+
+        footer a:hover {
+            color: var(--white);
+        }
+
+        /* Controls */
+        .controls {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+            flex-wrap: wrap;
+        }
+
+        .controls label {
+            font-family: 'DM Mono', monospace;
+            font-size: 0.8rem;
+            color: var(--blue4);
+            letter-spacing: 0.05em;
+        }
+
+        .controls select, .controls input {
+            font-family: 'DM Mono', monospace;
+            font-size: 0.85rem;
+            background: var(--blue1);
+            color: var(--white);
+            border: 1px solid var(--blue2);
+            border-radius: 6px;
+            padding: 0.5rem 0.75rem;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+
+        .controls select:focus, .controls input:focus {
+            border-color: var(--blue4);
+        }
+
+        .controls select option {
+            background: var(--blue1);
+        }
+
+        /* Person chips */
+        .person-picker {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+            margin-bottom: 1.5rem;
+        }
+
+        .person-chip {
+            font-family: 'DM Mono', monospace;
+            font-size: 0.8rem;
+            background: var(--blue1);
+            color: var(--blue3);
+            border: 1px solid var(--blue2);
+            border-radius: 9999px;
+            padding: 0.4rem 1rem;
+            cursor: pointer;
+            transition: all 0.2s;
+            user-select: none;
+        }
+
+        .person-chip:hover {
+            color: var(--white);
+            border-color: var(--blue4);
+        }
+
+        .person-chip.selected {
+            color: var(--white);
+            background: var(--blue2);
+            border-color: var(--blue4);
+        }
+
+        .btn {
+            font-family: 'DM Mono', monospace;
+            font-size: 0.8rem;
+            background: var(--blue1);
+            color: var(--blue4);
+            border: 1px solid var(--blue2);
+            border-radius: 6px;
+            padding: 0.5rem 1rem;
+            cursor: pointer;
+            transition: color 0.2s, border-color 0.2s;
+            letter-spacing: 0.05em;
+        }
+
+        .btn:hover {
+            color: var(--white);
+            border-color: var(--blue4);
+        }
+
+        .btn:disabled {
+            opacity: 0.4;
+            cursor: default;
+        }
+
+        .btn:disabled:hover {
+            color: var(--blue4);
+            border-color: var(--blue2);
+        }
+
+        .btn.active {
+            color: var(--white);
+            border-color: var(--blue4);
+            background: var(--blue2);
+        }
+
+        /* Slideshow */
+        .slideshow-container {
+            position: relative;
+            width: 100%;
+            aspect-ratio: 16 / 10;
+            background: var(--blue1);
+            border: 1px solid var(--blue2);
+            border-radius: 12px;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .slideshow-container img {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain;
+            position: absolute;
+            opacity: 0;
+            transition: opacity 0.8s ease-in-out;
+        }
+
+        .slideshow-container img.layer-back {
+            z-index: 1;
+        }
+
+        .slideshow-container img.layer-front {
+            z-index: 2;
+        }
+
+        .slideshow-container img.visible {
+            opacity: 1;
+        }
+
+        .slideshow-placeholder {
+            font-family: 'DM Mono', monospace;
+            font-size: 0.9rem;
+            color: var(--blue3);
+            letter-spacing: 0.05em;
+        }
+
+        .slideshow-info {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 0.75rem;
+            font-family: 'DM Mono', monospace;
+            font-size: 0.75rem;
+            color: var(--blue3);
+        }
+
+        .slideshow-counter {
+            color: var(--blue4);
+        }
+
+        .slideshow-date {
+            color: var(--blue4);
+        }
+
+        .slideshow-nav {
+            display: flex;
+            gap: 0.5rem;
+            margin-top: 1rem;
+            justify-content: center;
+            align-items: center;
+        }
+
+        /* Tommel opp/ned */
+        .btn-thumb {
+            font-size: 1.3rem;
+            padding: 0.4rem 0.7rem;
+            line-height: 1;
+            border-radius: 8px;
+        }
+
+        .btn-thumb.thumb-up:hover,
+        .btn-thumb.thumb-up.voted {
+            border-color: #059669;
+            color: #6ee7b7;
+        }
+
+        .btn-thumb.thumb-down:hover,
+        .btn-thumb.thumb-down.voted {
+            border-color: #dc2626;
+            color: #fca5a5;
+        }
+
+        .vote-feedback {
+            font-family: 'DM Mono', monospace;
+            font-size: 0.7rem;
+            color: var(--blue3);
+            min-width: 6rem;
+            text-align: center;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .vote-feedback.show {
+            opacity: 1;
+        }
+
+        /* Zoom-animasjon */
+        .slideshow-container img {
+            transform-origin: center center;
+        }
+
+        @keyframes zoomToFace {
+            0% { transform: scale(1); }
+            100% { transform: scale(var(--zoom-scale)) translate(var(--zoom-x), var(--zoom-y)); }
+        }
+
+        .slideshow-container img.zooming {
+            animation: zoomToFace var(--zoom-duration) ease-in-out forwards;
+        }
+
+        /* Fullscreen */
+        .slideshow-container.fullscreen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: 1000;
+            border-radius: 0;
+            border: none;
+            background: #000;
+            aspect-ratio: auto;
+        }
+
+        .hidden-count {
+            font-family: 'DM Mono', monospace;
+            font-size: 0.7rem;
+            color: var(--blue3);
+            margin-left: auto;
+        }
+
+        .hidden-count button {
+            font-family: 'DM Mono', monospace;
+            font-size: 0.7rem;
+            background: none;
+            border: none;
+            color: var(--blue4);
+            cursor: pointer;
+            text-decoration: underline;
+            padding: 0;
+        }
+
+        .hidden-count button:hover {
+            color: var(--white);
+        }
+
+        @media (max-width: 600px) {
+            header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            .controls {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div id="site-header"></div>
+    <script src="/header.js?v=2"></script>
+
+    <main>
+        <section class="section">
+            <div class="person-picker" id="person-picker">
+                <span style="font-family:'DM Mono',monospace;font-size:0.8rem;color:var(--blue4);padding:0.4rem 0;">Laster personer...</span>
+            </div>
+
+            <div class="controls">
+                <label for="interval-input">Intervall:</label>
+                <input type="number" id="interval-input" value="6" min="2" max="60" style="width:4.5rem;">
+                <span style="font-family:'DM Mono',monospace;font-size:0.8rem;color:var(--blue3);">sek</span>
+
+                <button class="btn" id="btn-favonly">Favoritter: av</button>
+                <button class="btn" id="btn-zoom">Zoom: av</button>
+                <button class="btn" id="btn-fullscreen">Fullskjerm</button>
+
+                <span class="hidden-count" id="hidden-count"></span>
+            </div>
+
+            <div class="slideshow-container" id="slideshow">
+                <span class="slideshow-placeholder" id="placeholder">Velg en eller flere personer for a starte</span>
+                <img id="img-current" src="" alt="">
+                <img id="img-next" src="" alt="">
+            </div>
+
+            <div class="slideshow-info">
+                <span class="slideshow-date" id="photo-date"></span>
+                <span class="slideshow-counter" id="photo-counter"></span>
+            </div>
+
+            <div class="slideshow-nav">
+                <button class="btn btn-thumb thumb-down" id="btn-thumbdown" disabled title="Skjul dette bildet">&#x1F44E;</button>
+                <button class="btn" id="btn-prev" disabled>Forrige</button>
+                <button class="btn" id="btn-next" disabled>Neste</button>
+                <button class="btn btn-thumb thumb-up" id="btn-thumbup" disabled title="Marker som favoritt i Immich">&#x1F44D;</button>
+                <span class="vote-feedback" id="vote-feedback"></span>
+            </div>
+        </section>
+    </main>
+
+    <div id="site-footer"></div>
+    <script src="/footer.js?v=2"></script>
+
+    <script>
+    (function() {
+        var BATCH_SIZE = 10;
+        var PREFETCH_THRESHOLD = 2;
+        var HIDDEN_KEY = 'tommytv_photos_hidden';
+
+        var personPicker = document.getElementById('person-picker');
+        var intervalInput = document.getElementById('interval-input');
+        var btnPrev = document.getElementById('btn-prev');
+        var btnNext = document.getElementById('btn-next');
+        var btnFullscreen = document.getElementById('btn-fullscreen');
+        var btnZoom = document.getElementById('btn-zoom');
+        var btnFavOnly = document.getElementById('btn-favonly');
+        var btnThumbUp = document.getElementById('btn-thumbup');
+        var btnThumbDown = document.getElementById('btn-thumbdown');
+        var voteFeedback = document.getElementById('vote-feedback');
+        var hiddenCountEl = document.getElementById('hidden-count');
+        var slideshow = document.getElementById('slideshow');
+        var imgCurrent = document.getElementById('img-current');
+        var imgNext = document.getElementById('img-next');
+        var placeholder = document.getElementById('placeholder');
+        var photoDate = document.getElementById('photo-date');
+        var photoCounter = document.getElementById('photo-counter');
+
+        var zoomEnabled = false;
+        var favOnly = false;
+        var allAssetIds = [];
+        var shuffledQueue = [];
+        var currentBatch = [];
+        var currentIndex = 0;
+        var timer = null;
+        var totalPhotos = 0;
+        var shownCount = 0;
+        var isFetchingBatch = false;
+        var nextBatchReady = null;
+        var selectedPersonIds = [];
+        var allPeople = [];
+
+        // Skjulte bilder (localStorage)
+        function getHiddenIds() {
+            try {
+                return JSON.parse(localStorage.getItem(HIDDEN_KEY) || '[]');
+            } catch(e) { return []; }
+        }
+
+        function addHiddenId(id) {
+            var hidden = getHiddenIds();
+            if (hidden.indexOf(id) === -1) {
+                hidden.push(id);
+                localStorage.setItem(HIDDEN_KEY, JSON.stringify(hidden));
+            }
+            updateHiddenCount();
+        }
+
+        function clearHidden() {
+            localStorage.removeItem(HIDDEN_KEY);
+            updateHiddenCount();
+        }
+
+        function updateHiddenCount() {
+            var count = getHiddenIds().length;
+            if (count > 0) {
+                hiddenCountEl.innerHTML = count + ' skjult <button onclick="window._clearHidden()">nullstill</button>';
+            } else {
+                hiddenCountEl.textContent = '';
+            }
+        }
+        window._clearHidden = function() {
+            clearHidden();
+        };
+
+        // Hent alle personer
+        function loadPeople() {
+            fetch('/immich-api/people', {
+                headers: {}
+            })
+            .then(function(r) { return r.json(); })
+            .then(function(data) {
+                allPeople = (data.people || data).filter(function(p) {
+                    return p.name && p.name.trim() !== '';
+                });
+                allPeople.sort(function(a, b) {
+                    return a.name.localeCompare(b.name, 'no');
+                });
+                renderPersonPicker();
+            });
+        }
+
+        function renderPersonPicker() {
+            personPicker.innerHTML = '';
+            allPeople.forEach(function(p) {
+                var chip = document.createElement('span');
+                chip.className = 'person-chip';
+                chip.textContent = p.name;
+                chip.dataset.id = p.id;
+                if (selectedPersonIds.indexOf(p.id) !== -1) {
+                    chip.classList.add('selected');
+                }
+                chip.addEventListener('click', function() {
+                    togglePerson(p.id);
+                });
+                personPicker.appendChild(chip);
+            });
+        }
+
+        function updateZoomAvailability() {
+            if (selectedPersonIds.length > 1) {
+                zoomEnabled = false;
+                btnZoom.textContent = 'Zoom: av';
+                btnZoom.classList.remove('active');
+                btnZoom.disabled = true;
+            } else {
+                btnZoom.disabled = false;
+            }
+        }
+
+        function togglePerson(id) {
+            var idx = selectedPersonIds.indexOf(id);
+            if (idx !== -1) {
+                selectedPersonIds.splice(idx, 1);
+            } else {
+                selectedPersonIds.push(id);
+            }
+            updateZoomAvailability();
+            renderPersonPicker();
+            loadSelectedPhotos();
+        }
+
+        function loadSelectedPhotos() {
+            stopSlideshow();
+            imgCurrent.classList.remove('visible');
+            imgNext.classList.remove('visible');
+            photoDate.textContent = '';
+            photoCounter.textContent = '';
+            btnPrev.disabled = true;
+            btnNext.disabled = true;
+            btnThumbUp.disabled = true;
+            btnThumbDown.disabled = true;
+            btnThumbUp.classList.remove('voted');
+            btnThumbDown.classList.remove('voted');
+
+            if (selectedPersonIds.length === 0) {
+                placeholder.textContent = 'Velg en eller flere personer for a starte';
+                placeholder.style.display = '';
+                return;
+            }
+
+            placeholder.textContent = 'Laster bilder...';
+            placeholder.style.display = '';
+
+            loadAssetIds(selectedPersonIds, function(ids) {
+                // Filtrer ut skjulte bilder
+                var hidden = getHiddenIds();
+                ids = ids.filter(function(item) {
+                    return hidden.indexOf(item.id) === -1;
+                });
+
+                allAssetIds = ids;
+                totalPhotos = ids.length;
+                shownCount = 0;
+                currentIndex = 0;
+                nextBatchReady = null;
+
+                if (ids.length === 0) {
+                    placeholder.textContent = 'Ingen bilder funnet';
+                    return;
+                }
+
+                refillQueue();
+                fetchBatch(function(batch) {
+                    currentBatch = batch;
+                    placeholder.style.display = 'none';
+                    showImage(0);
+                    startSlideshow();
+                    photoCounter.textContent = '1 av ' + totalPhotos;
+                });
+            });
+        }
+
+        // Hent asset-IDer for valgte personer via metadata search
+        function loadAssetIds(personIds, callback) {
+            var allIds = [];
+            var page = 1;
+
+            function fetchPage() {
+                fetch('/immich-api/search/metadata', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(Object.assign({
+                        personIds: personIds,
+                        type: 'IMAGE',
+                        page: page,
+                        size: 250
+                    }, favOnly ? { isFavorite: true } : {}))
+                })
+                .then(function(r) { return r.json(); })
+                .then(function(data) {
+                    var items = data.assets && data.assets.items || [];
+                    items.forEach(function(a) {
+                        allIds.push({ id: a.id, date: a.fileCreatedAt || a.createdAt, isFavorite: a.isFavorite });
+                    });
+                    if (items.length === 250) {
+                        page++;
+                        fetchPage();
+                    } else {
+                        callback(allIds);
+                    }
+                });
+            }
+            fetchPage();
+        }
+
+        // Fisher-Yates shuffle
+        function shuffle(arr) {
+            var a = arr.slice();
+            for (var i = a.length - 1; i > 0; i--) {
+                var j = Math.floor(Math.random() * (i + 1));
+                var t = a[i]; a[i] = a[j]; a[j] = t;
+            }
+            return a;
+        }
+
+        function refillQueue() {
+            shuffledQueue = shuffle(allAssetIds);
+        }
+
+        function dateKey(item) {
+            if (!item.date) return '';
+            return item.date.substring(0, 10);
+        }
+
+        function takeFromQueue(n) {
+            var batch = [];
+            var usedDates = {};
+            var skipped = [];
+            var hidden = getHiddenIds();
+
+            // Første pass: velg bilder fra unike datoer
+            while (batch.length < n && shuffledQueue.length > 0) {
+                var item = shuffledQueue.pop();
+                if (hidden.indexOf(item.id) !== -1) continue;
+                var dk = dateKey(item);
+                if (dk && usedDates[dk]) {
+                    skipped.push(item);
+                } else {
+                    if (dk) usedDates[dk] = true;
+                    batch.push(item);
+                }
+            }
+
+            // Andre pass: fyll opp med hoppede bilder om nødvendig
+            var i = 0;
+            while (batch.length < n && i < skipped.length) {
+                batch.push(skipped[i++]);
+            }
+            // Legg resten tilbake i køen
+            while (i < skipped.length) {
+                shuffledQueue.push(skipped[i++]);
+            }
+
+            // Om køen gikk tom, refill og fyll opp
+            while (batch.length < n) {
+                refillQueue();
+                var item = shuffledQueue.pop();
+                if (hidden.indexOf(item.id) === -1) {
+                    batch.push(item);
+                }
+            }
+
+            return batch;
+        }
+
+        function imageUrl(assetId) {
+            return '/immich-api/assets/' + assetId + '/thumbnail?size=preview';
+        }
+
+        function preloadImage(url) {
+            var img = new Image();
+            img.src = url;
+        }
+
+        function fetchAssetFaces(assetId, callback) {
+            fetch('/immich-api/assets/' + assetId, {
+                headers: {}
+            })
+            .then(function(r) { return r.json(); })
+            .then(function(data) {
+                var faces = {};
+                (data.people || []).forEach(function(p) {
+                    if (p.faces && p.faces.length > 0) {
+                        var f = p.faces[0];
+                        faces[p.id] = {
+                            x1: f.boundingBoxX1 / f.imageWidth,
+                            y1: f.boundingBoxY1 / f.imageHeight,
+                            x2: f.boundingBoxX2 / f.imageWidth,
+                            y2: f.boundingBoxY2 / f.imageHeight
+                        };
+                    }
+                });
+                callback(faces);
+            })
+            .catch(function() { callback({}); });
+        }
+
+        function fetchBatch(callback) {
+            var items = takeFromQueue(BATCH_SIZE);
+            var batch = items.map(function(item) {
+                return { id: item.id, date: item.date, isFavorite: item.isFavorite, url: imageUrl(item.id), face: null };
+            });
+            var done = 0;
+            batch.forEach(function(b, i) {
+                preloadImage(b.url);
+                fetchAssetFaces(b.id, function(faces) {
+                    // Finn ansiktet til første valgte person
+                    for (var j = 0; j < selectedPersonIds.length; j++) {
+                        if (faces[selectedPersonIds[j]]) {
+                            batch[i].face = faces[selectedPersonIds[j]];
+                            break;
+                        }
+                    }
+                    done++;
+                    if (done === batch.length) callback(batch);
+                });
+            });
+        }
+
+        function prefetchNextBatch() {
+            if (isFetchingBatch || nextBatchReady) return;
+            isFetchingBatch = true;
+            fetchBatch(function(batch) {
+                nextBatchReady = batch;
+                isFetchingBatch = false;
+            });
+        }
+
+        function showImage(index) {
+            if (!currentBatch.length) return;
+            var item = currentBatch[index];
+
+            // Reset vote-knapper
+            btnThumbUp.classList.remove('voted');
+            btnThumbDown.classList.remove('voted');
+            btnThumbUp.disabled = item.isFavorite;
+            btnThumbDown.disabled = false;
+            voteFeedback.classList.remove('show');
+
+            // Sett neste bilde i front-laget, last inn og fade over
+            var showEl = imgNext;
+            var hideEl = imgCurrent;
+            showEl.className = 'layer-front';
+            showEl.style.transform = '';
+            showEl.style.animation = '';
+            hideEl.className = 'visible layer-back';
+            showEl.src = item.url;
+            showEl.onload = function() {
+                showEl.classList.add('visible');
+
+                // Etter fade er ferdig: bytt roller
+                setTimeout(function() {
+                    imgCurrent = showEl;
+                    imgNext = hideEl;
+                    hideEl.classList.remove('visible');
+                    hideEl.classList.remove('zooming');
+                    hideEl.style.transform = '';
+                    hideEl.style.animation = '';
+                    hideEl.src = '';
+
+                    // Start zoom på det nye synlige bildet
+                    if (zoomEnabled && item.face) {
+                        var interval = getInterval();
+                        var f = item.face;
+                        var cx = (f.x1 + f.x2) / 2;
+                        var cy = (f.y1 + f.y2) / 2;
+                        var faceW = f.x2 - f.x1;
+                        var faceH = f.y2 - f.y1;
+                        var scale = Math.min(2.5, 0.6 / Math.max(faceW, faceH));
+                        var tx = (0.5 - cx) * 100;
+                        var ty = (0.5 - cy) * 100;
+                        var duration = Math.max(2, (interval - 1000) / 1000);
+
+                        showEl.style.setProperty('--zoom-scale', scale);
+                        showEl.style.setProperty('--zoom-x', tx + '%');
+                        showEl.style.setProperty('--zoom-y', ty + '%');
+                        showEl.style.setProperty('--zoom-duration', duration + 's');
+                        showEl.classList.add('zooming');
+                    }
+                }, 850);
+            };
+
+            shownCount++;
+            photoCounter.textContent = shownCount + ' av ' + totalPhotos;
+            if (item.date) {
+                var d = new Date(item.date);
+                photoDate.textContent = d.toLocaleDateString('nb-NO', {
+                    year: 'numeric', month: 'long', day: 'numeric'
+                });
+            } else {
+                photoDate.textContent = '';
+            }
+
+            var remaining = currentBatch.length - index - 1;
+            if (remaining <= PREFETCH_THRESHOLD) {
+                prefetchNextBatch();
+            }
+        }
+
+        function advance() {
+            currentIndex++;
+            if (currentIndex >= currentBatch.length) {
+                if (nextBatchReady) {
+                    currentBatch = nextBatchReady;
+                    nextBatchReady = null;
+                    currentIndex = 0;
+                    showImage(currentIndex);
+                } else {
+                    isFetchingBatch = true;
+                    fetchBatch(function(batch) {
+                        currentBatch = batch;
+                        currentIndex = 0;
+                        isFetchingBatch = false;
+                        showImage(currentIndex);
+                    });
+                }
+            } else {
+                showImage(currentIndex);
+            }
+        }
+
+        function goBack() {
+            if (currentIndex > 0) {
+                currentIndex--;
+                showImage(currentIndex);
+            }
+        }
+
+        function getInterval() {
+            var val = (parseInt(intervalInput.value) || 6) * 1000;
+            if (zoomEnabled && val < 5000) val = 5000;
+            return val;
+        }
+
+        function startSlideshow() {
+            if (timer) clearInterval(timer);
+            btnPrev.disabled = false;
+            btnNext.disabled = false;
+            timer = setInterval(advance, getInterval());
+        }
+
+        function stopSlideshow() {
+            if (timer) { clearInterval(timer); timer = null; }
+        }
+
+        function showVoteFeedback(text) {
+            voteFeedback.textContent = text;
+            voteFeedback.classList.add('show');
+            setTimeout(function() { voteFeedback.classList.remove('show'); }, 2000);
+        }
+
+        // Favoritt (tommel opp) — setter isFavorite i Immich
+        btnThumbUp.addEventListener('click', function() {
+            if (!currentBatch.length) return;
+            var item = currentBatch[currentIndex];
+            var newFav = !item.isFavorite;
+
+            fetch('/immich-api/assets', {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ ids: [item.id], isFavorite: newFav })
+            }).then(function() {
+                item.isFavorite = newFav;
+                if (newFav) {
+                    btnThumbUp.classList.add('voted');
+                    showVoteFeedback('Lagt til favoritter');
+                } else {
+                    btnThumbUp.classList.remove('voted');
+                    showVoteFeedback('Fjernet fra favoritter');
+                }
+                resetTimer();
+            });
+        });
+
+        // Skjul bilde (tommel ned) — lagres i localStorage, hopp til neste
+        btnThumbDown.addEventListener('click', function() {
+            if (!currentBatch.length) return;
+            var item = currentBatch[currentIndex];
+            addHiddenId(item.id);
+
+            // Tag bildet med "Gjennomgang" i Immich
+            fetch('/immich-api/tags/f6fbd4b8-5888-4580-9f34-5071db8019ae/assets', {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ ids: [item.id] })
+            });
+
+            // Fjern fra allAssetIds
+            allAssetIds = allAssetIds.filter(function(a) { return a.id !== item.id; });
+            totalPhotos = allAssetIds.length;
+
+            btnThumbDown.classList.add('voted');
+            showVoteFeedback('Merket for gjennomgang');
+
+            setTimeout(function() {
+                // Fjern fra nåværende batch og gå videre
+                currentBatch.splice(currentIndex, 1);
+                if (currentBatch.length === 0) {
+                    // Tom batch, hent ny
+                    if (nextBatchReady) {
+                        currentBatch = nextBatchReady;
+                        nextBatchReady = null;
+                        currentIndex = 0;
+                    } else {
+                        fetchBatch(function(batch) {
+                            currentBatch = batch;
+                            currentIndex = 0;
+                            showImage(currentIndex);
+                        });
+                        return;
+                    }
+                } else if (currentIndex >= currentBatch.length) {
+                    currentIndex = 0;
+                    if (nextBatchReady) {
+                        currentBatch = nextBatchReady;
+                        nextBatchReady = null;
+                    }
+                }
+                showImage(currentIndex);
+                resetTimer();
+            }, 500);
+        });
+
+        function resetTimer() {
+            if (timer) {
+                stopSlideshow();
+                startSlideshow();
+            }
+        }
+
+        btnPrev.addEventListener('click', function() {
+            goBack();
+            resetTimer();
+        });
+
+        btnNext.addEventListener('click', function() {
+            advance();
+            resetTimer();
+        });
+
+        // Kun favoritter av/på
+        btnFavOnly.addEventListener('click', function() {
+            favOnly = !favOnly;
+            btnFavOnly.textContent = 'Favoritter: ' + (favOnly ? 'på' : 'av');
+            if (favOnly) {
+                btnFavOnly.classList.add('active');
+            } else {
+                btnFavOnly.classList.remove('active');
+            }
+            if (selectedPersonIds.length > 0) {
+                loadSelectedPhotos();
+            }
+        });
+
+        // Zoom av/på
+        btnZoom.addEventListener('click', function() {
+            zoomEnabled = !zoomEnabled;
+            btnZoom.textContent = 'Zoom: ' + (zoomEnabled ? 'på' : 'av');
+            if (zoomEnabled) {
+                btnZoom.classList.add('active');
+            } else {
+                btnZoom.classList.remove('active');
+            }
+            resetTimer();
+        });
+
+        // Fullskjerm
+        btnFullscreen.addEventListener('click', function() {
+            if (slideshow.classList.contains('fullscreen')) {
+                slideshow.classList.remove('fullscreen');
+                btnFullscreen.textContent = 'Fullskjerm';
+            } else {
+                slideshow.classList.add('fullscreen');
+                btnFullscreen.textContent = 'Avslutt fullskjerm';
+            }
+        });
+
+        // Tastaturnavigasjon
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape' && slideshow.classList.contains('fullscreen')) {
+                slideshow.classList.remove('fullscreen');
+                btnFullscreen.textContent = 'Fullskjerm';
+            }
+            if (e.key === 'ArrowRight') { btnNext.click(); }
+            if (e.key === 'ArrowLeft') { btnPrev.click(); }
+            if (e.key === 'ArrowUp') { e.preventDefault(); btnThumbUp.click(); }
+            if (e.key === 'ArrowDown') { e.preventDefault(); btnThumbDown.click(); }
+            if (e.key === 'f' || e.key === 'F') { btnFullscreen.click(); }
+            if (e.key === 'z' || e.key === 'Z') { btnZoom.click(); }
+        });
+
+        // Init
+        loadPeople();
+        updateHiddenCount();
+    })();
+    </script>
+</body>
+</html>

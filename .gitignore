@@ -1,1 +1,2 @@
-# .env håndteres av git-crypt (se .gitattributes)
+# .env og nginx.conf håndteres av git-crypt (se .gitattributes)
+claude-status.json
