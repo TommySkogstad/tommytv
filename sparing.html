@@ -163,6 +163,7 @@
                 <button class="btn btn-success" id="saveBtn" onclick="saveData()">Lagre</button>
                 <button class="btn" onclick="exportJSON()">Eksporter JSON</button>
             </div>
+            <div id="agreementsEditor"></div>
             <div id="monthEditor"></div>
         </section>
 
@@ -331,9 +332,11 @@ const CHILD_NAMES = {
 /* ── Load ── */
 fetch('/sparing-data.json').then(r => r.json()).then(data => {
     DATA = data;
+    if (!DATA.savingsAgreements) DATA.savingsAgreements = {};
     if (isLAN) {
         document.getElementById('editSection').style.display = 'block';
         populateMonthSelect();
+        renderAgreements();
         renderMonthEditor();
     }
     renderCharts();
@@ -373,12 +376,20 @@ function getArrays() {
             m: entries.map(function(e) { return (e[acc.id] || [0,0])[1] })
         };
     });
-    var totalV = Array(N).fill(0), totalM = Array(N).fill(0), cumContrib = Array(N).fill(0);
+    var totalV = Array(N).fill(0), totalM = Array(N).fill(0), totalAgreement = Array(N).fill(0), cumContrib = Array(N).fill(0);
     A.forEach(function(a) { for (var i = 0; i < N; i++) { totalV[i] += a.v[i]; totalM[i] += a.m[i] } });
+    // Compute agreement portion per month
+    for (var i = 0; i < N; i++) {
+        var e = entries[i];
+        accounts.forEach(function(acc) {
+            var entry = e[acc.id] || [0, 0];
+            totalAgreement[i] += (entry[2] || 0);
+        });
+    }
     var cc = 0; for (var i = 0; i < N; i++) { cc += totalM[i]; cumContrib[i] = cc }
     var hypoSav = Array(N).fill(0), hs = 0;
     for (var i = 0; i < N; i++) { hs = hs * (1 + 0.03/12) + totalM[i]; hypoSav[i] = hs }
-    return { A: A, L: L, N: N, totalV: totalV, totalM: totalM, cumContrib: cumContrib, hypoSav: hypoSav };
+    return { A: A, L: L, N: N, totalV: totalV, totalM: totalM, totalAgreement: totalAgreement, cumContrib: cumContrib, hypoSav: hypoSav };
 }
 
 /* ── Charts ── */
@@ -389,7 +400,7 @@ function renderCharts() {
     charts = {};
 
     var d = getArrays();
-    var A = d.A, L = d.L, N = d.N, totalV = d.totalV, totalM = d.totalM, cumContrib = d.cumContrib, hypoSav = d.hypoSav;
+    var A = d.A, L = d.L, N = d.N, totalV = d.totalV, totalM = d.totalM, totalAgreement = d.totalAgreement, cumContrib = d.cumContrib, hypoSav = d.hypoSav;
 
     var lastMonth = monthLabel(DATA.entries[N-1].month);
     var firstMonth = monthLabel(DATA.entries[0].month);
@@ -409,10 +420,15 @@ function renderCharts() {
     var bestMonth = 0, bestIdx = 0;
     for (var i = 1; i < N; i++) { var ch = totalV[i] - totalV[i-1]; if (ch > bestMonth) { bestMonth = ch; bestIdx = i } }
 
+    var totalMonthlyAgreement = 0;
+    var agreements = DATA.savingsAgreements || {};
+    Object.keys(agreements).forEach(function(k) { totalMonthlyAgreement += agreements[k]; });
+
     document.getElementById('kpis').innerHTML = [
         {l:'Total verdi', v:fmt(latest), s:lastMonth},
         {l:'Avkastning', v:fmt(totalReturn), s:pct(returnPct)+' av innskudd'},
         {l:'Innbetalt', v:fmt(totalContrib), s:N+' måneder'},
+        {l:'Spareavtale', v:fmt(totalMonthlyAgreement), s:'Per måned'},
         {l:'CAGR', v:pct(cagr), s:'Årlig vekst'},
         {l:'Snitt sparing', v:fmt(avgSave), s:'Per måned'},
         {l:'Beste måned', v:'+'+fmt(bestMonth), s:L[bestIdx]}
@@ -457,13 +473,31 @@ function renderCharts() {
             plugins:{tooltip:tt,legend:{position:'bottom',labels:{usePointStyle:true,pointStyle:'circle',padding:8,font:{size:10}}}}}
     });
 
-    // Monthly bar
+    // Monthly bar — stacked (spareavtale + ekstra, negative = uttak)
+    var barAgreement = [], barExtra = [], barNegative = [];
+    for (var i = 0; i < N; i++) {
+        var total = totalM[i], agr = totalAgreement[i];
+        if (total < 0) {
+            barAgreement.push(0);
+            barExtra.push(0);
+            barNegative.push(total);
+        } else {
+            var agrPart = Math.min(agr, total);
+            barAgreement.push(agrPart);
+            barExtra.push(total - agrPart);
+            barNegative.push(0);
+        }
+    }
     charts.bar = new Chart(document.getElementById('barChart'), {
         type:'bar',
-        data:{labels:L,datasets:[{label:'Netto innskudd',data:totalM,backgroundColor:totalM.map(function(v){return v>=0?'#6D834560':'#C3583940'}),borderColor:totalM.map(function(v){return v>=0?'#6D8345':'#C35839'}),borderWidth:1,borderRadius:2}]},
+        data:{labels:L,datasets:[
+            {label:'Spareavtale',data:barAgreement,backgroundColor:'#6D834560',borderColor:'#6D8345',borderWidth:1,borderRadius:2},
+            {label:'Ekstra',data:barExtra,backgroundColor:'#60a5fa40',borderColor:'#60a5fa',borderWidth:1,borderRadius:2},
+            {label:'Uttak',data:barNegative,backgroundColor:'#C3583940',borderColor:'#C35839',borderWidth:1,borderRadius:2}
+        ]},
         options:{responsive:true,maintainAspectRatio:false,
-            scales:{x:{grid:{display:false},ticks:{maxTicksLimit:16,font:{size:10}}},y:{grid:{color:'#1b2d4288'},ticks:{callback:function(v){return fmtK(v)}}}},
-            plugins:{tooltip:tt,legend:{display:false}}}
+            scales:{x:{stacked:true,grid:{display:false},ticks:{maxTicksLimit:16,font:{size:10}}},y:{stacked:true,grid:{color:'#1b2d4288'},ticks:{callback:function(v){return fmtK(v)}}}},
+            plugins:{tooltip:{...tt,callbacks:{label:function(c){if(c.parsed.y===0)return null;return ' '+c.dataset.label+': '+fmt(c.parsed.y)},footer:function(items){var t=items.reduce(function(a,b){return a+(b.parsed.y||0)},0);return 'Totalt: '+fmt(t)}},footerColor:'#f4f5f2',footerFont:{weight:'bold'}},legend:{position:'bottom',labels:{usePointStyle:true,pointStyle:'circle',padding:8,font:{size:10}}}}}
     });
 
     // Milestones — starter på 100k, fine runde tall oppover
@@ -990,6 +1024,49 @@ function saveAllocationTargets() {
     .catch(function() { toast('Kunne ikke lagre', true); });
 }
 
+/* ── Savings agreements ── */
+function renderAgreements() {
+    if (!DATA) return;
+    var agreements = DATA.savingsAgreements || {};
+    var eligibleAccs = DATA.accounts.filter(function(a) {
+        return a.active !== false && !a.children && a.id !== 'krypto';
+    });
+    if (eligibleAccs.length === 0) { document.getElementById('agreementsEditor').innerHTML = ''; return; }
+
+    var totalAgreement = 0;
+    eligibleAccs.forEach(function(a) { totalAgreement += (agreements[a.id] || 0); });
+
+    var html = '<div style="margin-bottom:1.25rem;">' +
+        '<div style="display:flex;align-items:center;gap:0.75rem;margin-bottom:0.75rem;">' +
+            '<span style="font-family:\'DM Mono\',monospace;font-size:0.7rem;color:var(--blue4);text-transform:uppercase;letter-spacing:0.08em;">Spareavtaler</span>' +
+            '<span style="font-family:\'DM Mono\',monospace;font-size:0.7rem;color:var(--white);">' + fmt(totalAgreement) + '/mnd</span>' +
+        '</div>' +
+        '<div class="month-grid">';
+    eligibleAccs.forEach(function(a) {
+        var val = agreements[a.id] || 0;
+        html += '<div class="month-card" style="padding:0.75rem;">' +
+            '<div class="month-card-header" style="margin-bottom:0.5rem;">' +
+                '<div class="month-card-dot" style="background:' + a.color + '"></div>' +
+                '<div class="month-card-name" style="font-size:0.8rem;">' + a.name + '</div>' +
+            '</div>' +
+            '<div class="month-field">' +
+                '<label>Månedlig avtalebeløp</label>' +
+                '<input type="number" value="' + val + '" data-acc="' + a.id + '" onchange="agreementChanged(this)">' +
+            '</div>' +
+        '</div>';
+    });
+    html += '</div></div>';
+    document.getElementById('agreementsEditor').innerHTML = html;
+}
+
+function agreementChanged(input) {
+    var accId = input.dataset.acc;
+    if (!DATA.savingsAgreements) DATA.savingsAgreements = {};
+    DATA.savingsAgreements[accId] = parseFloat(input.value) || 0;
+    renderAgreements();
+    markUnsaved();
+}
+
 /* ── Month editor ── */
 function populateMonthSelect() {
     var sel = document.getElementById('editMonthSelect');
@@ -1026,12 +1103,17 @@ function renderMonthEditor() {
                 childSum[1] += cv[1];
                 if (cv[0] !== 0 || cv[1] !== 0) hasChildData = true;
                 var cname = CHILD_NAMES[cid] || cid.replace(a.id + '_', '').replace(/_/g, ' ');
-                childHTML += '<div style="display:grid;grid-template-columns:1fr 1fr;gap:0.5rem;padding:0.5rem 0;border-top:1px solid var(--blue2);">' +
+                var cAgreement = cv[2] || 0;
+                var cExtra = cv[1] - cAgreement;
+                childHTML += '<div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:0.5rem;padding:0.5rem 0;border-top:1px solid var(--blue2);">' +
                     '<div class="month-field"><label>' + cname + ' — saldo</label>' +
                         '<input type="number" value="' + cv[0] + '" data-month="' + mi + '" data-acc="' + cid + '" data-parent="' + a.id + '" data-field="0" onchange="childChanged(this)">' +
                     '</div>' +
-                    '<div class="month-field"><label>' + cname + ' — innskudd</label>' +
-                        '<input type="number" value="' + cv[1] + '" data-month="' + mi + '" data-acc="' + cid + '" data-parent="' + a.id + '" data-field="1" onchange="childChanged(this)">' +
+                    '<div class="month-field"><label>' + cname + ' — avtale</label>' +
+                        '<input type="number" value="' + cAgreement + '" data-month="' + mi + '" data-acc="' + cid + '" data-parent="' + a.id + '" data-type="agreement" onchange="childDepositSplitChanged(this)" style="border-color:#6D834566;">' +
+                    '</div>' +
+                    '<div class="month-field"><label>' + cname + ' — ekstra</label>' +
+                        '<input type="number" value="' + cExtra + '" data-month="' + mi + '" data-acc="' + cid + '" data-parent="' + a.id + '" data-type="extra" onchange="childDepositSplitChanged(this)" style="border-color:#60a5fa44;">' +
                     '</div>' +
                 '</div>';
             });
@@ -1096,6 +1178,8 @@ function renderMonthEditor() {
         } else {
             // Vanlig konto uten underposter
             var vals = e[a.id] || [0, 0];
+            var agreementPart = vals[2] || 0;
+            var extraPart = vals[1] - agreementPart;
             total += vals[0];
             html += '<div class="month-card">' +
                 '<div class="month-card-header">' +
@@ -1108,8 +1192,14 @@ function renderMonthEditor() {
                     '<div class="month-field"><label>Saldo</label>' +
                         '<input type="number" value="' + vals[0] + '" data-month="' + mi + '" data-acc="' + a.id + '" data-field="0" onchange="cardChanged(this)">' +
                     '</div>' +
-                    '<div class="month-field"><label>Innskudd</label>' +
-                        '<input type="number" value="' + vals[1] + '" data-month="' + mi + '" data-acc="' + a.id + '" data-field="1" onchange="cardChanged(this)">' +
+                    '<div class="month-field"><label>Spareavtale</label>' +
+                        '<input type="number" value="' + agreementPart + '" data-month="' + mi + '" data-acc="' + a.id + '" data-type="agreement" onchange="depositSplitChanged(this)" style="border-color:#6D834566;">' +
+                    '</div>' +
+                    '<div class="month-field"><label>Ekstra</label>' +
+                        '<input type="number" value="' + extraPart + '" data-month="' + mi + '" data-acc="' + a.id + '" data-type="extra" onchange="depositSplitChanged(this)" style="border-color:#60a5fa44;">' +
+                    '</div>' +
+                    '<div class="month-field"><label style="color:var(--blue3);">Innskudd totalt</label>' +
+                        '<input type="number" value="' + vals[1] + '" disabled style="opacity:0.5;">' +
                     '</div>' +
                 '</div>' +
             '</div>';
@@ -1139,6 +1229,62 @@ function cardChanged(input) {
     var fi = parseInt(input.dataset.field);
     if (!DATA.entries[mi][acc]) DATA.entries[mi][acc] = [0, 0];
     DATA.entries[mi][acc][fi] = parseFloat(input.value) || 0;
+    markUnsaved();
+}
+
+function depositSplitChanged(input) {
+    var mi = parseInt(input.dataset.month);
+    var acc = input.dataset.acc;
+    var type = input.dataset.type;
+    if (!DATA.entries[mi][acc]) DATA.entries[mi][acc] = [0, 0];
+    var entry = DATA.entries[mi][acc];
+    if (entry.length < 3) entry.push(0);
+
+    if (type === 'agreement') {
+        var agreement = parseFloat(input.value) || 0;
+        var extra = entry[1] - entry[2]; // preserve existing extra
+        entry[2] = agreement;
+        entry[1] = agreement + extra;
+    } else {
+        var extra = parseFloat(input.value) || 0;
+        entry[1] = entry[2] + extra;
+    }
+    renderMonthEditor();
+    renderCharts();
+    markUnsaved();
+}
+
+function childDepositSplitChanged(input) {
+    var mi = parseInt(input.dataset.month);
+    var cid = input.dataset.acc;
+    var parentId = input.dataset.parent;
+    var type = input.dataset.type;
+    if (!DATA.entries[mi][cid]) DATA.entries[mi][cid] = [0, 0];
+    var entry = DATA.entries[mi][cid];
+    if (entry.length < 3) entry.push(0);
+
+    if (type === 'agreement') {
+        var agreement = parseFloat(input.value) || 0;
+        var extra = entry[1] - entry[2];
+        entry[2] = agreement;
+        entry[1] = agreement + extra;
+    } else {
+        var extra = parseFloat(input.value) || 0;
+        entry[1] = entry[2] + extra;
+    }
+    // Summer barn til forelder
+    var parent = DATA.accounts.find(function(a) { return a.id === parentId });
+    if (parent && parent.children) {
+        var sum = [0, 0], hasData = false;
+        parent.children.forEach(function(c) {
+            var cv = DATA.entries[mi][c] || [0, 0];
+            sum[0] += cv[0]; sum[1] += cv[1];
+            if (cv[0] !== 0 || cv[1] !== 0) hasData = true;
+        });
+        if (hasData) DATA.entries[mi][parentId] = sum;
+    }
+    renderMonthEditor();
+    renderCharts();
     markUnsaved();
 }
 
@@ -1252,15 +1398,17 @@ function addMonth() {
     var entry = { month: nm };
     var lastEntry = DATA.entries[DATA.entries.length - 1];
     // Pre-fill active accounts with last month's balances, zero deposits
+    var agreements = DATA.savingsAgreements || {};
     DATA.accounts.forEach(function(a) {
         if (a.active === false) { entry[a.id] = [0, 0]; return; }
         var lastVals = lastEntry[a.id] || [0, 0];
-        entry[a.id] = [lastVals[0], 0];
+        var agreementVal = agreements[a.id] || 0;
+        entry[a.id] = [lastVals[0], agreementVal, agreementVal];
         // Pre-fill barn
         if (a.children) {
             a.children.forEach(function(cid) {
                 var cv = lastEntry[cid] || [0, 0];
-                entry[cid] = [cv[0], 0];
+                entry[cid] = [cv[0], 0, 0];
             });
         }
     });
