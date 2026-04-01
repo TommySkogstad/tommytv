@@ -141,6 +141,20 @@
         .rec-card .rec-handle { margin-top:1rem; padding:0.75rem 1rem; background:#1a2e1a; border:1px solid #6D8345; border-radius:8px; }
         .rec-card .rec-handle p { color:#6D8345; font-size:0.8rem; }
         .rec-card .rec-handle strong { color:#a3c76a; }
+        /* World map */
+        .world-map-svg { width:100%; height:auto; }
+        .world-map-svg .country { transition:fill 0.2s,stroke 0.2s; cursor:pointer; stroke:var(--blue1); stroke-width:0.5; }
+        .world-map-svg .country:hover { stroke:var(--white); stroke-width:1.5; filter:brightness(1.3); }
+        .world-map-svg .country.no-alloc { fill:var(--blue2); }
+        .map-tooltip { position:absolute; background:var(--blue1); border:1px solid var(--blue2); border-radius:8px; padding:0.5rem 0.75rem; font-size:0.75rem; color:var(--blue5); pointer-events:none; z-index:20; white-space:nowrap; opacity:0; transition:opacity 0.15s; }
+        .map-tooltip.show { opacity:1; }
+        .map-tooltip strong { color:var(--white); }
+        .region-legend { list-style:none; font-size:0.7rem; max-height:420px; overflow-y:auto; }
+        .region-legend li { display:flex; align-items:center; gap:0.5rem; padding:0.25rem 0; border-bottom:1px solid #1a2535; }
+        .region-legend .dot { width:8px; height:8px; border-radius:50%; flex-shrink:0; }
+        .region-legend .name { flex:1; color:var(--blue5); }
+        .region-legend .val { font-family:'DM Mono',monospace; font-size:0.65rem; color:var(--blue4); text-align:right; white-space:nowrap; }
+
         @media(max-width:600px) { header{flex-direction:column;align-items:flex-start} .row{grid-template-columns:1fr} .kpi-grid{grid-template-columns:repeat(3,1fr)} }
         @media(max-width:500px) { .kpi-grid{grid-template-columns:repeat(2,1fr)} }
     </style>
@@ -224,14 +238,21 @@
                 <span class="badge" id="askExposureDate">Fondsdata</span>
             </div>
             <div id="exposureFilters" style="display:flex;flex-wrap:wrap;gap:0.4rem;margin-bottom:0.75rem;"></div>
-            <div class="row">
-                <div class="card" style="height:420px">
-                    <div class="card-title">Geografisk fordeling</div>
-                    <canvas id="regionChart"></canvas>
+            <div class="card" style="margin-bottom:0.75rem;">
+                <div class="card-title">Geografisk fordeling</div>
+                <div style="display:flex;gap:1rem;flex-wrap:wrap;align-items:flex-start;">
+                    <div id="worldMapWrap" style="flex:1;min-width:320px;"></div>
+                    <div id="regionLegend" style="min-width:160px;"></div>
                 </div>
+            </div>
+            <div class="row">
                 <div class="card" style="height:420px">
                     <div class="card-title">Sektorfordeling</div>
                     <canvas id="sectorChart"></canvas>
+                </div>
+                <div class="card" style="height:420px">
+                    <div class="card-title">Aktivaklasser</div>
+                    <canvas id="assetClassChart"></canvas>
                 </div>
             </div>
             <div id="cryptoChartWrap" style="display:none;margin-top:0.75rem;">
@@ -623,21 +644,14 @@ function renderCharts() {
                     });
                 });
 
-                var regionColors = ['#60a5fa','#22d3ee','#818cf8','#a78bfa','#f472b6','#F9A850','#34d399','#fb923c','#84cc16','#e879f9','#7a96b0','#fbbf24'];
                 var sectorColors = ['#22d3ee','#60a5fa','#818cf8','#F9A850','#34d399','#f472b6','#fb923c','#a78bfa','#84cc16','#e879f9','#fbbf24','#7a96b0'];
 
                 function sortedEntries(obj) {
                     return Object.entries(obj).sort(function(a,b) { return b[1] - a[1] });
                 }
 
-                var rSorted = sortedEntries(regionKr);
-                if (charts.region) charts.region.destroy();
-                charts.region = new Chart(document.getElementById('regionChart'), {
-                    type:'doughnut',
-                    data:{labels:rSorted.map(function(r){return r[0]}), datasets:[{data:rSorted.map(function(r){return Math.round(r[1])}), backgroundColor:regionColors.slice(0,rSorted.length), borderColor:'#1b2d42', borderWidth:1}]},
-                    options:{responsive:true,maintainAspectRatio:false,cutout:'55%',plugins:{legend:{position:'bottom',labels:{usePointStyle:true,pointStyle:'circle',padding:6,font:{size:10},color:'#7a96b0'}},
-                        tooltip:{callbacks:{label:function(c){var pct=(c.parsed/totalVal*100).toFixed(1);return c.label+': '+fmt(c.parsed)+' ('+pct+'%)'}}}}}
-                });
+                // Verdenskart i stedet for regionChart
+                renderWorldMap(regionKr, totalVal);
 
                 var sSorted = sortedEntries(sectorKr);
                 if (charts.sector) charts.sector.destroy();
@@ -646,6 +660,32 @@ function renderCharts() {
                     data:{labels:sSorted.map(function(s){return s[0]}), datasets:[{data:sSorted.map(function(s){return Math.round(s[1])}), backgroundColor:sectorColors.slice(0,sSorted.length), borderColor:'#1b2d42', borderWidth:1}]},
                     options:{responsive:true,maintainAspectRatio:false,cutout:'55%',plugins:{legend:{position:'bottom',labels:{usePointStyle:true,pointStyle:'circle',padding:6,font:{size:10},color:'#7a96b0'}},
                         tooltip:{callbacks:{label:function(c){var pct=(c.parsed/totalVal*100).toFixed(1);return c.label+': '+fmt(c.parsed)+' ('+pct+'%)'}}}}}
+                });
+
+                // Aktivaklasse donut-chart
+                var assetClasses = {};
+                var pensjonIds = [];
+                DATA.accounts.forEach(function(acc) {
+                    if (acc.active === false) return;
+                    var val = (lastEntry[acc.id] || [0,0])[0];
+                    if (val <= 0) return;
+                    var cls;
+                    if (acc.id === 'gull') cls = 'Råvarer';
+                    else if (acc.id === 'krypto') cls = 'Krypto';
+                    else if (acc.id === 'crowdfunding') cls = 'Crowdfunding';
+                    else if (acc.category === 'pensjon') cls = 'Pensjon';
+                    else cls = 'Aksjefond';
+                    assetClasses[cls] = (assetClasses[cls] || 0) + val;
+                });
+                var acSorted = sortedEntries(assetClasses);
+                var acColors = {'Aksjefond':'#60a5fa','Pensjon':'#818cf8','Råvarer':'#fbbf24','Krypto':'#fb923c','Crowdfunding':'#34d399'};
+                var acTotal = acSorted.reduce(function(s,x){return s+x[1]},0);
+                if (charts.assetClass) charts.assetClass.destroy();
+                charts.assetClass = new Chart(document.getElementById('assetClassChart'), {
+                    type:'doughnut',
+                    data:{labels:acSorted.map(function(x){return x[0]}), datasets:[{data:acSorted.map(function(x){return Math.round(x[1])}), backgroundColor:acSorted.map(function(x){return acColors[x[0]]||'#7a96b0'}), borderColor:'#1b2d42', borderWidth:2}]},
+                    options:{responsive:true,maintainAspectRatio:false,cutout:'55%',plugins:{legend:{position:'bottom',labels:{usePointStyle:true,pointStyle:'circle',padding:6,font:{size:10},color:'#7a96b0'}},
+                        tooltip:{callbacks:{label:function(c){var p=(c.parsed/acTotal*100).toFixed(1);return c.label+': '+fmt(c.parsed)+' ('+p+'%)'}}}}}
                 });
             }
 
@@ -731,6 +771,129 @@ function renderCharts() {
     ].map(function(i) { return '<div class="insight ' + i.c + '"><h3>' + i.t + '</h3><p>' + i.p + '</p></div>' }).join('');
 
     renderAllocation();
+}
+
+/* ── World map (choropleth) ── */
+function renderWorldMap(regionKr, totalVal) {
+    // Forenklet equirectangular kart-paths for relevante land
+    // Koordinater: x=0..800, y=0..400 (lon -180..180 → x, lat 90..-90 → y)
+    function lonlat(lon, lat) { return [(lon + 180) * (800/360), (90 - lat) * (400/180)]; }
+
+    var countryPaths = {
+        'USA': 'M 45,120 L 140,120 155,135 155,155 145,175 130,180 115,175 100,180 80,175 55,170 40,160 35,145 Z',
+        'Canada': 'M 48,60 L 160,55 175,70 170,90 160,105 155,115 140,118 48,118 35,110 30,90 35,70 Z',
+        'Storbritannia': 'M 350,100 L 356,95 360,100 358,112 354,118 350,115 348,108 Z',
+        'Frankrike': 'M 352,130 L 365,125 372,130 375,145 368,155 355,155 348,145 Z',
+        'Tyskland': 'M 368,115 L 380,110 388,118 386,132 375,135 365,128 366,118 Z',
+        'Nederland': 'M 362,108 L 370,105 374,112 368,115 362,112 Z',
+        'Belgia': 'M 358,118 L 368,115 370,122 363,125 356,122 Z',
+        'Sveits': 'M 368,135 L 378,132 382,138 376,143 368,142 Z',
+        'Italia': 'M 378,138 L 385,132 392,138 388,158 382,168 378,162 380,148 Z',
+        'Spania': 'M 335,148 L 360,145 365,155 358,168 340,170 330,162 Z',
+        'Sverige': 'M 385,55 L 392,48 396,60 394,85 388,95 382,90 380,70 Z',
+        'Norge': 'M 372,50 L 384,42 388,55 385,80 378,90 372,82 370,62 Z',
+        'Danmark': 'M 378,100 L 386,96 388,104 382,108 376,105 Z',
+        'Finland': 'M 398,45 L 408,40 412,55 408,75 400,80 396,70 395,52 Z',
+        'Japan': 'M 690,140 L 700,130 705,140 703,160 697,168 690,160 Z',
+        'Sør-Korea': 'M 680,148 L 688,142 692,150 688,160 682,158 Z',
+        'Taiwan': 'M 685,175 L 690,170 693,178 689,184 685,181 Z',
+        'India': 'M 570,175 L 590,160 605,170 610,195 600,220 585,230 572,218 565,195 Z',
+        'Australia': 'M 650,280 L 710,270 730,290 725,320 700,335 660,330 640,310 645,290 Z'
+    };
+
+    // Finn maks-verdi for fargeskala
+    var maxKr = 0;
+    Object.keys(regionKr).forEach(function(r) {
+        if (r !== 'Global' && r !== 'Andre' && regionKr[r] > maxKr) maxKr = regionKr[r];
+    });
+
+    // Fargeskala: --blue2 (#2e4260) → #60a5fa
+    function allocColor(kr) {
+        if (!kr || kr <= 0) return '#2e4260';
+        var t = Math.min(kr / maxKr, 1);
+        t = Math.pow(t, 0.5); // square root for bedre spredning
+        // Interpoler fra #2e4260 til #60a5fa
+        var r = Math.round(0x2e + t * (0x60 - 0x2e));
+        var g = Math.round(0x42 + t * (0xa5 - 0x42));
+        var b = Math.round(0x60 + t * (0xfa - 0x60));
+        return 'rgb(' + r + ',' + g + ',' + b + ')';
+    }
+
+    // Bygg SVG
+    var svgPaths = '';
+    // Bakgrunnskontinenter (fyllfarger for land uten data)
+    var allCountries = Object.keys(countryPaths);
+    allCountries.forEach(function(name) {
+        var kr = regionKr[name] || 0;
+        var fill = allocColor(kr);
+        var cls = kr > 0 ? 'country' : 'country no-alloc';
+        var pctVal = totalVal > 0 ? (kr / totalVal * 100).toFixed(1) : '0.0';
+        svgPaths += '<path class="' + cls + '" d="' + countryPaths[name] + '" fill="' + fill + '" ' +
+            'data-country="' + name + '" data-kr="' + Math.round(kr) + '" data-pct="' + pctVal + '"/>';
+    });
+
+    // «Global» og «Andre» som egne bokser under kartet
+    var extraHTML = '';
+    ['Global', 'Andre'].forEach(function(label) {
+        var kr = regionKr[label] || 0;
+        if (kr > 0) {
+            var pctVal = totalVal > 0 ? (kr / totalVal * 100).toFixed(1) : '0.0';
+            extraHTML += '<div style="display:inline-flex;align-items:center;gap:0.5rem;padding:0.35rem 0.75rem;background:var(--blue2);border-radius:6px;font-size:0.7rem;">' +
+                '<span style="color:var(--white);">' + label + '</span>' +
+                '<span style="font-family:\'DM Mono\',monospace;font-size:0.65rem;color:var(--blue4);">' + fmt(Math.round(kr)) + ' · ' + pctVal + '%</span>' +
+            '</div>';
+        }
+    });
+
+    var wrap = document.getElementById('worldMapWrap');
+    wrap.innerHTML =
+        '<div style="position:relative;">' +
+            '<svg viewBox="0 0 800 400" class="world-map-svg" style="background:var(--navy);border-radius:8px;">' +
+                // Enkel bakgrunn med gridlinjer
+                '<line x1="0" y1="200" x2="800" y2="200" stroke="#1b2d42" stroke-width="0.5" stroke-dasharray="4,4"/>' +
+                '<line x1="400" y1="0" x2="400" y2="400" stroke="#1b2d42" stroke-width="0.5" stroke-dasharray="4,4"/>' +
+                svgPaths +
+            '</svg>' +
+            '<div class="map-tooltip" id="mapTooltip"></div>' +
+            (extraHTML ? '<div style="display:flex;gap:0.5rem;flex-wrap:wrap;margin-top:0.5rem;">' + extraHTML + '</div>' : '') +
+        '</div>';
+
+    // Hover-events
+    var tooltip = document.getElementById('mapTooltip');
+    var paths = wrap.querySelectorAll('.country');
+    paths.forEach(function(p) {
+        p.addEventListener('mouseenter', function(e) {
+            var name = p.dataset.country;
+            var kr = parseInt(p.dataset.kr);
+            var pct = p.dataset.pct;
+            tooltip.innerHTML = '<strong>' + name + '</strong><br>' + fmt(kr) + ' · ' + pct + '%';
+            tooltip.classList.add('show');
+        });
+        p.addEventListener('mousemove', function(e) {
+            var rect = wrap.getBoundingClientRect();
+            tooltip.style.left = (e.clientX - rect.left + 12) + 'px';
+            tooltip.style.top = (e.clientY - rect.top - 10) + 'px';
+        });
+        p.addEventListener('mouseleave', function() {
+            tooltip.classList.remove('show');
+        });
+    });
+
+    // Legend
+    var sorted = Object.entries(regionKr).sort(function(a, b) { return b[1] - a[1]; });
+    var legendHTML = '<ul class="region-legend">';
+    sorted.forEach(function(entry) {
+        var name = entry[0], kr = entry[1];
+        var pctVal = totalVal > 0 ? (kr / totalVal * 100).toFixed(1) : '0.0';
+        var color = allocColor(kr);
+        legendHTML += '<li>' +
+            '<span class="dot" style="background:' + color + ';"></span>' +
+            '<span class="name">' + name + '</span>' +
+            '<span class="val">' + fmt(Math.round(kr)) + ' · ' + pctVal + '%</span>' +
+        '</li>';
+    });
+    legendHTML += '</ul>';
+    document.getElementById('regionLegend').innerHTML = legendHTML;
 }
 
 /* ── Allocation dashboard ── */

@@ -6376,6 +6376,22 @@
         "riskScore": 5,
         "riskLabel": "Svært høy",
         "riskNote": "Kryptovaluta, ekstrem volatilitet"
+      },
+      "gull": {
+        "regions": {
+          "Global": 100
+        },
+        "sectors": {
+          "Råvarer": 100
+        }
+      },
+      "crowdfunding": {
+        "regions": {
+          "Norge": 100
+        },
+        "sectors": {
+          "Crowdfunding": 100
+        }
       }
     }
   },
