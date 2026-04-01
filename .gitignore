@@ -1,2 +1,5 @@
 # .env og nginx.conf håndteres av git-crypt (se .gitattributes)
 claude-status.json
+node_modules/
+package.json
+package-lock.json
