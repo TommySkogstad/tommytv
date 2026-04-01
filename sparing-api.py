@@ -42,6 +42,18 @@ class Handler(BaseHTTPRequestHandler):
     def do_GET(self):
         if self.path == '/health':
             self._respond(200, 'ok')
+        elif self.path == '/data':
+            try:
+                with open(DATA_FILE) as f:
+                    data = f.read()
+                self.send_response(200)
+                self.send_header('Content-Type', 'application/json')
+                self.send_header('Access-Control-Allow-Origin', '*')
+                self.send_header('Cache-Control', 'no-cache')
+                self.end_headers()
+                self.wfile.write(data.encode())
+            except Exception as e:
+                self._respond(500, str(e))
         else:
             self._respond(404, 'Not found')
 

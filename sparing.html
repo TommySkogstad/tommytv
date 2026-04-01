@@ -365,7 +365,13 @@ const CHILD_NAMES = {
 };
 
 /* ── Load ── */
-fetch('/sparing-data.json').then(r => r.json()).then(data => {
+function loadData() {
+    // Hent fra API (alltid fersk) med fallback til statisk fil
+    return fetch(API_BASE + '/data').then(r => r.json())
+        .catch(() => fetch('/sparing-data.json').then(r => r.json()));
+}
+
+loadData().then(data => {
     DATA = data;
     if (!DATA.savingsAgreements) DATA.savingsAgreements = {};
     if (isLAN) {
@@ -1857,7 +1863,12 @@ function saveData() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(DATA)
     }).then(function(r) {
-        if (r.ok) { toast('Lagret!'); var sb=document.getElementById('saveBtn'); sb.textContent='Lagre'; sb.style.borderColor=''; sb.style.color=''; }
+        if (r.ok) {
+            toast('Lagret!');
+            var sb = document.getElementById('saveBtn');
+            sb.textContent = 'Lagre'; sb.style.borderColor = ''; sb.style.color = '';
+            renderCharts();
+        }
         else r.json().then(function(d) { toast('Feil: ' + d.status, true) });
     }).catch(function(e) {
         toast('Kunne ikke lagre: ' + e.message, true);
