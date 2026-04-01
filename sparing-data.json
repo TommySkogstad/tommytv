@@ -6023,7 +6023,7 @@
         2500
       ],
       "ask": [
-        104464,
+        106964,
         7000
       ],
       "ask_odin_global_d": [
@@ -6073,7 +6073,7 @@
         0
       ],
       "gull": [
-        0,
+        3000,
         3000
       ],
       "cashback": [
@@ -6091,7 +6091,7 @@
         "ETH_staking": 0.04659498
       },
       "ask_klp_fremvoksende_markeder_indeks_n": [
-        0,
+        2500,
         2500
       ]
     }
@@ -6398,9 +6398,7 @@
         "riskNote": "Kryptovaluta, ekstrem volatilitet"
       },
       "gull": {
-        "regions": {
-          "Global": 100
-        },
+        "regions": {},
         "sectors": {
           "Råvarer": 100
         }
