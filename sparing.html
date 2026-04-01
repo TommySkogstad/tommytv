@@ -11,7 +11,7 @@
         :root { --navy:#0d1b2a; --blue1:#1b2d42; --blue2:#2e4260; --blue3:#4a6080; --blue4:#7a96b0; --blue5:#b8cad8; --white:#f4f5f2; }
         * { margin:0; padding:0; box-sizing:border-box; }
         body { font-family:'DM Sans',sans-serif; background:var(--navy); color:var(--blue5); min-height:100vh; }
-        header { max-width:900px; margin:0 auto; padding:2.5rem 1rem 2rem; display:flex; align-items:center; justify-content:space-between; gap:1.5rem; }
+        header { max-width:1100px; margin:0 auto; padding:2.5rem 1rem 2rem; display:flex; align-items:center; justify-content:space-between; gap:1.5rem; }
         .header-brand { display:flex; align-items:center; gap:1.25rem; }
         .header-brand img { height:4rem; width:4rem; }
         .header-brand-text { display:flex; flex-direction:column; gap:4px; }
@@ -23,7 +23,7 @@
         .header-nav a:hover { color:var(--white); border-color:var(--blue4); }
         .header-nav a.active { color:var(--white); border-color:var(--blue4); background:var(--blue1); }
         .nav-sep { width:1px; height:1.2rem; background:var(--blue2); }
-        main { max-width:900px; margin:0 auto; padding:0 1rem 3rem; }
+        main { max-width:1100px; margin:0 auto; padding:0 1rem 3rem; }
         .section { margin-bottom:2.5rem; }
         .section-header { display:flex; align-items:center; gap:0.75rem; margin-bottom:1rem; padding-bottom:0.5rem; border-bottom:1px solid var(--blue1); }
         .section-header h2 { font-size:1.25rem; font-weight:500; color:var(--white); }
@@ -52,15 +52,7 @@
         .insight.info { border-left-color:#60a5fa; }
         .insight h3 { font-size:0.85rem; color:var(--white); font-weight:500; margin-bottom:0.3rem; }
         .insight p { font-size:0.75rem; color:var(--blue4); line-height:1.5; }
-        .timeline { position:relative; padding-left:20px; border-left:2px solid var(--blue2); }
-        .evt { position:relative; margin-bottom:1rem; padding:0.75rem 1rem; background:var(--blue1); border:1px solid var(--blue2); border-radius:10px; }
-        .evt::before { content:''; position:absolute; left:-27px; top:14px; width:10px; height:10px; border-radius:50%; border:2px solid var(--blue3); background:var(--navy); }
-        .evt.big::before { border-color:#F9A850; background:#F9A850; }
-        .evt.sell::before { border-color:#C35839; }
-        .evt-date { font-family:'DM Mono',monospace; font-size:0.6rem; color:var(--blue3); }
-        .evt-title { font-size:0.8rem; color:var(--white); font-weight:500; }
-        .evt-desc { font-size:0.7rem; color:var(--blue4); margin-top:0.15rem; }
-        footer { text-align:center; padding:2rem 1rem; color:var(--blue3); font-size:0.85rem; border-top:1px solid var(--blue1); max-width:900px; margin:0 auto; }
+        footer { text-align:center; padding:2rem 1rem; color:var(--blue3); font-size:0.85rem; border-top:1px solid var(--blue1); max-width:1100px; margin:0 auto; }
         footer a { transition:color 0.2s; text-decoration:none; }
         footer a:hover { color:var(--white); }
 
@@ -118,6 +110,37 @@
         .modal input:focus, .modal select:focus { outline:none; border-color:#2563eb; }
         .modal .btn-row { display:flex; gap:0.5rem; margin-top:1.5rem; justify-content:flex-end; }
 
+        .alloc-row { background:var(--blue1); border:1px solid var(--blue2); border-radius:12px; padding:1rem 1.25rem; margin-bottom:0.5rem; }
+        .alloc-header { display:flex; justify-content:space-between; align-items:center; margin-bottom:0.4rem; }
+        .alloc-label { font-size:0.85rem; font-weight:500; color:var(--white); }
+        .alloc-values { font-family:'DM Mono',monospace; font-size:0.7rem; color:var(--blue4); display:flex; gap:1rem; }
+        .alloc-bar-bg { height:8px; background:var(--blue2); border-radius:4px; position:relative; overflow:visible; }
+        .alloc-bar-fill { height:100%; border-radius:4px; transition:width 0.5s; position:relative; }
+        .alloc-bar-target { position:absolute; top:-3px; height:14px; width:2px; background:var(--white); border-radius:1px; }
+        .alloc-bar-target-label { position:absolute; top:-18px; font-family:'DM Mono',monospace; font-size:0.5rem; color:var(--blue4); transform:translateX(-50%); white-space:nowrap; }
+        .alloc-status { font-family:'DM Mono',monospace; font-size:0.6rem; margin-top:0.25rem; }
+        .alloc-status.under { color:#F9A850; }
+        .alloc-status.ok { color:#6D8345; }
+        .alloc-status.over { color:#C35839; }
+        .alloc-edit { display:flex; align-items:center; gap:0.5rem; }
+        .alloc-edit label { font-family:'DM Mono',monospace; font-size:0.55rem; color:var(--blue3); text-transform:uppercase; }
+        .alloc-edit input { width:50px; background:#0a1520; border:1px solid var(--blue2); border-radius:4px; color:var(--blue5); font-family:'DM Mono',monospace; font-size:0.7rem; padding:0.2rem 0.3rem; text-align:right; }
+        .alloc-edit input:focus { outline:none; border-color:#2563eb; }
+        .rec-card { background:var(--blue1); border:1px solid var(--blue2); border-radius:12px; padding:1.25rem; }
+        .rec-card h3 { font-size:0.95rem; color:var(--white); font-weight:500; margin-bottom:0.5rem; }
+        .rec-card p, .rec-card li { font-size:0.8rem; color:var(--blue4); line-height:1.6; }
+        .rec-card .rec-primary { border-left:3px solid #6D8345; padding-left:1rem; margin:0.75rem 0; }
+        .rec-card .rec-primary strong { color:var(--white); }
+        .rec-card .rec-alt { margin-top:0.75rem; padding-top:0.75rem; border-top:1px solid var(--blue2); }
+        .rec-card .rec-alt ol { padding-left:1.2rem; }
+        .rec-card .rec-weakness { color:#F9A850; }
+        .rec-card .rec-table { width:100%; border-collapse:collapse; font-size:0.75rem; margin:0.5rem 0; }
+        .rec-card .rec-table th { text-align:left; color:var(--blue4); font-family:'DM Mono',monospace; font-size:0.6rem; text-transform:uppercase; letter-spacing:0.06em; padding:0.4rem 0.5rem; border-bottom:1px solid var(--blue2); }
+        .rec-card .rec-table td { padding:0.35rem 0.5rem; color:var(--blue5); border-bottom:1px solid #1a2535; }
+        .rec-card .rec-table td:nth-child(2), .rec-card .rec-table td:nth-child(3) { text-align:right; }
+        .rec-card .rec-handle { margin-top:1rem; padding:0.75rem 1rem; background:#1a2e1a; border:1px solid #6D8345; border-radius:8px; }
+        .rec-card .rec-handle p { color:#6D8345; font-size:0.8rem; }
+        .rec-card .rec-handle strong { color:#a3c76a; }
         @media(max-width:600px) { header{flex-direction:column;align-items:flex-start} .row{grid-template-columns:1fr} .kpi-grid{grid-template-columns:repeat(3,1fr)} }
         @media(max-width:500px) { .kpi-grid{grid-template-columns:repeat(2,1fr)} }
     </style>
@@ -166,7 +189,7 @@
                 <h2>Portefølje-utvikling</h2>
                 <span class="badge">Alle kontoer</span>
             </div>
-            <div class="card"><canvas id="stackedChart" height="120"></canvas></div>
+            <div class="card" style="height:400px"><canvas id="stackedChart"></canvas></div>
         </section>
 
         <section class="section">
@@ -175,13 +198,13 @@
                 <span class="badge">Analyse</span>
             </div>
             <div class="row">
-                <div class="card">
+                <div class="card" style="height:420px">
                     <div class="card-title" id="donutTitle">Fordeling</div>
-                    <canvas id="donutChart" height="160"></canvas>
+                    <canvas id="donutChart"></canvas>
                 </div>
-                <div class="card">
+                <div class="card" style="height:420px">
                     <div class="card-title">Innskudd vs portefolje-verdi</div>
-                    <canvas id="contribChart" height="160"></canvas>
+                    <canvas id="contribChart"></canvas>
                 </div>
             </div>
         </section>
@@ -191,7 +214,31 @@
                 <h2>Månedlig sparing</h2>
                 <span class="badge">Netto innskudd</span>
             </div>
-            <div class="card"><canvas id="barChart" height="75"></canvas></div>
+            <div class="card" style="height:250px"><canvas id="barChart"></canvas></div>
+        </section>
+
+        <section class="section" id="askExposureSection" style="display:none">
+            <div class="section-header">
+                <h2>Fondseksponering</h2>
+                <span class="badge" id="askExposureDate">Fondsdata</span>
+            </div>
+            <div id="exposureFilters" style="display:flex;flex-wrap:wrap;gap:0.4rem;margin-bottom:0.75rem;"></div>
+            <div class="row">
+                <div class="card" style="height:420px">
+                    <div class="card-title">Geografisk fordeling</div>
+                    <canvas id="regionChart"></canvas>
+                </div>
+                <div class="card" style="height:420px">
+                    <div class="card-title">Sektorfordeling</div>
+                    <canvas id="sectorChart"></canvas>
+                </div>
+            </div>
+            <div id="cryptoChartWrap" style="display:none;margin-top:0.75rem;">
+                <div class="card" style="height:320px;max-width:50%;">
+                    <div class="card-title" id="cryptoChartTitle">Krypto-portefølje</div>
+                    <canvas id="cryptoChart"></canvas>
+                </div>
+            </div>
         </section>
 
         <section class="section">
@@ -210,13 +257,24 @@
             <div class="insight-grid" id="insights"></div>
         </section>
 
-        <section class="section">
+        <section class="section" id="allocationSection" style="display:none">
             <div class="section-header">
-                <h2>Tidslinje</h2>
-                <span class="badge">Nøkkelbegivenheter</span>
+                <h2>Investeringsstrategi</h2>
+                <span class="badge" id="allocDate"></span>
             </div>
-            <div class="timeline" id="timeline"></div>
+
+            <div id="allocationBars"></div>
+
+            <div style="margin-top:1rem;">
+                <div class="card" style="height:400px">
+                    <div class="card-title">Eksponering over tid</div>
+                    <canvas id="allocationHistoryChart"></canvas>
+                </div>
+            </div>
+
+            <div id="allocationRec" style="margin-top:0.75rem;"></div>
         </section>
+
     </main>
 
     <div id="site-footer"></div>
@@ -262,6 +320,13 @@ let DATA = null;
 const isLAN = true;
 const API_BASE = location.protocol + '//' + location.hostname + ':8881';
 const MONTH_NAMES = ['jan','feb','mar','apr','mai','jun','jul','aug','sep','okt','nov','des'];
+const CHILD_NAMES = {
+    'ask_odin_global_d': 'ODIN Global D',
+    'ask_sb1_alt_i_ett_100': 'SB1 Alt-i-ett 100 N',
+    'ask_sb1_indeks_global': 'SB1 Indeks Global N',
+    'ask_sb1_norge_verdi': 'SB1 Norge Verdi N',
+    'ask_sb1_utbytte': 'SB1 Utbytte U'
+};
 
 /* ── Load ── */
 fetch('/sparing-data.json').then(r => r.json()).then(data => {
@@ -366,7 +431,7 @@ function renderCharts() {
     charts.stacked = new Chart(document.getElementById('stackedChart'), {
         type:'line',
         data:{labels:L, datasets:A.filter(function(a){return minorNames.indexOf(a.name)===-1}).map(function(a){return {label:a.name,fill:true,data:a.v,backgroundColor:a.color+'25',borderColor:a.color,borderWidth:1.5,pointRadius:0,pointHitRadius:8,tension:.3}})},
-        options:{responsive:true,interaction:{mode:'index',intersect:false},
+        options:{responsive:true,maintainAspectRatio:false,interaction:{mode:'index',intersect:false},
             scales:{x:{grid:{display:false},ticks:{maxTicksLimit:16,font:{size:10}}},y:{stacked:true,grid:{color:'#1b2d4288'},ticks:{callback:function(v){return fmtK(v)}},beginAtZero:true}},
             plugins:{tooltip:{...tt,callbacks:{label:function(c){return ' '+c.dataset.label+': '+fmt(c.parsed.y)},footer:function(items){return 'Total: '+fmt(items.reduce(function(a,b){return a+b.parsed.y},0))}},footerColor:'#f4f5f2',footerFont:{weight:'bold'}},legend:{position:'bottom',labels:{usePointStyle:true,pointStyle:'circle',padding:10,font:{size:11}}}}}
     });
@@ -376,7 +441,7 @@ function renderCharts() {
     charts.donut = new Chart(document.getElementById('donutChart'), {
         type:'doughnut',
         data:{labels:lastVals.map(function(x){return x.name}),datasets:[{data:lastVals.map(function(x){return x.val}),backgroundColor:lastVals.map(function(x){return x.color}),borderColor:'#1b2d42',borderWidth:2,hoverOffset:6}]},
-        options:{responsive:true,cutout:'60%',plugins:{tooltip:{...tt,callbacks:{label:function(c){var t=c.dataset.data.reduce(function(a,b){return a+b},0);return ' '+c.label+': '+fmt(c.parsed)+' ('+((c.parsed/t)*100).toFixed(1)+'%)'}}},legend:{position:'right',labels:{usePointStyle:true,pointStyle:'circle',padding:8,font:{size:10}}}}}
+        options:{responsive:true,maintainAspectRatio:false,cutout:'60%',plugins:{tooltip:{...tt,callbacks:{label:function(c){var t=c.dataset.data.reduce(function(a,b){return a+b},0);return ' '+c.label+': '+fmt(c.parsed)+' ('+((c.parsed/t)*100).toFixed(1)+'%)'}}},legend:{position:'bottom',labels:{usePointStyle:true,pointStyle:'circle',padding:8,font:{size:10}}}}}
     });
 
     // Contrib vs value
@@ -387,7 +452,7 @@ function renderCharts() {
             {label:'Innbetalt',data:cumContrib,borderColor:'#a78bfa',backgroundColor:'#a78bfa10',fill:true,tension:.3,pointRadius:0,borderWidth:2,borderDash:[5,3]},
             {label:'Sparekonto 3%',data:hypoSav,borderColor:'#4a6080',fill:false,tension:.3,pointRadius:0,borderWidth:1.5,borderDash:[2,4]}
         ]},
-        options:{responsive:true,interaction:{mode:'index',intersect:false},
+        options:{responsive:true,maintainAspectRatio:false,interaction:{mode:'index',intersect:false},
             scales:{x:{grid:{display:false},ticks:{maxTicksLimit:10,font:{size:9}}},y:{grid:{color:'#1b2d4288'},ticks:{callback:function(v){return fmtK(v)}}}},
             plugins:{tooltip:tt,legend:{position:'bottom',labels:{usePointStyle:true,pointStyle:'circle',padding:8,font:{size:10}}}}}
     });
@@ -396,13 +461,13 @@ function renderCharts() {
     charts.bar = new Chart(document.getElementById('barChart'), {
         type:'bar',
         data:{labels:L,datasets:[{label:'Netto innskudd',data:totalM,backgroundColor:totalM.map(function(v){return v>=0?'#6D834560':'#C3583940'}),borderColor:totalM.map(function(v){return v>=0?'#6D8345':'#C35839'}),borderWidth:1,borderRadius:2}]},
-        options:{responsive:true,
+        options:{responsive:true,maintainAspectRatio:false,
             scales:{x:{grid:{display:false},ticks:{maxTicksLimit:16,font:{size:10}}},y:{grid:{color:'#1b2d4288'},ticks:{callback:function(v){return fmtK(v)}}}},
             plugins:{tooltip:tt,legend:{display:false}}}
     });
 
-    // Milestones
-    var thresholds = [100000,250000,500000,750000,1000000];
+    // Milestones — starter på 100k, fine runde tall oppover
+    var thresholds = [100000,250000,500000,750000,1000000,1500000,2000000,2500000,5000000,7500000,10000000];
     var msHTML = '', prevT = 0;
     thresholds.forEach(function(t) {
         var idx = totalV.findIndex(function(v) { return v >= t });
@@ -413,7 +478,166 @@ function renderCharts() {
             prevT = t;
         }
     });
+    // Neste milepæl
+    var nextT = thresholds.find(function(t) { return totalV[totalV.length-1] < t });
+    if (nextT) {
+        var pctToNext = ((totalV[totalV.length-1] / nextT) * 100).toFixed(0);
+        msHTML += '<div class="ms" style="border-style:dashed;opacity:0.6"><div class="ms-amount">' + fmtK(nextT) + '</div><div class="ms-date">neste mål</div><div class="ms-sub">' + pctToNext + '% dit</div></div>';
+    }
     document.getElementById('milestones').innerHTML = msHTML;
+
+    // Fondseksponering med kontofilter
+    if (DATA.fundAllocations && DATA.fundAllocations.funds) {
+        var fa = DATA.fundAllocations;
+        var lastEntry = DATA.entries[N-1];
+
+        // Finn alle kontoer som har fondsdata (ekskluder krypto — egen visning)
+        var exposureAccounts = [];
+        var cryptoFund = null;
+        DATA.accounts.forEach(function(a) {
+            if (a.active === false) return;
+            var hasFundData = false;
+            if (fa.funds[a.id]) hasFundData = true;
+            if (a.children) a.children.forEach(function(c) { if (fa.funds[c]) hasFundData = true; });
+            if (hasFundData) {
+                var val = (lastEntry[a.id] || [0,0])[0];
+                if (val > 0) {
+                    if (a.category === 'annet' || a.id === 'krypto') {
+                        cryptoFund = {id: a.id, name: a.name, color: a.color, val: val};
+                    } else {
+                        exposureAccounts.push({id: a.id, name: a.name, color: a.color, val: val});
+                    }
+                }
+            }
+        });
+
+        if (exposureAccounts.length > 0) {
+            document.getElementById('askExposureSection').style.display = 'block';
+            document.getElementById('askExposureDate').textContent = 'Oppdatert ' + fa.updatedAt;
+
+            // Initielt: alle kontoer aktive
+            if (!window._exposureFilter) {
+                window._exposureFilter = {};
+                exposureAccounts.forEach(function(a) { window._exposureFilter[a.id] = true; });
+            }
+
+            // Bygg filterknapper
+            var filterHTML = '';
+            exposureAccounts.forEach(function(a) {
+                var active = window._exposureFilter[a.id] !== false;
+                filterHTML += '<button class="btn" style="font-size:0.7rem;padding:0.3rem 0.7rem;' +
+                    (active ? 'border-color:' + a.color + ';color:var(--white);background:' + a.color + '22;' : 'opacity:0.4;') +
+                    '" onclick="toggleExposureFilter(\'' + a.id + '\')">' +
+                    '<span style="display:inline-block;width:6px;height:6px;border-radius:50%;background:' + a.color + ';margin-right:0.4rem;"></span>' +
+                    a.name + ' (' + fmtK(a.val) + ')</button>';
+            });
+            document.getElementById('exposureFilters').innerHTML = filterHTML;
+
+            // Samle fond-IDer for aktive kontoer
+            var activeFundIds = [];
+            exposureAccounts.forEach(function(a) {
+                if (window._exposureFilter[a.id] === false) return;
+                var acc = DATA.accounts.find(function(x) { return x.id === a.id; });
+                if (acc && acc.children && acc.children.length > 0) {
+                    acc.children.forEach(function(c) { if (fa.funds[c]) activeFundIds.push(c); });
+                } else if (fa.funds[a.id]) {
+                    activeFundIds.push(a.id);
+                }
+            });
+
+            var totalVal = 0;
+            var fundWeights = {};
+            activeFundIds.forEach(function(fid) {
+                var val = (lastEntry[fid] || [0,0])[0];
+                // For barn uten egen verdi, bruk forelder-verdi fordelt likt
+                if (val <= 0) {
+                    DATA.accounts.forEach(function(acc) {
+                        if (acc.children && acc.children.indexOf(fid) >= 0) {
+                            val = (lastEntry[acc.id] || [0,0])[0] / acc.children.length;
+                        }
+                    });
+                }
+                if (val > 0) { fundWeights[fid] = val; totalVal += val; }
+            });
+
+            if (totalVal > 0) {
+                var regionKr = {}, sectorKr = {};
+                Object.keys(fundWeights).forEach(function(fid) {
+                    var val = fundWeights[fid];
+                    var fund = fa.funds[fid];
+                    Object.keys(fund.regions).forEach(function(r) {
+                        regionKr[r] = (regionKr[r] || 0) + val * fund.regions[r] / 100;
+                    });
+                    Object.keys(fund.sectors).forEach(function(s) {
+                        sectorKr[s] = (sectorKr[s] || 0) + val * fund.sectors[s] / 100;
+                    });
+                });
+
+                var regionColors = ['#60a5fa','#22d3ee','#818cf8','#a78bfa','#f472b6','#F9A850','#34d399','#fb923c','#84cc16','#e879f9','#7a96b0','#fbbf24'];
+                var sectorColors = ['#22d3ee','#60a5fa','#818cf8','#F9A850','#34d399','#f472b6','#fb923c','#a78bfa','#84cc16','#e879f9','#fbbf24','#7a96b0'];
+
+                function sortedEntries(obj) {
+                    return Object.entries(obj).sort(function(a,b) { return b[1] - a[1] });
+                }
+
+                var rSorted = sortedEntries(regionKr);
+                if (charts.region) charts.region.destroy();
+                charts.region = new Chart(document.getElementById('regionChart'), {
+                    type:'doughnut',
+                    data:{labels:rSorted.map(function(r){return r[0]}), datasets:[{data:rSorted.map(function(r){return Math.round(r[1])}), backgroundColor:regionColors.slice(0,rSorted.length), borderColor:'#1b2d42', borderWidth:1}]},
+                    options:{responsive:true,maintainAspectRatio:false,cutout:'55%',plugins:{legend:{position:'bottom',labels:{usePointStyle:true,pointStyle:'circle',padding:6,font:{size:10},color:'#7a96b0'}},
+                        tooltip:{callbacks:{label:function(c){var pct=(c.parsed/totalVal*100).toFixed(1);return c.label+': '+fmt(c.parsed)+' ('+pct+'%)'}}}}}
+                });
+
+                var sSorted = sortedEntries(sectorKr);
+                if (charts.sector) charts.sector.destroy();
+                charts.sector = new Chart(document.getElementById('sectorChart'), {
+                    type:'doughnut',
+                    data:{labels:sSorted.map(function(s){return s[0]}), datasets:[{data:sSorted.map(function(s){return Math.round(s[1])}), backgroundColor:sectorColors.slice(0,sSorted.length), borderColor:'#1b2d42', borderWidth:1}]},
+                    options:{responsive:true,maintainAspectRatio:false,cutout:'55%',plugins:{legend:{position:'bottom',labels:{usePointStyle:true,pointStyle:'circle',padding:6,font:{size:10},color:'#7a96b0'}},
+                        tooltip:{callbacks:{label:function(c){var pct=(c.parsed/totalVal*100).toFixed(1);return c.label+': '+fmt(c.parsed)+' ('+pct+'%)'}}}}}
+                });
+            }
+
+        }
+    }
+
+    // Krypto-kake med live-priser (bruker holdings fra siste entry)
+    var lastHoldings = DATA.entries[N-1].krypto_holdings;
+    if (lastHoldings && Object.keys(lastHoldings).length > 0) {
+        var coinMap = {'BTC':'bitcoin','DOGE':'dogecoin','ETH':'ethereum','ETH_staking':'ethereum','SOL':'solana','ADA':'cardano','XRP':'ripple','AVAX':'avalanche-2','LINK':'chainlink','DOT':'polkadot'};
+        var holdingsList = Object.keys(lastHoldings).filter(function(c){return lastHoldings[c]>0}).map(function(c){
+            return {symbol:c, label:c==='ETH_staking'?'ETH (staking)':c, amount:lastHoldings[c]};
+        });
+        if (holdingsList.length > 0) {
+            var neededCoins = holdingsList.map(function(h){return coinMap[h.symbol]||h.symbol.toLowerCase()}).filter(function(v,i,a){return v&&a.indexOf(v)===i}).join(',');
+            fetch('https://api.coingecko.com/api/v3/simple/price?ids='+neededCoins+'&vs_currencies=nok')
+            .then(function(r){return r.json()})
+            .then(function(prices){
+                var cryptoLabels=[], cryptoVals=[], totalCryptoVal=0;
+                var cryptoColors = ['#fb923c','#F9A850','#818cf8','#60a5fa','#34d399','#f472b6','#e879f9','#84cc16','#22d3ee','#a78bfa'];
+                holdingsList.forEach(function(h){
+                    var coinId=coinMap[h.symbol]||h.symbol.toLowerCase();
+                    var price=(prices[coinId]&&prices[coinId].nok)||0;
+                    var val=Math.round(h.amount*price);
+                    cryptoLabels.push(h.label);
+                    cryptoVals.push(val);
+                    totalCryptoVal+=val;
+                });
+                document.getElementById('cryptoChartWrap').style.display='block';
+                document.getElementById('cryptoChartTitle').textContent='Krypto — live ('+fmt(totalCryptoVal)+')';
+                if(charts.crypto)charts.crypto.destroy();
+                charts.crypto=new Chart(document.getElementById('cryptoChart'),{
+                    type:'doughnut',
+                    data:{labels:cryptoLabels,datasets:[{data:cryptoVals,backgroundColor:cryptoColors.slice(0,cryptoLabels.length),borderColor:'#1b2d42',borderWidth:1}]},
+                    options:{responsive:true,maintainAspectRatio:false,cutout:'55%',plugins:{
+                        legend:{position:'bottom',labels:{usePointStyle:true,pointStyle:'circle',padding:6,font:{size:10},color:'#7a96b0'}},
+                        tooltip:{callbacks:{label:function(c){var h=holdingsList[c.dataIndex];var pct=(c.parsed/totalCryptoVal*100).toFixed(1);return c.label+': '+fmt(c.parsed)+' ('+pct+'%) — '+h.amount+' '+h.symbol}}}
+                    }}
+                });
+            }).catch(function(err){console.warn('Krypto-priser utilgjengelig:',err)});
+        }
+    }
 
     // Insights
     var pensjonAccs = A.filter(function(a) { return a.category === 'pensjon' });
@@ -456,33 +680,314 @@ function renderCharts() {
         {c:'good', t:'Sparedisiplin', p:'Netto positive innskudd i ' + posM + ' av ' + N + ' måneder (' + (posM/N*100).toFixed(0) + '%). Snitt: ' + fmt(avgSave) + ' per måned.'}
     ].map(function(i) { return '<div class="insight ' + i.c + '"><h3>' + i.t + '</h3><p>' + i.p + '</p></div>' }).join('');
 
-    // Timeline — auto-generate significant events
-    var events = [];
-    for (var i = 1; i < N; i++) {
-        var diff = totalV[i] - totalV[i-1];
-        var netDep = totalM[i];
-        var pctChange = totalV[i-1] > 0 ? (diff / totalV[i-1] * 100) : 0;
-        if (Math.abs(pctChange) > 8) {
-            events.push({d: L[i], t: (diff > 0 ? 'Stor økning' : 'Stor nedgang'), p: fmt(Math.abs(diff)) + ' (' + pct(pctChange) + ') ' + (diff > 0 ? 'økning' : 'nedgang') + '.', c: diff > 0 ? 'big' : 'sell'});
-        } else if (Math.abs(netDep) > 20000) {
-            events.push({d: L[i], t: (netDep > 0 ? 'Stort innskudd' : 'Stort uttak'), p: 'Netto ' + fmt(Math.abs(netDep)) + (netDep > 0 ? ' inn.' : ' ut.'), c: netDep > 0 ? 'big' : 'sell'});
-        }
-    }
-    // Add milestones to timeline
-    thresholds.forEach(function(t) {
-        var idx = totalV.findIndex(function(v) { return v >= t });
-        if (idx >= 0) events.push({d: L[idx], t: 'Passerte ' + fmtK(t), p: 'Total porteføljeverdi passerte ' + fmt(t) + '.', c: 'big'});
-    });
-    // Current value
-    events.push({d: L[N-1], t: 'Portefølje i dag', p: 'Total verdi: ' + fmt(latest) + '. ' + DATA.accounts.length + ' kontoer.', c: 'big'});
-    // Sort by index (approximate by label)
-    events.sort(function(a,b) { return L.indexOf(a.d) - L.indexOf(b.d) });
-    // Keep last 12
-    events = events.slice(-12);
+    renderAllocation();
+}
 
-    document.getElementById('timeline').innerHTML = events.map(function(e) {
-        return '<div class="evt ' + e.c + '"><div class="evt-date">' + e.d + '</div><div class="evt-title">' + e.t + '</div><div class="evt-desc">' + e.p + '</div></div>';
-    }).join('');
+/* ── Allocation dashboard ── */
+function renderAllocation() {
+    if (!DATA || !DATA.allocationTargets || !DATA.fundAllocations) return;
+
+    var targets = DATA.allocationTargets;
+    var fa = DATA.fundAllocations;
+    var entries = DATA.entries;
+    var N = entries.length;
+    var lastEntry = entries[N-1];
+
+    // Beregn nåværende eksponering
+    var totalPortfolio = 0;
+    DATA.accounts.forEach(function(a) {
+        if (a.active !== false) totalPortfolio += (lastEntry[a.id] || [0,0])[0];
+    });
+    if (totalPortfolio <= 0) return;
+
+    // Samle fond-verdier for vekting
+    var fundVals = {};
+    DATA.accounts.forEach(function(a) {
+        if (a.active === false) return;
+        if (a.children && a.children.length > 0) {
+            var parentVal = (lastEntry[a.id] || [0,0])[0];
+            var perChild = parentVal / a.children.length;
+            a.children.forEach(function(c) {
+                var cv = (lastEntry[c] || [0,0])[0];
+                fundVals[c] = cv > 0 ? cv : perChild;
+            });
+        } else if (fa.funds[a.id]) {
+            fundVals[a.id] = (lastEntry[a.id] || [0,0])[0];
+        }
+    });
+
+    // Vektet region-beregning
+    var regionKr = {};
+    Object.keys(fundVals).forEach(function(fid) {
+        if (!fa.funds[fid] || !fa.funds[fid].regions) return;
+        var val = fundVals[fid];
+        Object.keys(fa.funds[fid].regions).forEach(function(r) {
+            regionKr[r] = (regionKr[r] || 0) + val * fa.funds[fid].regions[r] / 100;
+        });
+    });
+
+    // Beregn nåværende prosenter for hver target-kategori
+    var kryptoVal = (lastEntry['krypto'] || [0,0])[0];
+    var gullVal = (lastEntry['gull'] || [0,0])[0];
+    var crowdfundingVal = (lastEntry['crowdfunding'] || [0,0])[0];
+    var emRegions = ['Sør-Korea','Taiwan','India','Brasil','Kina','Indonesia','Mexico','Thailand','Sør-Afrika','Chile','Colombia','Peru','Malaysia','Filippinene'];
+    var emVal = 0;
+    emRegions.forEach(function(r) { emVal += regionKr[r] || 0; });
+    var norgeVal = regionKr['Norge'] || 0;
+    var usaVal = regionKr['USA'] || 0;
+
+    // Aktivaklasse-beregning
+    var aksjerFondVal = totalPortfolio - kryptoVal - gullVal - crowdfundingVal;
+
+    var current = {
+        krypto: (kryptoVal / totalPortfolio) * 100,
+        gull: (gullVal / totalPortfolio) * 100,
+        aksjer_fond: (aksjerFondVal / totalPortfolio) * 100,
+        emerging_markets: (emVal / totalPortfolio) * 100,
+        norge: (norgeVal / totalPortfolio) * 100,
+        usa: (usaVal / totalPortfolio) * 100
+    };
+
+    document.getElementById('allocationSection').style.display = 'block';
+    document.getElementById('allocDate').textContent = monthLabel(lastEntry.month);
+
+    // Render allokeringsbarer
+    var isLAN = location.hostname !== 'tommytv.no';
+    var barsHTML = '';
+    Object.keys(targets).forEach(function(key) {
+        var t = targets[key];
+        var cur = current[key] || 0;
+        var tgt = t.target;
+        var isMax = t.max || false;
+        var barMax = Math.max(tgt * 2, cur * 1.3, 10);
+        var fillPct = Math.min((cur / barMax) * 100, 100);
+        var targetPos = Math.min((tgt / barMax) * 100, 100);
+
+        var status, statusClass;
+        if (isMax) {
+            if (cur > tgt) { status = 'Over maks (' + cur.toFixed(1) + '% > ' + tgt + '%)'; statusClass = 'over'; }
+            else if (cur > tgt * 0.8) { status = 'Nær maks — vær forsiktig'; statusClass = 'under'; }
+            else { status = 'OK — under maks'; statusClass = 'ok'; }
+        } else {
+            var gap = tgt - cur;
+            var gapKr = Math.round(gap / 100 * totalPortfolio);
+            if (cur >= tgt * 0.9) { status = 'Mål nådd'; statusClass = 'ok'; }
+            else { status = 'Mangler ' + gap.toFixed(1) + '% (' + fmt(gapKr) + ')'; statusClass = 'under'; }
+        }
+
+        var curKr = Math.round(cur / 100 * totalPortfolio);
+
+        barsHTML += '<div class="alloc-row">' +
+            '<div class="alloc-header">' +
+                '<span class="alloc-label">' + t.label + '</span>' +
+                '<div class="alloc-values">' +
+                    '<span>' + fmt(curKr) + '</span>' +
+                    '<span>' + cur.toFixed(1) + '% / ' + (isMax ? 'maks ' : 'mål ') + tgt + '%</span>' +
+                    (isLAN ? '<div class="alloc-edit">' +
+                        '<select data-key="' + key + '" onchange="updateTargetType(this)" style="background:#0a1520;border:1px solid var(--blue2);border-radius:4px;color:var(--blue5);font-family:\'DM Mono\',monospace;font-size:0.6rem;padding:0.2rem 0.2rem;">' +
+                            '<option value="false"' + (!isMax ? ' selected' : '') + '>mål</option>' +
+                            '<option value="true"' + (isMax ? ' selected' : '') + '>maks</option>' +
+                        '</select>' +
+                        '<input type="number" step="0.5" value="' + tgt + '" data-key="' + key + '" onchange="updateTarget(this)">%' +
+                    '</div>' : '') +
+                '</div>' +
+            '</div>' +
+            '<div class="alloc-bar-bg">' +
+                '<div class="alloc-bar-fill" style="width:' + fillPct + '%;background:' + t.color + ';"></div>' +
+                '<div class="alloc-bar-target" style="left:' + targetPos + '%;">' +
+                    '<div class="alloc-bar-target-label">' + (isMax ? 'maks' : 'mål') + '</div>' +
+                '</div>' +
+            '</div>' +
+            '<div class="alloc-status ' + statusClass + '">' + status + '</div>' +
+        '</div>';
+    });
+    // Risikovurdering — vektet etter fond-risikoscore × kroneverdi
+    var aksjePct = current.aksjer_fond || 0;
+    var kryptoPct = current.krypto || 0;
+    var gullPct = current.gull || 0;
+    var usaPct = current.usa || 0;
+
+    // Vektet fondsrisiko (1-5 skala)
+    var weightedRisk = 0, riskWeightTotal = 0;
+    var fundRiskBreakdown = [];
+    Object.keys(fundVals).forEach(function(fid) {
+        var val = fundVals[fid];
+        if (val <= 0 || !fa.funds[fid]) return;
+        var rs = fa.funds[fid].riskScore || 3;
+        var rl = fa.funds[fid].riskLabel || 'Moderat';
+        var rn = fa.funds[fid].riskNote || '';
+        weightedRisk += rs * val;
+        riskWeightTotal += val;
+        fundRiskBreakdown.push({name: fa.funds[fid].name, val: val, score: rs, label: rl, note: rn});
+    });
+    // Legg til krypto
+    if (kryptoVal > 0) {
+        weightedRisk += 5 * kryptoVal;
+        riskWeightTotal += kryptoVal;
+        fundRiskBreakdown.push({name: 'Krypto', val: kryptoVal, score: 5, label: 'Svært høy', note: 'Ekstrem volatilitet'});
+    }
+    // Legg til gull (risikoscore 1)
+    if (gullVal > 0) {
+        weightedRisk += 1 * gullVal;
+        riskWeightTotal += gullVal;
+    }
+
+    var avgRisk = riskWeightTotal > 0 ? weightedRisk / riskWeightTotal : 3;
+    fundRiskBreakdown.sort(function(a,b) { return b.val - a.val; });
+
+    var riskLevel, riskColor;
+    if (avgRisk <= 1.5) { riskLevel = 'Lav'; riskColor = '#6D8345'; }
+    else if (avgRisk <= 2.5) { riskLevel = 'Lav-moderat'; riskColor = '#6D8345'; }
+    else if (avgRisk <= 3.5) { riskLevel = 'Moderat'; riskColor = '#F9A850'; }
+    else if (avgRisk <= 4.2) { riskLevel = 'Høy'; riskColor = '#fb923c'; }
+    else { riskLevel = 'Svært høy'; riskColor = '#C35839'; }
+
+    // Risikofaktorer
+    var riskFactors = [];
+    if (gullPct < 1) riskFactors.push('Ingen inflasjonssikring');
+    if (usaPct > 60) riskFactors.push('USA-konsentrasjon (' + usaPct.toFixed(0) + '%)');
+    if (kryptoPct > 1) riskFactors.push('Krypto over 1%');
+
+    // Aktivaklasse-bokser
+    barsHTML += '<div class="alloc-row" style="border-color:' + riskColor + '44;margin-top:0.75rem;">' +
+        '<div class="alloc-header">' +
+            '<span class="alloc-label">Risikoprofil</span>' +
+            '<span style="font-family:\'DM Mono\',monospace;font-size:0.8rem;font-weight:500;color:' + riskColor + ';">' + riskLevel + ' (' + avgRisk.toFixed(1) + '/5)</span>' +
+        '</div>' +
+        '<div style="display:flex;gap:0.75rem;flex-wrap:wrap;margin:0.4rem 0;">' +
+            '<div style="flex:1;min-width:120px;text-align:center;padding:0.5rem;background:var(--navy);border-radius:8px;">' +
+                '<div style="font-family:\'DM Mono\',monospace;font-size:0.55rem;color:var(--blue3);text-transform:uppercase;">Aksjer/Fond</div>' +
+                '<div style="font-size:1rem;font-weight:500;color:var(--white);">' + aksjePct.toFixed(1) + '%</div>' +
+            '</div>' +
+            '<div style="flex:1;min-width:120px;text-align:center;padding:0.5rem;background:var(--navy);border-radius:8px;">' +
+                '<div style="font-family:\'DM Mono\',monospace;font-size:0.55rem;color:var(--blue3);text-transform:uppercase;">Råvarer/Gull</div>' +
+                '<div style="font-size:1rem;font-weight:500;color:' + (gullPct > 0 ? '#fbbf24' : 'var(--blue3)') + ';">' + gullPct.toFixed(1) + '%</div>' +
+            '</div>' +
+            '<div style="flex:1;min-width:120px;text-align:center;padding:0.5rem;background:var(--navy);border-radius:8px;">' +
+                '<div style="font-family:\'DM Mono\',monospace;font-size:0.55rem;color:var(--blue3);text-transform:uppercase;">Krypto</div>' +
+                '<div style="font-size:1rem;font-weight:500;color:#fb923c;">' + kryptoPct.toFixed(1) + '%</div>' +
+            '</div>' +
+        '</div>' +
+        (riskFactors.length > 0 ? '<div class="alloc-status under" style="margin-bottom:0.5rem;">' + riskFactors.join(' · ') + '</div>' : '') +
+        '<div style="font-family:\'DM Mono\',monospace;font-size:0.55rem;color:var(--blue3);text-transform:uppercase;margin-bottom:0.3rem;">Fondrisiko (vektet etter verdi)</div>' +
+        '<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:0.4rem;">' +
+        fundRiskBreakdown.slice(0,6).map(function(f) {
+            var scoreColors = ['','#6D8345','#6D8345','#F9A850','#fb923c','#C35839'];
+            var sc = scoreColors[f.score] || '#F9A850';
+            return '<div style="display:flex;justify-content:space-between;align-items:center;padding:0.3rem 0.5rem;background:var(--navy);border-radius:6px;font-size:0.7rem;">' +
+                '<span style="color:var(--blue5);">' + f.name + '</span>' +
+                '<span style="color:' + sc + ';font-family:\'DM Mono\',monospace;font-size:0.6rem;">' + f.label + ' (' + f.score + '/5)</span>' +
+            '</div>';
+        }).join('') +
+        '</div>' +
+    '</div>';
+
+    document.getElementById('allocationBars').innerHTML = barsHTML;
+
+    // Historikk-graf — eksponering per kategori over tid
+    var histLabels = [];
+    var histData = {};
+    Object.keys(targets).forEach(function(k) { histData[k] = []; });
+
+    entries.forEach(function(e, idx) {
+        histLabels.push(monthLabel(e.month));
+        var tp = 0;
+        DATA.accounts.forEach(function(a) { if (a.active !== false) tp += (e[a.id] || [0,0])[0]; });
+        if (tp <= 0) {
+            Object.keys(targets).forEach(function(k) { histData[k].push(0); });
+            return;
+        }
+        var mKrypto = (e['krypto']||[0,0])[0];
+        var mGull = (e['gull']||[0,0])[0];
+        var mCrowd = (e['crowdfunding']||[0,0])[0];
+        histData.krypto.push((mKrypto / tp) * 100);
+        histData.gull.push((mGull / tp) * 100);
+        if (histData.aksjer_fond) histData.aksjer_fond.push(((tp - mKrypto - mGull - mCrowd) / tp) * 100);
+        // EM + Norge + USA — beregn fra fond-vekting for denne måneden
+        var mFundVals = {};
+        DATA.accounts.forEach(function(a) {
+            if (a.active === false) return;
+            if (a.children && a.children.length > 0) {
+                var pv = (e[a.id]||[0,0])[0]; var pc = pv / a.children.length;
+                a.children.forEach(function(c) { var cv = (e[c]||[0,0])[0]; mFundVals[c] = cv > 0 ? cv : pc; });
+            } else if (fa.funds[a.id]) { mFundVals[a.id] = (e[a.id]||[0,0])[0]; }
+        });
+        var mReg = {};
+        Object.keys(mFundVals).forEach(function(fid) {
+            if (!fa.funds[fid] || !fa.funds[fid].regions) return;
+            Object.keys(fa.funds[fid].regions).forEach(function(r) {
+                mReg[r] = (mReg[r]||0) + mFundVals[fid] * fa.funds[fid].regions[r] / 100;
+            });
+        });
+        var mEm = 0; emRegions.forEach(function(r) { mEm += mReg[r]||0; });
+        histData.emerging_markets.push((mEm / tp) * 100);
+        histData.norge.push(((mReg['Norge']||0) / tp) * 100);
+        histData.usa.push(((mReg['USA']||0) / tp) * 100);
+    });
+
+    if (charts.allocHistory) charts.allocHistory.destroy();
+    var histDatasets = Object.keys(targets).map(function(k) {
+        return {
+            label: targets[k].label,
+            data: histData[k],
+            borderColor: targets[k].color,
+            backgroundColor: targets[k].color + '20',
+            borderWidth: 2,
+            pointRadius: 0,
+            tension: 0.3,
+            fill: false
+        };
+    });
+    charts.allocHistory = new Chart(document.getElementById('allocationHistoryChart'), {
+        type: 'line',
+        data: { labels: histLabels, datasets: histDatasets },
+        options: {
+            responsive: true, maintainAspectRatio: false,
+            interaction: { mode: 'index', intersect: false },
+            scales: {
+                x: { grid: {display:false}, ticks: {maxTicksLimit:12, font:{size:9}} },
+                y: { grid: {color:'#1b2d4288'}, ticks: {callback: function(v){return v.toFixed(0)+'%'}} }
+            },
+            plugins: {
+                tooltip: { callbacks: { label: function(c){return c.dataset.label+': '+c.parsed.y.toFixed(1)+'%'} } },
+                legend: { position:'bottom', labels:{usePointStyle:true, pointStyle:'circle', padding:8, font:{size:10}, color:'#7a96b0'} }
+            }
+        }
+    });
+
+    // Last anbefaling
+    fetch('/sparing-anbefaling.json?t=' + Date.now())
+    .then(function(r) { if (!r.ok) throw new Error('not found'); return r.json() })
+    .then(function(rec) {
+        document.getElementById('allocationRec').innerHTML =
+            '<div style="font-family:\'DM Mono\',monospace;font-size:0.6rem;color:var(--blue3);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:0.5rem;">Anbefaling · ' + (rec.date || '') + '</div>' +
+            (rec.html || '');
+    }).catch(function() {});
+}
+
+function updateTarget(input) {
+    var key = input.dataset.key;
+    var val = parseFloat(input.value);
+    if (isNaN(val) || val < 0) return;
+    DATA.allocationTargets[key].target = val;
+    renderAllocation();
+    saveAllocationTargets();
+}
+
+function updateTargetType(select) {
+    var key = select.dataset.key;
+    DATA.allocationTargets[key].max = select.value === 'true';
+    renderAllocation();
+    saveAllocationTargets();
+}
+
+function saveAllocationTargets() {
+    fetch(API_BASE + '/save', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify(DATA)
+    }).then(function() { toast('Mål oppdatert'); })
+    .catch(function() { toast('Kunne ikke lagre', true); });
 }
 
 /* ── Month editor ── */
@@ -510,24 +1015,105 @@ function renderMonthEditor() {
 
     var html = '<div class="month-grid">';
     activeAccs.forEach(function(a) {
-        var vals = e[a.id] || [0, 0];
-        total += vals[0];
-        html += '<div class="month-card">' +
-            '<div class="month-card-header">' +
-                '<div class="month-card-dot" style="background:' + a.color + '"></div>' +
-                '<div style="flex:1"><div class="month-card-name">' + a.name + '</div>' +
-                '<div class="month-card-provider">' + a.provider + '</div></div>' +
-                '<button class="btn-icon" onclick="toggleAccount(\'' + a.id + '\')" title="Deaktiver">&#10005;</button>' +
-            '</div>' +
-            '<div class="month-card-fields">' +
-                '<div class="month-field"><label>Saldo</label>' +
-                    '<input type="number" value="' + vals[0] + '" data-month="' + mi + '" data-acc="' + a.id + '" data-field="0" onchange="cardChanged(this)">' +
+        if (a.children && a.children.length > 0) {
+            // Konto med underposter — vis barn, summer forelder kun hvis barn har verdier
+            var childSum = [0, 0];
+            var hasChildData = false;
+            var childHTML = '';
+            a.children.forEach(function(cid) {
+                var cv = e[cid] || [0, 0];
+                childSum[0] += cv[0];
+                childSum[1] += cv[1];
+                if (cv[0] !== 0 || cv[1] !== 0) hasChildData = true;
+                var cname = CHILD_NAMES[cid] || cid.replace(a.id + '_', '').replace(/_/g, ' ');
+                childHTML += '<div style="display:grid;grid-template-columns:1fr 1fr;gap:0.5rem;padding:0.5rem 0;border-top:1px solid var(--blue2);">' +
+                    '<div class="month-field"><label>' + cname + ' — saldo</label>' +
+                        '<input type="number" value="' + cv[0] + '" data-month="' + mi + '" data-acc="' + cid + '" data-parent="' + a.id + '" data-field="0" onchange="childChanged(this)">' +
+                    '</div>' +
+                    '<div class="month-field"><label>' + cname + ' — innskudd</label>' +
+                        '<input type="number" value="' + cv[1] + '" data-month="' + mi + '" data-acc="' + cid + '" data-parent="' + a.id + '" data-field="1" onchange="childChanged(this)">' +
+                    '</div>' +
+                '</div>';
+            });
+            // Oppdater foreldre-total kun hvis barn har data (bevar historiske verdier)
+            if (hasChildData) {
+                e[a.id] = [childSum[0], childSum[1]];
+            }
+            var parentVals = e[a.id] || [0, 0];
+            total += parentVals[0];
+            html += '<div class="month-card" style="border-color:' + a.color + '44">' +
+                '<div class="month-card-header">' +
+                    '<div class="month-card-dot" style="background:' + a.color + '"></div>' +
+                    '<div style="flex:1"><div class="month-card-name">' + a.name + '</div>' +
+                    '<div class="month-card-provider">' + a.provider + ' · ' + a.children.length + ' poster</div></div>' +
+                    '<button class="btn-icon" onclick="toggleAccount(\'' + a.id + '\')" title="Deaktiver">&#10005;</button>' +
                 '</div>' +
-                '<div class="month-field"><label>Innskudd</label>' +
-                    '<input type="number" value="' + vals[1] + '" data-month="' + mi + '" data-acc="' + a.id + '" data-field="1" onchange="cardChanged(this)">' +
+                '<div style="display:flex;justify-content:space-between;padding:0.4rem 0;font-family:\'DM Mono\',monospace;font-size:0.7rem;color:var(--white);">' +
+                    '<span>Total: ' + fmt(parentVals[0]) + '</span>' +
+                    '<span style="color:var(--blue3)">Innskudd: ' + fmt(parentVals[1]) + '</span>' +
                 '</div>' +
-            '</div>' +
-        '</div>';
+                childHTML +
+                '<div style="padding-top:0.5rem;border-top:1px solid var(--blue2);">' +
+                    '<button class="btn" style="font-size:0.65rem;padding:0.25rem 0.5rem;width:100%;" onclick="addChildAccount(\'' + a.id + '\')">+ Legg til post</button>' +
+                '</div>' +
+            '</div>';
+        } else if (a.id === 'krypto') {
+            // Krypto — saldo/innskudd + holdings per coin
+            var vals = e[a.id] || [0, 0];
+            total += vals[0];
+            var holdings = e.krypto_holdings || {};
+            var knownCoins = ['BTC', 'DOGE', 'ETH', 'ETH_staking'];
+            // Inkluder eventuelle nye coins
+            Object.keys(holdings).forEach(function(c) { if (knownCoins.indexOf(c) === -1) knownCoins.push(c); });
+            var holdingsHTML = '';
+            knownCoins.forEach(function(coin) {
+                var label = coin === 'ETH_staking' ? 'ETH (staking)' : coin;
+                holdingsHTML += '<div class="month-field"><label>' + label + '</label>' +
+                    '<input type="number" step="any" value="' + (holdings[coin] || 0) + '" data-month="' + mi + '" data-coin="' + coin + '" onchange="cryptoHoldingChanged(this)" style="font-size:0.65rem;">' +
+                '</div>';
+            });
+            html += '<div class="month-card" style="border-color:' + a.color + '44">' +
+                '<div class="month-card-header">' +
+                    '<div class="month-card-dot" style="background:' + a.color + '"></div>' +
+                    '<div style="flex:1"><div class="month-card-name">' + a.name + '</div>' +
+                    '<div class="month-card-provider">' + a.provider + '</div></div>' +
+                    '<button class="btn-icon" onclick="toggleAccount(\'' + a.id + '\')" title="Deaktiver">&#10005;</button>' +
+                '</div>' +
+                '<div class="month-card-fields">' +
+                    '<div class="month-field"><label>Verdi (NOK)</label>' +
+                        '<input type="number" value="' + vals[0] + '" data-month="' + mi + '" data-acc="' + a.id + '" data-field="0" onchange="cardChanged(this)">' +
+                    '</div>' +
+                    '<div class="month-field"><label>Innskudd</label>' +
+                        '<input type="number" value="' + vals[1] + '" data-month="' + mi + '" data-acc="' + a.id + '" data-field="1" onchange="cardChanged(this)">' +
+                    '</div>' +
+                '</div>' +
+                '<div style="margin-top:0.5rem;padding-top:0.5rem;border-top:1px solid var(--blue2);">' +
+                    '<div style="font-family:\'DM Mono\',monospace;font-size:0.55rem;color:var(--blue3);text-transform:uppercase;letter-spacing:0.06em;margin-bottom:0.4rem;">Beholdning</div>' +
+                    '<div style="display:grid;grid-template-columns:1fr 1fr;gap:0.5rem;">' + holdingsHTML + '</div>' +
+                    '<button class="btn" style="font-size:0.6rem;padding:0.2rem 0.4rem;margin-top:0.4rem;width:100%;" onclick="addCryptoCoin('+mi+')">+ Ny coin</button>' +
+                '</div>' +
+            '</div>';
+        } else {
+            // Vanlig konto uten underposter
+            var vals = e[a.id] || [0, 0];
+            total += vals[0];
+            html += '<div class="month-card">' +
+                '<div class="month-card-header">' +
+                    '<div class="month-card-dot" style="background:' + a.color + '"></div>' +
+                    '<div style="flex:1"><div class="month-card-name">' + a.name + '</div>' +
+                    '<div class="month-card-provider">' + a.provider + '</div></div>' +
+                    '<button class="btn-icon" onclick="toggleAccount(\'' + a.id + '\')" title="Deaktiver">&#10005;</button>' +
+                '</div>' +
+                '<div class="month-card-fields">' +
+                    '<div class="month-field"><label>Saldo</label>' +
+                        '<input type="number" value="' + vals[0] + '" data-month="' + mi + '" data-acc="' + a.id + '" data-field="0" onchange="cardChanged(this)">' +
+                    '</div>' +
+                    '<div class="month-field"><label>Innskudd</label>' +
+                        '<input type="number" value="' + vals[1] + '" data-month="' + mi + '" data-acc="' + a.id + '" data-field="1" onchange="cardChanged(this)">' +
+                    '</div>' +
+                '</div>' +
+            '</div>';
+        }
     });
     html += '</div>';
     html += '<div class="month-total"><span class="month-total-label">Total saldo</span><span class="month-total-value" id="monthTotal">' + fmt(total) + '</span></div>';
@@ -553,12 +1139,95 @@ function cardChanged(input) {
     var fi = parseInt(input.dataset.field);
     if (!DATA.entries[mi][acc]) DATA.entries[mi][acc] = [0, 0];
     DATA.entries[mi][acc][fi] = parseFloat(input.value) || 0;
-    // Update total
+    markUnsaved();
+}
+
+function childChanged(input) {
+    var mi = parseInt(input.dataset.month);
+    var cid = input.dataset.acc;
+    var parentId = input.dataset.parent;
+    var fi = parseInt(input.dataset.field);
+    if (!DATA.entries[mi][cid]) DATA.entries[mi][cid] = [0, 0];
+    DATA.entries[mi][cid][fi] = parseFloat(input.value) || 0;
+    // Summer barn til forelder (kun hvis minst ett barn har data)
+    var parent = DATA.accounts.find(function(a) { return a.id === parentId });
+    if (parent && parent.children) {
+        var sum = [0, 0], hasData = false;
+        parent.children.forEach(function(c) {
+            var cv = DATA.entries[mi][c] || [0, 0];
+            sum[0] += cv[0]; sum[1] += cv[1];
+            if (cv[0] !== 0 || cv[1] !== 0) hasData = true;
+        });
+        if (hasData) DATA.entries[mi][parentId] = sum;
+    }
+    renderMonthEditor();
+    renderCharts();
+    markUnsaved();
+}
+
+function addChildAccount(parentId) {
+    var name = prompt('Navn på ny post (f.eks. "DNB Global"):');
+    if (!name) return;
+    var cid = parentId + '_' + name.toLowerCase().replace(/[^a-z0-9]+/g, '_').replace(/^_|_$/g, '');
+    var parent = DATA.accounts.find(function(a) { return a.id === parentId });
+    if (!parent) return;
+    if (!parent.children) parent.children = [];
+    if (parent.children.indexOf(cid) >= 0) { toast('Posten finnes allerede', true); return; }
+    parent.children.push(cid);
+    CHILD_NAMES[cid] = name;
+    // Legg til nullverdier i alle entries
+    DATA.entries.forEach(function(e) { if (!e[cid]) e[cid] = [0, 0] });
+    renderMonthEditor();
+    markUnsaved();
+    toast('La til post: ' + name);
+}
+
+function cryptoHoldingChanged(input) {
+    var mi = parseInt(input.dataset.month);
+    var coin = input.dataset.coin;
+    if (!DATA.entries[mi].krypto_holdings) DATA.entries[mi].krypto_holdings = {};
+    DATA.entries[mi].krypto_holdings[coin] = parseFloat(input.value) || 0;
+    // Oppdater også fundAllocations.funds.krypto.holdings for live-kake
+    if (DATA.fundAllocations && DATA.fundAllocations.funds && DATA.fundAllocations.funds.krypto) {
+        var coinSymbol = coin === 'ETH_staking' ? 'ETH-staking' : coin;
+        var h = DATA.fundAllocations.funds.krypto.holdings;
+        var existing = h.find(function(x) { return x.symbol === coinSymbol; });
+        if (existing) {
+            existing.amount = parseFloat(input.value) || 0;
+        } else {
+            h.push({symbol: coinSymbol, name: coin, amount: parseFloat(input.value) || 0});
+        }
+    }
+    markUnsaved();
+}
+
+function addCryptoCoin(mi) {
+    var symbol = prompt('Coin-symbol (f.eks. BTC, SOL, ADA):');
+    if (!symbol) return;
+    symbol = symbol.toUpperCase().trim();
+    if (!DATA.entries[mi].krypto_holdings) DATA.entries[mi].krypto_holdings = {};
+    if (DATA.entries[mi].krypto_holdings[symbol] !== undefined) { toast(symbol + ' finnes allerede', true); return; }
+    DATA.entries[mi].krypto_holdings[symbol] = 0;
+    // Legg til i fundAllocations for live-kake
+    if (DATA.fundAllocations && DATA.fundAllocations.funds && DATA.fundAllocations.funds.krypto) {
+        DATA.fundAllocations.funds.krypto.holdings.push({symbol: symbol, name: symbol, amount: 0});
+    }
+    renderMonthEditor();
+    markUnsaved();
+    toast('La til ' + symbol);
+}
+
+function toggleExposureFilter(accId) {
+    window._exposureFilter[accId] = !window._exposureFilter[accId];
+    renderCharts();
+}
+
+function markUnsaved() {
     var total = 0;
+    var mi = parseInt(document.getElementById('editMonthSelect').value);
     DATA.accounts.forEach(function(a) { total += (DATA.entries[mi][a.id] || [0,0])[0] });
     var te = document.getElementById('monthTotal');
     if (te) te.textContent = fmt(total);
-    // Mark unsaved
     var saveBtn = document.getElementById('saveBtn');
     saveBtn.textContent = 'Lagre *';
     saveBtn.style.borderColor = '#F9A850';
@@ -581,12 +1250,24 @@ function addMonth() {
     var lastMonth = DATA.entries[DATA.entries.length - 1].month;
     var nm = nextMonth(lastMonth);
     var entry = { month: nm };
+    var lastEntry = DATA.entries[DATA.entries.length - 1];
     // Pre-fill active accounts with last month's balances, zero deposits
     DATA.accounts.forEach(function(a) {
         if (a.active === false) { entry[a.id] = [0, 0]; return; }
-        var lastVals = DATA.entries[DATA.entries.length - 1][a.id] || [0, 0];
+        var lastVals = lastEntry[a.id] || [0, 0];
         entry[a.id] = [lastVals[0], 0];
+        // Pre-fill barn
+        if (a.children) {
+            a.children.forEach(function(cid) {
+                var cv = lastEntry[cid] || [0, 0];
+                entry[cid] = [cv[0], 0];
+            });
+        }
     });
+    // Pre-fill krypto-holdings fra forrige måned
+    if (lastEntry.krypto_holdings) {
+        entry.krypto_holdings = JSON.parse(JSON.stringify(lastEntry.krypto_holdings));
+    }
     DATA.entries.push(entry);
     populateMonthSelect();
     document.getElementById('editMonthSelect').value = DATA.entries.length - 1;
