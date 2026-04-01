@@ -1106,10 +1106,12 @@ function renderAllocation() {
         if (a.active === false) return;
         if (a.children && a.children.length > 0) {
             var parentVal = (lastEntry[a.id] || [0,0])[0];
-            var perChild = parentVal / a.children.length;
+            // Fordel forelder-verdi kun blant barn som har hatt verdi
+            var activeChildren = a.children.filter(function(c) { return (lastEntry[c]||[0,0])[0] > 0 || (lastEntry[c]||[0,0])[1] > 0; });
+            var perChild = activeChildren.length > 0 ? parentVal / activeChildren.length : 0;
             a.children.forEach(function(c) {
                 var cv = (lastEntry[c] || [0,0])[0];
-                fundVals[c] = cv > 0 ? cv : perChild;
+                fundVals[c] = cv > 0 ? cv : (activeChildren.indexOf(c) >= 0 ? perChild : 0);
             });
         } else if (fa.funds[a.id]) {
             fundVals[a.id] = (lastEntry[a.id] || [0,0])[0];
@@ -1308,8 +1310,10 @@ function renderAllocation() {
         DATA.accounts.forEach(function(a) {
             if (a.active === false) return;
             if (a.children && a.children.length > 0) {
-                var pv = (e[a.id]||[0,0])[0]; var pc = pv / a.children.length;
-                a.children.forEach(function(c) { var cv = (e[c]||[0,0])[0]; mFundVals[c] = cv > 0 ? cv : pc; });
+                var pv = (e[a.id]||[0,0])[0];
+                var ac = a.children.filter(function(c) { return (e[c]||[0,0])[0] > 0 || (e[c]||[0,0])[1] > 0; });
+                var pc = ac.length > 0 ? pv / ac.length : 0;
+                a.children.forEach(function(c) { var cv = (e[c]||[0,0])[0]; mFundVals[c] = cv > 0 ? cv : (ac.indexOf(c) >= 0 ? pc : 0); });
             } else if (fa.funds[a.id]) { mFundVals[a.id] = (e[a.id]||[0,0])[0]; }
         });
         var mReg = {};
