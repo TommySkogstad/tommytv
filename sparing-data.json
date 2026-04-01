@@ -25,7 +25,8 @@
         "ask_sb1_alt_i_ett_100",
         "ask_sb1_indeks_global",
         "ask_sb1_norge_verdi",
-        "ask_sb1_utbytte"
+        "ask_sb1_utbytte",
+        "ask_klp_fremvoksende_markeder_indeks_n"
       ]
     },
     {
@@ -154,6 +155,10 @@
       "gull": [
         0,
         0
+      ],
+      "ask_klp_fremvoksende_markeder_indeks_n": [
+        0,
+        0
       ]
     },
     {
@@ -219,6 +224,10 @@
         0
       ],
       "gull": [
+        0,
+        0
+      ],
+      "ask_klp_fremvoksende_markeder_indeks_n": [
         0,
         0
       ]
@@ -288,6 +297,10 @@
       "gull": [
         0,
         0
+      ],
+      "ask_klp_fremvoksende_markeder_indeks_n": [
+        0,
+        0
       ]
     },
     {
@@ -353,6 +366,10 @@
         0
       ],
       "gull": [
+        0,
+        0
+      ],
+      "ask_klp_fremvoksende_markeder_indeks_n": [
         0,
         0
       ]
@@ -422,6 +439,10 @@
       "gull": [
         0,
         0
+      ],
+      "ask_klp_fremvoksende_markeder_indeks_n": [
+        0,
+        0
       ]
     },
     {
@@ -487,6 +508,10 @@
         0
       ],
       "gull": [
+        0,
+        0
+      ],
+      "ask_klp_fremvoksende_markeder_indeks_n": [
         0,
         0
       ]
@@ -556,6 +581,10 @@
       "gull": [
         0,
         0
+      ],
+      "ask_klp_fremvoksende_markeder_indeks_n": [
+        0,
+        0
       ]
     },
     {
@@ -621,6 +650,10 @@
         0
       ],
       "gull": [
+        0,
+        0
+      ],
+      "ask_klp_fremvoksende_markeder_indeks_n": [
         0,
         0
       ]
@@ -690,6 +723,10 @@
       "gull": [
         0,
         0
+      ],
+      "ask_klp_fremvoksende_markeder_indeks_n": [
+        0,
+        0
       ]
     },
     {
@@ -755,6 +792,10 @@
         0
       ],
       "gull": [
+        0,
+        0
+      ],
+      "ask_klp_fremvoksende_markeder_indeks_n": [
         0,
         0
       ]
@@ -824,6 +865,10 @@
       "gull": [
         0,
         0
+      ],
+      "ask_klp_fremvoksende_markeder_indeks_n": [
+        0,
+        0
       ]
     },
     {
@@ -889,6 +934,10 @@
         0
       ],
       "gull": [
+        0,
+        0
+      ],
+      "ask_klp_fremvoksende_markeder_indeks_n": [
         0,
         0
       ]
@@ -958,6 +1007,10 @@
       "gull": [
         0,
         0
+      ],
+      "ask_klp_fremvoksende_markeder_indeks_n": [
+        0,
+        0
       ]
     },
     {
@@ -1025,6 +1078,10 @@
       "gull": [
         0,
         0
+      ],
+      "ask_klp_fremvoksende_markeder_indeks_n": [
+        0,
+        0
       ]
     },
     {
@@ -1090,6 +1147,10 @@
         0
       ],
       "gull": [
+        0,
+        0
+      ],
+      "ask_klp_fremvoksende_markeder_indeks_n": [
         0,
         0
       ]
@@ -1160,6 +1221,10 @@
       "gull": [
         0,
         0
+      ],
+      "ask_klp_fremvoksende_markeder_indeks_n": [
+        0,
+        0
       ]
     },
     {
@@ -1226,6 +1291,10 @@
       ],
       "krypto_holdings": {},
       "gull": [
+        0,
+        0
+      ],
+      "ask_klp_fremvoksende_markeder_indeks_n": [
         0,
         0
       ]
@@ -1296,6 +1365,10 @@
       "gull": [
         0,
         0
+      ],
+      "ask_klp_fremvoksende_markeder_indeks_n": [
+        0,
+        0
       ]
     },
     {
@@ -1362,6 +1435,10 @@
       ],
       "krypto_holdings": {},
       "gull": [
+        0,
+        0
+      ],
+      "ask_klp_fremvoksende_markeder_indeks_n": [
         0,
         0
       ]
@@ -1432,6 +1509,10 @@
       "gull": [
         0,
         0
+      ],
+      "ask_klp_fremvoksende_markeder_indeks_n": [
+        0,
+        0
       ]
     },
     {
@@ -1498,6 +1579,10 @@
       ],
       "krypto_holdings": {},
       "gull": [
+        0,
+        0
+      ],
+      "ask_klp_fremvoksende_markeder_indeks_n": [
         0,
         0
       ]
@@ -1568,6 +1653,10 @@
       "gull": [
         0,
         0
+      ],
+      "ask_klp_fremvoksende_markeder_indeks_n": [
+        0,
+        0
       ]
     },
     {
@@ -1634,6 +1723,10 @@
       ],
       "krypto_holdings": {},
       "gull": [
+        0,
+        0
+      ],
+      "ask_klp_fremvoksende_markeder_indeks_n": [
         0,
         0
       ]
@@ -1704,6 +1797,10 @@
       "gull": [
         0,
         0
+      ],
+      "ask_klp_fremvoksende_markeder_indeks_n": [
+        0,
+        0
       ]
     },
     {
@@ -1770,6 +1867,10 @@
       ],
       "krypto_holdings": {},
       "gull": [
+        0,
+        0
+      ],
+      "ask_klp_fremvoksende_markeder_indeks_n": [
         0,
         0
       ]
@@ -1840,6 +1941,10 @@
       "gull": [
         0,
         0
+      ],
+      "ask_klp_fremvoksende_markeder_indeks_n": [
+        0,
+        0
       ]
     },
     {
@@ -1906,6 +2011,10 @@
       ],
       "krypto_holdings": {},
       "gull": [
+        0,
+        0
+      ],
+      "ask_klp_fremvoksende_markeder_indeks_n": [
         0,
         0
       ]
@@ -1976,6 +2085,10 @@
       "gull": [
         0,
         0
+      ],
+      "ask_klp_fremvoksende_markeder_indeks_n": [
+        0,
+        0
       ]
     },
     {
@@ -2042,6 +2155,10 @@
       ],
       "krypto_holdings": {},
       "gull": [
+        0,
+        0
+      ],
+      "ask_klp_fremvoksende_markeder_indeks_n": [
         0,
         0
       ]
@@ -2112,6 +2229,10 @@
       "gull": [
         0,
         0
+      ],
+      "ask_klp_fremvoksende_markeder_indeks_n": [
+        0,
+        0
       ]
     },
     {
@@ -2178,6 +2299,10 @@
       ],
       "krypto_holdings": {},
       "gull": [
+        0,
+        0
+      ],
+      "ask_klp_fremvoksende_markeder_indeks_n": [
         0,
         0
       ]
@@ -2248,6 +2373,10 @@
       "gull": [
         0,
         0
+      ],
+      "ask_klp_fremvoksende_markeder_indeks_n": [
+        0,
+        0
       ]
     },
     {
@@ -2314,6 +2443,10 @@
       ],
       "krypto_holdings": {},
       "gull": [
+        0,
+        0
+      ],
+      "ask_klp_fremvoksende_markeder_indeks_n": [
         0,
         0
       ]
@@ -2384,6 +2517,10 @@
       "gull": [
         0,
         0
+      ],
+      "ask_klp_fremvoksende_markeder_indeks_n": [
+        0,
+        0
       ]
     },
     {
@@ -2450,6 +2587,10 @@
       ],
       "krypto_holdings": {},
       "gull": [
+        0,
+        0
+      ],
+      "ask_klp_fremvoksende_markeder_indeks_n": [
         0,
         0
       ]
@@ -2520,6 +2661,10 @@
       "gull": [
         0,
         0
+      ],
+      "ask_klp_fremvoksende_markeder_indeks_n": [
+        0,
+        0
       ]
     },
     {
@@ -2586,6 +2731,10 @@
       ],
       "krypto_holdings": {},
       "gull": [
+        0,
+        0
+      ],
+      "ask_klp_fremvoksende_markeder_indeks_n": [
         0,
         0
       ]
@@ -2656,6 +2805,10 @@
       "gull": [
         0,
         0
+      ],
+      "ask_klp_fremvoksende_markeder_indeks_n": [
+        0,
+        0
       ]
     },
     {
@@ -2722,6 +2875,10 @@
       ],
       "krypto_holdings": {},
       "gull": [
+        0,
+        0
+      ],
+      "ask_klp_fremvoksende_markeder_indeks_n": [
         0,
         0
       ]
@@ -2792,6 +2949,10 @@
       "gull": [
         0,
         0
+      ],
+      "ask_klp_fremvoksende_markeder_indeks_n": [
+        0,
+        0
       ]
     },
     {
@@ -2858,6 +3019,10 @@
       ],
       "krypto_holdings": {},
       "gull": [
+        0,
+        0
+      ],
+      "ask_klp_fremvoksende_markeder_indeks_n": [
         0,
         0
       ]
@@ -2928,6 +3093,10 @@
       "gull": [
         0,
         0
+      ],
+      "ask_klp_fremvoksende_markeder_indeks_n": [
+        0,
+        0
       ]
     },
     {
@@ -2994,6 +3163,10 @@
       ],
       "krypto_holdings": {},
       "gull": [
+        0,
+        0
+      ],
+      "ask_klp_fremvoksende_markeder_indeks_n": [
         0,
         0
       ]
@@ -3064,6 +3237,10 @@
       "gull": [
         0,
         0
+      ],
+      "ask_klp_fremvoksende_markeder_indeks_n": [
+        0,
+        0
       ]
     },
     {
@@ -3130,6 +3307,10 @@
       ],
       "krypto_holdings": {},
       "gull": [
+        0,
+        0
+      ],
+      "ask_klp_fremvoksende_markeder_indeks_n": [
         0,
         0
       ]
@@ -3200,6 +3381,10 @@
       "gull": [
         0,
         0
+      ],
+      "ask_klp_fremvoksende_markeder_indeks_n": [
+        0,
+        0
       ]
     },
     {
@@ -3266,6 +3451,10 @@
       ],
       "krypto_holdings": {},
       "gull": [
+        0,
+        0
+      ],
+      "ask_klp_fremvoksende_markeder_indeks_n": [
         0,
         0
       ]
@@ -3336,6 +3525,10 @@
       "gull": [
         0,
         0
+      ],
+      "ask_klp_fremvoksende_markeder_indeks_n": [
+        0,
+        0
       ]
     },
     {
@@ -3402,6 +3595,10 @@
       ],
       "krypto_holdings": {},
       "gull": [
+        0,
+        0
+      ],
+      "ask_klp_fremvoksende_markeder_indeks_n": [
         0,
         0
       ]
@@ -3472,6 +3669,10 @@
       "gull": [
         0,
         0
+      ],
+      "ask_klp_fremvoksende_markeder_indeks_n": [
+        0,
+        0
       ]
     },
     {
@@ -3538,6 +3739,10 @@
       ],
       "krypto_holdings": {},
       "gull": [
+        0,
+        0
+      ],
+      "ask_klp_fremvoksende_markeder_indeks_n": [
         0,
         0
       ]
@@ -3608,6 +3813,10 @@
       "gull": [
         0,
         0
+      ],
+      "ask_klp_fremvoksende_markeder_indeks_n": [
+        0,
+        0
       ]
     },
     {
@@ -3674,6 +3883,10 @@
       ],
       "krypto_holdings": {},
       "gull": [
+        0,
+        0
+      ],
+      "ask_klp_fremvoksende_markeder_indeks_n": [
         0,
         0
       ]
@@ -3744,6 +3957,10 @@
       "gull": [
         0,
         0
+      ],
+      "ask_klp_fremvoksende_markeder_indeks_n": [
+        0,
+        0
       ]
     },
     {
@@ -3810,6 +4027,10 @@
       ],
       "krypto_holdings": {},
       "gull": [
+        0,
+        0
+      ],
+      "ask_klp_fremvoksende_markeder_indeks_n": [
         0,
         0
       ]
@@ -3880,6 +4101,10 @@
       "gull": [
         0,
         0
+      ],
+      "ask_klp_fremvoksende_markeder_indeks_n": [
+        0,
+        0
       ]
     },
     {
@@ -3946,6 +4171,10 @@
       ],
       "krypto_holdings": {},
       "gull": [
+        0,
+        0
+      ],
+      "ask_klp_fremvoksende_markeder_indeks_n": [
         0,
         0
       ]
@@ -4016,6 +4245,10 @@
       "gull": [
         0,
         0
+      ],
+      "ask_klp_fremvoksende_markeder_indeks_n": [
+        0,
+        0
       ]
     },
     {
@@ -4082,6 +4315,10 @@
       ],
       "krypto_holdings": {},
       "gull": [
+        0,
+        0
+      ],
+      "ask_klp_fremvoksende_markeder_indeks_n": [
         0,
         0
       ]
@@ -4152,6 +4389,10 @@
       "gull": [
         0,
         0
+      ],
+      "ask_klp_fremvoksende_markeder_indeks_n": [
+        0,
+        0
       ]
     },
     {
@@ -4218,6 +4459,10 @@
       ],
       "krypto_holdings": {},
       "gull": [
+        0,
+        0
+      ],
+      "ask_klp_fremvoksende_markeder_indeks_n": [
         0,
         0
       ]
@@ -4288,6 +4533,10 @@
       "gull": [
         0,
         0
+      ],
+      "ask_klp_fremvoksende_markeder_indeks_n": [
+        0,
+        0
       ]
     },
     {
@@ -4354,6 +4603,10 @@
       ],
       "krypto_holdings": {},
       "gull": [
+        0,
+        0
+      ],
+      "ask_klp_fremvoksende_markeder_indeks_n": [
         0,
         0
       ]
@@ -4424,6 +4677,10 @@
       "gull": [
         0,
         0
+      ],
+      "ask_klp_fremvoksende_markeder_indeks_n": [
+        0,
+        0
       ]
     },
     {
@@ -4490,6 +4747,10 @@
       ],
       "krypto_holdings": {},
       "gull": [
+        0,
+        0
+      ],
+      "ask_klp_fremvoksende_markeder_indeks_n": [
         0,
         0
       ]
@@ -4560,6 +4821,10 @@
       "gull": [
         0,
         0
+      ],
+      "ask_klp_fremvoksende_markeder_indeks_n": [
+        0,
+        0
       ]
     },
     {
@@ -4626,6 +4891,10 @@
       ],
       "krypto_holdings": {},
       "gull": [
+        0,
+        0
+      ],
+      "ask_klp_fremvoksende_markeder_indeks_n": [
         0,
         0
       ]
@@ -4696,6 +4965,10 @@
       "gull": [
         0,
         0
+      ],
+      "ask_klp_fremvoksende_markeder_indeks_n": [
+        0,
+        0
       ]
     },
     {
@@ -4762,6 +5035,10 @@
       ],
       "krypto_holdings": {},
       "gull": [
+        0,
+        0
+      ],
+      "ask_klp_fremvoksende_markeder_indeks_n": [
         0,
         0
       ]
@@ -4832,6 +5109,10 @@
       "gull": [
         0,
         0
+      ],
+      "ask_klp_fremvoksende_markeder_indeks_n": [
+        0,
+        0
       ]
     },
     {
@@ -4898,6 +5179,10 @@
       ],
       "krypto_holdings": {},
       "gull": [
+        0,
+        0
+      ],
+      "ask_klp_fremvoksende_markeder_indeks_n": [
         0,
         0
       ]
@@ -4968,6 +5253,10 @@
       "gull": [
         0,
         0
+      ],
+      "ask_klp_fremvoksende_markeder_indeks_n": [
+        0,
+        0
       ]
     },
     {
@@ -5034,6 +5323,10 @@
       ],
       "krypto_holdings": {},
       "gull": [
+        0,
+        0
+      ],
+      "ask_klp_fremvoksende_markeder_indeks_n": [
         0,
         0
       ]
@@ -5109,6 +5402,10 @@
       "gull": [
         0,
         0
+      ],
+      "ask_klp_fremvoksende_markeder_indeks_n": [
+        0,
+        0
       ]
     },
     {
@@ -5182,7 +5479,88 @@
         "DOGE": 108.51241815,
         "ETH": 0.00022417,
         "ETH_staking": 0.04659498
-      }
+      },
+      "ask_klp_fremvoksende_markeder_indeks_n": [
+        0,
+        0
+      ]
+    },
+    {
+      "month": "2026-04",
+      "innskuddspensjon": [
+        557390,
+        0
+      ],
+      "fond": [
+        74132,
+        2500
+      ],
+      "ask": [
+        104464,
+        7000
+      ],
+      "ask_odin_global_d": [
+        8064,
+        200
+      ],
+      "ask_sb1_alt_i_ett_100": [
+        10459,
+        500
+      ],
+      "ask_sb1_indeks_global": [
+        9794,
+        2700
+      ],
+      "ask_sb1_norge_verdi": [
+        6386,
+        100
+      ],
+      "ask_sb1_utbytte": [
+        69761,
+        1000
+      ],
+      "ips": [
+        76086,
+        2500
+      ],
+      "bsu": [
+        0,
+        0
+      ],
+      "pensjonskapitalbevis": [
+        0,
+        0
+      ],
+      "crowdfunding": [
+        663,
+        0
+      ],
+      "krypto": [
+        2715,
+        0
+      ],
+      "gull": [
+        0,
+        3000
+      ],
+      "cashback": [
+        0,
+        0
+      ],
+      "coop": [
+        17,
+        0
+      ],
+      "krypto_holdings": {
+        "BTC": 0.00252848,
+        "DOGE": 108.51241815,
+        "ETH": 0.00022417,
+        "ETH_staking": 0.04659498
+      },
+      "ask_klp_fremvoksende_markeder_indeks_n": [
+        0,
+        2500
+      ]
     }
   ],
   "fundAllocations": {
