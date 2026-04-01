@@ -11,11 +11,22 @@
 - `status.html` — Status-side (LAN): Smarthus (Hue + Homey + Nanoleaf + Plejd + Yale + gardiner) + Infrastruktur (UniFi + speedtest + WiFi restart)
 - `bookmarks.html` — Bokmerkeside med eksterne tjenester og lenker
 - `heating.html` — Heating system dashboard
+- `sparing.html` — Spareoversikt-side (portefølje, fordeling, anbefalinger)
+- `photos.html` — Fotoside med Immich-integrasjon
 - `tommy_skogstad_brand_guide.html` — Brand guide page
+- `header.js` — Delt navigasjonskomponent (inkluderes av alle sider)
+- `footer.js` — Delt footerkomponent (inkluderes av alle sider)
+- `sparing-data.json` — Porteføljedata for sparesiden
+- `sparing-anbefaling.json` — Investeringsanbefalinger for sparesiden
 - `logo.svg` — SVG-tekstlogo med gradient (Tommy=blå gradient, TV=hvit)
 - `nginx.conf` — Nginx-konfigurasjon
-- `docker-compose.yml` — Cloudflared + Nginx, port 8880 eksponert for LAN
+- `docker-compose.yml` — Cloudflared + Nginx + sparing-api, port 8880 eksponert for LAN
 - `.env` — Cloudflare Tunnel-token (git-ignorert)
+
+## Tjenester (Docker Compose)
+- **nginx** — Serverer statiske filer, port 8880
+- **cloudflared** — Cloudflare Tunnel til tommytv.no
+- **sparing-api** — Python REST API for porteføljedata (port 8881), leser/skriver sparing-data.json
 
 ## Arkitektur
 - Nginx serverer statiske filer, cloudflared kobler til Cloudflare Tunnel
@@ -27,7 +38,7 @@
 - Bildegalleriet er integrert i hoveddashboardet
 
 ## Navigasjon
-Hovednavigasjonen inneholder: Hjem, Status, Varme & Sikkerhet, Bokmerker.
+Hovednavigasjonen inneholder: Hjem, Status, Varme & Sikkerhet, Sparing, Bilder, Bokmerker.
 (Audio er fjernet fra navigasjonen.)
 
 ## LAN-logikk
