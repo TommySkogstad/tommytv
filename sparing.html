@@ -273,6 +273,17 @@
 
         <section class="section">
             <div class="section-header">
+                <h2>Prognose</h2>
+                <span class="badge">Fremskriving</span>
+            </div>
+            <div class="card" style="margin-bottom:0.75rem;">
+                <div style="height:300px"><canvas id="projectionChart"></canvas></div>
+            </div>
+            <div class="kpi-grid" id="projectionKpis"></div>
+        </section>
+
+        <section class="section">
+            <div class="section-header">
                 <h2>Innsikter</h2>
                 <span class="badge">Analyse</span>
             </div>
@@ -749,6 +760,134 @@ function renderCharts() {
             }).catch(function(err){console.warn('Krypto-priser utilgjengelig:',err)});
         }
     }
+
+    // Projection / Prognose
+    (function() {
+        var currentVal = latest;
+        // Månedlig sparing: spareavtaler + snitt ekstra (siste 6 mnd)
+        var agreements = DATA.savingsAgreements || {};
+        var monthlyAgreement = 0;
+        Object.keys(agreements).forEach(function(k) { monthlyAgreement += agreements[k]; });
+
+        // Snitt ekstra (egen sparing minus avtale, siste 6 mnd)
+        var recentOwn = ownM.slice(-6).filter(function(x) { return x > 0; });
+        var avgOwn = recentOwn.length > 0 ? recentOwn.reduce(function(a,b){return a+b},0) / recentOwn.length : monthlyAgreement;
+        var avgExtra = Math.max(avgOwn - monthlyAgreement, 0);
+
+        // Snitt arbeidsgiver (siste 12 mnd)
+        var recentEmp = totalEmployer.slice(-12).filter(function(x) { return x > 0; });
+        var avgEmp = recentEmp.length > 0 ? recentEmp.reduce(function(a,b){return a+b},0) / recentEmp.length : 0;
+
+        var monthlySave = monthlyAgreement + avgExtra + avgEmp;
+
+        // Tre scenarier: konservativ (3%), moderat (7%), optimistisk (10%)
+        var scenarios = [
+            {name: 'Konservativ', rate: 0.03, color: '#7a96b0', dash: [6,3]},
+            {name: 'Moderat', rate: 0.07, color: '#60a5fa', dash: []},
+            {name: 'Optimistisk', rate: 0.10, color: '#6D8345', dash: [6,3]}
+        ];
+
+        // Fremskriv 60 måneder (5 år)
+        var projMonths = 60;
+        var projLabels = [];
+        var lastMonth = DATA.entries[N-1].month;
+        var pMonth = lastMonth;
+        projLabels.push('Nå');
+        for (var i = 1; i <= projMonths; i++) {
+            pMonth = nextMonth(pMonth);
+            var p = pMonth.split('-');
+            projLabels.push(MONTH_NAMES[parseInt(p[1])-1] + ' ' + p[0].slice(2));
+        }
+
+        // Historisk (siste 24 mnd for kontekst)
+        var histLen = Math.min(24, N);
+        var histLabels = L.slice(N - histLen);
+        var histValues = totalV.slice(N - histLen);
+
+        var allLabels = histLabels.concat(projLabels);
+        var histData = histValues.concat(Array(projMonths + 1).fill(null));
+        histData[histLen] = currentVal; // Koble historisk til prognose
+
+        var datasets = [{
+            label: 'Historisk',
+            data: histData,
+            borderColor: '#f4f5f2',
+            backgroundColor: '#f4f5f220',
+            fill: false,
+            borderWidth: 2,
+            pointRadius: 0,
+            tension: 0.3
+        }];
+
+        scenarios.forEach(function(sc) {
+            var data = Array(histLen).fill(null);
+            var val = currentVal;
+            data.push(val);
+            var monthlyRate = sc.rate / 12;
+            for (var i = 1; i <= projMonths; i++) {
+                val = val * (1 + monthlyRate) + monthlySave;
+                data.push(Math.round(val));
+            }
+            datasets.push({
+                label: sc.name + ' (' + (sc.rate*100) + '%)',
+                data: data,
+                borderColor: sc.color,
+                borderDash: sc.dash,
+                borderWidth: 1.5,
+                pointRadius: 0,
+                fill: false,
+                tension: 0.3
+            });
+        });
+
+        if (charts.projection) charts.projection.destroy();
+        charts.projection = new Chart(document.getElementById('projectionChart'), {
+            type: 'line',
+            data: {labels: allLabels, datasets: datasets},
+            options: {
+                responsive: true, maintainAspectRatio: false,
+                scales: {
+                    x: {grid:{display:false}, ticks:{maxTicksLimit:12, font:{size:9}}},
+                    y: {grid:{color:'#1b2d4288'}, ticks:{callback:function(v){return fmtK(v)}}}
+                },
+                plugins: {
+                    tooltip: {callbacks:{label:function(c){return c.parsed.y?c.dataset.label+': '+fmt(c.parsed.y):null}}},
+                    legend: {position:'bottom', labels:{usePointStyle:true, pointStyle:'circle', padding:8, font:{size:10}}}
+                }
+            }
+        });
+
+        // KPI-kort for milepæler
+        var milestones = [
+            {months: 6, label: '6 mnd'},
+            {months: 12, label: '1 år'},
+            {months: 24, label: '2 år'},
+            {months: 60, label: '5 år'}
+        ];
+        var kpiHTML = '';
+        milestones.forEach(function(ms) {
+            var vals = scenarios.map(function(sc) {
+                var val = currentVal;
+                var mr = sc.rate / 12;
+                for (var i = 0; i < ms.months; i++) val = val * (1 + mr) + monthlySave;
+                return val;
+            });
+            var growth = vals[1] - currentVal; // moderat
+            var growthPct = ((vals[1] / currentVal - 1) * 100).toFixed(0);
+            kpiHTML += '<div class="kpi"><div class="kpi-label">' + ms.label + '</div>' +
+                '<div class="kpi-value">' + fmtK(vals[1]) + '</div>' +
+                '<div class="kpi-sub" style="color:#6D8345;">+' + fmt(growth) + ' (+' + growthPct + '%)</div>' +
+                '<div class="kpi-sub">' + fmtK(vals[0]) + ' — ' + fmtK(vals[2]) + '</div></div>';
+        });
+        // Vis forutsetninger
+        kpiHTML += '<div class="kpi"><div class="kpi-label">Forutsetninger</div>' +
+            '<div class="kpi-sub" style="line-height:1.6;">Avtale: ' + fmt(monthlyAgreement) + '/mnd<br>' +
+            'Ekstra: ~' + fmt(Math.round(avgExtra)) + '/mnd<br>' +
+            'Arbeidsgiver: ~' + fmt(Math.round(avgEmp)) + '/mnd<br>' +
+            '<strong style="color:var(--white);">Totalt: ' + fmt(Math.round(monthlySave)) + '/mnd</strong></div></div>';
+
+        document.getElementById('projectionKpis').innerHTML = kpiHTML;
+    })();
 
     // Insights
     var pensjonAccs = A.filter(function(a) { return a.category === 'pensjon' });
