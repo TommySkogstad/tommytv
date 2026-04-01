@@ -376,20 +376,34 @@ function getArrays() {
             m: entries.map(function(e) { return (e[acc.id] || [0,0])[1] })
         };
     });
-    var totalV = Array(N).fill(0), totalM = Array(N).fill(0), totalAgreement = Array(N).fill(0), cumContrib = Array(N).fill(0);
+    var totalV = Array(N).fill(0), totalM = Array(N).fill(0), totalAgreement = Array(N).fill(0), totalEmployer = Array(N).fill(0), cumContrib = Array(N).fill(0);
+    var employerIds = {};
+    accounts.forEach(function(acc) { if (acc.employer) employerIds[acc.id] = true; });
     A.forEach(function(a) { for (var i = 0; i < N; i++) { totalV[i] += a.v[i]; totalM[i] += a.m[i] } });
-    // Compute agreement portion per month
+    // Compute agreement and employer portions per month
     for (var i = 0; i < N; i++) {
         var e = entries[i];
         accounts.forEach(function(acc) {
-            var entry = e[acc.id] || [0, 0];
-            totalAgreement[i] += (entry[2] || 0);
+            if (acc.employer) {
+                totalEmployer[i] += (e[acc.id] || [0,0])[1];
+            } else if (acc.children && acc.children.length > 0) {
+                acc.children.forEach(function(cid) {
+                    var ce = e[cid] || [0, 0];
+                    totalAgreement[i] += (ce[2] || 0);
+                });
+            } else {
+                var entry = e[acc.id] || [0, 0];
+                totalAgreement[i] += (entry[2] || 0);
+            }
         });
     }
+    // ownM = egen sparing (uten arbeidsgiver)
+    var ownM = Array(N).fill(0);
+    for (var i = 0; i < N; i++) { ownM[i] = totalM[i] - totalEmployer[i]; }
     var cc = 0; for (var i = 0; i < N; i++) { cc += totalM[i]; cumContrib[i] = cc }
     var hypoSav = Array(N).fill(0), hs = 0;
     for (var i = 0; i < N; i++) { hs = hs * (1 + 0.03/12) + totalM[i]; hypoSav[i] = hs }
-    return { A: A, L: L, N: N, totalV: totalV, totalM: totalM, totalAgreement: totalAgreement, cumContrib: cumContrib, hypoSav: hypoSav };
+    return { A: A, L: L, N: N, totalV: totalV, totalM: totalM, ownM: ownM, totalAgreement: totalAgreement, totalEmployer: totalEmployer, cumContrib: cumContrib, hypoSav: hypoSav };
 }
 
 /* ── Charts ── */
@@ -400,7 +414,7 @@ function renderCharts() {
     charts = {};
 
     var d = getArrays();
-    var A = d.A, L = d.L, N = d.N, totalV = d.totalV, totalM = d.totalM, totalAgreement = d.totalAgreement, cumContrib = d.cumContrib, hypoSav = d.hypoSav;
+    var A = d.A, L = d.L, N = d.N, totalV = d.totalV, totalM = d.totalM, ownM = d.ownM, totalAgreement = d.totalAgreement, totalEmployer = d.totalEmployer, cumContrib = d.cumContrib, hypoSav = d.hypoSav;
 
     var lastMonth = monthLabel(DATA.entries[N-1].month);
     var firstMonth = monthLabel(DATA.entries[0].month);
@@ -415,8 +429,8 @@ function renderCharts() {
     var avgInvested = cumContrib.reduce(function(a,b){return a+b}, 0) / N;
     var totalReturnRate = avgInvested > 0 ? (totalReturn / avgInvested) : 0;
     var cagr = years > 0 ? ((Math.pow(1 + totalReturnRate, 1/years) - 1) * 100) : 0;
-    var posMonths = totalM.filter(function(x) { return x > 0 });
-    var avgSave = posMonths.length > 0 ? posMonths.reduce(function(a,b) { return a+b }, 0) / posMonths.length : 0;
+    var posOwnMonths = ownM.filter(function(x) { return x > 0 });
+    var avgOwnSave = posOwnMonths.length > 0 ? posOwnMonths.reduce(function(a,b) { return a+b }, 0) / posOwnMonths.length : 0;
     var bestMonth = 0, bestIdx = 0;
     for (var i = 1; i < N; i++) { var ch = totalV[i] - totalV[i-1]; if (ch > bestMonth) { bestMonth = ch; bestIdx = i } }
 
@@ -430,7 +444,7 @@ function renderCharts() {
         {l:'Innbetalt', v:fmt(totalContrib), s:N+' måneder'},
         {l:'Spareavtale', v:fmt(totalMonthlyAgreement), s:'Per måned'},
         {l:'CAGR', v:pct(cagr), s:'Årlig vekst'},
-        {l:'Snitt sparing', v:fmt(avgSave), s:'Per måned'},
+        {l:'Snitt egen sparing', v:fmt(avgOwnSave), s:'Uten arbeidsgiver'},
         {l:'Beste måned', v:'+'+fmt(bestMonth), s:L[bestIdx]}
     ].map(function(k) { return '<div class="kpi"><div class="kpi-label">'+k.l+'</div><div class="kpi-value">'+k.v+'</div><div class="kpi-sub">'+k.s+'</div></div>' }).join('');
 
@@ -473,18 +487,19 @@ function renderCharts() {
             plugins:{tooltip:tt,legend:{position:'bottom',labels:{usePointStyle:true,pointStyle:'circle',padding:8,font:{size:10}}}}}
     });
 
-    // Monthly bar — stacked (spareavtale + ekstra, negative = uttak)
-    var barAgreement = [], barExtra = [], barNegative = [];
+    // Monthly bar — stacked (spareavtale + ekstra + arbeidsgiver, negative = uttak)
+    var barAgreement = [], barExtra = [], barEmployer = [], barNegative = [];
     for (var i = 0; i < N; i++) {
-        var total = totalM[i], agr = totalAgreement[i];
-        if (total < 0) {
+        var own = ownM[i], agr = totalAgreement[i], emp = totalEmployer[i];
+        barEmployer.push(Math.max(emp, 0));
+        if (own < 0) {
             barAgreement.push(0);
             barExtra.push(0);
-            barNegative.push(total);
+            barNegative.push(own);
         } else {
-            var agrPart = Math.min(agr, total);
+            var agrPart = Math.min(agr, own);
             barAgreement.push(agrPart);
-            barExtra.push(total - agrPart);
+            barExtra.push(own - agrPart);
             barNegative.push(0);
         }
     }
@@ -493,6 +508,7 @@ function renderCharts() {
         data:{labels:L,datasets:[
             {label:'Spareavtale',data:barAgreement,backgroundColor:'#6D834560',borderColor:'#6D8345',borderWidth:1,borderRadius:2},
             {label:'Ekstra',data:barExtra,backgroundColor:'#60a5fa40',borderColor:'#60a5fa',borderWidth:1,borderRadius:2},
+            {label:'Arbeidsgiver',data:barEmployer,backgroundColor:'#818cf840',borderColor:'#818cf8',borderWidth:1,borderRadius:2},
             {label:'Uttak',data:barNegative,backgroundColor:'#C3583940',borderColor:'#C35839',borderWidth:1,borderRadius:2}
         ]},
         options:{responsive:true,maintainAspectRatio:false,
@@ -711,7 +727,7 @@ function renderCharts() {
         {c:'good', t:'Beste år: ' + bestY.year, p:'Porteføljen vokste ' + pct(bestY.pct) + ' (' + fmt(bestY.start) + ' → ' + fmt(bestY.end) + '). Avkastning: ' + fmt(bestY.ret) + '.'},
         {c:'warn', t:'Svakeste år: ' + worstY.year, p:'Vekst på ' + pct(worstY.pct) + ' (' + fmt(worstY.start) + ' → ' + fmt(worstY.end) + '). ' + (worstY.ret < 0 ? 'Negativ avkastning: ' + fmt(worstY.ret) + '.' : 'Avkastning: ' + fmt(worstY.ret) + '.')},
         {c:'info', t:'Sparekonto-sammenligning', p:'Med 3% rente: ' + fmt(hypoSav[N-1]) + '. Faktisk: ' + fmt(latest) + '. Differanse: ' + fmt(latest - hypoSav[N-1]) + ' ' + (latest > hypoSav[N-1] ? 'i din favor' : 'i minus') + '.'},
-        {c:'good', t:'Sparedisiplin', p:'Netto positive innskudd i ' + posM + ' av ' + N + ' måneder (' + (posM/N*100).toFixed(0) + '%). Snitt: ' + fmt(avgSave) + ' per måned.'}
+        {c:'good', t:'Sparedisiplin', p:'Netto positive innskudd i ' + posM + ' av ' + N + ' måneder (' + (posM/N*100).toFixed(0) + '%). Snitt egen sparing: ' + fmt(avgOwnSave) + ' per måned.'}
     ].map(function(i) { return '<div class="insight ' + i.c + '"><h3>' + i.t + '</h3><p>' + i.p + '</p></div>' }).join('');
 
     renderAllocation();
@@ -1029,12 +1045,18 @@ function renderAgreements() {
     if (!DATA) return;
     var agreements = DATA.savingsAgreements || {};
     var eligibleAccs = DATA.accounts.filter(function(a) {
-        return a.active !== false && !a.children && a.id !== 'krypto';
+        return a.active !== false && a.id !== 'krypto' && !a.employer;
     });
     if (eligibleAccs.length === 0) { document.getElementById('agreementsEditor').innerHTML = ''; return; }
 
     var totalAgreement = 0;
-    eligibleAccs.forEach(function(a) { totalAgreement += (agreements[a.id] || 0); });
+    eligibleAccs.forEach(function(a) {
+        if (a.children) {
+            a.children.forEach(function(cid) { totalAgreement += (agreements[cid] || 0); });
+        } else {
+            totalAgreement += (agreements[a.id] || 0);
+        }
+    });
 
     var html = '<div style="margin-bottom:1.25rem;">' +
         '<div style="display:flex;align-items:center;gap:0.75rem;margin-bottom:0.75rem;">' +
@@ -1043,17 +1065,39 @@ function renderAgreements() {
         '</div>' +
         '<div class="month-grid">';
     eligibleAccs.forEach(function(a) {
-        var val = agreements[a.id] || 0;
-        html += '<div class="month-card" style="padding:0.75rem;">' +
-            '<div class="month-card-header" style="margin-bottom:0.5rem;">' +
-                '<div class="month-card-dot" style="background:' + a.color + '"></div>' +
-                '<div class="month-card-name" style="font-size:0.8rem;">' + a.name + '</div>' +
-            '</div>' +
-            '<div class="month-field">' +
-                '<label>Månedlig avtalebeløp</label>' +
-                '<input type="number" value="' + val + '" data-acc="' + a.id + '" onchange="agreementChanged(this)">' +
-            '</div>' +
-        '</div>';
+        if (a.children) {
+            // Konto med barn — vis hver underpost
+            var childTotal = 0;
+            var childHTML = '';
+            a.children.forEach(function(cid) {
+                var cval = agreements[cid] || 0;
+                childTotal += cval;
+                var cname = CHILD_NAMES[cid] || cid.replace(a.id + '_', '').replace(/_/g, ' ');
+                childHTML += '<div class="month-field">' +
+                    '<label>' + cname + '</label>' +
+                    '<input type="number" value="' + cval + '" data-acc="' + cid + '" onchange="agreementChanged(this)">' +
+                '</div>';
+            });
+            html += '<div class="month-card" style="padding:0.75rem;">' +
+                '<div class="month-card-header" style="margin-bottom:0.5rem;">' +
+                    '<div class="month-card-dot" style="background:' + a.color + '"></div>' +
+                    '<div class="month-card-name" style="font-size:0.8rem;">' + a.name + ' <span style="font-family:\'DM Mono\',monospace;font-size:0.65rem;color:var(--blue3);">' + fmt(childTotal) + '/mnd</span></div>' +
+                '</div>' +
+                childHTML +
+            '</div>';
+        } else {
+            var val = agreements[a.id] || 0;
+            html += '<div class="month-card" style="padding:0.75rem;">' +
+                '<div class="month-card-header" style="margin-bottom:0.5rem;">' +
+                    '<div class="month-card-dot" style="background:' + a.color + '"></div>' +
+                    '<div class="month-card-name" style="font-size:0.8rem;">' + a.name + '</div>' +
+                '</div>' +
+                '<div class="month-field">' +
+                    '<label>Månedlig avtalebeløp</label>' +
+                    '<input type="number" value="' + val + '" data-acc="' + a.id + '" onchange="agreementChanged(this)">' +
+                '</div>' +
+            '</div>';
+        }
     });
     html += '</div></div>';
     document.getElementById('agreementsEditor').innerHTML = html;
@@ -1062,8 +1106,20 @@ function renderAgreements() {
 function agreementChanged(input) {
     var accId = input.dataset.acc;
     if (!DATA.savingsAgreements) DATA.savingsAgreements = {};
-    DATA.savingsAgreements[accId] = parseFloat(input.value) || 0;
+    var newVal = parseFloat(input.value) || 0;
+    DATA.savingsAgreements[accId] = newVal;
+    // Backfill: oppdater entries som mangler tredje element
+    DATA.entries.forEach(function(e) {
+        var entry = e[accId];
+        if (!entry || !Array.isArray(entry)) return;
+        if (entry.length < 3) {
+            // Ingen eksplisitt split — fordel innskuddet: avtale = min(avtalebeløp, innskudd), ekstra = resten
+            entry.push(Math.min(newVal, Math.max(entry[1], 0)));
+        }
+    });
     renderAgreements();
+    renderMonthEditor();
+    renderCharts();
     markUnsaved();
 }
 
@@ -1192,14 +1248,14 @@ function renderMonthEditor() {
                     '<div class="month-field"><label>Saldo</label>' +
                         '<input type="number" value="' + vals[0] + '" data-month="' + mi + '" data-acc="' + a.id + '" data-field="0" onchange="cardChanged(this)">' +
                     '</div>' +
-                    '<div class="month-field"><label>Spareavtale</label>' +
-                        '<input type="number" value="' + agreementPart + '" data-month="' + mi + '" data-acc="' + a.id + '" data-type="agreement" onchange="depositSplitChanged(this)" style="border-color:#6D834566;">' +
-                    '</div>' +
-                    '<div class="month-field"><label>Ekstra</label>' +
-                        '<input type="number" value="' + extraPart + '" data-month="' + mi + '" data-acc="' + a.id + '" data-type="extra" onchange="depositSplitChanged(this)" style="border-color:#60a5fa44;">' +
-                    '</div>' +
                     '<div class="month-field"><label style="color:var(--blue3);">Innskudd totalt</label>' +
                         '<input type="number" value="' + vals[1] + '" disabled style="opacity:0.5;">' +
+                    '</div>' +
+                    '<div class="month-field"><label style="color:#6D8345;">Spareavtale</label>' +
+                        '<input type="number" value="' + agreementPart + '" data-month="' + mi + '" data-acc="' + a.id + '" data-type="agreement" onchange="depositSplitChanged(this)" style="border-color:#6D834566;">' +
+                    '</div>' +
+                    '<div class="month-field"><label style="color:#60a5fa;">Ekstra</label>' +
+                        '<input type="number" value="' + extraPart + '" data-month="' + mi + '" data-acc="' + a.id + '" data-type="extra" onchange="depositSplitChanged(this)" style="border-color:#60a5fa44;">' +
                     '</div>' +
                 '</div>' +
             '</div>';
@@ -1404,12 +1460,17 @@ function addMonth() {
         var lastVals = lastEntry[a.id] || [0, 0];
         var agreementVal = agreements[a.id] || 0;
         entry[a.id] = [lastVals[0], agreementVal, agreementVal];
-        // Pre-fill barn
+        // Pre-fill barn med spareavtaler
         if (a.children) {
+            var childAgrSum = 0;
             a.children.forEach(function(cid) {
                 var cv = lastEntry[cid] || [0, 0];
-                entry[cid] = [cv[0], 0, 0];
+                var childAgr = agreements[cid] || 0;
+                entry[cid] = [cv[0], childAgr, childAgr];
+                childAgrSum += childAgr;
             });
+            // Forelder-sum fra barn
+            entry[a.id] = [lastVals[0], childAgrSum, childAgrSum];
         }
     });
     // Pre-fill krypto-holdings fra forrige måned
