@@ -675,6 +675,11 @@ function renderCharts() {
                 }
                 if (val > 0) { fundWeights[fid] = val; totalVal += val; }
             });
+            // Inkluder krypto i sektor/region-beregningen
+            if (cryptoFund && fa.funds[cryptoFund.id]) {
+                fundWeights[cryptoFund.id] = cryptoFund.val;
+                totalVal += cryptoFund.val;
+            }
 
             if (totalVal > 0) {
                 var regionKr = {}, sectorKr = {};
