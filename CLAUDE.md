@@ -7,13 +7,13 @@
 - **Start**: `docker compose down && docker compose up -d`
 
 ## Filstruktur
-- `index.html` — Hoveddashboard med egne tjenester og Immich-fotointegrasjon
+- `index.html` — Hoveddashboard med e-post, VPN, offentlige tjenester og LAN-tjenester
 - `status.html` — Status-side (LAN): Smarthus (Hue + Homey + Nanoleaf + Plejd + Yale + gardiner) + Infrastruktur (UniFi + speedtest + WiFi restart)
 - `bookmarks.html` — Bokmerkeside med eksterne tjenester og lenker
-- `heating.html` — Heating system dashboard
+- `heating.html` — Varme og sikkerhet (LAN): Gulvvarme, Mill-ovn, Yale-lås, temperaturer, batteristatus, printer
 - `sparing.html` — Spareoversikt-side (portefølje, fordeling, anbefalinger)
 - `photos.html` — Fotoside med Immich-integrasjon
-- `tommy_skogstad_brand_guide.html` — Brand guide page
+- `tommy_skogstad_brand_guide.html` — Brand guide (visuell identitet, logo, farger, typografi) — standalone side uten header.js/footer.js
 - `header.js` — Delt navigasjonskomponent (inkluderes av alle sider)
 - `footer.js` — Delt footerkomponent (inkluderes av alle sider)
 - `sparing-data.json` — Porteføljedata for sparesiden
@@ -33,20 +33,21 @@
 - Port 8880 eksponert på host for direkte LAN-tilgang
 - Alle HTML-filer må mountes som volumes i docker-compose.yml
 
-## Immich-fotointegrasjon (index.html)
-- Viser siste bilder fra Immich via API (port 2283)
-- Bildegalleriet er integrert i hoveddashboardet
+## Immich-fotointegrasjon (photos.html)
+- Bildefremvisning med Immich API (port 2283) via nginx-proxy (/immich-api/)
+- Personsøk, favorittmarkering, zoom-til-ansikt, fullskjerm, skjuling av bilder
 
 ## Navigasjon
-Hovednavigasjonen inneholder: Hjem, Status, Varme & Sikkerhet, Sparing, Bilder, Bokmerker.
-(Audio er fjernet fra navigasjonen.)
+Hovednavigasjonen inneholder:
+- **Offentlig** (alle): Dashboard, Bokmerker, Brand Guide
+- **LAN** (kun lokalt): Status, Varme & Sikkerhet, Sparing, Bilder
 
 ## LAN-logikk
 - Seksjoner med klasse `local-section` og `style="display: none;"` er skjult som standard
 - JavaScript viser dem kun når `location.hostname !== 'tommytv.no'` (dvs. LAN-tilgang)
-- På tommytv.no vises en "Bytt til LAN-versjon"-knapp (`id="lan-toggle"`) som peker til `http://nuc.tommy.tv:8880`
-- Knappen skjules automatisk på LAN (`lan-toggle` style.display = 'none')
-- bookmarks.html har samme logikk, men uten LAN-knapp
+- På tommytv.no viser header.js en "LAN-versjon"-lenke i navigasjonen som peker til `http://nuc.tommy.tv:8880`
+- På LAN vises i stedet ekstra navigasjonspunkter (Status, Varme & Sikkerhet, Sparing, Bilder)
+- bookmarks.html har samme LAN-logikk for seksjoner
 
 ## Legge til ny tjeneste (index.html)
 Legg kortet i riktig seksjon. JavaScript sorterer alfabetisk automatisk.
