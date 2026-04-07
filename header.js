@@ -9,6 +9,7 @@
     var publicNav = [
         { href: '/', label: 'Dashboard' },
         { href: '/bookmarks.html', label: 'Bokmerker' },
+        { href: '/tommy_skogstad_brand_guide.html', label: 'Brand Guide' },
     ];
 
     var lanNav = [
