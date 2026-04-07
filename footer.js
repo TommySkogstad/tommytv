@@ -14,6 +14,7 @@
         '<div style="font-family:\'DM Mono\',monospace;font-size:0.7rem;letter-spacing:0.1em;color:var(--blue3);">' +
             'Ingeni\u00f8r Tommy Skogstad \u00b7 org.nr. 921 954 565 \u00b7 \u00a9 ' + new Date().getFullYear() +
         '</div>' +
+        (location.hostname === 'tommytv.no' ? '<div style="margin-top:0.75rem;"><a href="http://nuc.tommy.tv:8880' + (location.pathname.replace(/\/$/, '') || '/') + '" style="font-family:\'DM Mono\',monospace;font-size:0.65rem;color:var(--blue2);text-decoration:none;letter-spacing:0.08em;">LAN</a></div>' : '') +
     '</footer>';
 
     var el = document.getElementById('site-footer');

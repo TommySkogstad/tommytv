@@ -6,13 +6,17 @@
     var path = location.pathname.replace(/\/$/, '') || '/';
 
     // Navigation items
-    var publicNav = [
+    var publicNav = isLAN ? [
         { href: '/', label: 'Dashboard' },
-        { href: '/bookmarks.html', label: 'Bokmerker' },
+        { href: '/tommy_skogstad_brand_guide.html', label: 'Brand Guide' },
+    ] : [
+        { href: '/', label: 'Hjem' },
+        { href: '/dashboard.html', label: 'Portefølje' },
         { href: '/tommy_skogstad_brand_guide.html', label: 'Brand Guide' },
     ];
 
     var lanNav = [
+        { href: '/bookmarks.html', label: 'Bokmerker' },
         { href: '/status.html', label: 'Status' },
         { href: '/heating.html', label: 'Varme & Sikkerhet' },
         { href: '/sparing.html', label: 'Sparing' },
@@ -35,9 +39,6 @@
         lanNav.forEach(function(item) {
             navHTML += '<a href="' + item.href + '"' + (isActive(item.href) ? ' class="active"' : '') + '>' + item.label + '</a>';
         });
-    } else {
-        navHTML += '<span class="nav-sep"></span>';
-        navHTML += '<a href="http://nuc.tommy.tv:8880' + path + '" style="color:#60a5fa;border-color:#1e3a5f;">LAN-versjon</a>';
     }
 
     var html = '<header>' +
@@ -47,7 +48,7 @@
                 '<div class="header-brand-text">' +
                     '<div class="header-brand-name">Tommy Skogstad</div>' +
                     '<div class="header-brand-sep"></div>' +
-                    '<div class="header-brand-sub">ingeniør · data · elektro · ledelse · produktutvikling</div>' +
+                    '<div class="header-brand-sub">systemutvikling · automatisering · AI · drift</div>' +
                 '</div>' +
             '</div>' +
         '</a>' +
