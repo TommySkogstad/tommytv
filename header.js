@@ -48,7 +48,7 @@
                 '<div class="header-brand-text">' +
                     '<div class="header-brand-name">Tommy Skogstad</div>' +
                     '<div class="header-brand-sep"></div>' +
-                    '<div class="header-brand-sub">systemutvikling · automatisering · AI · drift</div>' +
+                    '<div class="header-brand-sub">ingeniør · elektro · data · automatisering</div>' +
                 '</div>' +
             '</div>' +
         '</a>' +
