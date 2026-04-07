@@ -69,10 +69,13 @@
     },
     {
       "id": "gull",
-      "name": "Gull",
+      "name": "AF - Nordnet",
       "provider": "Nordnet",
       "color": "#fbbf24",
-      "category": "investering"
+      "category": "investering",
+      "children": [
+        "gull_bgf_world_gold_a2"
+      ]
     },
     {
       "id": "cashback",
@@ -6076,6 +6079,11 @@
         3000,
         3000
       ],
+      "gull_bgf_world_gold_a2": [
+        3000,
+        3000,
+        3000
+      ],
       "cashback": [
         0,
         0
@@ -6397,11 +6405,23 @@
         "riskLabel": "Svært høy",
         "riskNote": "Kryptovaluta, ekstrem volatilitet"
       },
-      "gull": {
-        "regions": {},
+      "gull_bgf_world_gold_a2": {
+        "name": "BGF World Gold A2",
+        "regions": {
+          "Canada": 49.22,
+          "USA": 36.69,
+          "Australia": 9.62,
+          "Hong Kong": 1.37,
+          "Storbritannia": 0.94,
+          "Sør-Afrika": 0.65
+        },
         "sectors": {
-          "Råvarer": 100
-        }
+          "Gullgruver": 92.00,
+          "Sølvgruver": 6.30
+        },
+        "riskScore": 5,
+        "riskLabel": "Svært høy",
+        "riskNote": "Konsentrert i gullgruveselskaper, 7/7 risiko"
       },
       "crowdfunding": {
         "regions": {

@@ -1228,11 +1228,7 @@ function renderAllocation() {
         riskWeightTotal += kryptoVal;
         fundRiskBreakdown.push({name: 'Krypto', val: kryptoVal, score: 5, label: 'Svært høy', note: 'Ekstrem volatilitet'});
     }
-    // Legg til gull (risikoscore 1)
-    if (gullVal > 0) {
-        weightedRisk += 1 * gullVal;
-        riskWeightTotal += gullVal;
-    }
+    // Gull håndteres nå via fundVals-loopen over (har riskScore i fundAllocations)
 
     var avgRisk = riskWeightTotal > 0 ? weightedRisk / riskWeightTotal : 3;
     fundRiskBreakdown.sort(function(a,b) { return b.val - a.val; });
