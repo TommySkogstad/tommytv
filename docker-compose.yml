@@ -7,6 +7,12 @@ services:
     command: tunnel --no-autoupdate run
     environment:
       TUNNEL_TOKEN: ${CLOUDFLARE_TUNNEL_TOKEN:?Sett CLOUDFLARE_TUNNEL_TOKEN i .env}
+    healthcheck:
+      test: ["CMD", "cloudflared", "version"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 10s
     networks:
       - tommytv-network
     depends_on:
