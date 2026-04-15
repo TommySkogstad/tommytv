@@ -28,6 +28,23 @@
 - **cloudflared** — Cloudflare Tunnel til tommytv.no
 - **sparing-api** — Python REST API for porteføljedata (port 8881), leser/skriver sparing-data.json
 
+## Dashboard-tjenester (index.html)
+Offentlige tjenester vist på dashboardet (seksjon "Offentlige tjenester"):
+- **Biologportal** — portal.leienbiolog.no — Oppdragshåndtering for biologer
+- **LO Finans** — lo-finans.no — Fagforeningsportal
+- **Sameiet HWA 6-8-10** — 6810.no — Beboerportal
+- **Styreportal** — styreportal.leienbiolog.no — Multi-tenant styreportal
+- **BilagBot** — bilag.tommytv.no — AI-drevet bilagsscanner
+- **GeoLoop** — geoloop.tommytv.no — Prediktiv varmestyring
+- **md2pdf** — md.tommytv.no
+- **Stirling PDF** — pdf.tommytv.no
+- **Ntfy** — ntfy.tommytv.no
+- **Uptime Kuma** — uptime.tommytv.no
+- **Speedtest** — speedtest.tommytv.no
+- **Plex** — app.plex.tv
+- **Safekeeper** — github.com/TommySkogstad/safekeeper
+- **Grunnmur** — github.com/TommySkogstad/grunnmur
+
 ## Arkitektur
 - Nginx serverer statiske filer, cloudflared kobler til Cloudflare Tunnel
 - Port 8880 eksponert på host for direkte LAN-tilgang
