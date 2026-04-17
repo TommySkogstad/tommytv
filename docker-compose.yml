@@ -28,6 +28,7 @@ services:
       - ./dashboard.html:/usr/share/nginx/html/dashboard.html:ro
       - ./bookmarks.html:/usr/share/nginx/html/bookmarks.html:ro
       - ./status.html:/usr/share/nginx/html/status.html:ro
+      - ./status-app.html:/usr/share/nginx/html/status-app.html:ro
       - ./heating.html:/usr/share/nginx/html/heating.html:ro
       - ./sparing.html:/usr/share/nginx/html/sparing.html:ro
       - ./photos.html:/usr/share/nginx/html/photos.html:ro
@@ -83,6 +84,34 @@ services:
         limits:
           memory: 32M
           cpus: '0.05'
+
+  status-api:
+    image: python:3.12-alpine
+    restart: unless-stopped
+    command: python /app/status-api.py
+    environment:
+      STATUS_DB: /data/status.db
+      STATUS_API_PORT: "8882"
+    volumes:
+      - ./status-api.py:/app/status-api.py:ro
+      # RW-mount kreves fordi SQLite WAL må kunne opprette -wal/-shm.
+      # PRAGMA query_only = 1 i status-api.py hindrer skrive-operasjoner.
+      - ${STATUS_DATA_DIR:-/home/terminator/status-data}:/data
+    ports:
+      - "8882:8882"
+    healthcheck:
+      test: ["CMD-SHELL", "wget -q --spider http://127.0.0.1:8882/health || exit 1"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 5s
+    networks:
+      - tommytv-network
+    deploy:
+      resources:
+        limits:
+          memory: 48M
+          cpus: '0.10'
 
 volumes:
   sparing-backups:

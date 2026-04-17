@@ -9,438 +9,448 @@
     <title>Status — Tommy Skogstad</title>
     <style>
         :root {
-            --navy:   #0d1b2a;
-            --blue1:  #1b2d42;
-            --blue2:  #2e4260;
-            --blue3:  #4a6080;
-            --blue4:  #7a96b0;
-            --blue5:  #b8cad8;
-            --blue6:  #e4eaf0;
-            --white:  #f4f5f2;
+            --navy:#0d1b2a; --blue1:#1b2d42; --blue2:#2e4260; --blue3:#4a6080;
+            --blue4:#7a96b0; --blue5:#b8cad8; --blue6:#e4eaf0; --white:#f4f5f2;
+            --green:#6D8345; --yellow:#F9A850; --red:#C35839;
         }
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: 'DM Sans', sans-serif; background: var(--navy); color: var(--blue5); min-height: 100vh; }
-        header { max-width: 900px; margin: 0 auto; padding: 2.5rem 1rem 2rem; display: flex; align-items: center; justify-content: space-between; gap: 1.5rem; }
-        .header-brand { display: flex; align-items: center; gap: 1.25rem; }
-        .header-brand img { height: 4rem; width: 4rem; }
-        .header-brand-text { display: flex; flex-direction: column; gap: 4px; }
-        .header-brand-name { font-size: 1.4rem; font-weight: 400; color: var(--white); letter-spacing: -0.02em; line-height: 1; }
-        .header-brand-sep { height: 1px; background: var(--white); opacity: 0.12; }
-        .header-brand-sub { font-family: 'DM Mono', monospace; font-size: 0.6rem; letter-spacing: 0.14em; color: var(--blue4); text-transform: uppercase; }
-        .header-nav { display: flex; gap: 0.5rem; align-items: center; flex-wrap: wrap; }
-        .header-nav a { font-family: 'DM Mono', monospace; font-size: 0.75rem; letter-spacing: 0.08em; color: var(--blue3); text-decoration: none; padding: 0.4rem 0.8rem; border: 1px solid var(--blue2); border-radius: 6px; transition: color 0.2s, border-color 0.2s; }
-        .header-nav a:hover { color: var(--white); border-color: var(--blue4); }
-        .header-nav a.active { color: var(--white); border-color: var(--blue4); background: var(--blue1); }
-        .nav-sep { width:1px; height:1.2rem; background:var(--blue2); }
-        main { max-width: 900px; margin: 0 auto; padding: 0 1rem 3rem; }
-        .section { margin-bottom: 2.5rem; }
-        .section-header { display: flex; align-items: center; gap: 0.75rem; margin-bottom: 1rem; padding-bottom: 0.5rem; border-bottom: 1px solid var(--blue1); }
-        .section-header h2 { font-size: 1.25rem; font-weight: 500; color: var(--white); }
-        .badge { font-family: 'DM Mono', monospace; font-size: 0.65rem; font-weight: 400; text-transform: uppercase; letter-spacing: 0.1em; padding: 0.2rem 0.6rem; border-radius: 9999px; }
-        .badge-local { background: var(--blue1); color: var(--blue4); }
-        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 1rem; }
-        .card { background: var(--blue1); border: 1px solid var(--blue2); border-radius: 12px; padding: 1.5rem; text-decoration: none; color: inherit; display: block; }
-        footer { text-align: center; padding: 2rem 1rem; color: var(--blue3); font-size: 0.85rem; border-top: 1px solid var(--blue1); max-width: 900px; margin: 0 auto; }
-        footer a { transition: color 0.2s; text-decoration: none; }
-        footer a:hover { color: var(--white); }
-        @media (max-width: 600px) { .grid { grid-template-columns: 1fr; } header { flex-direction: column; align-items: flex-start; } }
+        * { margin:0; padding:0; box-sizing:border-box; }
+        body { font-family:'DM Sans',sans-serif; background:var(--navy); color:var(--blue5); min-height:100vh; }
+        header { max-width:1100px; margin:0 auto; padding:2.5rem 1rem 2rem; display:flex; align-items:center; justify-content:space-between; gap:1.5rem; }
+        .header-brand { display:flex; align-items:center; gap:1.25rem; }
+        .header-brand img { height:4rem; width:4rem; }
+        .header-brand-text { display:flex; flex-direction:column; gap:4px; }
+        .header-brand-name { font-size:1.4rem; font-weight:400; color:var(--white); letter-spacing:-0.02em; line-height:1; }
+        .header-brand-sep { height:1px; background:var(--white); opacity:0.12; }
+        .header-brand-sub { font-family:'DM Mono',monospace; font-size:0.6rem; letter-spacing:0.14em; color:var(--blue4); text-transform:uppercase; }
+        .header-nav { display:flex; gap:0.5rem; align-items:center; flex-wrap:wrap; }
+        .header-nav a { font-family:'DM Mono',monospace; font-size:0.75rem; letter-spacing:0.08em; color:var(--blue3); text-decoration:none; padding:0.4rem 0.8rem; border:1px solid var(--blue2); border-radius:6px; transition:color 0.2s,border-color 0.2s; }
+        .header-nav a:hover { color:var(--white); border-color:var(--blue4); }
+        .header-nav a.active { color:var(--white); border-color:var(--blue4); background:var(--blue1); }
+        main { max-width:1100px; margin:0 auto; padding:0 1rem 3rem; }
+        .page-head { display:flex; justify-content:space-between; align-items:baseline; flex-wrap:wrap; margin-bottom:1.5rem; gap:0.5rem; }
+        .page-head h1 { font-size:1.5rem; font-weight:500; color:var(--white); }
+        .updated { font-family:'DM Mono',monospace; font-size:0.7rem; color:var(--blue4); }
+        .updated .dot { display:inline-block; width:6px; height:6px; border-radius:50%; background:var(--green); margin-right:4px; animation:pulse 2s infinite; }
+        @keyframes pulse { 0%,100% { opacity:1; } 50% { opacity:0.3; } }
+
+        .grid { display:grid; grid-template-columns:repeat(auto-fit, minmax(340px, 1fr)); gap:1rem; }
+        .app-card { background:var(--blue1); border:1px solid var(--blue2); border-radius:12px; overflow:hidden; transition:border-color 0.2s, transform 0.2s; text-decoration:none; color:inherit; display:flex; flex-direction:column; }
+        .app-card:hover { border-color:var(--blue4); transform:translateY(-2px); }
+        .app-card.status-ok     { border-left:4px solid var(--green); }
+        .app-card.status-warn   { border-left:4px solid var(--yellow); }
+        .app-card.status-crit   { border-left:4px solid var(--red); }
+        .app-card.status-unknown{ border-left:4px solid var(--blue3); }
+        .app-head { padding:1rem 1.25rem 0.75rem; display:flex; align-items:center; justify-content:space-between; gap:0.5rem; }
+        .app-title { font-size:1.05rem; font-weight:500; color:var(--white); }
+        .app-sub { font-family:'DM Mono',monospace; font-size:0.65rem; color:var(--blue3); letter-spacing:0.08em; text-transform:uppercase; }
+        .status-pill { font-family:'DM Mono',monospace; font-size:0.65rem; padding:0.2rem 0.55rem; border-radius:9999px; background:var(--navy); letter-spacing:0.06em; text-transform:uppercase; }
+        .status-pill.ok   { color:var(--green); border:1px solid rgba(109,131,69,0.4); }
+        .status-pill.warn { color:var(--yellow); border:1px solid rgba(249,168,80,0.4); }
+        .status-pill.crit { color:var(--red); border:1px solid rgba(195,88,57,0.4); }
+        .status-pill.unknown { color:var(--blue4); border:1px solid var(--blue2); }
+
+        .kpis { display:grid; grid-template-columns:repeat(3,1fr); gap:1px; background:var(--blue2); }
+        .kpi { background:var(--blue1); padding:0.6rem 0.75rem; text-align:left; }
+        .kpi-label { font-family:'DM Mono',monospace; font-size:0.55rem; color:var(--blue4); letter-spacing:0.08em; text-transform:uppercase; }
+        .kpi-value { font-size:0.95rem; color:var(--white); font-weight:500; margin-top:2px; font-family:'DM Mono',monospace; }
+        .kpi-value.ok   { color:var(--green); }
+        .kpi-value.warn { color:var(--yellow); }
+        .kpi-value.crit { color:var(--red); }
+
+        .spark { padding:0.75rem 1rem 0; background:var(--blue1); }
+        .spark svg { display:block; width:100%; height:28px; }
+        .spark-label { display:flex; justify-content:space-between; font-family:'DM Mono',monospace; font-size:0.55rem; color:var(--blue3); letter-spacing:0.08em; text-transform:uppercase; margin-bottom:2px; }
+
+        .app-foot { padding:0.6rem 1rem; background:rgba(0,0,0,0.18); display:flex; justify-content:space-between; align-items:center; font-family:'DM Mono',monospace; font-size:0.7rem; color:var(--blue4); }
+        .concern-badges { display:flex; gap:0.3rem; flex-wrap:wrap; }
+        .concern { padding:0.15rem 0.45rem; border-radius:4px; font-size:0.65rem; font-family:'DM Mono',monospace; }
+        .concern.crit { background:rgba(195,88,57,0.18); color:var(--red); }
+        .concern.high { background:rgba(249,168,80,0.18); color:var(--yellow); }
+        .concern.med  { background:rgba(122,150,176,0.18); color:var(--blue5); }
+        .concern.low  { background:rgba(74,96,128,0.18); color:var(--blue4); }
+        .concern.info { background:rgba(74,96,128,0.12); color:var(--blue3); }
+
+        .section { margin-top:2.5rem; }
+        .section-header { display:flex; align-items:center; gap:0.75rem; margin-bottom:1rem; padding-bottom:0.5rem; border-bottom:1px solid var(--blue1); }
+        .section-header h2 { font-size:1.15rem; font-weight:500; color:var(--white); }
+        .concerns-list { background:var(--blue1); border:1px solid var(--blue2); border-radius:10px; }
+        .concern-row { padding:0.7rem 1rem; display:flex; align-items:center; gap:0.75rem; border-bottom:1px solid var(--blue2); font-size:0.85rem; }
+        .concern-row:last-child { border-bottom:0; }
+        .concern-row .sev { font-family:'DM Mono',monospace; font-size:0.65rem; padding:0.15rem 0.5rem; border-radius:4px; min-width:44px; text-align:center; flex-shrink:0; }
+        .concern-row .app { font-family:'DM Mono',monospace; font-size:0.75rem; color:var(--blue4); min-width:110px; }
+        .concern-row .title { flex:1; color:var(--blue5); }
+        .concern-row a.link { font-family:'DM Mono',monospace; font-size:0.7rem; color:var(--blue3); text-decoration:none; }
+        .concern-row a.link:hover { color:var(--blue5); }
+
+        .empty { text-align:center; padding:2rem; color:var(--blue3); font-style:italic; }
+        .error { text-align:center; padding:1rem; color:var(--red); background:rgba(195,88,57,0.1); border-radius:8px; }
+
+        /* Sekundære apper — kompakte rader */
+        .compact-list { background:var(--blue1); border:1px solid var(--blue2); border-radius:10px; overflow:hidden; }
+        .compact-row { padding:0.6rem 0.9rem; display:flex; align-items:center; gap:0.75rem; border-bottom:1px solid var(--blue2); text-decoration:none; color:inherit; transition:background 0.15s; }
+        .compact-row:last-child { border-bottom:0; }
+        .compact-row:hover { background:rgba(0,0,0,0.18); }
+        .compact-row .tier { font-family:'DM Mono',monospace; font-size:0.62rem; padding:0.1rem 0.4rem; border-radius:4px; background:var(--navy); color:var(--blue4); letter-spacing:0.05em; text-transform:uppercase; min-width:70px; text-align:center; }
+        .compact-row .name { flex:1; font-size:0.9rem; color:var(--blue5); }
+        .compact-row .name .slug { font-family:'DM Mono',monospace; font-size:0.65rem; color:var(--blue3); margin-left:0.4rem; }
+        .compact-row .meta { font-family:'DM Mono',monospace; font-size:0.7rem; color:var(--blue4); display:flex; gap:0.5rem; }
+        .compact-row .status-dot { width:8px; height:8px; border-radius:50%; flex-shrink:0; }
+        .compact-row .status-dot.ok { background:var(--green); }
+        .compact-row .status-dot.warn { background:var(--yellow); }
+        .compact-row .status-dot.crit { background:var(--red); }
+        .compact-row .status-dot.unknown { background:var(--blue3); }
+
+        .banner { padding:0.75rem 1rem; background:rgba(249,168,80,0.12); border:1px solid rgba(249,168,80,0.3); border-radius:8px; margin-bottom:1.5rem; font-size:0.85rem; color:var(--yellow); display:flex; align-items:center; gap:0.5rem; }
+        .banner strong { color:var(--white); }
+
+        footer { text-align:center; padding:2rem 1rem; color:var(--blue3); font-size:0.85rem; border-top:1px solid var(--blue1); max-width:1100px; margin:0 auto; }
+        footer a { transition:color 0.2s; text-decoration:none; color:inherit; }
+        footer a:hover { color:var(--white); }
+        @media (max-width: 640px) { .grid { grid-template-columns:1fr; } header { flex-direction:column; align-items:flex-start; } .kpis { grid-template-columns:repeat(2,1fr); } }
     </style>
 </head>
 <body>
     <div id="site-header"></div>
-    <script src="/header.js?v=2"></script>
+    <script src="/header.js?v=3"></script>
 
     <main>
-        <!-- Smarthus -->
+        <div class="page-head">
+            <h1>Status</h1>
+            <div class="updated"><span class="dot"></span><span id="last-updated">laster...</span></div>
+        </div>
+
+        <div id="unclassified-banner"></div>
+
+        <div id="overview-grid" class="grid">
+            <div class="empty">Henter statusdata...</div>
+        </div>
+
         <section class="section">
             <div class="section-header">
-                <h2>Smarthus</h2>
-                <span class="badge badge-local">Live</span>
+                <h2>Sekundære apper og biblioteker</h2>
             </div>
-            <div style="display: flex; gap: 0.5rem; margin-bottom: 1rem;">
-                <button onclick="sceneAllOff()" style="font-family: 'DM Mono', monospace; font-size: 0.75rem; background: var(--blue1); border: 1px solid var(--blue2); color: var(--blue4); padding: 0.4rem 0.8rem; border-radius: 6px; cursor: pointer;">Alt av</button>
-                <button onclick="sceneTvMode()" style="font-family: 'DM Mono', monospace; font-size: 0.75rem; background: var(--blue1); border: 1px solid var(--blue2); color: var(--blue4); padding: 0.4rem 0.8rem; border-radius: 6px; cursor: pointer;">📺 TV-modus</button>
+            <div id="secondary-list" class="compact-list">
+                <div class="empty">Laster...</div>
             </div>
-            <div id="sh-loading" style="color: var(--blue4); font-size: 0.8rem;">Laster rom...</div>
-            <div id="sh-rooms-grid" class="grid" style="margin-top: 1rem;"></div>
         </section>
 
-        <!-- Infrastruktur -->
         <section class="section">
             <div class="section-header">
-                <h2>Infrastruktur</h2>
-                <span class="badge badge-local">Live</span>
+                <h2>Åpne bekymringer</h2>
             </div>
-            <div class="grid">
-                <div class="card" style="grid-column: 1 / -1;">
-                    <h3>UniFi Nettverk</h3>
-                    <div id="unifi-loading" style="color: var(--blue4); font-size: 0.8rem;">Laster nettverksstatus...</div>
-                    <div id="unifi-content" style="display: none;">
-                        <div style="display: flex; gap: 1.5rem; flex-wrap: wrap; margin-bottom: 0.75rem;">
-                            <div style="text-align: center;"><div style="font-size: 1.5rem; font-weight: 500; color: var(--white);" id="unifi-clients">—</div><div style="font-size: 0.7rem; color: var(--blue4);">Klienter</div></div>
-                            <div style="text-align: center;"><div style="font-size: 1.5rem; font-weight: 500; color: var(--white);" id="unifi-wifi">—</div><div style="font-size: 0.7rem; color: var(--blue4);">WiFi</div></div>
-                            <div style="text-align: center;"><div style="font-size: 1.5rem; font-weight: 500; color: var(--white);" id="unifi-wired">—</div><div style="font-size: 0.7rem; color: var(--blue4);">Kablet</div></div>
-                            <div style="text-align: center;"><div style="font-size: 1.5rem; font-weight: 500;" id="unifi-devices-count">—</div><div style="font-size: 0.7rem; color: var(--blue4);">Enheter</div></div>
-                        </div>
-                        <div style="display: flex; gap: 0.75rem; flex-wrap: wrap; margin-bottom: 0.75rem; font-size: 0.75rem;">
-                            <div id="unifi-isp" style="background: var(--navy); padding: 0.4rem 0.6rem; border-radius: 0.375rem;"></div>
-                            <div id="unifi-wan-uptime" style="background: var(--navy); padding: 0.4rem 0.6rem; border-radius: 0.375rem;"></div>
-                            <div id="unifi-latency" style="background: var(--navy); padding: 0.4rem 0.6rem; border-radius: 0.375rem;"></div>
-                            <div id="unifi-txretry" style="background: var(--navy); padding: 0.4rem 0.6rem; border-radius: 0.375rem;"></div>
-                            <div id="unifi-updates" style="background: var(--navy); padding: 0.4rem 0.6rem; border-radius: 0.375rem; display: none;"></div>
-                        </div>
-                        <div id="unifi-wifi-section" style="margin-bottom: 0.75rem; display: none;">
-                            <div style="font-size: 0.7rem; color: var(--blue3); text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 0.35rem; font-family: 'DM Mono', monospace;">WiFi-aksesspunkter</div>
-                            <div id="unifi-wifi-aps" style="display: flex; flex-direction: column; gap: 0.25rem; font-size: 0.75rem;"></div>
-                        </div>
-                        <div style="font-size: 0.7rem; color: var(--blue3); text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 0.35rem; font-family: 'DM Mono', monospace;">Alle enheter</div>
-                        <div id="unifi-devices" style="display: flex; flex-direction: column; gap: 0.25rem; font-size: 0.75rem; margin-bottom: 0.75rem;"></div>
-                        <!-- WiFi Restart -->
-                        <div style="border-top: 1px solid var(--blue2); padding-top: 0.75rem; margin-bottom: 0.75rem;">
-                            <div style="display: flex; align-items: center; gap: 0.75rem; flex-wrap: wrap;">
-                                <span style="font-size: 0.7rem; color: var(--blue3); text-transform: uppercase; letter-spacing: 0.1em; font-family: 'DM Mono', monospace;">WiFi restart</span>
-                                <button onclick="restartWifi('all')" style="font-family: 'DM Mono', monospace; font-size: 0.75rem; background: #C35839; border: none; color: var(--white); padding: 0.4rem 0.8rem; border-radius: 6px; cursor: pointer;">Restart alle AP-er</button>
-                                <button onclick="restartWifi('u7pro')" style="font-family: 'DM Mono', monospace; font-size: 0.7rem; background: var(--navy); border: 1px solid var(--blue2); color: var(--blue4); padding: 0.3rem 0.6rem; border-radius: 6px; cursor: pointer;">U7 Pro</button>
-                                <button onclick="restartWifi('u7kontor')" style="font-family: 'DM Mono', monospace; font-size: 0.7rem; background: var(--navy); border: 1px solid var(--blue2); color: var(--blue4); padding: 0.3rem 0.6rem; border-radius: 6px; cursor: pointer;">U7 Pro Kontor</button>
-                                <span id="wifi-restart-status" style="font-size: 0.7rem; color: var(--blue4);"></span>
-                            </div>
-                        </div>
-                        <!-- Speedtest -->
-                        <div style="border-top: 1px solid var(--blue2); padding-top: 0.75rem;">
-                            <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 0.5rem;">
-                                <button id="speedtest-btn" onclick="runSpeedtest()" style="font-family: 'DM Mono', monospace; font-size: 0.75rem; background: var(--navy); border: 1px solid var(--blue2); color: var(--blue4); padding: 0.4rem 0.8rem; border-radius: 6px; cursor: pointer;">WAN speedtest</button>
-                                <span id="speedtest-result" style="font-size: 0.75rem; color: var(--blue4);"></span>
-                            </div>
-                            <div style="display: flex; align-items: center; gap: 1rem;">
-                                <a href="http://nuc.tommy.tv:3000" target="_blank" style="font-family: 'DM Mono', monospace; font-size: 0.75rem; background: var(--navy); border: 1px solid var(--blue2); color: var(--blue4); padding: 0.4rem 0.8rem; border-radius: 6px; text-decoration: none;">LAN speedtest</a>
-                                <span style="font-size: 0.65rem; color: var(--blue3);">OpenSpeedTest mot NUC lokalt</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+            <div id="concerns-list" class="concerns-list">
+                <div class="empty">Laster...</div>
             </div>
         </section>
     </main>
 
     <div id="site-footer"></div>
-    <script src="/footer.js?v=2"></script>
+    <script src="/footer.js?v=3"></script>
 
     <script>
-    var SH_API = 'http://nuc.tommy.tv:8851';
-
-    function toggleRoom(roomId) {
-        fetch(SH_API + '/api/room/' + roomId + '/toggle', { method: 'POST' })
-            .then(function() { setTimeout(loadSmarthus, 500); });
-    }
-
-    function toggleLight(lightId) {
-        fetch(SH_API + '/api/light/' + lightId + '/toggle', { method: 'POST' })
-            .then(function() { setTimeout(loadSmarthus, 500); });
-    }
-
-    function setBlinds(key, position) {
-        fetch(SH_API + '/api/blinds/' + key + '/set?position=' + position, { method: 'POST' })
-            .then(function() { setTimeout(loadSmarthus, 2000); });
-    }
-
-    function setAllBlinds(position) {
-        fetch(SH_API + '/api/blinds/all/set?position=' + position, { method: 'POST' })
-            .then(function() { setTimeout(loadSmarthus, 2000); });
-    }
-
-    function togglePlejd() {
-        fetch(SH_API + '/api/plejd/toggle', { method: 'POST' })
-            .then(function() { setTimeout(loadSmarthus, 1000); });
-    }
-
-    function dimPlejd(level) {
-        fetch(SH_API + '/api/plejd/dim?level=' + level, { method: 'POST' })
-            .then(function() { setTimeout(loadSmarthus, 1000); });
-    }
-
-    function toggleNanoleaf(key) {
-        fetch(SH_API + '/api/nanoleaf/' + key + '/toggle', { method: 'POST' })
-            .then(function() { setTimeout(loadSmarthus, 1000); });
-    }
-
-    function setNanoleafBrightness(key, level) {
-        fetch(SH_API + '/api/nanoleaf/' + key + '/brightness?level=' + level, { method: 'POST' })
-            .then(function() { setTimeout(loadSmarthus, 1000); });
-    }
-
-    function setNanoleafEffect(key, effect) {
-        fetch(SH_API + '/api/nanoleaf/' + key + '/effect?name=' + encodeURIComponent(effect), { method: 'POST' })
-            .then(function() { setTimeout(loadSmarthus, 1000); });
-    }
-
-    function sceneAllOff() {
-        if (!confirm('Slå av ALT lys?')) return;
-        fetch(SH_API + '/api/scenes/all-off', { method: 'POST' })
-            .then(function() { setTimeout(loadSmarthus, 1500); });
-    }
-
-    function sceneTvMode() {
-        fetch(SH_API + '/api/scenes/tv-mode', { method: 'POST' })
-            .then(function() { setTimeout(loadSmarthus, 1500); });
-    }
-
-    function toggleLock() {
-        if (!confirm('Er du sikker på at du vil endre låsen?')) return;
-        fetch(SH_API + '/api/lock/toggle', { method: 'POST' })
-            .then(function() { setTimeout(loadSmarthus, 2000); });
-    }
-
-    function restartWifi(ap) {
-        var msg = ap === 'all' ? 'Vil du restarte ALLE WiFi AP-er? Nettverket vil være nede i ~2 minutter.' : 'Vil du restarte ' + ap + '?';
-        if (!confirm(msg)) return;
-        var url = ap === 'all' ? SH_API + '/api/wifi/restart' : SH_API + '/api/wifi/restart/' + ap;
-        var status = document.getElementById('wifi-restart-status');
-        status.textContent = 'Restarter...';
-        status.style.color = '#F9A850';
-        fetch(url, { method: 'POST' })
-            .then(function(r) { return r.json(); })
-            .then(function(d) {
-                if (d.error) { status.textContent = 'Feil: ' + d.error; status.style.color = '#C35839'; }
-                else { status.textContent = 'Restart sendt! AP-ene er tilbake om ~2 min.'; status.style.color = '#6D8345'; }
-            })
-            .catch(function() { status.textContent = 'Feil ved restart'; status.style.color = '#C35839'; });
-    }
-
-    function runSpeedtest() {
-        var btn = document.getElementById('speedtest-btn');
-        var res = document.getElementById('speedtest-result');
-        btn.disabled = true;
-        btn.textContent = 'Kjører...';
-        res.textContent = '';
-        fetch(SH_API + '/api/speedtest', { method: 'POST' });
-        var poll = setInterval(function() {
-            fetch(SH_API + '/api/speedtest').then(function(r) { return r.json(); }).then(function(d) {
-                if (!d.running && d.result) {
-                    clearInterval(poll);
-                    btn.disabled = false;
-                    btn.textContent = 'Kjør speedtest';
-                    if (d.result.error) {
-                        res.textContent = 'Feil: ' + d.result.error;
-                        res.style.color = '#C35839';
-                    } else {
-                        res.innerHTML = '<span style="color:var(--white)">' + d.result.download + ' Mbps ↓</span> <span style="color:var(--blue4)">' + d.result.upload + ' Mbps ↑</span> <span style="color:var(--blue3)">' + d.result.ping + ' ms</span> <span style="color:var(--blue3);font-size:0.65rem">(' + (d.lastRun || '') + ')</span>';
-                        res.style.color = '';
-                    }
-                }
-            });
-        }, 2000);
-    }
-
-    function loadSmarthus() {
-        fetch(SH_API + '/api/status')
-            .then(function(r) { return r.json(); })
-            .then(function(data) {
-                document.getElementById('sh-loading').style.display = 'none';
-
-                // Rom-kort
-                var grid = document.getElementById('sh-rooms-grid');
-                grid.innerHTML = '';
-                (data.rooms || []).forEach(function(r) {
-                    var card = document.createElement('div');
-                    card.className = 'card';
-
-                    // Header med toggle
-                    var header = '<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:0.5rem;">' +
-                        '<h3 style="margin:0;font-size:1rem;">' + r.name + '</h3>' +
-                        '<button onclick="toggleRoom(\'' + r.id + '\')" style="font-family:\'DM Mono\',monospace;font-size:0.7rem;background:' + (r.anyOn ? '#C35839' : '#6D8345') + ';border:none;color:var(--white);padding:0.3rem 0.6rem;border-radius:4px;cursor:pointer;">' + (r.anyOn ? 'Slå av' : 'Slå på') + '</button></div>';
-
-                    // Sensor-info
-                    var sensors = '';
-                    if (r.temperature !== undefined || r.motion !== undefined) {
-                        sensors = '<div style="display:flex;gap:0.75rem;margin-bottom:0.5rem;font-size:0.75rem;">';
-                        if (r.temperature !== undefined) sensors += '<span style="color:var(--blue5);">' + r.temperature + '°C</span>';
-                        if (r.motion !== undefined) sensors += '<span style="color:' + (r.motion ? '#C35839' : 'var(--blue3)') + ';">' + (r.motion ? 'Bevegelse' : 'Ingen bev.') + '</span>';
-                        if (r.dark !== undefined) sensors += '<span style="color:var(--blue3);">' + (r.dark ? 'Mørkt' : 'Lyst') + '</span>';
-                        sensors += '</div>';
-                    }
-
-                    // Lys-liste
-                    var lightsList = '';
-                    r.lights.forEach(function(l) {
-                        var dotColor = l.on ? '#F9A850' : 'var(--blue2)';
-                        var nameColor = l.on ? 'var(--blue5)' : 'var(--blue3)';
-                        var unreachable = !l.reachable && !l.on ? ' <span style="color:var(--blue2);font-size:0.6rem;">(frakoblet)</span>' : '';
-                        lightsList += '<div style="display:flex;align-items:center;gap:0.5rem;padding:0.15rem 0;cursor:pointer;" onclick="toggleLight(\'' + l.id + '\')">' +
-                            '<span style="width:6px;height:6px;border-radius:50%;flex-shrink:0;background:' + dotColor + '"></span>' +
-                            '<span style="flex:1;font-size:0.75rem;color:' + nameColor + '">' + l.name + unreachable + '</span>' +
-                            '</div>';
-                    });
-
-                    // Plejd lys (kun Stue)
-                    var plejdHtml = '';
-                    if (r.plejd) {
-                        var p = r.plejd;
-                        var pDot = p.on ? '#F9A850' : 'var(--blue2)';
-                        plejdHtml = '<div style="border-top:1px solid var(--blue2);margin-top:0.5rem;padding-top:0.5rem;">' +
-                            '<div style="display:flex;align-items:center;gap:0.5rem;padding:0.15rem 0;">' +
-                            '<span style="width:6px;height:6px;border-radius:50%;flex-shrink:0;background:' + pDot + '"></span>' +
-                            '<span style="flex:1;font-size:0.75rem;color:var(--blue5);cursor:pointer;" onclick="togglePlejd()">' + p.name + '</span>' +
-                            '<span style="color:var(--blue3);font-family:\'DM Mono\',monospace;font-size:0.65rem;">' + p.dim + '%</span>' +
-                            '</div>' +
-                            '<div style="display:flex;gap:0.3rem;margin-top:0.3rem;">' +
-                            '<button onclick="dimPlejd(25)" style="font-family:\'DM Mono\',monospace;font-size:0.6rem;background:var(--navy);border:1px solid var(--blue2);color:var(--blue4);padding:0.15rem 0.4rem;border-radius:3px;cursor:pointer;">25%</button>' +
-                            '<button onclick="dimPlejd(50)" style="font-family:\'DM Mono\',monospace;font-size:0.6rem;background:var(--navy);border:1px solid var(--blue2);color:var(--blue4);padding:0.15rem 0.4rem;border-radius:3px;cursor:pointer;">50%</button>' +
-                            '<button onclick="dimPlejd(75)" style="font-family:\'DM Mono\',monospace;font-size:0.6rem;background:var(--navy);border:1px solid var(--blue2);color:var(--blue4);padding:0.15rem 0.4rem;border-radius:3px;cursor:pointer;">75%</button>' +
-                            '<button onclick="dimPlejd(100)" style="font-family:\'DM Mono\',monospace;font-size:0.6rem;background:var(--navy);border:1px solid var(--blue2);color:var(--blue4);padding:0.15rem 0.4rem;border-radius:3px;cursor:pointer;">100%</button>' +
-                            '</div></div>';
-                    }
-
-                    // Yale lås (kun Entré)
-                    var lockHtml = '';
-                    if (r.lock) {
-                        var lk = r.lock;
-                        var lockColor = lk.locked ? '#6D8345' : '#C35839';
-                        var lockIcon = lk.locked ? '🔒' : '🔓';
-                        var doorStatus = lk.doorOpen ? '<span style="color:#C35839;font-size:0.65rem;margin-left:0.5rem;">Dør åpen</span>' : '';
-                        var battStatus = lk.batteryLow ? '<span style="color:#C35839;font-size:0.65rem;margin-left:0.5rem;">Lavt batteri!</span>' : '';
-                        lockHtml = '<div style="border-top:1px solid var(--blue2);margin-top:0.5rem;padding-top:0.5rem;">' +
-                            '<div style="display:flex;align-items:center;gap:0.5rem;font-size:0.75rem;">' +
-                            '<span>' + lockIcon + '</span>' +
-                            '<span style="flex:1;color:var(--blue5);">' + lk.name + '</span>' +
-                            doorStatus + battStatus +
-                            '<button onclick="toggleLock()" style="font-family:\'DM Mono\',monospace;font-size:0.65rem;background:' + lockColor + ';border:none;color:var(--white);padding:0.2rem 0.5rem;border-radius:4px;cursor:pointer;">' + (lk.locked ? 'Lås opp' : 'Lås') + '</button>' +
-                            '</div></div>';
-                    }
-
-                    // Gardiner (kun Stue)
-                    var blindsHtml = '';
-                    if (r.blinds && r.blinds.length > 0) {
-                        blindsHtml = '<div style="border-top:1px solid var(--blue2);margin-top:0.5rem;padding-top:0.5rem;">' +
-                            '<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:0.4rem;">' +
-                            '<span style="font-size:0.7rem;color:var(--blue3);text-transform:uppercase;letter-spacing:0.1em;font-family:\'DM Mono\',monospace;">Rullegardiner</span>' +
-                            '<div style="display:flex;gap:0.3rem;">' +
-                            '<button onclick="setAllBlinds(0)" style="font-family:\'DM Mono\',monospace;font-size:0.65rem;background:var(--navy);border:1px solid var(--blue2);color:var(--blue4);padding:0.2rem 0.5rem;border-radius:4px;cursor:pointer;">Lukk alle</button>' +
-                            '<button onclick="setAllBlinds(50)" style="font-family:\'DM Mono\',monospace;font-size:0.65rem;background:var(--navy);border:1px solid var(--blue2);color:var(--blue4);padding:0.2rem 0.5rem;border-radius:4px;cursor:pointer;">50%</button>' +
-                            '<button onclick="setAllBlinds(100)" style="font-family:\'DM Mono\',monospace;font-size:0.65rem;background:var(--navy);border:1px solid var(--blue2);color:var(--blue4);padding:0.2rem 0.5rem;border-radius:4px;cursor:pointer;">Åpne alle</button>' +
-                            '</div></div>';
-                        r.blinds.forEach(function(b) {
-                            var pct = b.position;
-                            var barColor = pct > 0 ? '#6D8345' : 'var(--blue2)';
-                            blindsHtml += '<div style="display:flex;align-items:center;gap:0.5rem;padding:0.15rem 0;font-size:0.75rem;">' +
-                                '<span style="flex:1;color:var(--blue5);">' + b.name + '</span>' +
-                                '<div style="width:60px;height:6px;background:var(--blue2);border-radius:3px;overflow:hidden;"><div style="width:' + pct + '%;height:100%;background:' + barColor + ';border-radius:3px;"></div></div>' +
-                                '<span style="color:var(--blue3);font-family:\'DM Mono\',monospace;font-size:0.65rem;min-width:2rem;text-align:right;">' + pct + '%</span>' +
-                                '</div>';
-                        });
-                        blindsHtml += '</div>';
-                    }
-
-                    // Nanoleaf
-                    var nanoleafHtml = '';
-                    if (r.nanoleaf && r.nanoleaf.length > 0) {
-                        r.nanoleaf.forEach(function(nl) {
-                            var nlDot = nl.on ? '#F9A850' : 'var(--blue2)';
-                            nanoleafHtml += '<div style="border-top:1px solid var(--blue2);margin-top:0.5rem;padding-top:0.5rem;">' +
-                                '<div style="display:flex;align-items:center;gap:0.5rem;margin-bottom:0.3rem;">' +
-                                '<span style="width:6px;height:6px;border-radius:50%;flex-shrink:0;background:' + nlDot + '"></span>' +
-                                '<span style="flex:1;font-size:0.75rem;color:var(--blue5);cursor:pointer;" onclick="toggleNanoleaf(\'' + nl.key + '\')">' + nl.name + ' <span style="color:var(--blue3);font-size:0.65rem;">' + nl.panels + ' paneler</span></span>' +
-                                '<span style="color:var(--blue3);font-family:\'DM Mono\',monospace;font-size:0.65rem;">' + nl.brightness + '%</span>' +
-                                '</div>' +
-                                '<div style="display:flex;gap:0.3rem;flex-wrap:wrap;">' +
-                                '<button onclick="setNanoleafBrightness(\'' + nl.key + '\',25)" style="font-family:\'DM Mono\',monospace;font-size:0.6rem;background:var(--navy);border:1px solid var(--blue2);color:var(--blue4);padding:0.15rem 0.4rem;border-radius:3px;cursor:pointer;">25%</button>' +
-                                '<button onclick="setNanoleafBrightness(\'' + nl.key + '\',50)" style="font-family:\'DM Mono\',monospace;font-size:0.6rem;background:var(--navy);border:1px solid var(--blue2);color:var(--blue4);padding:0.15rem 0.4rem;border-radius:3px;cursor:pointer;">50%</button>' +
-                                '<button onclick="setNanoleafBrightness(\'' + nl.key + '\',100)" style="font-family:\'DM Mono\',monospace;font-size:0.6rem;background:var(--navy);border:1px solid var(--blue2);color:var(--blue4);padding:0.15rem 0.4rem;border-radius:3px;cursor:pointer;">100%</button>';
-                            if (nl.effects && nl.effects.length > 0) {
-                                nl.effects.slice(0, 5).forEach(function(fx) {
-                                    var active = nl.effect === fx ? 'background:var(--blue2);color:var(--white);' : '';
-                                    nanoleafHtml += '<button onclick="setNanoleafEffect(\'' + nl.key + '\',\'' + fx.replace(/'/g, "\\'") + '\')" style="font-family:\'DM Mono\',monospace;font-size:0.6rem;background:var(--navy);border:1px solid var(--blue2);color:var(--blue4);padding:0.15rem 0.4rem;border-radius:3px;cursor:pointer;' + active + '">' + fx + '</button>';
-                                });
-                            }
-                            nanoleafHtml += '</div></div>';
-                        });
-                    }
-
-                    card.innerHTML = header + sensors + lightsList + plejdHtml + nanoleafHtml + lockHtml + blindsHtml;
-                    grid.appendChild(card);
-                });
-            })
-            .catch(function() {
-                document.getElementById('sh-loading').textContent = 'Kunne ikke hente smarthus-status';
-                document.getElementById('sh-loading').style.color = '#C35839';
-            });
-    }
-
     (function() {
-        loadSmarthus();
+        var API = '/status-api';
+        var POLL_MS = 60000; // 1 min
 
-        // UniFi
-        fetch('http://nuc.tommy.tv:8850/api/status')
-            .then(function(r) { return r.json(); })
-            .then(function(data) {
-                document.getElementById('unifi-loading').style.display = 'none';
-                document.getElementById('unifi-content').style.display = '';
-                document.getElementById('unifi-clients').textContent = data.totalClients;
-                document.getElementById('unifi-wifi').textContent = data.wifiClients;
-                document.getElementById('unifi-wired').textContent = data.wiredClients;
-                var devEl = document.getElementById('unifi-devices-count');
-                devEl.textContent = data.onlineDevices + '/' + data.totalDevices;
-                devEl.style.color = data.offlineDevices > 0 ? '#F9A850' : 'var(--white)';
-                document.getElementById('unifi-isp').innerHTML = '<span style="color:var(--blue4)">ISP</span> <span style="color:var(--white)">' + (data.isp || '—') + '</span>';
-                document.getElementById('unifi-wan-uptime').innerHTML = '<span style="color:var(--blue4)">WAN</span> <span style="color:' + (data.wanUptime >= 99 ? '#6D8345' : '#C35839') + '">' + data.wanUptime + '% oppe</span>';
-                var latEl = document.getElementById('unifi-latency');
-                if (data.latencyAvgMs !== null) {
-                    var latColor = data.latencyAvgMs < 20 ? '#6D8345' : data.latencyAvgMs < 40 ? '#F9A850' : '#C35839';
-                    latEl.innerHTML = '<span style="color:var(--blue4)">Latens</span> <span style="color:' + latColor + '">' + data.latencyAvgMs + ' ms</span>';
-                } else { latEl.style.display = 'none'; }
-                var retryEl = document.getElementById('unifi-txretry');
-                var retryColor = data.txRetryPct < 10 ? '#6D8345' : data.txRetryPct < 25 ? '#F9A850' : '#C35839';
-                retryEl.innerHTML = '<span style="color:var(--blue4)">WiFi retry</span> <span style="color:' + retryColor + '">' + data.txRetryPct + '%</span>';
-                if (data.updatesAvailable > 0) {
-                    var updEl = document.getElementById('unifi-updates');
-                    updEl.style.display = '';
-                    updEl.innerHTML = '<span style="color:#F9A850">' + data.updatesAvailable + ' oppdatering' + (data.updatesAvailable > 1 ? 'er' : '') + '</span>';
-                }
-                if (data.wifiAps && data.wifiAps.length > 0) {
-                    document.getElementById('unifi-wifi-section').style.display = '';
-                    var apContainer = document.getElementById('unifi-wifi-aps');
-                    apContainer.innerHTML = '';
-                    data.wifiAps.forEach(function(ap) {
-                        var row = document.createElement('div');
-                        row.style.cssText = 'display:flex;align-items:center;gap:0.5rem;padding:0.2rem 0;';
-                        var dot = document.createElement('span');
-                        dot.style.cssText = 'width:6px;height:6px;border-radius:50%;flex-shrink:0;background:' + (ap.status === 'online' ? '#6D8345' : '#C35839');
-                        row.appendChild(dot);
-                        var name = document.createElement('span');
-                        name.style.cssText = 'flex:1;color:var(--blue5);';
-                        name.textContent = ap.name;
-                        row.appendChild(name);
-                        if (ap.uptime) { var ut = document.createElement('span'); ut.style.cssText = 'color:var(--blue3);font-size:0.65rem;'; ut.textContent = ap.uptime; row.appendChild(ut); }
-                        var ver = document.createElement('span');
-                        ver.style.cssText = 'color:var(--blue3);font-family:"DM Mono",monospace;font-size:0.65rem;min-width:3rem;text-align:right;';
-                        ver.textContent = ap.version ? 'v' + ap.version : '';
-                        row.appendChild(ver);
-                        apContainer.appendChild(row);
-                    });
-                }
-                var container = document.getElementById('unifi-devices');
-                container.innerHTML = '';
-                data.devices.forEach(function(d) {
-                    var row = document.createElement('div');
-                    row.style.cssText = 'display:flex;align-items:center;gap:0.5rem;padding:0.2rem 0;';
-                    var dot = document.createElement('span');
-                    dot.style.cssText = 'width:6px;height:6px;border-radius:50%;flex-shrink:0;background:' + (d.status === 'online' ? '#6D8345' : '#C35839');
-                    row.appendChild(dot);
-                    var name = document.createElement('span');
-                    name.style.cssText = 'flex:1;color:var(--blue5);';
-                    name.textContent = d.name;
-                    row.appendChild(name);
-                    if (d.uptime) { var ut = document.createElement('span'); ut.style.cssText = 'color:var(--blue3);font-size:0.65rem;'; ut.textContent = d.uptime; row.appendChild(ut); }
-                    var ip = document.createElement('span');
-                    ip.style.cssText = 'color:var(--blue3);font-family:"DM Mono",monospace;font-size:0.65rem;min-width:7rem;text-align:right;';
-                    ip.textContent = d.ip || '';
-                    row.appendChild(ip);
-                    container.appendChild(row);
-                });
-            })
-            .catch(function() {
-                document.getElementById('unifi-loading').textContent = 'Kunne ikke hente nettverksstatus';
-                document.getElementById('unifi-loading').style.color = '#C35839';
+        // ----- Rendering helpers -----
+        function el(tag, attrs, children) {
+            var e = document.createElement(tag);
+            for (var k in attrs) {
+                if (k === 'class') e.className = attrs[k];
+                else if (k === 'text') e.textContent = attrs[k];
+                else if (k === 'html') e.innerHTML = attrs[k];
+                else e.setAttribute(k, attrs[k]);
+            }
+            (children || []).forEach(function(c) { if (c) e.appendChild(c); });
+            return e;
+        }
+
+        function minutesAgo(tsStr) {
+            if (!tsStr) return null;
+            var ts = new Date(tsStr.replace(' ', 'T') + (tsStr.indexOf('Z') < 0 ? 'Z' : ''));
+            return Math.round((Date.now() - ts.getTime()) / 60000);
+        }
+
+        function ago(tsStr) {
+            var m = minutesAgo(tsStr);
+            if (m === null) return '—';
+            if (m < 60) return m + 'm';
+            if (m < 1440) return Math.round(m/60) + 't';
+            return Math.round(m/1440) + 'd';
+        }
+
+        // Agreger en apps tilstand til ok/warn/crit
+        function appStatus(a) {
+            var h = a.health || {};
+            var cf = a.cloudflare || {};
+            var lh = a.lighthouse || {};
+            var tls = a.tls || {};
+            var c = a.concerns || {};
+            if (h.status === 'down' || h.status === 'white-page') return 'crit';
+            if (c.crit) return 'crit';
+            if (c.high) return 'warn';
+            if ((cf.errors_5xx || 0) > 30) return 'warn';
+            if (tls.days_until_expiry !== undefined && tls.days_until_expiry < 14) return 'crit';
+            if (tls.days_until_expiry !== undefined && tls.days_until_expiry < 30) return 'warn';
+            if (h.status === 'degraded') return 'warn';
+            if (lh.performance !== null && lh.performance !== undefined && lh.performance < 60) return 'warn';
+            if (!h.status) return 'unknown';
+            return 'ok';
+        }
+
+        // SVG sparkline for response_ms siste 24t
+        function sparkline(points) {
+            var NS = 'http://www.w3.org/2000/svg';
+            var svg = document.createElementNS(NS, 'svg');
+            svg.setAttribute('viewBox', '0 0 100 28');
+            svg.setAttribute('preserveAspectRatio', 'none');
+            if (!points || points.length < 2) {
+                var t = document.createElementNS(NS, 'text');
+                t.setAttribute('x', '50'); t.setAttribute('y', '18');
+                t.setAttribute('text-anchor', 'middle');
+                t.setAttribute('font-family', 'DM Mono, monospace');
+                t.setAttribute('font-size', '7');
+                t.setAttribute('fill', '#4a6080');
+                t.textContent = 'for lite data';
+                svg.appendChild(t);
+                return svg;
+            }
+            var vals = points.map(function(p) { return p.response_ms || 0; });
+            var max = Math.max.apply(null, vals) || 1;
+            var min = Math.min.apply(null, vals);
+            var range = max - min || 1;
+            var path = '';
+            points.forEach(function(p, i) {
+                var x = (i / (points.length - 1)) * 100;
+                var y = 26 - ((p.response_ms - min) / range) * 22;
+                path += (i === 0 ? 'M' : 'L') + x.toFixed(1) + ' ' + y.toFixed(1) + ' ';
             });
+            // Area-fill
+            var fill = document.createElementNS(NS, 'path');
+            fill.setAttribute('d', path + 'L100 28 L0 28 Z');
+            fill.setAttribute('fill', 'rgba(109,131,69,0.15)');
+            svg.appendChild(fill);
+            var line = document.createElementNS(NS, 'path');
+            line.setAttribute('d', path);
+            line.setAttribute('stroke', '#6D8345');
+            line.setAttribute('stroke-width', '1.2');
+            line.setAttribute('fill', 'none');
+            svg.appendChild(line);
+            // Marker for downs
+            points.forEach(function(p, i) {
+                if (p.status !== 'up' && p.status !== 'unknown') {
+                    var x = (i / (points.length - 1)) * 100;
+                    var dot = document.createElementNS(NS, 'circle');
+                    dot.setAttribute('cx', x); dot.setAttribute('cy', '14');
+                    dot.setAttribute('r', '2'); dot.setAttribute('fill', '#C35839');
+                    svg.appendChild(dot);
+                }
+            });
+            return svg;
+        }
+
+        function kpi(label, value, cls) {
+            return el('div', { class:'kpi' }, [
+                el('div', { class:'kpi-label', text: label }),
+                el('div', { class:'kpi-value ' + (cls||''), text: value })
+            ]);
+        }
+
+        function renderApp(a) {
+            var status = appStatus(a);
+            var h = a.health || {};
+            var cf = a.cloudflare || {};
+            var lh = a.lighthouse || {};
+            var tls = a.tls || {};
+            var gh = a.github || {};
+            var concerns = a.concerns || {};
+
+            // Header
+            var pillText = status === 'crit' ? 'kritisk' : (status === 'warn' ? 'advarsel' : (status === 'unknown' ? 'ukjent' : 'ok'));
+            var head = el('div', { class:'app-head' }, [
+                el('div', {}, [
+                    el('div', { class:'app-title', text: a.display_name || a.slug }),
+                    el('div', { class:'app-sub', text: a.github_repo || a.slug })
+                ]),
+                el('span', { class:'status-pill ' + status, text: pillText })
+            ]);
+
+            // KPIs: helse/respons, Lighthouse-perf, Cloudflare 5xx, TLS, PRs, issues
+            var perfCls = lh.performance >= 90 ? 'ok' : (lh.performance >= 70 ? '' : (lh.performance >= 50 ? 'warn' : 'crit'));
+            var errCls = (cf.errors_5xx || 0) > 30 ? 'crit' : ((cf.errors_5xx || 0) > 5 ? 'warn' : '');
+            var tlsCls = tls.days_until_expiry === undefined ? '' : (tls.days_until_expiry < 14 ? 'crit' : (tls.days_until_expiry < 30 ? 'warn' : ''));
+            var kpis = el('div', { class:'kpis' }, [
+                kpi('Respons', (h.response_ms != null ? h.response_ms + ' ms' : '—'),
+                    h.status === 'up' ? 'ok' : (h.status ? 'crit' : '')),
+                kpi('Lighthouse', lh.performance != null ? lh.performance : '—', perfCls),
+                kpi('CF 24t', cf.requests != null ? cf.requests.toLocaleString('no-NO') : '—', ''),
+                kpi('5xx', cf.errors_5xx != null ? cf.errors_5xx : '—', errCls),
+                kpi('TLS', tls.days_until_expiry != null ? tls.days_until_expiry + 'd' : '—', tlsCls),
+                kpi('PR / issues',
+                    (gh.open_prs != null ? gh.open_prs : '?') + ' / ' + (gh.open_issues != null ? gh.open_issues : '?'),
+                    (gh.ci_status && gh.ci_status !== 'success') ? 'warn' : '')
+            ]);
+
+            // Spark
+            var sparkLabel = el('div', { class:'spark-label' }, [
+                el('span', { text: 'Responstid 24t' }),
+                el('span', { text: (a.health_24h || []).length + ' punkter' })
+            ]);
+            var spark = el('div', { class:'spark' }, [sparkLabel, sparkline(a.health_24h || [])]);
+
+            // Foot: deploy-alder + concerns
+            var concernEls = [];
+            ['crit','high','med','low','info'].forEach(function(sev) {
+                if (concerns[sev]) concernEls.push(el('span', { class:'concern ' + sev, text: sev + ' ' + concerns[sev] }));
+            });
+            var deployStr = a.last_deploy && a.last_deploy.ts ? 'sist deploy ' + ago(a.last_deploy.ts) : 'ingen deploy registrert';
+            var foot = el('div', { class:'app-foot' }, [
+                el('span', { text: deployStr }),
+                el('div', { class:'concern-badges' }, concernEls)
+            ]);
+
+            var card = el('a', { class:'app-card status-' + status, href:'/status-app.html?app=' + encodeURIComponent(a.slug) },
+                [head, spark, kpis, foot]);
+            return card;
+        }
+
+        function renderOverview(data) {
+            var grid = document.getElementById('overview-grid');
+            grid.innerHTML = '';
+            if (!data.apps || !data.apps.length) {
+                grid.innerHTML = '<div class="empty">Ingen apper funnet</div>';
+                return;
+            }
+            data.apps.forEach(function(a) { grid.appendChild(renderApp(a)); });
+            var u = document.getElementById('last-updated');
+            var gen = new Date(data.generated_at);
+            u.textContent = 'oppdatert ' + gen.toLocaleTimeString('no-NO');
+        }
+
+        function renderConcerns(apps) {
+            var list = document.getElementById('concerns-list');
+            list.innerHTML = '';
+            // Hent alle concerns fra alle apps ved å kalle /api/app/<slug> for hver — men det
+            // er N+1. I stedet tar vi fra overview at hver app har concerns-tall, og viser en
+            // lenke til drilldown. Full concern-liste kommer senere via en /api/concerns-rute.
+            var total = 0;
+            apps.forEach(function(a) {
+                var c = a.concerns || {};
+                Object.keys(c).forEach(function(sev) { total += c[sev]; });
+            });
+            if (total === 0) {
+                list.innerHTML = '<div class="empty">Ingen åpne bekymringer 🎉</div>';
+                return;
+            }
+            // Kall /api/app/<slug> parallelt og saml concerns
+            Promise.all(apps.filter(function(a) {
+                return Object.keys(a.concerns || {}).length > 0;
+            }).map(function(a) {
+                return fetch(API + '/api/app/' + a.slug).then(function(r) { return r.json(); });
+            })).then(function(results) {
+                var rows = [];
+                results.forEach(function(r) {
+                    (r.concerns_open || []).forEach(function(c) { rows.push(c); });
+                });
+                rows.sort(function(a, b) {
+                    var order = { crit:1, high:2, med:3, low:4, info:5 };
+                    return (order[a.severity]||9) - (order[b.severity]||9);
+                });
+                list.innerHTML = '';
+                rows.forEach(function(c) {
+                    var row = el('div', { class:'concern-row' }, [
+                        el('span', { class:'sev concern ' + c.severity, text: c.severity }),
+                        el('span', { class:'app', text: c.app_slug || '—' }),
+                        el('span', { class:'title', text: c.title }),
+                        c.link ? el('a', { class:'link', href: c.link, target:'_blank', text:'↗' }) : null
+                    ]);
+                    list.appendChild(row);
+                });
+                if (!rows.length) list.innerHTML = '<div class="empty">Ingen åpne bekymringer</div>';
+            }).catch(function(err) {
+                list.innerHTML = '<div class="error">Kunne ikke hente bekymringer: ' + err + '</div>';
+            });
+        }
+
+        function renderSecondary(apps) {
+            var list = document.getElementById('secondary-list');
+            list.innerHTML = '';
+            if (!apps.length) {
+                list.innerHTML = '<div class="empty">Ingen sekundære apper</div>';
+                return;
+            }
+            apps.forEach(function(a) {
+                var status = appStatus(a);
+                var h = a.health || {};
+                var gh = a.github || {};
+                var concerns = a.concerns || {};
+                var c = Object.keys(concerns).reduce(function(s,k){ return s+concerns[k]; }, 0);
+                var metaParts = [];
+                if (gh.last_commit_ts) {
+                    var days = Math.floor((Date.now() - new Date(gh.last_commit_ts).getTime()) / 86400000);
+                    metaParts.push(days < 1 ? 'commit nå' : 'commit ' + days + 'd');
+                }
+                if (gh.open_prs != null || gh.open_issues != null) {
+                    metaParts.push((gh.open_prs || 0) + 'pr ' + (gh.open_issues || 0) + 'i');
+                }
+                if (c > 0) metaParts.push(c + ' concern' + (c !== 1 ? 's' : ''));
+                if (h.status && h.status !== 'unknown') metaParts.push(h.status);
+
+                var row = el('a', { class:'compact-row', href:'/status-app.html?app=' + encodeURIComponent(a.slug) }, [
+                    el('span', { class:'status-dot ' + status }),
+                    el('span', { class:'tier', text: a.tier }),
+                    el('span', { class:'name' }, [
+                        document.createTextNode(a.display_name || a.slug),
+                        el('span', { class:'slug', text: a.slug })
+                    ]),
+                    el('span', { class:'meta', text: metaParts.join(' · ') })
+                ]);
+                list.appendChild(row);
+            });
+        }
+
+        function renderUnclassified(apps) {
+            var banner = document.getElementById('unclassified-banner');
+            banner.innerHTML = '';
+            var unclassified = apps.filter(function(a) { return a.tier === 'unclassified'; });
+            if (!unclassified.length) return;
+            var names = unclassified.map(function(a) { return a.slug; }).join(', ');
+            var msg = el('div', { class:'banner' }, [
+                el('span', { text: '⚠' }),
+                el('span', { html: '<strong>' + unclassified.length + ' repo trenger klassifisering:</strong> ' + names +
+                    '. Kjør <code>status-report app set-tier &lt;slug&gt; &lt;tier&gt;</code> for å ordne.' })
+            ]);
+            banner.appendChild(msg);
+        }
+
+        function load() {
+            // Primary for store kort
+            var pPrimary = fetch(API + '/api/overview?tier=primary').then(function(r) {
+                if (!r.ok) throw new Error('HTTP ' + r.status); return r.json();
+            });
+            // Sekundære for kompakt liste
+            var pSecondary = fetch(API + '/api/overview?tier=secondary,lib,maintenance,unclassified').then(function(r) {
+                if (!r.ok) throw new Error('HTTP ' + r.status); return r.json();
+            });
+            Promise.all([pPrimary, pSecondary])
+                .then(function(results) {
+                    var primary = results[0];
+                    var secondary = results[1];
+                    renderOverview(primary);
+                    renderSecondary(secondary.apps);
+                    renderUnclassified(secondary.apps);
+                    // Concerns samler vi fra alle (primary + secondary)
+                    renderConcerns(primary.apps.concat(secondary.apps));
+                })
+                .catch(function(err) {
+                    document.getElementById('overview-grid').innerHTML =
+                        '<div class="error">Kunne ikke hente status: ' + err + '</div>';
+                    document.getElementById('last-updated').textContent = 'feil';
+                });
+        }
+
+        load();
+        setInterval(load, POLL_MS);
     })();
     </script>
 </body>
