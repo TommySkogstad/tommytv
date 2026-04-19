@@ -15,6 +15,7 @@ Endepunkter:
                                        concerns, plans, work_log, CF, Lighthouse, TLS
   GET  /api/series/<slug>/<metric>?days=30
         metrics: health, cloudflare, lighthouse, github, deploys, tls
+  GET  /api/shadow-modes             — livssyklus-data for registrerte shadow-modes
 
 Alle svar er JSON. CORS tillates (LAN-only via nginx).
 """
@@ -199,6 +200,32 @@ def q_app_truth(conn, slug: str) -> dict | None:
     }
 
 
+def q_shadow_modes(conn) -> list[dict]:
+    """Hent alle registrerte shadow-modes med livssyklus-data.
+
+    Returnerer tom liste hvis tabellen ikke finnes enda (shadow_modes legges til
+    av schema-migrasjon 003, se misc-scripts #115/#118).
+    """
+    exists = conn.execute(
+        "SELECT name FROM sqlite_master WHERE type='table' AND name='shadow_modes'"
+    ).fetchone()
+    if not exists:
+        return []
+    rows = rows_to_dicts(conn.execute(
+        "SELECT name, description, owner, status, started_at, "
+        "promotion_criteria_json, max_lifetime_days, "
+        "promoted_at, promoted_by, "
+        "last_evaluated_at, last_match_rate, last_sample_count "
+        "FROM shadow_modes ORDER BY started_at DESC"))
+    for r in rows:
+        raw = r.pop("promotion_criteria_json", None)
+        try:
+            r["promotion_criteria"] = json.loads(raw) if raw else None
+        except (TypeError, ValueError):
+            r["promotion_criteria"] = None
+    return rows
+
+
 def q_series(conn, slug: str, metric: str, days: int) -> dict:
     """Tidsserier for grafer. Returnerer {points: [...], metric, slug}."""
     days = max(1, min(days, 365))
@@ -314,6 +341,13 @@ class Handler(BaseHTTPRequestHandler):
                     self._error(404, f"ukjent app: {slug}")
                     return
                 self._json(200, data)
+                return
+
+            if path == "/api/shadow-modes":
+                self._json(200, {
+                    "shadow_modes": q_shadow_modes(conn),
+                    "generated_at": datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),
+                })
                 return
 
             if path.startswith("/api/series/"):

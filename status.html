@@ -100,6 +100,35 @@
         .compact-row .status-dot.crit { background:var(--red); }
         .compact-row .status-dot.unknown { background:var(--blue3); }
 
+        /* Shadow-modes widget */
+        .shadow-table { width:100%; border-collapse:collapse; background:var(--blue1); border:1px solid var(--blue2); border-radius:10px; overflow:hidden; font-size:0.85rem; }
+        .shadow-table thead th { text-align:left; font-family:'DM Mono',monospace; font-size:0.62rem; letter-spacing:0.08em; color:var(--blue4); text-transform:uppercase; padding:0.7rem 0.9rem; background:rgba(0,0,0,0.15); border-bottom:1px solid var(--blue2); font-weight:500; }
+        .shadow-table tbody td { padding:0.65rem 0.9rem; border-bottom:1px solid var(--blue2); vertical-align:top; }
+        .shadow-table tbody tr:last-child td { border-bottom:0; }
+        .shadow-table tbody tr:hover td { background:rgba(0,0,0,0.12); }
+        .shadow-name { color:var(--white); font-weight:500; }
+        .shadow-desc { display:block; color:var(--blue3); font-size:0.72rem; margin-top:2px; font-family:'DM Mono',monospace; }
+        .shadow-status { font-family:'DM Mono',monospace; font-size:0.7rem; display:inline-flex; align-items:center; gap:0.35rem; }
+        .shadow-status .icon { font-size:0.85rem; line-height:1; }
+        .shadow-verdict { font-family:'DM Mono',monospace; font-size:0.72rem; padding:0.15rem 0.5rem; border-radius:4px; display:inline-block; }
+        .shadow-verdict.ready { background:rgba(109,131,69,0.2); color:var(--green); }
+        .shadow-verdict.not-ready { background:rgba(122,150,176,0.15); color:var(--blue5); }
+        .shadow-verdict.expired { background:rgba(249,168,80,0.18); color:var(--yellow); }
+        .shadow-verdict.abandoned { background:rgba(195,88,57,0.15); color:var(--red); }
+        .shadow-verdict.promoted { background:rgba(109,131,69,0.15); color:var(--blue5); }
+        .shadow-verdict.planned { background:rgba(74,96,128,0.15); color:var(--blue4); }
+        .shadow-num { font-family:'DM Mono',monospace; color:var(--white); white-space:nowrap; }
+        .shadow-num.muted { color:var(--blue4); }
+        .shadow-since { font-family:'DM Mono',monospace; font-size:0.75rem; color:var(--blue5); white-space:nowrap; }
+        @media (max-width: 720px) {
+            .shadow-table thead { display:none; }
+            .shadow-table, .shadow-table tbody, .shadow-table tr, .shadow-table td { display:block; width:100%; }
+            .shadow-table tr { padding:0.6rem 0.9rem; border-bottom:1px solid var(--blue2); }
+            .shadow-table td { padding:0.15rem 0; border-bottom:0; }
+            .shadow-table td::before { content:attr(data-label) ": "; font-family:'DM Mono',monospace; font-size:0.6rem; color:var(--blue4); text-transform:uppercase; letter-spacing:0.08em; margin-right:0.4rem; }
+            .shadow-table td:first-child::before { content:""; margin-right:0; }
+        }
+
         .banner { padding:0.75rem 1rem; background:rgba(249,168,80,0.12); border:1px solid rgba(249,168,80,0.3); border-radius:8px; margin-bottom:1.5rem; font-size:0.85rem; color:var(--yellow); display:flex; align-items:center; gap:0.5rem; }
         .banner strong { color:var(--white); }
 
@@ -139,6 +168,15 @@
                 <h2>Åpne bekymringer</h2>
             </div>
             <div id="concerns-list" class="concerns-list">
+                <div class="empty">Laster...</div>
+            </div>
+        </section>
+
+        <section class="section">
+            <div class="section-header">
+                <h2>Shadow-modes</h2>
+            </div>
+            <div id="shadow-modes">
                 <div class="empty">Laster...</div>
             </div>
         </section>
@@ -423,6 +461,132 @@
             banner.appendChild(msg);
         }
 
+        // ----- Shadow-modes widget -----
+        // Vurdering avhenger av status + match-rate ift. promotion-kriterier.
+        // Returnerer { key, label, icon } hvor key brukes til sortering og farge.
+        function shadowVerdict(m) {
+            var crit = m.promotion_criteria || {};
+            var threshold = (typeof crit.match_threshold === 'number') ? crit.match_threshold : 0.8;
+            var minSamples = (typeof crit.min_samples === 'number') ? crit.min_samples : 50;
+            var samples = m.last_sample_count || 0;
+            var rate = (typeof m.last_match_rate === 'number') ? m.last_match_rate : null;
+
+            if (m.status === 'promoted')  return { key:'promoted',  label:'Promotert', icon:'🟢' };
+            if (m.status === 'expired')   return { key:'expired',   label:'Utløpt',    icon:'⚠️' };
+            if (m.status === 'abandoned') return { key:'abandoned', label:'Forkastet', icon:'⚠️' };
+
+            // active
+            if (!m.started_at || samples === 0) {
+                return { key:'planned', label:'Planlagt — ingen samples', icon:'⚫' };
+            }
+            if (samples < minSamples) {
+                return { key:'not-ready', label:'For tidlig — for få samples', icon:'🟡' };
+            }
+            if (rate !== null && rate >= threshold) {
+                return { key:'ready', label:'Klar for promotion', icon:'🟢' };
+            }
+            if (rate !== null && rate < threshold) {
+                return { key:'not-ready', label:'Under terskel', icon:'🟡' };
+            }
+            return { key:'not-ready', label:'Evaluerer', icon:'🟡' };
+        }
+
+        // Sortering: active-ready (🟢) → active-not-ready (🟡) → planlagt (⚫) →
+        // promoted/expired/abandoned (⚠️) nederst.
+        var SHADOW_SORT_ORDER = {
+            'ready': 1, 'not-ready': 2, 'planned': 3,
+            'promoted': 4, 'expired': 5, 'abandoned': 6
+        };
+
+        function fmtMatchRate(rate) {
+            if (rate === null || rate === undefined) return '—';
+            var pct = rate * 100;
+            // 0 desimaler hvis hele prosent, ellers 1.
+            if (Math.abs(pct - Math.round(pct)) < 0.05) return pct.toFixed(0) + '%';
+            return pct.toFixed(1) + '%';
+        }
+
+        function fmtShadowSince(tsStr) {
+            if (!tsStr) return '—';
+            var d = new Date(tsStr.replace(' ', 'T') + (tsStr.indexOf('Z') < 0 ? 'Z' : ''));
+            if (isNaN(d.getTime())) return tsStr;
+            // YYYY-MM-DD
+            return d.toISOString().slice(0, 10);
+        }
+
+        function renderShadowModes(data) {
+            var container = document.getElementById('shadow-modes');
+            container.innerHTML = '';
+            var modes = (data && data.shadow_modes) || [];
+            if (!modes.length) {
+                container.innerHTML = '<div class="empty">Ingen shadow-modes registrert</div>';
+                return;
+            }
+            var rows = modes.map(function(m) {
+                var verdict = shadowVerdict(m);
+                return { mode: m, verdict: verdict };
+            });
+            rows.sort(function(a, b) {
+                var oa = SHADOW_SORT_ORDER[a.verdict.key] || 9;
+                var ob = SHADOW_SORT_ORDER[b.verdict.key] || 9;
+                if (oa !== ob) return oa - ob;
+                return (a.mode.name || '').localeCompare(b.mode.name || '');
+            });
+
+            var thead = el('thead', {}, [
+                el('tr', {}, [
+                    el('th', { text: 'Mode' }),
+                    el('th', { text: 'Status' }),
+                    el('th', { text: 'Aktiv siden' }),
+                    el('th', { text: 'Samples' }),
+                    el('th', { text: 'Match-rate' }),
+                    el('th', { text: 'Vurdering' })
+                ])
+            ]);
+            var tbody = el('tbody', {});
+            rows.forEach(function(r) {
+                var m = r.mode, v = r.verdict;
+                var nameCell = el('td', { 'data-label': 'Mode' }, [
+                    el('span', { class:'shadow-name', text: m.name || '—' }),
+                    m.description ? el('span', { class:'shadow-desc', text: m.description }) : null
+                ]);
+                var statusCell = el('td', { 'data-label': 'Status' }, [
+                    el('span', { class:'shadow-status' }, [
+                        el('span', { class:'icon', text: v.icon }),
+                        document.createTextNode(m.status || '—')
+                    ])
+                ]);
+                var sinceCell = el('td', { 'data-label': 'Aktiv siden', class:'shadow-since',
+                    text: fmtShadowSince(m.started_at) });
+                var samplesCell = el('td', { 'data-label': 'Samples',
+                    class: 'shadow-num' + (!m.last_sample_count ? ' muted' : ''),
+                    text: m.last_sample_count != null ? String(m.last_sample_count) : '0' });
+                var rateCell = el('td', { 'data-label': 'Match-rate',
+                    class: 'shadow-num' + (m.last_match_rate == null ? ' muted' : ''),
+                    text: fmtMatchRate(m.last_match_rate != null ? m.last_match_rate : null) });
+                var verdictCell = el('td', { 'data-label': 'Vurdering' }, [
+                    el('span', { class:'shadow-verdict ' + v.key, text: v.label })
+                ]);
+                var tr = el('tr', {}, [nameCell, statusCell, sinceCell, samplesCell, rateCell, verdictCell]);
+                tbody.appendChild(tr);
+            });
+            var table = el('table', { class:'shadow-table' }, [thead, tbody]);
+            container.appendChild(table);
+        }
+
+        function loadShadowModes() {
+            fetch(API + '/api/shadow-modes')
+                .then(function(r) {
+                    if (!r.ok) throw new Error('HTTP ' + r.status);
+                    return r.json();
+                })
+                .then(renderShadowModes)
+                .catch(function(err) {
+                    document.getElementById('shadow-modes').innerHTML =
+                        '<div class="error">Kunne ikke hente shadow-modes: ' + err + '</div>';
+                });
+        }
+
         function load() {
             // Primary for store kort
             var pPrimary = fetch(API + '/api/overview?tier=primary').then(function(r) {
@@ -447,6 +611,7 @@
                         '<div class="error">Kunne ikke hente status: ' + err + '</div>';
                     document.getElementById('last-updated').textContent = 'feil';
                 });
+            loadShadowModes();
         }
 
         load();
