@@ -14,7 +14,8 @@ Endepunkter:
   GET  /api/app/<slug>               — full "truth": app-rad, deploys, versjoner,
                                        concerns, plans, work_log, CF, Lighthouse, TLS
   GET  /api/series/<slug>/<metric>?days=30
-        metrics: health, cloudflare, lighthouse, github, deploys, tls
+        metrics: smoke, endpoint, health (legacy alias for smoke),
+                 cloudflare, lighthouse, github, deploys, tls
   GET  /api/shadow-modes             — livssyklus-data for registrerte shadow-modes
 
 Alle svar er JSON. CORS tillates (LAN-only via nginx).
@@ -229,10 +230,25 @@ def q_shadow_modes(conn) -> list[dict]:
 def q_series(conn, slug: str, metric: str, days: int) -> dict:
     """Tidsserier for grafer. Returnerer {points: [...], metric, slug}."""
     days = max(1, min(days, 365))
+    # NB: "health" (misc-scripts#159) var historisk navn paa frontend-render-
+    # maalingen (Playwright smoke-test, ~1,5 s). Vi eksponerer den som "smoke"
+    # fra 2026-04-21 og holder "health" som bakoverkompatibel alias. Nytt navn
+    # "endpoint" (misc-scripts#160) er reservert for backend-curl-timing.
     metric_map = {
+        "smoke": (
+            "SELECT ts, response_ms AS value, status AS tag FROM health_checks "
+            "WHERE app_slug = ? AND ts > datetime('now', ?) "
+            "AND (check_kind = 'smoke' OR check_kind IS NULL) ORDER BY ts"
+        ),
+        "endpoint": (
+            "SELECT ts, response_ms AS value, status AS tag FROM health_checks "
+            "WHERE app_slug = ? AND ts > datetime('now', ?) "
+            "AND check_kind = 'endpoint' ORDER BY ts"
+        ),
         "health": (
             "SELECT ts, response_ms AS value, status AS tag FROM health_checks "
-            "WHERE app_slug = ? AND ts > datetime('now', ?) ORDER BY ts"
+            "WHERE app_slug = ? AND ts > datetime('now', ?) "
+            "AND (check_kind = 'smoke' OR check_kind IS NULL) ORDER BY ts"
         ),
         "cloudflare": (
             "SELECT date AS ts, SUM(requests) AS value, SUM(errors_5xx) AS errors, "

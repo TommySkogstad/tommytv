@@ -505,7 +505,7 @@
                 el('h2', { text:'Trafikk og helse' }),
                 el('div', { class:'grid-2' })
             ]);
-            var healthCard = chartCard('Responstid', 'siste 24 timer');
+            var healthCard = chartCard('Frontend-render (smoke)', 'siste 24 timer');
             var cfCard = chartCard('Cloudflare-trafikk', 'siste 30 dager');
             s1.lastChild.appendChild(healthCard.card);
             s1.lastChild.appendChild(cfCard.card);
@@ -565,7 +565,9 @@
             root.appendChild(s5);
 
             // Render charts async (fetch series)
-            fetchSeries('health', 1).then(function(p) { buildHealthChart(healthCard.canvas, p); });
+            // smoke = Playwright-render-tid fra frontend-health-check (misc-scripts#159).
+            // Gammel metrikk "health" er fortsatt en alias for den samme serien.
+            fetchSeries('smoke', 1).then(function(p) { buildHealthChart(healthCard.canvas, p); });
             fetchSeries('cloudflare', 30).then(function(p) { buildCloudflareChart(cfCard.canvas, p); });
             fetchSeries('lighthouse', 30).then(function(p) { buildLighthouseChart(lhCard.canvas, p); });
             fetchSeries('github', 7).then(function(p) { buildGithubChart(ghCard.canvas, p); });
