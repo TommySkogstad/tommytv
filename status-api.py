@@ -213,12 +213,16 @@ def q_shadow_modes(conn) -> list[dict]:
     ).fetchone()
     if not exists:
         return []
+    # Abandoned modes er historiske — skjul fra dashbordet. Promoted beholdes
+    # synlig som "ferdig-stilt" signal.
     rows = rows_to_dicts(conn.execute(
         "SELECT name, description, owner, status, started_at, "
         "promotion_criteria_json, max_lifetime_days, "
         "promoted_at, promoted_by, "
         "last_evaluated_at, last_match_rate, last_sample_count "
-        "FROM shadow_modes ORDER BY started_at DESC"))
+        "FROM shadow_modes "
+        "WHERE status != 'abandoned' "
+        "ORDER BY started_at DESC"))
     for r in rows:
         raw = r.pop("promotion_criteria_json", None)
         try:
