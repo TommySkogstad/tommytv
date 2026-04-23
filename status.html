@@ -635,7 +635,7 @@
                 el('span', { class:'pill ok', text: closed + ' lukket' }),
                 retries ? el('span', { class:'pill warn', text: retries + ' retry' }) : null,
                 failures ? el('span', { class:'pill crit', text: failures + ' failure' }) : null,
-                el('span', { class:'pill info', text: (data.escalations || 0) + ' eskaleringer' }),
+                el('span', { class:'pill info', text: (data.escalations || 0) + ' flere forsøk', title: 'Issues som trengte mer enn én triage-runde (retries > 0)' }),
                 data.dynamic_active === false
                     ? el('span', { class:'pill info', text: 'ruting=av (shadow)' })
                     : null,
