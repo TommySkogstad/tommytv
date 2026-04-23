@@ -92,11 +92,14 @@ services:
     environment:
       STATUS_DB: /data/status.db
       STATUS_API_PORT: "8882"
+      TRIAGE_LOG_DIR: /triage-logs
     volumes:
       - ./status-api.py:/app/status-api.py:ro
       # RW-mount kreves fordi SQLite WAL må kunne opprette -wal/-shm.
       # PRAGMA query_only = 1 i status-api.py hindrer skrive-operasjoner.
       - ${STATUS_DATA_DIR:-/home/terminator/status-data}:/data
+      # Read-only mount av issue-triage log-katalog for classifier-eval.jsonl
+      - ${TRIAGE_LOG_DIR:-/home/terminator/log/issue-triage}:/triage-logs:ro
     ports:
       - "8882:8882"
     healthcheck:

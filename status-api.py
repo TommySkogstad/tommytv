@@ -32,6 +32,7 @@ from urllib.parse import parse_qs, urlparse
 
 DB_PATH = os.environ.get("STATUS_DB", "/data/status.db")
 PORT = int(os.environ.get("STATUS_API_PORT", "8882"))
+TRIAGE_LOG_DIR = os.environ.get("TRIAGE_LOG_DIR", "/triage-logs")
 
 
 def rows_to_dicts(cursor) -> list[dict]:
@@ -293,6 +294,100 @@ def q_series(conn, slug: str, metric: str, days: int) -> dict:
 
 
 # --------------------------------------------------------------------------
+# Issue-triage classifier-evaluation (rullerende 24t)
+# --------------------------------------------------------------------------
+def q_triage_classifier_window(hours: int = 24) -> dict:
+    """Les ~/log/issue-triage/classifier-eval.jsonl, filter siste `hours` og
+    aggreger: total, outcome-fordeling, klasse-fordeling, modell-fordeling,
+    eskaleringer (retries>0), suksessrate per klasse.
+
+    Returnerer et tomt skjelett hvis loggen mangler — frontend viser "ingen data".
+    """
+    log_path = os.path.join(TRIAGE_LOG_DIR, "classifier-eval.jsonl")
+    empty = {
+        "window_hours": hours, "total": 0,
+        "outcomes": {}, "by_class": {}, "by_model": {},
+        "escalations": 0, "success_rate_by_class": {},
+        "dynamic_active": None,
+        "generated_at": datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),
+    }
+    if not os.path.exists(log_path):
+        return empty
+
+    cutoff = datetime.now(timezone.utc).timestamp() - (hours * 3600)
+    records: list[dict] = []
+    try:
+        with open(log_path, "r", encoding="utf-8") as f:
+            for line in f:
+                line = line.strip()
+                if not line:
+                    continue
+                try:
+                    r = json.loads(line)
+                except json.JSONDecodeError:
+                    continue
+                ts = r.get("ts", "")
+                try:
+                    # ts er ISO-8601 med tz — fromisoformat handterer offset
+                    rec_ts = datetime.fromisoformat(ts).timestamp()
+                except (ValueError, TypeError):
+                    continue
+                if rec_ts >= cutoff:
+                    records.append(r)
+    except OSError:
+        return empty
+
+    if not records:
+        return empty
+
+    outcomes: dict[str, int] = {}
+    by_class: dict[str, int] = {}
+    by_model: dict[str, int] = {}
+    class_success: dict[str, list[int]] = {}  # class -> [success, total]
+    escalations = 0
+    dynamic_count = 0
+
+    for r in records:
+        o = r.get("outcome", "unknown")
+        c = r.get("class", "unknown")
+        m = r.get("model", "unknown")
+        e = r.get("effort", "unknown")
+        retries = int(r.get("retries", 0) or 0)
+        dynamic = bool(r.get("dynamic_active", False))
+
+        outcomes[o] = outcomes.get(o, 0) + 1
+        by_class[c] = by_class.get(c, 0) + 1
+        model_key = f"{m}/{e}"
+        by_model[model_key] = by_model.get(model_key, 0) + 1
+
+        stats = class_success.setdefault(c, [0, 0])
+        stats[1] += 1
+        if o == "success":
+            stats[0] += 1
+        if retries > 0:
+            escalations += 1
+        if dynamic:
+            dynamic_count += 1
+
+    success_rate = {
+        c: round(stats[0] / stats[1], 3) if stats[1] else 0.0
+        for c, stats in class_success.items()
+    }
+
+    return {
+        "window_hours": hours,
+        "total": len(records),
+        "outcomes": outcomes,
+        "by_class": by_class,
+        "by_model": by_model,
+        "escalations": escalations,
+        "success_rate_by_class": success_rate,
+        "dynamic_active": dynamic_count == len(records) if records else None,
+        "generated_at": datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),
+    }
+
+
+# --------------------------------------------------------------------------
 # HTTP-handler
 # --------------------------------------------------------------------------
 class Handler(BaseHTTPRequestHandler):
@@ -364,6 +459,11 @@ class Handler(BaseHTTPRequestHandler):
                     "shadow_modes": q_shadow_modes(conn),
                     "generated_at": datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),
                 })
+                return
+
+            if path == "/api/triage-24h":
+                hours = int(query.get("hours", ["24"])[0])
+                self._json(200, q_triage_classifier_window(hours))
                 return
 
             if path.startswith("/api/series/"):
