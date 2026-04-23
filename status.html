@@ -654,10 +654,13 @@
             classOrder.forEach(function(c) {
                 if (!(c in byClass)) return;
                 var rate = rateByClass[c];
+                var vHtml = String(byClass[c]);
+                if (rate !== undefined) {
+                    vHtml += ' <span class="rate">(' + Math.round(rate * 100) + '%)</span>';
+                }
                 var row = el('div', { class:'triage-row' }, [
                     el('span', { class:'k', text: c }),
-                    el('span', { class:'v', html: byClass[c] +
-                        (rate !== undefined ? '<span class="rate">' + Math.round(rate * 100) + '%</span>' : '') }),
+                    el('span', { class:'v', html: vHtml }),
                 ]);
                 classBlock.appendChild(row);
             });
