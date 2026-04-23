@@ -348,7 +348,9 @@ def q_triage_classifier_window(hours: int = 24) -> dict:
     by_class: dict[str, int] = {}
     by_model: dict[str, int] = {}
     class_success: dict[str, list[int]] = {}  # class -> [success, total]
-    escalations = 0
+    class_classifier_hit: dict[str, list[int]] = {}  # class -> [hit, total]
+    escalations = 0           # retries > 0 (cron-round-level)
+    model_escalations = 0     # model_escalated == true (beyond classifier pick)
     dynamic_count = 0
 
     for r in records:
@@ -358,6 +360,7 @@ def q_triage_classifier_window(hours: int = 24) -> dict:
         e = r.get("effort", "unknown")
         retries = int(r.get("retries", 0) or 0)
         dynamic = bool(r.get("dynamic_active", False))
+        mescalated = bool(r.get("model_escalated", False))
 
         outcomes[o] = outcomes.get(o, 0) + 1
         by_class[c] = by_class.get(c, 0) + 1
@@ -368,14 +371,27 @@ def q_triage_classifier_window(hours: int = 24) -> dict:
         stats[1] += 1
         if o == "success":
             stats[0] += 1
+
+        # Classifier-hit: flyten beholdt rutet modell (uansett outcome)
+        hit_stats = class_classifier_hit.setdefault(c, [0, 0])
+        hit_stats[1] += 1
+        if not mescalated:
+            hit_stats[0] += 1
+
         if retries > 0:
             escalations += 1
+        if mescalated:
+            model_escalations += 1
         if dynamic:
             dynamic_count += 1
 
     success_rate = {
         c: round(stats[0] / stats[1], 3) if stats[1] else 0.0
         for c, stats in class_success.items()
+    }
+    classifier_hit_rate = {
+        c: round(stats[0] / stats[1], 3) if stats[1] else 0.0
+        for c, stats in class_classifier_hit.items()
     }
 
     return {
@@ -385,7 +401,9 @@ def q_triage_classifier_window(hours: int = 24) -> dict:
         "by_class": by_class,
         "by_model": by_model,
         "escalations": escalations,
+        "model_escalations": model_escalations,
         "success_rate_by_class": success_rate,
+        "classifier_hit_rate_by_class": classifier_hit_rate,
         "dynamic_active": dynamic_count == len(records) if records else None,
         "generated_at": datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),
     }

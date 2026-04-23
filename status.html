@@ -636,6 +636,7 @@
                 retries ? el('span', { class:'pill warn', text: retries + ' retry' }) : null,
                 failures ? el('span', { class:'pill crit', text: failures + ' failure' }) : null,
                 el('span', { class:'pill info', text: (data.escalations || 0) + ' flere forsøk', title: 'Issues som trengte mer enn én triage-runde (retries > 0)' }),
+                el('span', { class:'pill warn', text: (data.model_escalations || 0) + ' modell-bom', title: 'Classifier valgte for lav modell — flyten gikk til diagnose/decompose/spawn_claude_on_failure' }),
                 data.dynamic_active === false
                     ? el('span', { class:'pill info', text: 'ruting=av (shadow)' })
                     : null,
@@ -651,12 +652,17 @@
             var classOrder = ['trivial', 'small', 'medium', 'large', 'critical', 'unknown'];
             var byClass = data.by_class || {};
             var rateByClass = data.success_rate_by_class || {};
+            var hitByClass = data.classifier_hit_rate_by_class || {};
             classOrder.forEach(function(c) {
                 if (!(c in byClass)) return;
                 var rate = rateByClass[c];
+                var hit = hitByClass[c];
                 var vHtml = String(byClass[c]);
                 if (rate !== undefined) {
-                    vHtml += ' <span class="rate">(' + Math.round(rate * 100) + '%)</span>';
+                    vHtml += ' <span class="rate" title="Suksessrate">(' + Math.round(rate * 100) + '%)</span>';
+                }
+                if (hit !== undefined) {
+                    vHtml += ' <span class="rate" title="Classifier-treff: ' + Math.round(hit * 100) + '% holdt rutet modell">🎯' + Math.round(hit * 100) + '%</span>';
                 }
                 var row = el('div', { class:'triage-row' }, [
                     el('span', { class:'k', text: c }),
