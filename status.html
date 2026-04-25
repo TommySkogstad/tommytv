@@ -624,7 +624,10 @@
             }
 
             var outcomes = data.outcomes || {};
-            var closed = outcomes.success || 0;
+            var success = outcomes.success || 0;
+            var decomposed = (outcomes.decomposed || 0) + (outcomes['timeout-decomposed'] || 0);
+            var timeoutFixed = outcomes['timeout-fixed'] || 0;
+            var closed = success + decomposed + timeoutFixed;
             var retries = outcomes.retry || 0;
             var failures = outcomes.failure || 0;
 
@@ -632,7 +635,8 @@
             var summary = el('div', { class:'triage-summary' }, [
                 el('span', { class:'big', text: String(data.total) }),
                 el('span', { class:'label', text: 'issues behandlet' }),
-                el('span', { class:'pill ok', text: closed + ' lukket' }),
+                el('span', { class:'pill ok', text: closed + ' lukket', title: 'Inkluderer success, decomposed, timeout-fixed' }),
+                decomposed ? el('span', { class:'pill info', text: decomposed + ' dekomponert', title: 'Parent-issue lukket fordi sub-issues ble opprettet' }) : null,
                 retries ? el('span', { class:'pill warn', text: retries + ' retry' }) : null,
                 failures ? el('span', { class:'pill crit', text: failures + ' failure' }) : null,
                 el('span', { class:'pill info', text: (data.escalations || 0) + ' flere forsøk', title: 'Issues som trengte mer enn én triage-runde (retries > 0)' }),
