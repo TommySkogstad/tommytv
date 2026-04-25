@@ -305,6 +305,11 @@ def q_triage_classifier_window(hours: int = 24) -> dict:
     aggreger: total, outcome-fordeling, klasse-fordeling, modell-fordeling,
     eskaleringer (retries>0), suksessrate per klasse.
 
+    success_rate_by_class regnes mot OK_OUTCOMES (alle ønskede atferder),
+    ikke kun "success". Decomposed (parent → sub-issues) og timeout-fixed/
+    timeout-decomposed regnes også som suksess siden det er bevisst
+    triage-utfall, ikke feil.
+
     Returnerer et tomt skjelett hvis loggen mangler — frontend viser "ingen data".
     """
     log_path = os.path.join(TRIAGE_LOG_DIR, "classifier-eval.jsonl")
@@ -344,23 +349,53 @@ def q_triage_classifier_window(hours: int = 24) -> dict:
     if not records:
         return empty
 
+    # Outcome-typer som regnes som ønsket atferd (gir success-rate-treff):
+    # - success:             direkte fiks merget til main
+    # - decomposed:          parent lukket fordi sub-issues ble opprettet
+    # - timeout-fixed:       Claude fikset før timeout, issue lukket
+    # - timeout-decomposed:  Claude dekomponerte under timeout-pathway
+    OK_OUTCOMES = {"success", "decomposed", "timeout-fixed", "timeout-decomposed"}
+
+    # Aggreger på SISTE record per (repo, issue). Issues kan ha flere runder
+    # (retry → success), og uten dette telles styreportal#140 som 3 separate
+    # issues i statistikken — overkill og misvisende. Vi bruker siste-per-issue
+    # som den endelige outcomen.
+    by_issue: dict[tuple[str, int], dict] = {}
+    issue_max_retries: dict[tuple[str, int], int] = {}
+    issue_any_mescalated: dict[tuple[str, int], bool] = {}
+    for r in records:
+        repo = r.get("repo", "")
+        num = r.get("issue", 0)
+        key = (repo, num)
+        retries = int(r.get("retries", 0) or 0)
+        mescalated = bool(r.get("model_escalated", False))
+        issue_max_retries[key] = max(issue_max_retries.get(key, 0), retries)
+        if mescalated:
+            issue_any_mescalated[key] = True
+        # Behold den siste recorden basert på ts (jsonl er typisk sortert,
+        # men vi sammenligner eksplisitt for trygghet).
+        prev = by_issue.get(key)
+        if prev is None or r.get("ts", "") >= prev.get("ts", ""):
+            by_issue[key] = r
+
+    final_records = list(by_issue.values())
+
     outcomes: dict[str, int] = {}
     by_class: dict[str, int] = {}
     by_model: dict[str, int] = {}
-    class_success: dict[str, list[int]] = {}  # class -> [success, total]
+    class_success: dict[str, list[int]] = {}  # class -> [ok, total]
     class_classifier_hit: dict[str, list[int]] = {}  # class -> [hit, total]
-    escalations = 0           # retries > 0 (cron-round-level)
-    model_escalations = 0     # model_escalated == true (beyond classifier pick)
+    escalations = 0           # antall unike issues med retries > 0 noen runde
+    model_escalations = 0     # antall unike issues der noen runde eskalerte
     dynamic_count = 0
 
-    for r in records:
+    for r in final_records:
         o = r.get("outcome", "unknown")
         c = r.get("class", "unknown")
         m = r.get("model", "unknown")
         e = r.get("effort", "unknown")
-        retries = int(r.get("retries", 0) or 0)
         dynamic = bool(r.get("dynamic_active", False))
-        mescalated = bool(r.get("model_escalated", False))
+        key = (r.get("repo", ""), r.get("issue", 0))
 
         outcomes[o] = outcomes.get(o, 0) + 1
         by_class[c] = by_class.get(c, 0) + 1
@@ -369,21 +404,21 @@ def q_triage_classifier_window(hours: int = 24) -> dict:
 
         stats = class_success.setdefault(c, [0, 0])
         stats[1] += 1
-        if o == "success":
+        if o in OK_OUTCOMES:
             stats[0] += 1
 
-        # Classifier-hit: flyten beholdt rutet modell (uansett outcome)
-        hit_stats = class_classifier_hit.setdefault(c, [0, 0])
-        hit_stats[1] += 1
-        if not mescalated:
-            hit_stats[0] += 1
-
-        if retries > 0:
+        if issue_max_retries.get(key, 0) > 0:
             escalations += 1
-        if mescalated:
+        if issue_any_mescalated.get(key, False):
             model_escalations += 1
         if dynamic:
             dynamic_count += 1
+
+        # Classifier-hit: flyten beholdt rutet modell (per unike issue)
+        hit_stats = class_classifier_hit.setdefault(c, [0, 0])
+        hit_stats[1] += 1
+        if not issue_any_mescalated.get(key, False):
+            hit_stats[0] += 1
 
     success_rate = {
         c: round(stats[0] / stats[1], 3) if stats[1] else 0.0
@@ -396,7 +431,8 @@ def q_triage_classifier_window(hours: int = 24) -> dict:
 
     return {
         "window_hours": hours,
-        "total": len(records),
+        "total": len(final_records),
+        "rounds": len(records),
         "outcomes": outcomes,
         "by_class": by_class,
         "by_model": by_model,
@@ -404,7 +440,7 @@ def q_triage_classifier_window(hours: int = 24) -> dict:
         "model_escalations": model_escalations,
         "success_rate_by_class": success_rate,
         "classifier_hit_rate_by_class": classifier_hit_rate,
-        "dynamic_active": dynamic_count == len(records) if records else None,
+        "dynamic_active": dynamic_count == len(final_records) if final_records else None,
         "generated_at": datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),
     }
 
