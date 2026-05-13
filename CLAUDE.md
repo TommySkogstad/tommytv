@@ -18,6 +18,13 @@
 - `footer.js` — Delt footerkomponent (inkluderes av alle sider)
 - `sparing-data.json` — Porteføljedata for sparesiden
 - `sparing-anbefaling.json` — Investeringsanbefalinger for sparesiden
+- `dashboard.html` — Alternativt dashboard
+- `status-app.html` — Status-app side
+- `favicon.svg` — Nettstedets favicon (SVG)
+- `tommy_skogstad_favicon_16.svg` — Brand favicon 16px
+- `tommy_skogstad_favicon_32.svg` — Brand favicon 32px
+- `tommy_skogstad_logo_lys.svg` — Brand logo (lys variant)
+- `tommy_skogstad_logo_mork.svg` — Brand logo (mørk variant)
 - `logo.svg` — SVG-tekstlogo med gradient (Tommy=blå gradient, TV=hvit)
 - `nginx.conf` — Nginx-konfigurasjon
 - `docker-compose.yml` — Cloudflared + Nginx + sparing-api, port 8880 eksponert for LAN
