@@ -36,7 +36,6 @@ Offentlige tjenester vist på dashboardet (seksjon "Offentlige tjenester"):
 - **Sameiet HWA 6-8-10** — 6810.no — Beboerportal
 - **Styreportal** — styreportal.leienbiolog.no — Multi-tenant styreportal
 - **BilagBot** — bilag.tommytv.no — AI-drevet bilagsscanner
-- **GeoLoop** — geoloop.tommytv.no — Prediktiv varmestyring
 - **md2pdf** — md.tommytv.no
 - **Stirling PDF** — pdf.tommytv.no
 - **Ntfy** — ntfy.tommytv.no
