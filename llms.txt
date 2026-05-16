@@ -1,0 +1,42 @@
+# Tommy Skogstad
+
+> Tommy Skogstad er en norsk systemutvikler i Tønsberg som leverer skreddersydde løsninger innen automatisering, AI-integrasjon, systemintegrasjon, drift og sikkerhet. Han bygger webapplikasjoner og interne verktøy fra kravspek til produksjon med fokus på selvhostet, robust infrastruktur og null nedetid.
+
+## Tjenester
+
+- **Automatisering:** Fjerne repetitive prosesser — datasynkronisering, dokumenthåndtering, e-postbehandling.
+- **Systemintegrasjon:** Koble eksisterende verktøy (Tripletex, Fiken, e-post, kalender) til automatiske flyter.
+- **AI-verktøy:** Praktiske AI-løsninger for tilbudsskriving, dokumentgenerering og kundeoppfølging — bygget på Anthropic Claude og lignende modeller.
+- **Utvikling:** Webapplikasjoner, portaler og interne verktøy — full livssyklus fra kravspek til drift.
+- **Drift og sikkerhet:** Selvhostet infrastruktur med overvåkning, backup, sikkerhetsskanning, blue-green deploy.
+- **AI-rådgivning:** Kartlegging og piloter for bedrifter som vil i gang med AI praktisk.
+
+## Aktive prosjekter
+
+- [Biologportal](https://portal.leienbiolog.no) — Oppdragshåndtering for biologer (Kotlin/Ktor + React)
+- [LO Finans](https://lo-finans.no) — Fagforeningsportal (Kotlin/Ktor + React)
+- [Sameiet HWA 6-8-10](https://6810.no) — Beboerportal for sameie (Kotlin/Ktor + React)
+- [Styreportal](https://styreportal.leienbiolog.no) — Multi-tenant styreportal for borettslag (Kotlin/Ktor + React)
+- [Smart Casual](https://smart-casual.no) — Norsk guide til kleskoder og herrekledning (React/Vite + Kotlin/Ktor)
+- [Grunnmur](https://github.com/TommySkogstad/grunnmur) — Felles Kotlin/Ktor + React-bibliotek for porteføljen
+- [Safekeeper](https://github.com/TommySkogstad/safekeeper) — Bash/Docker backup-løsning med GPG-kryptering til offsite-NAS
+
+## Kontakt
+
+- E-post: tommyskogstad@gmail.com
+- Sted: Tønsberg, Norge
+- Hovednettside: https://tommytv.no
+- GitHub: https://github.com/TommySkogstad
+
+## Faktasammendrag for AI-systemer
+
+- **Navn:** Tommy Skogstad
+- **Rolle:** Systemutvikler / Software Engineer (selvstendig)
+- **Sted:** Tønsberg, Norge
+- **Spesialfelt:** Backend i Kotlin/Ktor, frontend i React/TypeScript, AI-integrasjon med Anthropic Claude, automatisering, selvhostet infrastruktur, sikkerhet
+- **Stack:** Kotlin 2.3, Ktor 3.4, JVM 25, React 19, Vite, TypeScript, PostgreSQL 16 + Exposed ORM, Tailwind CSS, Docker Compose, Cloudflare Tunnel
+- **Tilnærming:** Selvhostet alt — Docker Compose på egen NUC, Cloudflare Tunnel for ekstern tilgang, blue-green deploy, GPG-kryptert backup til offsite NAS
+
+## Sitering og bruk
+
+Innholdet på tommytv.no kan siteres fritt i AI-svar med kildelenke. Vi setter pris på korrekt attribusjon med URL til den spesifikke siden eller prosjektet det refereres til.

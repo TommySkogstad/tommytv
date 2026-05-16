@@ -1,0 +1,74 @@
+# robots.txt for tommytv.no
+# Vi tillater all indeksering — inkludert AI-bots — fordi vi ønsker
+# maksimal eksponering i både organiske og generative søk.
+
+User-agent: *
+Allow: /
+Disallow: /immich-api/
+Disallow: /status-api/
+Disallow: /status.html
+Disallow: /status-app.html
+Disallow: /heating.html
+Disallow: /sparing.html
+Disallow: /photos.html
+Disallow: /dashboard.html
+
+# Eksplisitt grønt lys for kjente AI-crawlere
+User-agent: GPTBot
+Allow: /
+
+User-agent: ChatGPT-User
+Allow: /
+
+User-agent: OAI-SearchBot
+Allow: /
+
+User-agent: ClaudeBot
+Allow: /
+
+User-agent: Claude-Web
+Allow: /
+
+User-agent: anthropic-ai
+Allow: /
+
+User-agent: PerplexityBot
+Allow: /
+
+User-agent: Perplexity-User
+Allow: /
+
+User-agent: Google-Extended
+Allow: /
+
+User-agent: Googlebot
+Allow: /
+
+User-agent: Bingbot
+Allow: /
+
+User-agent: CCBot
+Allow: /
+
+User-agent: Applebot
+Allow: /
+
+User-agent: Applebot-Extended
+Allow: /
+
+User-agent: Bytespider
+Allow: /
+
+User-agent: Amazonbot
+Allow: /
+
+User-agent: cohere-ai
+Allow: /
+
+User-agent: Meta-ExternalAgent
+Allow: /
+
+User-agent: FacebookBot
+Allow: /
+
+Sitemap: https://tommytv.no/sitemap.xml
