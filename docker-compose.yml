@@ -44,6 +44,9 @@ services:
       - ./icons:/usr/share/nginx/html/icons:ro
       - ./sparing-data.json:/usr/share/nginx/html/sparing-data.json:ro
       - ./sparing-anbefaling.json:/usr/share/nginx/html/sparing-anbefaling.json:ro
+      - ./robots.txt:/usr/share/nginx/html/robots.txt:ro
+      - ./sitemap.xml:/usr/share/nginx/html/sitemap.xml:ro
+      - ./llms.txt:/usr/share/nginx/html/llms.txt:ro
       - ./nginx.conf:/etc/nginx/nginx.conf:ro
     extra_hosts:
       - "host.docker.internal:host-gateway"
