@@ -18,6 +18,10 @@
 - `footer.js` — Delt footerkomponent (inkluderes av alle sider)
 - `sparing-data.json` — Porteføljedata for sparesiden
 - `sparing-anbefaling.json` — Investeringsanbefalinger for sparesiden
+- `robots.txt` — SEO: instruksjoner til webcrawlere
+- `sitemap.xml` — SEO: sitemap for søkemotorer
+- `llms.txt` — GEO: maskinlesbar profilside for AI-søkemotorer
+- `icons/` — Ikonmappe (montert som volume i nginx)
 - `dashboard.html` — Alternativt dashboard
 - `status-app.html` — Status-app side
 - `favicon.svg` — Nettstedets favicon (SVG)
