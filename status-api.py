@@ -17,6 +17,11 @@ Endepunkter:
         metrics: smoke, endpoint, health (legacy alias for smoke),
                  cloudflare, lighthouse, github, deploys, tls
   GET  /api/shadow-modes             — livssyklus-data for registrerte shadow-modes
+  GET  /api/job-metrics?job=<navn>&days=<n>
+        Daglige metrikker for autonomi-jobber (issue-triage, guardian, …).
+        Uten ?job: returnerer {jobs: [...]} med distinkte job-navn fra siste `days`.
+        days default 7, clampet til [1, 365]. Graceful fallback hvis job_metrics
+        mangler (DB ikke migrert til v4).
 
 Alle svar er JSON. CORS tillates (LAN-only via nginx).
 """
@@ -230,6 +235,45 @@ def q_shadow_modes(conn) -> list[dict]:
         except (TypeError, ValueError):
             r["promotion_criteria"] = None
     return rows
+
+
+def q_job_metrics(conn, job: str, days: int) -> dict:
+    """Hent daglige metrikker for én autonomi-jobb.
+
+    Tabellen `job_metrics` opprettes av schema-migrasjon 004 (misc-scripts#583)
+    og fylles av `status/job-metrics-daily.py` (cron 00:30). Returnerer
+    `{job, days, points: []}` hvis tabellen mangler — samme moenster som
+    `q_shadow_modes`. Punkter sorteres eldst foerst.
+    """
+    days = max(1, min(days, 365))
+    exists = conn.execute(
+        "SELECT name FROM sqlite_master WHERE type='table' AND name='job_metrics'"
+    ).fetchone()
+    if not exists:
+        return {"job": job, "days": days, "points": []}
+    offset = f"-{days} day"
+    points = rows_to_dicts(conn.execute(
+        "SELECT day, runs, fails, p50_dur_s, p95_dur_s, escalations_used, "
+        "recoveries_triggered, recoveries_succeeded, tokens_in_total, "
+        "tokens_out_total, cache_hits FROM job_metrics "
+        "WHERE job = ? AND day > date('now', ?) ORDER BY day",
+        (job, offset)))
+    return {"job": job, "days": days, "points": points}
+
+
+def q_job_metrics_list(conn, days: int) -> dict:
+    """Distinkte job-navn aktive i siste `days`. Graceful fallback som q_job_metrics."""
+    days = max(1, min(days, 365))
+    exists = conn.execute(
+        "SELECT name FROM sqlite_master WHERE type='table' AND name='job_metrics'"
+    ).fetchone()
+    if not exists:
+        return {"days": days, "jobs": []}
+    offset = f"-{days} day"
+    rows = conn.execute(
+        "SELECT DISTINCT job FROM job_metrics WHERE day > date('now', ?) ORDER BY job",
+        (offset,)).fetchall()
+    return {"days": days, "jobs": [r[0] for r in rows]}
 
 
 def q_series(conn, slug: str, metric: str, days: int) -> dict:
@@ -517,6 +561,15 @@ class Handler(BaseHTTPRequestHandler):
                     "shadow_modes": q_shadow_modes(conn),
                     "generated_at": datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),
                 })
+                return
+
+            if path == "/api/job-metrics":
+                days = int(query.get("days", ["7"])[0])
+                job = query.get("job", [None])[0]
+                if job:
+                    self._json(200, q_job_metrics(conn, job, days))
+                else:
+                    self._json(200, q_job_metrics_list(conn, days))
                 return
 
             if path == "/api/triage-24h":

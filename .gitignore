@@ -1,5 +1,7 @@
-# .env og nginx.conf håndteres av git-crypt (se .gitattributes)
 claude-status.json
+# .env og nginx.conf håndteres av git-crypt (se .gitattributes)
 node_modules/
 package.json
 package-lock.json
+*.pyc
+__pycache__/
