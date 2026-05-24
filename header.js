@@ -20,7 +20,7 @@
         { href: '/status.html', label: 'Status' },
         { href: '/heating.html', label: 'Varme & Sikkerhet' },
         { href: '/sparing.html', label: 'Sparing' },
-        { href: '/photos.html', label: 'Bilder' },
+        { href: 'https://bilder.tommytv.no', label: 'Bilder' },
     ];
 
     function isActive(href) {
