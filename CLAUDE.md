@@ -7,32 +7,33 @@
 - **Start**: `docker compose down && docker compose up -d`
 
 ## Filstruktur
-- `index.html` — Hoveddashboard med e-post, VPN, offentlige tjenester og LAN-tjenester
-- `status.html` — Status-side (LAN): Smarthus (Hue + Homey + Nanoleaf + Plejd + Yale + gardiner) + Infrastruktur (UniFi + speedtest + WiFi restart)
-- `bookmarks.html` — Bokmerkeside med eksterne tjenester og lenker
-- `heating.html` — Varme og sikkerhet (LAN): Gulvvarme, Mill-ovn, Yale-lås, temperaturer, batteristatus, printer
-- `sparing.html` — Spareoversikt-side (portefølje, fordeling, anbefalinger)
-- `photos.html` — Fotoside med Immich-integrasjon
-- `tommy_skogstad_brand_guide.html` — Brand guide (visuell identitet, logo, farger, typografi) — standalone side uten header.js/footer.js
-- `header.js` — Delt navigasjonskomponent (inkluderes av alle sider)
-- `footer.js` — Delt footerkomponent (inkluderes av alle sider)
-- `sparing-data.json` — Porteføljedata for sparesiden
-- `sparing-anbefaling.json` — Investeringsanbefalinger for sparesiden
-- `robots.txt` — SEO: instruksjoner til webcrawlere
-- `sitemap.xml` — SEO: sitemap for søkemotorer
-- `llms.txt` — GEO: maskinlesbar profilside for AI-søkemotorer
-- `icons/` — Ikonmappe (montert som volume i nginx)
-- `dashboard.html` — Alternativt dashboard
-- `status-app.html` — Status-app side
-- `favicon.svg` — Nettstedets favicon (SVG)
-- `tommy_skogstad_favicon_16.svg` — Brand favicon 16px
-- `tommy_skogstad_favicon_32.svg` — Brand favicon 32px
-- `tommy_skogstad_logo_lys.svg` — Brand logo (lys variant)
-- `tommy_skogstad_logo_mork.svg` — Brand logo (mørk variant)
-- `logo.svg` — SVG-tekstlogo med gradient (Tommy=blå gradient, TV=hvit)
-- `nginx.conf` — Nginx-konfigurasjon
+- `public/` — Alle statiske filer servert av nginx (én katalog-mount, inode-immun)
+  - `index.html` — Hoveddashboard med e-post, VPN, offentlige tjenester og LAN-tjenester
+  - `status.html` — Status-side (LAN): Smarthus (Hue + Homey + Nanoleaf + Plejd + Yale + gardiner) + Infrastruktur (UniFi + speedtest + WiFi restart)
+  - `bookmarks.html` — Bokmerkeside med eksterne tjenester og lenker
+  - `heating.html` — Varme og sikkerhet (LAN): Gulvvarme, Mill-ovn, Yale-lås, temperaturer, batteristatus, printer
+  - `sparing.html` — Spareoversikt-side (portefølje, fordeling, anbefalinger)
+  - `photos.html` — Fotoside med Immich-integrasjon
+  - `tommy_skogstad_brand_guide.html` — Brand guide (visuell identitet, logo, farger, typografi) — standalone side uten header.js/footer.js
+  - `header.js` — Delt navigasjonskomponent (inkluderes av alle sider)
+  - `footer.js` — Delt footerkomponent (inkluderes av alle sider)
+  - `sparing-data.json` — Porteføljedata for sparesiden (leses/skrives av sparing-api)
+  - `sparing-anbefaling.json` — Investeringsanbefalinger for sparesiden
+  - `robots.txt` — SEO: instruksjoner til webcrawlere
+  - `sitemap.xml` — SEO: sitemap for søkemotorer
+  - `llms.txt` — GEO: maskinlesbar profilside for AI-søkemotorer
+  - `icons/` — Ikonmappe
+  - `dashboard.html` — Alternativt dashboard
+  - `status-app.html` — Status-app side
+  - `favicon.svg` — Nettstedets favicon (SVG)
+  - `tommy_skogstad_favicon_16.svg` — Brand favicon 16px
+  - `tommy_skogstad_favicon_32.svg` — Brand favicon 32px
+  - `tommy_skogstad_logo_lys.svg` — Brand logo (lys variant)
+  - `tommy_skogstad_logo_mork.svg` — Brand logo (mørk variant)
+  - `logo.svg` — SVG-tekstlogo med gradient (Tommy=blå gradient, TV=hvit)
+- `nginx.conf` — Nginx-konfigurasjon (git-crypt-kryptert)
 - `docker-compose.yml` — Cloudflared + Nginx + sparing-api, port 8880 eksponert for LAN
-- `.env` — Cloudflare Tunnel-token (git-ignorert)
+- `.env` — Cloudflare Tunnel-token (git-ignorert, git-crypt-kryptert)
 
 ## Tjenester (Docker Compose)
 - **nginx** — Serverer statiske filer, port 8880
@@ -58,7 +59,7 @@ Offentlige tjenester vist på dashboardet (seksjon "Offentlige tjenester"):
 ## Arkitektur
 - Nginx serverer statiske filer, cloudflared kobler til Cloudflare Tunnel
 - Port 8880 eksponert på host for direkte LAN-tilgang
-- Alle HTML-filer må mountes som volumes i docker-compose.yml
+- `public/` mountes som katalog (ikke enkeltfiler) — inode-immun ved git pull/checkout
 
 ## Immich-fotointegrasjon (photos.html)
 - Bildefremvisning med Immich API (port 2283) via nginx-proxy (/immich-api/)
@@ -116,4 +117,4 @@ Bruk favicon fra tjenestens nettside: `<img src="https://tjeneste.com/favicon.ic
 
 ## Etter endringer
 Restart containere: `docker compose down && docker compose up -d`
-Nginx bruker volume mounts, men restart sikrer at endringene blir plukket opp.
+Katalog-mount (`public/`) er inode-immun — nginx leser endrede filer uten restart etter git pull.
