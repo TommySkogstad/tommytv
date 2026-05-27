@@ -13,7 +13,7 @@
   - `bookmarks.html` — Bokmerkeside med eksterne tjenester og lenker
   - `heating.html` — Varme og sikkerhet (LAN): Gulvvarme, Mill-ovn, Yale-lås, temperaturer, batteristatus, printer
   - `sparing.html` — Spareoversikt-side (portefølje, fordeling, anbefalinger)
-  - `photos.html` — Fotoside med Immich-integrasjon
+  - `photos.html` — Videresendes til bilder.tommytv.no
   - `tommy_skogstad_brand_guide.html` — Brand guide (visuell identitet, logo, farger, typografi) — standalone side uten header.js/footer.js
   - `header.js` — Delt navigasjonskomponent (inkluderes av alle sider)
   - `footer.js` — Delt footerkomponent (inkluderes av alle sider)
@@ -60,10 +60,6 @@ Offentlige tjenester vist på dashboardet (seksjon "Offentlige tjenester"):
 - Nginx serverer statiske filer, cloudflared kobler til Cloudflare Tunnel
 - Port 8880 eksponert på host for direkte LAN-tilgang
 - `public/` mountes som katalog (ikke enkeltfiler) — inode-immun ved git pull/checkout
-
-## Immich-fotointegrasjon (photos.html)
-- Bildefremvisning med Immich API (port 2283) via nginx-proxy (/immich-api/)
-- Personsøk, favorittmarkering, zoom-til-ansikt, fullskjerm, skjuling av bilder
 
 ## Navigasjon
 Hovednavigasjonen inneholder:
