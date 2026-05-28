@@ -17,6 +17,11 @@ services:
       - tommytv-network
     depends_on:
       - nginx
+    deploy:
+      resources:
+        limits:
+          memory: 128M
+          cpus: '0.25'
 
   nginx:
     image: nginx:alpine
