@@ -62,15 +62,14 @@ Offentlige tjenester vist på dashboardet (seksjon "Offentlige tjenester"):
 - `public/` mountes som katalog (ikke enkeltfiler) — inode-immun ved git pull/checkout
 
 ## Navigasjon
-Hovednavigasjonen inneholder:
-- **Offentlig** (alle): Dashboard, Bokmerker, Brand Guide
-- **LAN** (kun lokalt): Status, Varme & Sikkerhet, Sparing, Bilder
+Navigasjonen har to varianter basert på `location.hostname`:
+- **tommytv.no (offentlig)**: Hjem, Portefølje, Brand Guide
+- **LAN (nuc.tommy.tv:8880)**: Dashboard, Brand Guide + Bokmerker, Status, Varme & Sikkerhet, Sparing, Bilder
 
 ## LAN-logikk
 - Seksjoner med klasse `local-section` og `style="display: none;"` er skjult som standard
 - JavaScript viser dem kun når `location.hostname !== 'tommytv.no'` (dvs. LAN-tilgang)
-- På tommytv.no viser header.js en "LAN-versjon"-lenke i navigasjonen som peker til `http://nuc.tommy.tv:8880`
-- På LAN vises i stedet ekstra navigasjonspunkter (Status, Varme & Sikkerhet, Sparing, Bilder)
+- På LAN vises andre navigasjonspunkter (Dashboard i stedet for Hjem/Portefølje) + ekstra LAN-lenker (Bokmerker, Status, Varme & Sikkerhet, Sparing, Bilder)
 - bookmarks.html har samme LAN-logikk for seksjoner
 
 ## Legge til ny tjeneste (index.html)
