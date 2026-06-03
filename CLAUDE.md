@@ -39,7 +39,7 @@
 - **nginx** — Serverer statiske filer, port 8880
 - **cloudflared** — Cloudflare Tunnel til tommytv.no
 - **sparing-api** — Python REST API for porteføljedata (port 8881), leser/skriver sparing-data.json
-- **status-api** — Read-only JSON-API mot `~/status-data/status.db` (port 8882, proxy via nginx som `/status-api/`). Endepunkter: `/api/apps`, `/api/overview`, `/api/app/<slug>`, `/api/series/<slug>/<metric>`, `/api/shadow-modes`, `/api/job-metrics`. Kilder: misc-scripts/status/
+- **status-api** — Read-only JSON-API mot `~/status-data/status.db` (port 8882, proxy via nginx som `/status-api/`). Endepunkter: `/api/apps`, `/api/overview`, `/api/app/<slug>`, `/api/series/<slug>/<metric>`, `/api/shadow-modes`, `/api/job-metrics`, `/api/triage-24h?hours=<n>` (triage-classifier-resultater for siste n timer, default 24). Kilder: misc-scripts/status/
 
 ## Dashboard-tjenester (index.html)
 Offentlige tjenester vist på dashboardet (seksjon "Offentlige tjenester"):
