@@ -53,6 +53,7 @@ Offentlige tjenester vist på dashboardet (seksjon "Offentlige tjenester"):
 - **Uptime Kuma** — uptime.tommytv.no
 - **Speedtest** — speedtest.tommytv.no
 - **Plex** — app.plex.tv
+- **Smart Casual** — smart-casual.no — Norsk guide til kleskoder og herrekledning
 - **Safekeeper** — github.com/TommySkogstad/safekeeper
 - **Grunnmur** — github.com/TommySkogstad/grunnmur
 
