@@ -11,7 +11,7 @@
   - `index.html` — Hoveddashboard med e-post, VPN, offentlige tjenester og LAN-tjenester
   - `status.html` — Status-side (LAN): Smarthus (Hue + Homey + Nanoleaf + Plejd + Yale + gardiner) + Infrastruktur (UniFi + speedtest + WiFi restart)
   - `bookmarks.html` — Bokmerkeside med eksterne tjenester og lenker
-  - `heating.html` — Varme og sikkerhet (LAN): Gulvvarme, Mill-ovn, Yale-lås, temperaturer, batteristatus, printer
+  - `heating.html` — Avviklet (homey-shs avviklet 2026-06-01)
   - `sparing.html` — Spareoversikt-side (portefølje, fordeling, anbefalinger)
   - `photos.html` — Videresendes til bilder.tommytv.no
   - `tommy_skogstad_brand_guide.html` — Brand guide (visuell identitet, logo, farger, typografi) — standalone side uten header.js/footer.js
@@ -65,7 +65,7 @@ Offentlige tjenester vist på dashboardet (seksjon "Offentlige tjenester"):
 ## Navigasjon
 Navigasjonen har to varianter basert på `location.hostname`:
 - **tommytv.no (offentlig)**: Hjem, Portefølje, Brand Guide
-- **LAN (nuc.tommy.tv:8880)**: Dashboard, Brand Guide + Bokmerker, Status, Varme & Sikkerhet, Sparing, Bilder
+- **LAN (nuc.tommy.tv:8880)**: Dashboard, Brand Guide + Bokmerker, Status, Sparing, Bilder
 
 ## LAN-logikk
 - Seksjoner med klasse `local-section` og `style="display: none;"` er skjult som standard
