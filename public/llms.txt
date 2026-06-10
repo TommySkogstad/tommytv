@@ -14,7 +14,6 @@
 ## Aktive prosjekter
 
 - [Biologportal](https://portal.leienbiolog.no) — Oppdragshåndtering for biologer (Kotlin/Ktor + React)
-- [LO Finans](https://lo-finans.no) — Fagforeningsportal (Kotlin/Ktor + React)
 - [Sameiet HWA 6-8-10](https://6810.no) — Beboerportal for sameie (Kotlin/Ktor + React)
 - [Styreportal](https://styreportal.leienbiolog.no) — Multi-tenant styreportal for borettslag (Kotlin/Ktor + React)
 - [Smart Casual](https://smart-casual.no) — Norsk guide til kleskoder og herrekledning (React/Vite + Kotlin/Ktor)
