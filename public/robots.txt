@@ -4,7 +4,6 @@
 
 User-agent: *
 Allow: /
-Disallow: /immich-api/
 Disallow: /status-api/
 Disallow: /status.html
 Disallow: /status-app.html
