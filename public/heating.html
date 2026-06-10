@@ -97,207 +97,21 @@
     <script src="/footer.js?v=2"></script>
 
     <script>
-    var API = 'http://nuc.tommy.tv:8851';
-
-    function adjustFloor(delta) {
-        fetch(API+'/api/status').then(function(r){return r.json();}).then(function(d) {
-            var th = (d.homey||{}).thermostat||{};
-            var t = Math.max(5,Math.min(40,(th.targetTemperature||25)+delta));
-            fetch(API+'/api/thermostat/set?temperature='+t,{method:'POST'}).then(function(){setTimeout(loadAll,1000);});
-        });
-    }
-
-    function adjustMill(delta) {
-        fetch(API+'/api/status').then(function(r){return r.json();}).then(function(d) {
-            for (var i=0;i<(d.rooms||[]).length;i++) {
-                if (d.rooms[i].heater) {
-                    var t = Math.max(4,Math.min(35,(d.rooms[i].heater.targetTemperature||22)+delta));
-                    fetch(API+'/api/mill/set?temperature='+t,{method:'POST'}).then(function(){setTimeout(loadAll,1000);});
-                    break;
-                }
-            }
-        });
-    }
-
-    function toggleMill() {
-        fetch(API+'/api/mill/toggle',{method:'POST'}).then(function(){setTimeout(loadAll,1000);});
-    }
-
-    function toggleLock() {
-        if (!confirm('Er du sikker på at du vil endre låsen?')) return;
-        fetch(API+'/api/lock/toggle',{method:'POST'}).then(function(){setTimeout(loadAll,1000);});
-    }
-
     function loadAll() {
-        fetch(API+'/api/status')
-            .then(function(r){return r.json();})
-            .then(function(data) {
-                var now = new Date().toLocaleTimeString('nb-NO',{hour:'2-digit',minute:'2-digit'});
-
-                // === Yale Lås ===
-                var lockHtml = '';
-                var lockData = null;
-                (data.rooms||[]).forEach(function(r){ if(r.lock) lockData=r.lock; });
-                if (lockData) {
-                    var lk = lockData;
-                    var lockColor = lk.locked ? '#6D8345' : '#C35839';
-                    var lockIcon = lk.locked ? '🔒' : '🔓';
-                    document.getElementById('lock-badge').textContent = lk.locked ? 'Låst' : 'ÅPEN';
-                    document.getElementById('lock-badge').className = 'badge ' + (lk.locked ? 'badge-ok' : 'badge-alarm');
-
-                    lockHtml = '<div class="card">';
-                    lockHtml += '<div style="display:flex;align-items:center;justify-content:space-between;">';
-                    lockHtml += '<div style="display:flex;align-items:center;gap:1rem;">';
-                    lockHtml += '<span style="font-size:2rem;">'+lockIcon+'</span>';
-                    lockHtml += '<div>';
-                    lockHtml += '<div style="font-size:1.1rem;color:var(--white);font-weight:500;">Yale Doorman — Entré</div>';
-                    lockHtml += '<div style="display:flex;gap:1rem;margin-top:0.4rem;">';
-                    lockHtml += '<span><span class="status-dot '+(lk.locked?'dot-ok':'dot-alarm')+'"></span>'+(lk.locked?'Låst':'ÅPEN')+'</span>';
-                    lockHtml += '<span><span class="status-dot '+(lk.doorOpen?'dot-alarm':'dot-ok')+'"></span>Dør: '+(lk.doorOpen?'ÅPEN':'Lukket')+'</span>';
-                    lockHtml += '<span><span class="status-dot '+(lk.batteryLow?'dot-warn':'dot-ok')+'"></span>Batteri: '+(lk.batteryLow?'LAVT':'OK')+'</span>';
-                    lockHtml += '</div>';
-                    lockHtml += '</div>';
-                    lockHtml += '</div>';
-                    lockHtml += '<button onclick="toggleLock()" style="font-family:\'DM Mono\',monospace;font-size:0.75rem;background:'+lockColor+';border:none;color:var(--white);padding:0.5rem 1rem;border-radius:6px;cursor:pointer;">'+(lk.locked?'Lås opp':'Lås')+'</button>';
-                    lockHtml += '</div>';
-                    lockHtml += '</div>';
-                } else {
-                    lockHtml = '<div class="card" style="padding:1rem;color:var(--blue3);">Yale-lås utilgjengelig</div>';
-                }
-                document.getElementById('lock-container').innerHTML = lockHtml;
-
-                // === Oppvarming ===
-                document.getElementById('heat-badge').textContent = 'Oppdatert '+now;
-                var th = (data.homey||{}).thermostat||{};
-                var mill = null;
-                (data.rooms||[]).forEach(function(r){if(r.heater) mill=r.heater;});
-
-                var html = '';
-                if (th.temperature != null) {
-                    var hc = th.heating?'#C35839':'#6D8345';
-                    html += '<div class="card">';
-                    html += '<h3 style="font-size:1.1rem;color:var(--white);margin-bottom:1rem;">Gulvvarme — Bad</h3>';
-                    html += '<div style="display:flex;gap:2rem;flex-wrap:wrap;margin-bottom:1rem;">';
-                    html += '<div><div class="temp-big">'+(th.temperature||'—')+'°</div><div class="temp-label">Termostat (skap)</div></div>';
-                    html += '<div><div class="temp-big">'+(th.floorTemperature||'—')+'°</div><div class="temp-label">Gulvsensor</div></div>';
-                    html += '<div><div class="temp-big" style="color:var(--blue4);">'+(th.targetTemperature||'—')+'°</div><div class="temp-label">Måltemperatur</div></div>';
-                    html += '<div><div class="temp-big" style="color:'+hc+';">'+Math.round(th.power||0)+'</div><div class="temp-label">Watt '+(th.heating?'(varmer)':'(idle)')+'</div></div>';
-                    html += '</div>';
-                    html += '<div style="display:flex;align-items:center;gap:0.75rem;margin-bottom:0.75rem;">';
-                    html += '<button class="btn" style="font-size:1.2rem;width:2.5rem;height:2.5rem;" onclick="adjustFloor(-1)">−</button>';
-                    html += '<span style="font-family:\'DM Mono\',monospace;font-size:1.2rem;color:var(--white);min-width:4rem;text-align:center;">'+(th.targetTemperature||'—')+'°C</span>';
-                    html += '<button class="btn" style="font-size:1.2rem;width:2.5rem;height:2.5rem;" onclick="adjustFloor(1)">+</button>';
-                    html += '</div>';
-                    html += '<div style="font-size:0.75rem;color:var(--blue3);">Totalt forbruk: '+(th.energy?Math.round(th.energy).toLocaleString():'-')+' kWh</div>';
-                    html += '</div>';
-                } else {
-                    html += '<div class="card" style="padding:1rem;color:var(--blue3);">Gulvvarme utilgjengelig (Homey frakoblet)</div>';
-                }
-
-                if (mill) {
-                    var mc = mill.on?'#C35839':'#6D8345';
-                    html += '<div class="card">';
-                    html += '<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1rem;">';
-                    html += '<h3 style="font-size:1.1rem;color:var(--white);">Mill Varmeovn — Stue</h3>';
-                    html += '<button class="btn" style="background:'+(mill.on?'#C35839':'#6D8345')+';border:none;color:var(--white);padding:0.3rem 0.8rem;" onclick="toggleMill()">'+(mill.on?'Slå av':'Slå på')+'</button>';
-                    html += '</div>';
-                    html += '<div style="display:flex;gap:2rem;flex-wrap:wrap;margin-bottom:1rem;">';
-                    html += '<div><div class="temp-big">'+(mill.temperature||'—')+'°</div><div class="temp-label">Romtemperatur</div></div>';
-                    html += '<div><div class="temp-big" style="color:var(--blue4);">'+(mill.targetTemperature||'—')+'°</div><div class="temp-label">Måltemperatur</div></div>';
-                    html += '<div><div class="temp-big" style="color:'+mc+';">'+(mill.power||0)+'</div><div class="temp-label">Watt</div></div>';
-                    html += '</div>';
-                    html += '<div style="display:flex;align-items:center;gap:0.75rem;margin-bottom:0.75rem;">';
-                    html += '<button class="btn" style="font-size:1.2rem;width:2.5rem;height:2.5rem;" onclick="adjustMill(-1)">−</button>';
-                    html += '<span style="font-family:\'DM Mono\',monospace;font-size:1.2rem;color:var(--white);min-width:4rem;text-align:center;">'+(mill.targetTemperature||'—')+'°C</span>';
-                    html += '<button class="btn" style="font-size:1.2rem;width:2.5rem;height:2.5rem;" onclick="adjustMill(1)">+</button>';
-                    html += '</div>';
-                    var extras = [];
-                    if (mill.openWindow) extras.push('<span style="color:#F9A850;">⚠ Åpent vindu detektert</span>');
-                    extras.push('Daglig: '+(mill.dailyPower||0).toFixed(1)+' kWh');
-                    extras.push('Totalt: '+(mill.energy||0).toFixed(1)+' kWh');
-                    html += '<div style="font-size:0.75rem;color:var(--blue3);display:flex;gap:1rem;flex-wrap:wrap;">'+extras.join('')+'</div>';
-                    html += '</div>';
-                }
-
-                document.getElementById('heating-container').innerHTML = html;
-
-                // === Temperaturoversikt ===
-                var temps = '<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:0.75rem;">';
-                if (th.temperature != null) {
-                    temps += '<div class="card" style="padding:1rem;"><div style="font-size:1.5rem;font-weight:500;color:var(--white);">'+th.temperature+'°C</div><div class="temp-label">Bad — Termostat (skap)</div></div>';
-                    temps += '<div class="card" style="padding:1rem;"><div style="font-size:1.5rem;font-weight:500;color:var(--white);">'+(th.floorTemperature||'—')+'°C</div><div class="temp-label">Bad — Gulvsensor</div></div>';
-                }
-                (data.rooms||[]).forEach(function(r) {
-                    if (r.temperature !== undefined) {
-                        temps += '<div class="card" style="padding:1rem;"><div style="font-size:1.5rem;font-weight:500;color:var(--white);">'+r.temperature+'°C</div><div class="temp-label">'+r.name+' — Hue-sensor</div></div>';
-                    }
-                    if (r.heater && r.heater.temperature) {
-                        temps += '<div class="card" style="padding:1rem;"><div style="font-size:1.5rem;font-weight:500;color:var(--white);">'+r.heater.temperature+'°C</div><div class="temp-label">'+r.name+' — Mill</div></div>';
-                    }
-                });
-                temps += '</div>';
-                document.getElementById('temps-container').innerHTML = temps;
-
-                // === Batteristatus ===
-                var bat = '<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:0.75rem;">';
-                // Hue-enheter (dimmere + sensorer)
-                (data.rooms||[]).forEach(function(r) {
-                    (r.batteries||[]).forEach(function(b) {
-                        var pct = b.level;
-                        var color = pct > 50 ? '#6D8345' : pct > 20 ? '#F9A850' : '#C35839';
-                        bat += '<div class="card" style="padding:1rem;">';
-                        bat += '<div style="font-size:1.5rem;font-weight:500;color:'+color+';">'+pct+'%</div>';
-                        bat += '<div class="temp-label">'+r.name+' — '+b.device+'</div>';
-                        bat += '<div style="margin-top:0.5rem;height:4px;background:var(--blue2);border-radius:2px;"><div style="height:100%;width:'+pct+'%;background:'+color+';border-radius:2px;"></div></div>';
-                        bat += '</div>';
-                    });
-                });
-                // Yale lås
-                if (lockData) {
-                    var batOk = !lockData.batteryLow;
-                    bat += '<div class="card" style="padding:1rem;">';
-                    bat += '<div style="font-size:1.5rem;font-weight:500;color:'+(batOk?'#6D8345':'#C35839')+';">'+(batOk?'OK':'LAVT')+'</div>';
-                    bat += '<div class="temp-label">Entré — Yale Doorman</div>';
-                    bat += '<div style="margin-top:0.5rem;height:4px;background:var(--blue2);border-radius:2px;"><div style="height:100%;width:'+(batOk?'80':'15')+'%;background:'+(batOk?'#6D8345':'#C35839')+';border-radius:2px;"></div></div>';
-                    bat += '</div>';
-                }
-                bat += '</div>';
-                document.getElementById('battery-container').innerHTML = bat;
-
-                // === Printer ===
-                var pr = data.printer;
-                var prHtml = '';
-                if (pr) {
-                    var inkPct = pr.inkBlack != null ? pr.inkBlack : null;
-                    var inkColor = inkPct > 50 ? '#6D8345' : inkPct > 20 ? '#F9A850' : '#C35839';
-                    var stateMap = {idle:'Klar',printing:'Skriver',unknown:'Ukjent'};
-                    document.getElementById('printer-badge').textContent = stateMap[pr.state] || pr.state;
-                    document.getElementById('printer-badge').className = 'badge badge-ok';
-
-                    prHtml = '<div class="card" style="padding:1.25rem;">';
-                    prHtml += '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1rem;">';
-                    prHtml += '<h3 style="font-size:1.1rem;color:var(--white);">'+pr.name+'</h3>';
-                    prHtml += '<span class="badge badge-ok">'+(stateMap[pr.state]||pr.state)+'</span>';
-                    prHtml += '</div>';
-                    if (inkPct != null) {
-                        prHtml += '<div style="font-size:0.85rem;color:var(--blue4);margin-bottom:0.5rem;">Svart toner</div>';
-                        prHtml += '<div style="display:flex;align-items:center;gap:1rem;">';
-                        prHtml += '<div style="flex:1;height:8px;background:var(--blue2);border-radius:4px;"><div style="height:100%;width:'+inkPct+'%;background:'+inkColor+';border-radius:4px;"></div></div>';
-                        prHtml += '<span style="font-size:1.2rem;font-weight:500;color:'+inkColor+';">'+inkPct+'%</span>';
-                        prHtml += '</div>';
-                    }
-                    prHtml += '</div>';
-                } else {
-                    prHtml = '<div class="card" style="padding:1rem;color:var(--blue3);">Printer utilgjengelig</div>';
-                    document.getElementById('printer-badge').textContent = 'Utilgjengelig';
-                }
-                document.getElementById('printer-container').innerHTML = prHtml;
-
-            });
+        // homey-shs avviklet 2026-06-01 — tjenesten er ikke lenger tilgjengelig
+        var unavailable = '<div class="card" style="padding:1rem;color:var(--blue3);">Utilgjengelig (homey-shs avviklet)</div>';
+        document.getElementById('lock-container').innerHTML = unavailable;
+        document.getElementById('heating-container').innerHTML = unavailable;
+        document.getElementById('temps-container').innerHTML = unavailable;
+        document.getElementById('battery-container').innerHTML = unavailable;
+        document.getElementById('printer-container').innerHTML = unavailable;
+        document.getElementById('lock-badge').textContent = 'Utilgjengelig';
+        document.getElementById('heat-badge').textContent = 'Utilgjengelig';
+        document.getElementById('printer-badge').textContent = 'Utilgjengelig';
     }
+
 
     loadAll();
-    setInterval(loadAll, 15000);
     </script>
 </body>
 </html>

@@ -23,7 +23,7 @@ Endepunkter:
         days default 7, clampet til [1, 365]. Graceful fallback hvis job_metrics
         mangler (DB ikke migrert til v4).
 
-Alle svar er JSON. CORS tillates (LAN-only via nginx).
+Alle svar er JSON. CORS tillates. Tjenesten er tilgjengelig via Cloudflare-tunnelen (ikke LAN-only).
 """
 from __future__ import annotations
 
