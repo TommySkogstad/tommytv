@@ -1,15 +1,20 @@
 #!/usr/bin/env python3
-"""Enhetstester for status-api.py — fokus paa job-metrics-endepunktet (issue #20)."""
+"""Enhetstester for status-api.py."""
 from __future__ import annotations
 
 import importlib.util
+import json
 import os
 import sqlite3
 import sys
 import tempfile
+import threading
 import unittest
-from datetime import date, timedelta
+from datetime import date, datetime, timedelta, timezone
+from http.server import HTTPServer
 from pathlib import Path
+from urllib.error import HTTPError
+from urllib.request import urlopen
 
 HERE = Path(__file__).resolve().parent
 
@@ -22,6 +27,60 @@ def load_status_api(db_path: str):
     sys.modules["status_api"] = mod
     spec.loader.exec_module(mod)
     return mod
+
+
+def _create_full_schema(conn) -> None:
+    """Opprett alle tabeller brukt av q_app_truth, q_overview, q_series og q_apps."""
+    for ddl in [
+        """CREATE TABLE IF NOT EXISTS apps (
+            slug TEXT PRIMARY KEY, display_name TEXT, tier TEXT,
+            github_repo TEXT, prod_url TEXT, dev_url TEXT)""",
+        """CREATE TABLE IF NOT EXISTS versions (
+            app_slug TEXT, package TEXT, version TEXT, ts TEXT)""",
+        """CREATE TABLE IF NOT EXISTS deploys (
+            app_slug TEXT, ts TEXT, commit_sha TEXT, status TEXT,
+            duration_s INT, slot TEXT)""",
+        """CREATE TABLE IF NOT EXISTS health_checks (
+            app_slug TEXT, status TEXT, response_ms INT,
+            http_status INT, check_kind TEXT, ts TEXT)""",
+        """CREATE TABLE IF NOT EXISTS github_snapshots (
+            app_slug TEXT, ts TEXT, open_prs INT, draft_prs INT,
+            open_issues INT, dependabot_alerts INT, ci_status TEXT,
+            last_commit_sha TEXT, last_commit_ts TEXT)""",
+        """CREATE TABLE IF NOT EXISTS concerns (
+            app_slug TEXT, status TEXT, severity TEXT, created_at TEXT)""",
+        """CREATE TABLE IF NOT EXISTS plans (
+            app_slug TEXT, status TEXT, priority INT, created_at TEXT)""",
+        """CREATE TABLE IF NOT EXISTS work_log (app_slug TEXT, ts TEXT)""",
+        """CREATE TABLE IF NOT EXISTS cloudflare_daily (
+            app_slug TEXT, date TEXT, requests INT, unique_visitors INT,
+            cache_hit_pct REAL, errors_4xx INT, errors_5xx INT, hostname TEXT)""",
+        """CREATE TABLE IF NOT EXISTS lighthouse_scores (
+            app_slug TEXT, ts TEXT, performance INT, accessibility INT,
+            best_practices INT, seo INT, url TEXT)""",
+        """CREATE TABLE IF NOT EXISTS tls_checks (
+            app_slug TEXT, ts TEXT, domain TEXT, days_until_expiry INT, expires_at TEXT)""",
+        """CREATE TABLE IF NOT EXISTS backups (
+            app_slug TEXT, ts TEXT, status TEXT, detail TEXT)""",
+    ]:
+        conn.execute(ddl)
+
+
+def _start_status_server(db_path: str):
+    """Start status-api på tilfeldig port. Returnerer (server, port)."""
+    api = load_status_api(db_path)
+    server = HTTPServer(("127.0.0.1", 0), api.Handler)
+    port = server.server_address[1]
+    threading.Thread(target=server.serve_forever, daemon=True).start()
+    return server, port
+
+
+def _http_get(port: int, path: str) -> tuple:
+    try:
+        with urlopen(f"http://127.0.0.1:{port}{path}") as r:
+            return r.status, json.loads(r.read())
+    except HTTPError as e:
+        return e.code, json.loads(e.read())
 
 
 class JobMetricsTests(unittest.TestCase):
@@ -182,6 +241,272 @@ class JobMetricsTests(unittest.TestCase):
         finally:
             conn.close()
         self.assertEqual(result["days"], 365)
+
+
+class AppsQueryTests(unittest.TestCase):
+    """Tests for q_apps() — med og uten tier-filter."""
+
+    def setUp(self) -> None:
+        self.tmp = tempfile.NamedTemporaryFile(suffix=".db", delete=False)
+        self.tmp.close()
+        self.db_path = self.tmp.name
+        with sqlite3.connect(self.db_path) as conn:
+            _create_full_schema(conn)
+            conn.executemany(
+                "INSERT INTO apps (slug, display_name, tier) VALUES (?,?,?)",
+                [("bio", "Biologportal", "primary"),
+                 ("6810", "6810", "secondary"),
+                 ("safekeeper", "Safekeeper", "lib")],
+            )
+            conn.commit()
+        self.api = load_status_api(self.db_path)
+
+    def tearDown(self) -> None:
+        os.unlink(self.db_path)
+
+    def _q(self, tiers):
+        conn = self.api.open_ro()
+        try:
+            return self.api.q_apps(conn, tiers)
+        finally:
+            conn.close()
+
+    def test_ingen_filter_returnerer_alle(self) -> None:
+        slugs = {a["slug"] for a in self._q(None)}
+        self.assertEqual(slugs, {"bio", "6810", "safekeeper"})
+
+    def test_filtrerer_paa_en_tier(self) -> None:
+        result = self._q(["primary"])
+        self.assertEqual(len(result), 1)
+        self.assertEqual(result[0]["slug"], "bio")
+
+    def test_filtrerer_paa_flere_tiers(self) -> None:
+        slugs = {a["slug"] for a in self._q(["primary", "secondary"])}
+        self.assertEqual(slugs, {"bio", "6810"})
+        self.assertNotIn("safekeeper", slugs)
+
+    def test_ukjent_tier_gir_tom_liste(self) -> None:
+        self.assertEqual(self._q(["finnes-ikke"]), [])
+
+
+class SeriesQueryTests(unittest.TestCase):
+    """Tests for q_series() — gyldige og ugyldige metric-navn."""
+
+    def setUp(self) -> None:
+        self.tmp = tempfile.NamedTemporaryFile(suffix=".db", delete=False)
+        self.tmp.close()
+        self.db_path = self.tmp.name
+        with sqlite3.connect(self.db_path) as conn:
+            conn.execute("""
+                CREATE TABLE health_checks (
+                    app_slug TEXT, status TEXT, response_ms INT,
+                    http_status INT, check_kind TEXT, ts TEXT)
+            """)
+            conn.execute(
+                "INSERT INTO health_checks VALUES "
+                "('bio','ok',120,200,'smoke',datetime('now','-1 hour'))"
+            )
+            conn.commit()
+        self.api = load_status_api(self.db_path)
+
+    def tearDown(self) -> None:
+        os.unlink(self.db_path)
+
+    def _q(self, slug, metric, days=30):
+        conn = self.api.open_ro()
+        try:
+            return self.api.q_series(conn, slug, metric, days)
+        finally:
+            conn.close()
+
+    def test_smoke_returnerer_punkter(self) -> None:
+        result = self._q("bio", "smoke")
+        self.assertEqual(result["metric"], "smoke")
+        self.assertEqual(len(result["points"]), 1)
+        self.assertEqual(result["points"][0]["tag"], "ok")
+
+    def test_health_er_alias_for_smoke(self) -> None:
+        self.assertEqual(len(self._q("bio", "health")["points"]), 1)
+
+    def test_ugyldig_metric_gir_valueerror(self) -> None:
+        conn = self.api.open_ro()
+        try:
+            with self.assertRaises(ValueError):
+                self.api.q_series(conn, "bio", "ukjent-metric", 30)
+        finally:
+            conn.close()
+
+    def test_clamper_days_til_hoyst_365(self) -> None:
+        self.assertEqual(self._q("bio", "smoke", days=9999)["days"], 365)
+
+    def test_clamper_days_til_minst_1(self) -> None:
+        self.assertEqual(self._q("bio", "smoke", days=0)["days"], 1)
+
+    def test_ukjent_slug_returnerer_ingen_punkter(self) -> None:
+        self.assertEqual(self._q("finnes-ikke", "smoke")["points"], [])
+
+
+class ShadowModesQueryTests(unittest.TestCase):
+    """Tests for q_shadow_modes() — graceful fallback og filtrering."""
+
+    def setUp(self) -> None:
+        self.tmp = tempfile.NamedTemporaryFile(suffix=".db", delete=False)
+        self.tmp.close()
+        self.db_path = self.tmp.name
+        sqlite3.connect(self.db_path).close()
+        self.api = load_status_api(self.db_path)
+
+    def tearDown(self) -> None:
+        os.unlink(self.db_path)
+
+    def test_returnerer_tom_liste_naar_tabell_mangler(self) -> None:
+        conn = self.api.open_ro()
+        try:
+            self.assertEqual(self.api.q_shadow_modes(conn), [])
+        finally:
+            conn.close()
+
+    def test_ekskluderer_abandoned_status(self) -> None:
+        with sqlite3.connect(self.db_path) as wconn:
+            wconn.execute("""
+                CREATE TABLE shadow_modes (
+                    name TEXT PRIMARY KEY, description TEXT, owner TEXT,
+                    status TEXT, started_at TEXT, promotion_criteria_json TEXT,
+                    max_lifetime_days INT, promoted_at TEXT, promoted_by TEXT,
+                    last_evaluated_at TEXT, last_match_rate REAL, last_sample_count INT)
+            """)
+            wconn.executemany(
+                "INSERT INTO shadow_modes VALUES (?,?,?,?,?,?,?,?,?,?,?,?)",
+                [
+                    ("active", "Aktiv", "sys", "active", "2026-01-01",
+                     None, 30, None, None, None, None, None),
+                    ("aban", "Avviklet", "sys", "abandoned", "2026-01-01",
+                     None, 30, None, None, None, None, None),
+                ],
+            )
+            wconn.commit()
+        self.api = load_status_api(self.db_path)
+        conn = self.api.open_ro()
+        try:
+            result = self.api.q_shadow_modes(conn)
+        finally:
+            conn.close()
+        self.assertEqual(len(result), 1)
+        self.assertEqual(result[0]["name"], "active")
+
+
+class AppTruthQueryTests(unittest.TestCase):
+    """Tests for q_app_truth() — ikke-funnet (None) og funnet med tomme tabeller."""
+
+    def setUp(self) -> None:
+        self.tmp = tempfile.NamedTemporaryFile(suffix=".db", delete=False)
+        self.tmp.close()
+        self.db_path = self.tmp.name
+        with sqlite3.connect(self.db_path) as conn:
+            _create_full_schema(conn)
+            conn.execute(
+                "INSERT INTO apps (slug, display_name, tier) VALUES "
+                "('bio','Biologportal','primary')"
+            )
+            conn.commit()
+        self.api = load_status_api(self.db_path)
+
+    def tearDown(self) -> None:
+        os.unlink(self.db_path)
+
+    def test_returnerer_none_for_ukjent_slug(self) -> None:
+        conn = self.api.open_ro()
+        try:
+            self.assertIsNone(self.api.q_app_truth(conn, "finnes-ikke"))
+        finally:
+            conn.close()
+
+    def test_returnerer_dict_med_forventede_nokler_for_kjent_slug(self) -> None:
+        conn = self.api.open_ro()
+        try:
+            result = self.api.q_app_truth(conn, "bio")
+        finally:
+            conn.close()
+        self.assertIsNotNone(result)
+        self.assertEqual(result["app"]["slug"], "bio")
+        for key in ("latest_deploys", "health_24h", "versions",
+                    "concerns_open", "plans_active", "recent_work"):
+            self.assertIn(key, result)
+            self.assertIsInstance(result[key], list)
+
+
+class TriageClassifierTests(unittest.TestCase):
+    """Tests for q_triage_classifier_window() — fallback og JSONL-parsing."""
+
+    def setUp(self) -> None:
+        self.tmpdb = tempfile.NamedTemporaryFile(suffix=".db", delete=False)
+        self.tmpdb.close()
+        self.tmplogdir = tempfile.mkdtemp()
+        os.environ["TRIAGE_LOG_DIR"] = self.tmplogdir
+        self.api = load_status_api(self.tmpdb.name)
+
+    def tearDown(self) -> None:
+        import shutil
+        os.unlink(self.tmpdb.name)
+        shutil.rmtree(self.tmplogdir)
+        os.environ.pop("TRIAGE_LOG_DIR", None)
+
+    def test_returnerer_tomt_skjelett_naar_logg_mangler(self) -> None:
+        result = self.api.q_triage_classifier_window(24)
+        self.assertEqual(result["total"], 0)
+        self.assertEqual(result["outcomes"], {})
+        self.assertEqual(result["window_hours"], 24)
+
+    def test_parser_jsonl_og_aggregerer_outcomes(self) -> None:
+        ts = (datetime.now(timezone.utc) - timedelta(hours=1)).isoformat()
+        log_path = os.path.join(self.tmplogdir, "classifier-eval.jsonl")
+        with open(log_path, "w") as f:
+            f.write(json.dumps({
+                "ts": ts, "repo": "biologportal", "issue": 1,
+                "outcome": "success", "class": "bug",
+                "model": "sonnet", "effort": "medium",
+                "retries": 0, "model_escalated": False, "dynamic_active": False,
+            }) + "\n")
+        self.api = load_status_api(self.tmpdb.name)
+        result = self.api.q_triage_classifier_window(24)
+        self.assertEqual(result["total"], 1)
+        self.assertEqual(result["outcomes"].get("success"), 1)
+        self.assertEqual(result["by_class"].get("bug"), 1)
+
+
+class HttpEndpointTests(unittest.TestCase):
+    """HTTP-nivå tester: /health, 404-routing, ugyldig series-metric."""
+
+    def setUp(self) -> None:
+        self.tmp = tempfile.NamedTemporaryFile(suffix=".db", delete=False)
+        self.tmp.close()
+        self.db_path = self.tmp.name
+        with sqlite3.connect(self.db_path) as conn:
+            _create_full_schema(conn)
+            conn.commit()
+        self.server, self.port = _start_status_server(self.db_path)
+
+    def tearDown(self) -> None:
+        self.server.shutdown()
+        os.unlink(self.db_path)
+
+    def test_health_returnerer_200_med_status_ok(self) -> None:
+        code, data = _http_get(self.port, "/health")
+        self.assertEqual(code, 200)
+        self.assertEqual(data["status"], "ok")
+
+    def test_ukjent_sti_returnerer_404(self) -> None:
+        code, _ = _http_get(self.port, "/api/finnes-ikke")
+        self.assertEqual(code, 404)
+
+    def test_ukjent_app_slug_returnerer_404(self) -> None:
+        code, data = _http_get(self.port, "/api/app/finnes-ikke")
+        self.assertEqual(code, 404)
+        self.assertIn("ukjent app", data.get("error", ""))
+
+    def test_ugyldig_series_metric_returnerer_400(self) -> None:
+        code, _ = _http_get(self.port, "/api/series/bio/ugyldig-metric")
+        self.assertEqual(code, 400)
 
 
 if __name__ == "__main__":
