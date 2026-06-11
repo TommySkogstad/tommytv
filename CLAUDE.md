@@ -70,7 +70,7 @@ Navigasjonen har to varianter basert på `location.hostname`:
 ## LAN-logikk
 - Seksjoner med klasse `local-section` og `style="display: none;"` er skjult som standard
 - JavaScript viser dem kun når `location.hostname !== 'tommytv.no'` (dvs. LAN-tilgang)
-- På LAN vises andre navigasjonspunkter (Dashboard i stedet for Hjem/Portefølje) + ekstra LAN-lenker (Bokmerker, Status, Varme & Sikkerhet, Sparing, Bilder)
+- På LAN vises andre navigasjonspunkter (Dashboard i stedet for Hjem/Portefølje) + ekstra LAN-lenker (Bokmerker, Status, Sparing, Bilder)
 - bookmarks.html har samme LAN-logikk for seksjoner
 
 ## Legge til ny tjeneste (index.html)

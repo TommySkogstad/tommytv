@@ -18,7 +18,6 @@
     var lanNav = [
         { href: '/bookmarks.html', label: 'Bokmerker' },
         { href: '/status.html', label: 'Status' },
-        { href: '/heating.html', label: 'Varme & Sikkerhet' },
         { href: '/sparing.html', label: 'Sparing' },
         { href: 'https://bilder.tommytv.no', label: 'Bilder' },
     ];
