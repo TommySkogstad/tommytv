@@ -92,6 +92,12 @@ class CORSAllowlistTests(unittest.TestCase):
         acao = headers.get("Access-Control-Allow-Origin", "")
         self.assertEqual(acao, "http://nuc.tommy.tv:8880")
 
+    def test_lan_origin_uten_port_faar_acao_header(self):
+        """nuc.tommy.tv uten portnummer skal også tillates."""
+        headers = self._get_with_origin("http://nuc.tommy.tv")
+        acao = headers.get("Access-Control-Allow-Origin", "")
+        self.assertEqual(acao, "http://nuc.tommy.tv")
+
     def test_localhost_origin_faar_acao_header(self):
         headers = self._get_with_origin("http://localhost:8880")
         acao = headers.get("Access-Control-Allow-Origin", "")
@@ -172,6 +178,23 @@ class BodySizeTests(unittest.TestCase):
         body = json.dumps({"accounts": [], "entries": []}).encode()
         code, _ = post(self.port, "/save", body)
         self.assertEqual(code, 200)
+
+    def test_manglende_content_length_avvises(self):
+        """POST /save uten Content-Length skal avvises med 400."""
+        body = json.dumps({"accounts": [], "entries": []}).encode()
+        req = Request(f"http://127.0.0.1:{self.port}/save", data=body, method="POST")
+        req.add_header("Content-Type", "application/json")
+        # urllib legger til Content-Length automatisk — vi overstyrer til tom verdi
+        # ved å lage en raw socket-forespørsel. Enklere: bruk http.client direkte.
+        import http.client
+        conn = http.client.HTTPConnection("127.0.0.1", self.port)
+        # send() omgår automatisk Content-Length-tillegg
+        conn.putrequest("POST", "/save")
+        conn.putheader("Content-Type", "application/json")
+        # Sender IKKE Content-Length — serveren skal avvise dette
+        conn.endheaders(body)
+        resp = conn.getresponse()
+        self.assertEqual(resp.status, 400)
 
 
 class AtomicWriteTests(unittest.TestCase):

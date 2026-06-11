@@ -35,7 +35,11 @@ class Handler(BaseHTTPRequestHandler):
         if self.path != '/save':
             self._respond(404, 'Not found')
             return
-        length = int(self.headers.get('Content-Length', 0))
+        cl_header = self.headers.get('Content-Length')
+        if cl_header is None:
+            self._respond(400, 'Content-Length påkrevd')
+            return
+        length = int(cl_header)
         if length > MAX_BODY:
             self._respond(413, 'Forespørsel for stor')
             return
@@ -66,7 +70,10 @@ class Handler(BaseHTTPRequestHandler):
                     json.dump(data, f, indent=2, ensure_ascii=False)
                 os.replace(tmp_path, DATA_FILE)
             except Exception:
-                os.unlink(tmp_path)
+                try:
+                    os.unlink(tmp_path)
+                except OSError:
+                    pass
                 raise
             self._respond(200, 'Lagret')
         except json.JSONDecodeError:
