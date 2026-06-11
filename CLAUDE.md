@@ -38,7 +38,7 @@
 ## Tjenester (Docker Compose)
 - **nginx** — Serverer statiske filer, port 8880
 - **cloudflared** — Cloudflare Tunnel til tommytv.no
-- **sparing-api** — Python REST API for porteføljedata (port 8881), leser/skriver sparing-data.json
+- **sparing-api** — Python REST API for porteføljedata (port 8881), leser/skriver sparing-data.json. CORS begrenset til tommytv.no + LAN-origins (localhost, 127.0.0.1, nuc.tommy.tv, 192.168.x.x, 10.x.x.x, 172.16–31.x.x). POST /save krever Content-Length og valid JSON med `accounts` og `entries` felter.
 - **status-api** — Read-only JSON-API mot `~/status-data/status.db` (port 8882, proxy via nginx som `/status-api/`). Endepunkter: `/api/apps`, `/api/overview`, `/api/app/<slug>`, `/api/series/<slug>/<metric>`, `/api/shadow-modes`, `/api/job-metrics`, `/api/triage-24h?hours=<n>` (triage-classifier-resultater for siste n timer, default 24). Kilder: misc-scripts/status/
 
 ## Dashboard-tjenester (index.html)
