@@ -253,5 +253,45 @@ class HealthEndpointTests(unittest.TestCase):
         self.assertEqual(code, 404)
 
 
+class BackupRotationTests(unittest.TestCase):
+    """Verifiser at backup-rotasjon oppretter filer og beholder maks 50."""
+
+    def setUp(self):
+        self.tmp = tempfile.TemporaryDirectory()
+        self.data_file = os.path.join(self.tmp.name, "sparing-data.json")
+        self.backup_dir = os.path.join(self.tmp.name, "backups")
+        with open(self.data_file, "w") as f:
+            json.dump({"accounts": [], "entries": []}, f)
+        self.server, self.port = start_server(self.data_file, self.backup_dir)
+
+    def tearDown(self):
+        self.server.shutdown()
+        self.tmp.cleanup()
+
+    def _save(self, accounts=None):
+        body = json.dumps({"accounts": accounts or [], "entries": []}).encode()
+        code, _ = post(self.port, "/save", body)
+        self.assertEqual(code, 200)
+
+    def test_backup_opprettes_ved_lagring(self):
+        """Første POST /save skal opprette én backup av eksisterende fil."""
+        self._save(["konto1"])
+        backups = os.listdir(self.backup_dir)
+        self.assertEqual(len(backups), 1)
+        self.assertTrue(backups[0].startswith("sparing-data."))
+
+    def test_maks_50_backups_beholdes(self):
+        """Etter 51 lagringer skal kun 50 backups bevares."""
+        import time
+        for i in range(51):
+            self._save([f"konto-{i}"])
+            time.sleep(0.01)
+        backups = [
+            f for f in os.listdir(self.backup_dir)
+            if f.startswith("sparing-data.")
+        ]
+        self.assertLessEqual(len(backups), 50)
+
+
 if __name__ == "__main__":
     unittest.main()
