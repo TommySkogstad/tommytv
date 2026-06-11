@@ -8,6 +8,7 @@ import sqlite3
 import sys
 import tempfile
 import unittest
+from datetime import date, timedelta
 from pathlib import Path
 
 HERE = Path(__file__).resolve().parent
@@ -101,7 +102,8 @@ class JobMetricsTests(unittest.TestCase):
         # Skriv via egen tilkobling (open_ro er read-only).
         with sqlite3.connect(self.db_path) as wconn:
             self._create_table(wconn)
-            self._insert(wconn, "issue-triage", "2026-05-20", runs=5, fails=1)
+            day = (date.today() - timedelta(days=1)).isoformat()
+            self._insert(wconn, "issue-triage", day, runs=5, fails=1)
             wconn.commit()
 
         conn = self.api.open_ro()
@@ -124,28 +126,33 @@ class JobMetricsTests(unittest.TestCase):
         self.assertEqual(point["fails"], 1)
 
     def test_q_job_metrics_sorterer_eldst_forst(self) -> None:
+        day_new = (date.today() - timedelta(days=1)).isoformat()
+        day_mid = (date.today() - timedelta(days=2)).isoformat()
+        day_old = (date.today() - timedelta(days=3)).isoformat()
         with sqlite3.connect(self.db_path) as wconn:
             self._create_table(wconn)
-            self._insert(wconn, "issue-triage", "2026-05-20")
-            self._insert(wconn, "issue-triage", "2026-05-18")
-            self._insert(wconn, "issue-triage", "2026-05-19")
+            self._insert(wconn, "issue-triage", day_new)
+            self._insert(wconn, "issue-triage", day_old)
+            self._insert(wconn, "issue-triage", day_mid)
             wconn.commit()
 
         conn = self.api.open_ro()
         try:
-            result = self.api.q_job_metrics(conn, job="issue-triage", days=365)
+            result = self.api.q_job_metrics(conn, job="issue-triage", days=7)
         finally:
             conn.close()
 
         days = [p["day"] for p in result["points"]]
-        self.assertEqual(days, ["2026-05-18", "2026-05-19", "2026-05-20"])
+        self.assertEqual(days, [day_old, day_mid, day_new])
 
     def test_q_job_metrics_list_returnerer_distinkte_jobnavn(self) -> None:
+        day0 = (date.today() - timedelta(days=1)).isoformat()
+        day1 = (date.today() - timedelta(days=2)).isoformat()
         with sqlite3.connect(self.db_path) as wconn:
             self._create_table(wconn)
-            self._insert(wconn, "issue-triage", "2026-05-20")
-            self._insert(wconn, "guardian", "2026-05-20")
-            self._insert(wconn, "issue-triage", "2026-05-19")
+            self._insert(wconn, "issue-triage", day0)
+            self._insert(wconn, "guardian", day0)
+            self._insert(wconn, "issue-triage", day1)
             wconn.commit()
 
         conn = self.api.open_ro()
