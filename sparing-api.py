@@ -1,19 +1,45 @@
 #!/usr/bin/env python3
 """Tiny save API for sparing-data.json. LAN-only."""
-import json, os, shutil
+import json, os, re, shutil, tempfile
 from http.server import HTTPServer, BaseHTTPRequestHandler
 from datetime import datetime
 
-DATA_FILE = '/data/sparing-data.json'
-BACKUP_DIR = '/data/backups'
+DATA_FILE = os.environ.get('SPARING_DATA_FILE', '/data/sparing-data.json')
+BACKUP_DIR = os.environ.get('SPARING_BACKUP_DIR', '/data/backups')
+MAX_BODY = 1_048_576  # 1 MB
+
+# Origins tillatt via CORS. Ukjente origins får ingen ACAO-header.
+_CORS_ALLOWLIST = [
+    re.compile(r'^https://tommytv\.no$'),
+    re.compile(r'^http://localhost(:\d+)?$'),
+    re.compile(r'^http://127\.0\.0\.1(:\d+)?$'),
+    re.compile(r'^http://nuc\.tommy\.tv(:\d+)?$'),
+    re.compile(r'^http://192\.168\.\d+\.\d+(:\d+)?$'),
+    re.compile(r'^http://10\.\d+\.\d+\.\d+(:\d+)?$'),
+    re.compile(r'^http://172\.(1[6-9]|2\d|3[01])\.\d+\.\d+(:\d+)?$'),
+]
+
+
+def _allowed_origin(origin: str | None) -> str | None:
+    """Returner origin hvis den er i allowlisten, ellers None."""
+    if not origin:
+        return None
+    for pattern in _CORS_ALLOWLIST:
+        if pattern.match(origin):
+            return origin
+    return None
+
 
 class Handler(BaseHTTPRequestHandler):
     def do_POST(self):
         if self.path != '/save':
             self._respond(404, 'Not found')
             return
+        length = int(self.headers.get('Content-Length', 0))
+        if length > MAX_BODY:
+            self._respond(413, 'Forespørsel for stor')
+            return
         try:
-            length = int(self.headers.get('Content-Length', 0))
             body = self.rfile.read(length)
             data = json.loads(body)
             if 'accounts' not in data or 'entries' not in data:
@@ -31,8 +57,17 @@ class Handler(BaseHTTPRequestHandler):
                 )
                 for old in backups[50:]:
                     os.remove(os.path.join(BACKUP_DIR, old))
-            with open(DATA_FILE, 'w') as f:
-                json.dump(data, f, indent=2, ensure_ascii=False)
+            # Atomisk skriving: temp-fil i samme katalog + os.replace
+            data_dir = os.path.dirname(DATA_FILE)
+            os.makedirs(data_dir, exist_ok=True)
+            fd, tmp_path = tempfile.mkstemp(dir=data_dir, suffix='.tmp')
+            try:
+                with os.fdopen(fd, 'w') as f:
+                    json.dump(data, f, indent=2, ensure_ascii=False)
+                os.replace(tmp_path, DATA_FILE)
+            except Exception:
+                os.unlink(tmp_path)
+                raise
             self._respond(200, 'Lagret')
         except json.JSONDecodeError:
             self._respond(400, 'Ugyldig JSON')
@@ -46,9 +81,11 @@ class Handler(BaseHTTPRequestHandler):
             try:
                 with open(DATA_FILE) as f:
                     data = f.read()
+                origin = _allowed_origin(self.headers.get('Origin'))
                 self.send_response(200)
                 self.send_header('Content-Type', 'application/json')
-                self.send_header('Access-Control-Allow-Origin', '*')
+                if origin:
+                    self.send_header('Access-Control-Allow-Origin', origin)
                 self.send_header('Cache-Control', 'no-cache')
                 self.end_headers()
                 self.wfile.write(data.encode())
@@ -58,17 +95,21 @@ class Handler(BaseHTTPRequestHandler):
             self._respond(404, 'Not found')
 
     def _respond(self, code, msg):
+        origin = _allowed_origin(self.headers.get('Origin'))
         self.send_response(code)
         self.send_header('Content-Type', 'application/json')
-        self.send_header('Access-Control-Allow-Origin', '*')
+        if origin:
+            self.send_header('Access-Control-Allow-Origin', origin)
         self.end_headers()
         self.wfile.write(json.dumps({'status': msg}).encode())
 
     def do_OPTIONS(self):
+        origin = _allowed_origin(self.headers.get('Origin'))
         self.send_response(204)
-        self.send_header('Access-Control-Allow-Origin', '*')
-        self.send_header('Access-Control-Allow-Methods', 'POST, GET, OPTIONS')
-        self.send_header('Access-Control-Allow-Headers', 'Content-Type')
+        if origin:
+            self.send_header('Access-Control-Allow-Origin', origin)
+            self.send_header('Access-Control-Allow-Methods', 'POST, GET, OPTIONS')
+            self.send_header('Access-Control-Allow-Headers', 'Content-Type')
         self.end_headers()
 
     def log_message(self, fmt, *args):
