@@ -24,13 +24,14 @@ services:
           cpus: '0.25'
 
   nginx:
-    image: nginx:alpine
+    build:
+      context: .
+      dockerfile: Dockerfile.nginx
     restart: unless-stopped
     ports:
       - "8880:80"
     volumes:
       - ./public:/usr/share/nginx/html:ro
-      - ./nginx.conf:/etc/nginx/nginx.conf:ro
     extra_hosts:
       - "host.docker.internal:host-gateway"
     healthcheck:
@@ -48,13 +49,11 @@ services:
           cpus: '0.10'
 
   sparing-api:
-    image: python:3.12-alpine
+    build:
+      context: .
+      dockerfile: Dockerfile.sparing-api
     restart: unless-stopped
-    command: python /app/sparing-api.py
-    environment:
-      SPARING_API_TOKEN: ${SPARING_API_TOKEN:?Sett SPARING_API_TOKEN i .env}
     volumes:
-      - ./sparing-api.py:/app/sparing-api.py:ro
       - ./public/sparing-data.json:/data/sparing-data.json
       - sparing-backups:/data/backups
     healthcheck:
@@ -72,15 +71,15 @@ services:
           cpus: '0.05'
 
   status-api:
-    image: python:3.12-alpine
+    build:
+      context: .
+      dockerfile: Dockerfile.status-api
     restart: unless-stopped
-    command: python /app/status-api.py
     environment:
       STATUS_DB: /data/status.db
       STATUS_API_PORT: "8882"
       TRIAGE_LOG_DIR: /triage-logs
     volumes:
-      - ./status-api.py:/app/status-api.py:ro
       # RW-mount kreves fordi SQLite WAL må kunne opprette -wal/-shm.
       # PRAGMA query_only = 1 i status-api.py hindrer skrive-operasjoner.
       - ${STATUS_DATA_DIR:-/home/terminator/status-data}:/data
