@@ -33,6 +33,7 @@
   - `logo.svg` — SVG-tekstlogo med gradient (Tommy=blå gradient, TV=hvit)
 - `nginx.conf` — Nginx-konfigurasjon (git-crypt-kryptert)
 - `docker-compose.yml` — Cloudflared + Nginx + sparing-api, port 8880 eksponert for LAN
+- `.env.example` — Eksempel på environment-variabler: `CLOUDFLARE_TUNNEL_TOKEN` og `SPARING_API_TOKEN`
 - `.env` — Hemmeligheter (git-ignorert, git-crypt-kryptert): `CLOUDFLARE_TUNNEL_TOKEN` for Tunnel, `SPARING_API_TOKEN` for sparing-api Bearer-auth
 
 ## Tjenester (Docker Compose)
