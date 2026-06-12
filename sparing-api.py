@@ -73,20 +73,22 @@ class Handler(BaseHTTPRequestHandler):
                 )
                 for old in backups[50:]:
                     os.remove(os.path.join(BACKUP_DIR, old))
-            # Atomisk skriving: temp-fil i samme katalog + os.replace
+            # DATA_FILE er en enkeltfil-bind-mount (mountpoint) i prod, så
+            # os.replace over den feiler (EBUSY/EXDEV). Serialiser til temp-fil
+            # først (fanger JSON-feil før originalen røres), kopier så innholdet
+            # in-place med copyfile. Backup er allerede tatt over.
             data_dir = os.path.dirname(DATA_FILE)
             os.makedirs(data_dir, exist_ok=True)
             fd, tmp_path = tempfile.mkstemp(dir=data_dir, suffix='.tmp')
             try:
                 with os.fdopen(fd, 'w') as f:
                     json.dump(data, f, indent=2, ensure_ascii=False)
-                os.replace(tmp_path, DATA_FILE)
-            except Exception:
+                shutil.copyfile(tmp_path, DATA_FILE)
+            finally:
                 try:
                     os.unlink(tmp_path)
                 except OSError:
                     pass
-                raise
             self._respond(200, 'Lagret')
         except json.JSONDecodeError:
             self._respond(400, 'Ugyldig JSON')
