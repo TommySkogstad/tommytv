@@ -354,7 +354,8 @@ if (location.hostname === 'tommytv.no') throw new Error('LAN only');
 /* ── State ── */
 let DATA = null;
 const isLAN = true;
-const API_BASE = location.protocol + '//' + location.hostname + ':8881';
+const API_BASE = '/sparing-api';
+const SPARING_API_TOKEN = localStorage.getItem('sparing_api_token') || '';
 const MONTH_NAMES = ['jan','feb','mar','apr','mai','jun','jul','aug','sep','okt','nov','des'];
 const CHILD_NAMES = {
     'ask_odin_global_d': 'ODIN Global D',
@@ -1384,7 +1385,7 @@ function updateTargetType(select) {
 function saveAllocationTargets() {
     fetch(API_BASE + '/save', {
         method: 'POST',
-        headers: {'Content-Type': 'application/json'},
+        headers: {'Content-Type': 'application/json', 'Authorization': 'Bearer ' + SPARING_API_TOKEN},
         body: JSON.stringify(DATA)
     }).then(function() { toast('Mål oppdatert'); })
     .catch(function() { toast('Kunne ikke lagre', true); });
@@ -1869,7 +1870,7 @@ function addAccount() {
 function saveData() {
     fetch(API_BASE + '/save', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + SPARING_API_TOKEN },
         body: JSON.stringify(DATA)
     }).then(function(r) {
         if (r.ok) {

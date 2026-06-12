@@ -15,12 +15,14 @@ from urllib.error import HTTPError
 from urllib.request import Request, urlopen
 
 HERE = Path(__file__).resolve().parent
+_TEST_TOKEN = "test-token-123"
 
 
-def start_server(data_file: str, backup_dir: str) -> tuple:
-    """Start sparing-api på en tilfeldig port. Returnerer (server, port, thread)."""
+def start_server(data_file: str, backup_dir: str, api_token: str = _TEST_TOKEN) -> tuple:
+    """Start sparing-api på en tilfeldig port. Returnerer (server, port)."""
     os.environ["SPARING_DATA_FILE"] = data_file
     os.environ["SPARING_BACKUP_DIR"] = backup_dir
+    os.environ["SPARING_API_TOKEN"] = api_token
 
     # Last modulen på nytt per test (unngå cachede env-verdier).
     spec = importlib.util.spec_from_file_location("sparing_api_mod", HERE / "sparing-api.py")
@@ -129,6 +131,7 @@ class CORSAllowlistTests(unittest.TestCase):
         req = Request(f"http://127.0.0.1:{self.port}/save", data=body, method="POST")
         req.add_header("Content-Type", "application/json")
         req.add_header("Origin", "https://evil.example.com")
+        req.add_header("Authorization", f"Bearer {_TEST_TOKEN}")
         with urlopen(req) as r:
             headers = dict(r.headers)
         acao = headers.get("Access-Control-Allow-Origin", "")
@@ -166,6 +169,7 @@ class BodySizeTests(unittest.TestCase):
         req = Request(f"http://127.0.0.1:{self.port}/save", data=stor_body, method="POST")
         req.add_header("Content-Type", "application/json")
         req.add_header("Content-Length", str(len(stor_body)))
+        req.add_header("Authorization", f"Bearer {_TEST_TOKEN}")
         try:
             with urlopen(req) as r:
                 status = r.status
@@ -176,7 +180,7 @@ class BodySizeTests(unittest.TestCase):
     def test_normal_body_godtas(self):
         """Normal-størrelse body under MAX_BODY skal godtas."""
         body = json.dumps({"accounts": [], "entries": []}).encode()
-        code, _ = post(self.port, "/save", body)
+        code, _ = post(self.port, "/save", body, {"Authorization": f"Bearer {_TEST_TOKEN}"})
         self.assertEqual(code, 200)
 
     def test_manglende_content_length_avvises(self):
@@ -191,6 +195,7 @@ class BodySizeTests(unittest.TestCase):
         # send() omgår automatisk Content-Length-tillegg
         conn.putrequest("POST", "/save")
         conn.putheader("Content-Type", "application/json")
+        conn.putheader("Authorization", f"Bearer {_TEST_TOKEN}")
         # Sender IKKE Content-Length — serveren skal avvise dette
         conn.endheaders(body)
         resp = conn.getresponse()
@@ -215,7 +220,7 @@ class AtomicWriteTests(unittest.TestCase):
         """POST /save skal skrive ny data til filen."""
         ny_data = {"accounts": ["ny_konto"], "entries": [{"beloep": 1000}]}
         body = json.dumps(ny_data).encode()
-        code, _ = post(self.port, "/save", body)
+        code, _ = post(self.port, "/save", body, {"Authorization": f"Bearer {_TEST_TOKEN}"})
         self.assertEqual(code, 200)
 
         with open(self.data_file) as f:
@@ -224,7 +229,7 @@ class AtomicWriteTests(unittest.TestCase):
 
     def test_post_ugyldig_json_beholder_gammel_fil(self):
         """POST /save med ugyldig JSON skal ikke overskrive eksisterende data."""
-        code, _ = post(self.port, "/save", b"ikke-json{")
+        code, _ = post(self.port, "/save", b"ikke-json{", {"Authorization": f"Bearer {_TEST_TOKEN}"})
         self.assertEqual(code, 400)
 
         with open(self.data_file) as f:
@@ -270,7 +275,7 @@ class BackupRotationTests(unittest.TestCase):
 
     def _save(self, accounts=None):
         body = json.dumps({"accounts": accounts or [], "entries": []}).encode()
-        code, _ = post(self.port, "/save", body)
+        code, _ = post(self.port, "/save", body, {"Authorization": f"Bearer {_TEST_TOKEN}"})
         self.assertEqual(code, 200)
 
     def test_backup_opprettes_ved_lagring(self):
@@ -291,6 +296,60 @@ class BackupRotationTests(unittest.TestCase):
             if f.startswith("sparing-data.")
         ]
         self.assertLessEqual(len(backups), 50)
+
+
+class TokenAuthTests(unittest.TestCase):
+    """Verifiser at POST /save krever gyldig Bearer-token (fail-closed)."""
+
+    _TOKEN = "supersecret-auth-token"
+
+    def setUp(self):
+        self.tmp = tempfile.TemporaryDirectory()
+        self.data_file = os.path.join(self.tmp.name, "sparing-data.json")
+        self.backup_dir = os.path.join(self.tmp.name, "backups")
+        with open(self.data_file, "w") as f:
+            json.dump({"accounts": [], "entries": []}, f)
+        self.server, self.port = start_server(
+            self.data_file, self.backup_dir, api_token=self._TOKEN
+        )
+
+    def tearDown(self):
+        self.server.shutdown()
+        self.tmp.cleanup()
+
+    def _valid_body(self) -> bytes:
+        return json.dumps({"accounts": [], "entries": []}).encode()
+
+    def test_post_save_uten_token_returnerer_401(self):
+        """POST /save uten Authorization-header skal gi 401."""
+        code, _ = post(self.port, "/save", self._valid_body())
+        self.assertEqual(code, 401)
+
+    def test_post_save_med_feil_token_returnerer_401(self):
+        """POST /save med feil Bearer-token skal gi 401."""
+        code, _ = post(self.port, "/save", self._valid_body(),
+                       {"Authorization": "Bearer feil-token-xyz"})
+        self.assertEqual(code, 401)
+
+    def test_post_save_med_riktig_token_returnerer_200(self):
+        """POST /save med korrekt Bearer-token skal gi 200."""
+        code, _ = post(self.port, "/save", self._valid_body(),
+                       {"Authorization": f"Bearer {self._TOKEN}"})
+        self.assertEqual(code, 200)
+
+    def test_401_returneres_foer_backup_opprettes(self):
+        """POST /save med feil token skal ikke opprette backup."""
+        code, _ = post(self.port, "/save", self._valid_body(),
+                       {"Authorization": "Bearer feil-token-xyz"})
+        self.assertEqual(code, 401)
+        backup_count = 0
+        if os.path.exists(self.backup_dir):
+            backup_count = len([
+                f for f in os.listdir(self.backup_dir)
+                if f.startswith("sparing-data.")
+            ])
+        self.assertEqual(backup_count, 0,
+                         "Ingen backup skal opprettes ved ugyldig token")
 
 
 if __name__ == "__main__":
