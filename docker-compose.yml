@@ -51,12 +51,12 @@ services:
     image: python:3.12-alpine
     restart: unless-stopped
     command: python /app/sparing-api.py
+    environment:
+      SPARING_API_TOKEN: ${SPARING_API_TOKEN:?Sett SPARING_API_TOKEN i .env}
     volumes:
       - ./sparing-api.py:/app/sparing-api.py:ro
       - ./public/sparing-data.json:/data/sparing-data.json
       - sparing-backups:/data/backups
-    ports:
-      - "8881:8881"
     healthcheck:
       test: ["CMD-SHELL", "wget -q --spider http://127.0.0.1:8881/health || exit 1"]
       interval: 30s

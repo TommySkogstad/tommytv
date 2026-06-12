@@ -1,12 +1,13 @@
 #!/usr/bin/env python3
 """Tiny save API for sparing-data.json. LAN-only."""
-import json, os, re, shutil, tempfile
+import hmac, json, os, re, shutil, tempfile
 from http.server import HTTPServer, BaseHTTPRequestHandler
 from datetime import datetime
 
 DATA_FILE = os.environ.get('SPARING_DATA_FILE', '/data/sparing-data.json')
 BACKUP_DIR = os.environ.get('SPARING_BACKUP_DIR', '/data/backups')
 MAX_BODY = 1_048_576  # 1 MB
+API_TOKEN = os.environ.get('SPARING_API_TOKEN')
 
 # Origins tillatt via CORS. Ukjente origins får ingen ACAO-header.
 _CORS_ALLOWLIST = [
@@ -31,9 +32,20 @@ def _allowed_origin(origin: str | None) -> str | None:
 
 
 class Handler(BaseHTTPRequestHandler):
+    def _authorized(self) -> bool:
+        if not API_TOKEN:
+            return False  # fail-closed: ingen token konfigurert
+        auth = self.headers.get('Authorization', '')
+        if not auth.startswith('Bearer '):
+            return False
+        return hmac.compare_digest(auth[7:].strip(), API_TOKEN)
+
     def do_POST(self):
         if self.path != '/save':
             self._respond(404, 'Not found')
+            return
+        if not self._authorized():
+            self._respond(401, 'Ugyldig eller manglende token')
             return
         cl_header = self.headers.get('Content-Length')
         if cl_header is None:
@@ -116,7 +128,7 @@ class Handler(BaseHTTPRequestHandler):
         if origin:
             self.send_header('Access-Control-Allow-Origin', origin)
             self.send_header('Access-Control-Allow-Methods', 'POST, GET, OPTIONS')
-            self.send_header('Access-Control-Allow-Headers', 'Content-Type')
+            self.send_header('Access-Control-Allow-Headers', 'Content-Type, Authorization')
         self.end_headers()
 
     def log_message(self, fmt, *args):
