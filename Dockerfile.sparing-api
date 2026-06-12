@@ -1,0 +1,4 @@
+FROM python:3.12-alpine
+WORKDIR /app
+COPY sparing-api.py .
+CMD ["python", "sparing-api.py"]
