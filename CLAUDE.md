@@ -37,10 +37,10 @@
 - `.env` — Hemmeligheter (git-crypt-kryptert): `CLOUDFLARE_TUNNEL_TOKEN` for Tunnel. (`SPARING_API_TOKEN` er utfaset — sparing bruker nå Cloudflare Access, ikke Bearer-token; env-en kan fjernes ved neste opprydding.)
 
 ## Tjenester (Docker Compose)
-- **nginx** — Serverer statiske filer, port 8880
+- **nginx** — Bygges via `Dockerfile.nginx` (COPY `nginx.conf`), serverer statiske filer, port 8880
 - **cloudflared** — Cloudflare Tunnel til tommytv.no
-- **sparing-api** — Python REST API for porteføljedata (port 8881), leser/skriver sparing-data.json. **Auth: Cloudflare Access** foran `sparing.tommytv.no`. Sparing serveres på en intern nginx-port (`:8081`) som IKKE er host-publisert, så eneste vei inn er `sparing.tommytv.no` → CF Access → tunnel → `nginx:8081` → sparing-api. Ingen Bearer-token lenger; LAN-direkte (`:8880/sparing.html`) redirigeres til `sparing.tommytv.no`. POST /save krever Content-Length og valid JSON med `accounts` og `entries`. CORS-allowlist beholdt (tommytv.no + LAN-origins) som ekstra lag.
-- **status-api** — Read-only JSON-API mot `~/status-data/status.db` (port 8882, proxy via nginx som `/status-api/`). Endepunkter: `/api/apps`, `/api/overview`, `/api/app/<slug>`, `/api/series/<slug>/<metric>`, `/api/shadow-modes`, `/api/job-metrics`, `/api/triage-24h?hours=<n>` (triage-classifier-resultater for siste n timer, default 24). Kilder: misc-scripts/status/
+- **sparing-api** — Bygges via `Dockerfile.sparing-api` (COPY `sparing-api.py`), Python REST API for porteføljedata (port 8881), leser/skriver sparing-data.json. **Auth: Cloudflare Access** foran `sparing.tommytv.no`. Sparing serveres på en intern nginx-port (`:8081`) som IKKE er host-publisert, så eneste vei inn er `sparing.tommytv.no` → CF Access → tunnel → `nginx:8081` → sparing-api. Ingen Bearer-token lenger; LAN-direkte (`:8880/sparing.html`) redirigeres til `sparing.tommytv.no`. POST /save krever Content-Length og valid JSON med `accounts` og `entries`. CORS-allowlist beholdt (tommytv.no + LAN-origins) som ekstra lag.
+- **status-api** — Bygges via `Dockerfile.status-api` (COPY `status-api.py`), read-only JSON-API mot `~/status-data/status.db` (port 8882, proxy via nginx som `/status-api/`). Endepunkter: `/api/apps`, `/api/overview`, `/api/app/<slug>`, `/api/series/<slug>/<metric>`, `/api/shadow-modes`, `/api/job-metrics`, `/api/triage-24h?hours=<n>` (triage-classifier-resultater for siste n timer, default 24). Kilder: misc-scripts/status/
 
 ## Dashboard-tjenester (index.html)
 Offentlige tjenester vist på dashboardet (seksjon "Offentlige tjenester"):
@@ -59,9 +59,10 @@ Offentlige tjenester vist på dashboardet (seksjon "Offentlige tjenester"):
 - **Grunnmur** — github.com/TommySkogstad/grunnmur
 
 ## Arkitektur
-- Nginx serverer statiske filer, cloudflared kobler til Cloudflare Tunnel
+- Tre tjenester bygges fra Dockerfiles (nginx, sparing-api, status-api) — config-filer og scripts COPY-es inn
+- `public/` katalog-mountes som read-only til nginx — inode-immun ved git pull/checkout
+- Cloudflared kobler nginx til Cloudflare Tunnel
 - Port 8880 eksponert på host for direkte LAN-tilgang
-- `public/` mountes som katalog (ikke enkeltfiler) — inode-immun ved git pull/checkout
 
 ## Navigasjon
 Navigasjonen har to varianter basert på `location.hostname`:
@@ -113,5 +114,5 @@ Bruk favicon fra tjenestens nettside: `<img src="https://tjeneste.com/favicon.ic
 - `badge-local` (blå) — Kun LAN
 
 ## Etter endringer
-Restart containere: `docker compose down && docker compose up -d`
-Katalog-mount (`public/`) er inode-immun — nginx leser endrede filer uten restart etter git pull.
+- Endringer i `public/` — nginx leser dem uten restart (inode-immun katalog-mount)
+- Endringer i `nginx.conf`, `sparing-api.py` eller `status-api.py` — rebuild: `docker compose down && docker compose up -d`
