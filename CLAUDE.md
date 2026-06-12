@@ -34,12 +34,12 @@
 - `nginx.conf` — Nginx-konfigurasjon (git-crypt-kryptert)
 - `docker-compose.yml` — Cloudflared + Nginx + sparing-api, port 8880 eksponert for LAN
 - `.env.example` — Eksempel på environment-variabler: `CLOUDFLARE_TUNNEL_TOKEN` og `SPARING_API_TOKEN`
-- `.env` — Hemmeligheter (git-ignorert, git-crypt-kryptert): `CLOUDFLARE_TUNNEL_TOKEN` for Tunnel, `SPARING_API_TOKEN` for sparing-api Bearer-auth
+- `.env` — Hemmeligheter (git-crypt-kryptert): `CLOUDFLARE_TUNNEL_TOKEN` for Tunnel. (`SPARING_API_TOKEN` er utfaset — sparing bruker nå Cloudflare Access, ikke Bearer-token; env-en kan fjernes ved neste opprydding.)
 
 ## Tjenester (Docker Compose)
 - **nginx** — Serverer statiske filer, port 8880
 - **cloudflared** — Cloudflare Tunnel til tommytv.no
-- **sparing-api** — Python REST API for porteføljedata (port 8881), leser/skriver sparing-data.json. CORS begrenset til tommytv.no + LAN-origins (localhost, 127.0.0.1, nuc.tommy.tv, 192.168.x.x, 10.x.x.x, 172.16–31.x.x). GET /data og /health krever ingen autentisering. POST /save krever `Authorization: Bearer <token>` header (token fra `.env` som `SPARING_API_TOKEN`), Content-Length og valid JSON med `accounts` og `entries` felter.
+- **sparing-api** — Python REST API for porteføljedata (port 8881), leser/skriver sparing-data.json. **Auth: Cloudflare Access** foran `sparing.tommytv.no`. Sparing serveres på en intern nginx-port (`:8081`) som IKKE er host-publisert, så eneste vei inn er `sparing.tommytv.no` → CF Access → tunnel → `nginx:8081` → sparing-api. Ingen Bearer-token lenger; LAN-direkte (`:8880/sparing.html`) redirigeres til `sparing.tommytv.no`. POST /save krever Content-Length og valid JSON med `accounts` og `entries`. CORS-allowlist beholdt (tommytv.no + LAN-origins) som ekstra lag.
 - **status-api** — Read-only JSON-API mot `~/status-data/status.db` (port 8882, proxy via nginx som `/status-api/`). Endepunkter: `/api/apps`, `/api/overview`, `/api/app/<slug>`, `/api/series/<slug>/<metric>`, `/api/shadow-modes`, `/api/job-metrics`, `/api/triage-24h?hours=<n>` (triage-classifier-resultater for siste n timer, default 24). Kilder: misc-scripts/status/
 
 ## Dashboard-tjenester (index.html)

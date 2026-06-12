@@ -298,59 +298,5 @@ class BackupRotationTests(unittest.TestCase):
         self.assertLessEqual(len(backups), 50)
 
 
-class TokenAuthTests(unittest.TestCase):
-    """Verifiser at POST /save krever gyldig Bearer-token (fail-closed)."""
-
-    _TOKEN = "supersecret-auth-token"
-
-    def setUp(self):
-        self.tmp = tempfile.TemporaryDirectory()
-        self.data_file = os.path.join(self.tmp.name, "sparing-data.json")
-        self.backup_dir = os.path.join(self.tmp.name, "backups")
-        with open(self.data_file, "w") as f:
-            json.dump({"accounts": [], "entries": []}, f)
-        self.server, self.port = start_server(
-            self.data_file, self.backup_dir, api_token=self._TOKEN
-        )
-
-    def tearDown(self):
-        self.server.shutdown()
-        self.tmp.cleanup()
-
-    def _valid_body(self) -> bytes:
-        return json.dumps({"accounts": [], "entries": []}).encode()
-
-    def test_post_save_uten_token_returnerer_401(self):
-        """POST /save uten Authorization-header skal gi 401."""
-        code, _ = post(self.port, "/save", self._valid_body())
-        self.assertEqual(code, 401)
-
-    def test_post_save_med_feil_token_returnerer_401(self):
-        """POST /save med feil Bearer-token skal gi 401."""
-        code, _ = post(self.port, "/save", self._valid_body(),
-                       {"Authorization": "Bearer feil-token-xyz"})
-        self.assertEqual(code, 401)
-
-    def test_post_save_med_riktig_token_returnerer_200(self):
-        """POST /save med korrekt Bearer-token skal gi 200."""
-        code, _ = post(self.port, "/save", self._valid_body(),
-                       {"Authorization": f"Bearer {self._TOKEN}"})
-        self.assertEqual(code, 200)
-
-    def test_401_returneres_foer_backup_opprettes(self):
-        """POST /save med feil token skal ikke opprette backup."""
-        code, _ = post(self.port, "/save", self._valid_body(),
-                       {"Authorization": "Bearer feil-token-xyz"})
-        self.assertEqual(code, 401)
-        backup_count = 0
-        if os.path.exists(self.backup_dir):
-            backup_count = len([
-                f for f in os.listdir(self.backup_dir)
-                if f.startswith("sparing-data.")
-            ])
-        self.assertEqual(backup_count, 0,
-                         "Ingen backup skal opprettes ved ugyldig token")
-
-
 if __name__ == "__main__":
     unittest.main()
