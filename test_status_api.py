@@ -605,6 +605,97 @@ class OverviewQueryTests(unittest.TestCase):
             conn.close()
         self.assertEqual(result, [])
 
+    def test_q_overview_health_24h_inneholder_rader_for_app_med_data(self) -> None:
+        """health_24h skal inneholde alle rader fra siste 24t (ikke bare den siste)."""
+        with sqlite3.connect(self.db_path) as conn:
+            conn.execute(
+                "INSERT INTO health_checks (app_slug, status, response_ms, ts) "
+                "VALUES ('app0','ok',10,datetime('now','-1 hour'))"
+            )
+            conn.execute(
+                "INSERT INTO health_checks (app_slug, status, response_ms, ts) "
+                "VALUES ('app0','ok',20,datetime('now','-30 minutes'))"
+            )
+            conn.commit()
+        self.api = load_status_api(self.db_path)
+
+        conn = self.api.open_ro()
+        try:
+            result = self.api.q_overview(conn, ["primary"])
+        finally:
+            conn.close()
+
+        app0 = next(r for r in result if r["slug"] == "app0")
+        self.assertEqual(len(app0["health_24h"]), 2)
+        for row in app0["health_24h"]:
+            self.assertIn("status", row)
+            self.assertIn("response_ms", row)
+            self.assertIn("ts", row)
+            self.assertNotIn("app_slug", row)
+
+    def test_q_overview_cloudflare_aggregerer_flere_hostnames(self) -> None:
+        """Cloudflare med to hostnames skal aggregeres til én rad per app."""
+        with sqlite3.connect(self.db_path) as conn:
+            conn.execute(
+                "INSERT INTO cloudflare_daily "
+                "(app_slug, date, requests, unique_visitors, cache_hit_pct, "
+                " errors_4xx, errors_5xx, hostname) "
+                "VALUES ('app0','2026-06-18',100,30,80.0,1,0,'a.no')"
+            )
+            conn.execute(
+                "INSERT INTO cloudflare_daily "
+                "(app_slug, date, requests, unique_visitors, cache_hit_pct, "
+                " errors_4xx, errors_5xx, hostname) "
+                "VALUES ('app0','2026-06-18',200,50,60.0,2,0,'b.no')"
+            )
+            conn.commit()
+        self.api = load_status_api(self.db_path)
+
+        conn = self.api.open_ro()
+        try:
+            result = self.api.q_overview(conn, ["primary"])
+        finally:
+            conn.close()
+
+        app0 = next(r for r in result if r["slug"] == "app0")
+        cf = app0["cloudflare"]
+        self.assertIsNotNone(cf)
+        self.assertEqual(cf["requests"], 300)
+        self.assertEqual(cf["tenant_count"], 2)
+        # Vektet snitt: (100×80 + 200×60) / 300 = 200/3 ≈ 66.67
+        self.assertAlmostEqual(cf["cache_hit_pct"], 66.67, places=1)
+
+    def test_q_overview_concerns_med_flere_severity_nivaaer(self) -> None:
+        """concerns-dict skal inneholde alle severity-nivåer med riktig telling."""
+        with sqlite3.connect(self.db_path) as conn:
+            conn.execute(
+                "INSERT INTO concerns (app_slug, status, severity, created_at) "
+                "VALUES ('app0','open','crit','2026-06-18T08:00:00')"
+            )
+            conn.execute(
+                "INSERT INTO concerns (app_slug, status, severity, created_at) "
+                "VALUES ('app0','open','crit','2026-06-18T08:01:00')"
+            )
+            conn.execute(
+                "INSERT INTO concerns (app_slug, status, severity, created_at) "
+                "VALUES ('app0','open','high','2026-06-18T08:02:00')"
+            )
+            conn.execute(
+                "INSERT INTO concerns (app_slug, status, severity, created_at) "
+                "VALUES ('app0','resolved','high','2026-06-18T08:03:00')"
+            )
+            conn.commit()
+        self.api = load_status_api(self.db_path)
+
+        conn = self.api.open_ro()
+        try:
+            result = self.api.q_overview(conn, ["primary"])
+        finally:
+            conn.close()
+
+        app0 = next(r for r in result if r["slug"] == "app0")
+        self.assertEqual(app0["concerns"], {"crit": 2, "high": 1})
+
 
 if __name__ == "__main__":
     unittest.main()
