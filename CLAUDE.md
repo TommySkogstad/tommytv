@@ -46,7 +46,6 @@ Offentlige tjenester vist på dashboardet (seksjon "Offentlige tjenester"):
 - **Biologportal** — portal.leienbiolog.no — Oppdragshåndtering for biologer
 - **Sameiet HWA 6-8-10** — 6810.no — Beboerportal
 - **Styreportal** — styreportal.leienbiolog.no — Multi-tenant styreportal
-- **BilagBot** — bilag.tommytv.no — AI-drevet bilagsscanner
 - **md2pdf** — md.tommytv.no
 - **Stirling PDF** — pdf.tommytv.no
 - **Ntfy** — ntfy.tommytv.no
