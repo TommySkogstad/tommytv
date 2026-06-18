@@ -509,5 +509,102 @@ class HttpEndpointTests(unittest.TestCase):
         self.assertEqual(code, 400)
 
 
+class OverviewQueryTests(unittest.TestCase):
+    """Verifiserer at q_overview bruker bulk-fetching (ikke N+1 per app).
+
+    Uten fix: 1 (q_apps) + N×10 = 51 kall for N=5 apper.
+    Med fix:  1 (q_apps) + 10 bulk-queries = ~11 kall uansett N.
+    """
+
+    class _CountingConn:
+        """Proxy-wrapper som teller conn.execute()-kall."""
+        def __init__(self, real: sqlite3.Connection):
+            self._real = real
+            self.call_count = 0
+
+        def execute(self, sql, params=()):
+            self.call_count += 1
+            return self._real.execute(sql, params)
+
+        def close(self):
+            self._real.close()
+
+    def setUp(self) -> None:
+        self.tmp = tempfile.NamedTemporaryFile(suffix=".db", delete=False)
+        self.tmp.close()
+        self.db_path = self.tmp.name
+        with sqlite3.connect(self.db_path) as conn:
+            _create_full_schema(conn)
+            for i in range(5):
+                conn.execute(
+                    "INSERT INTO apps (slug, display_name, tier) VALUES (?,?,?)",
+                    (f"app{i}", f"App {i}", "primary"),
+                )
+            conn.commit()
+        self.api = load_status_api(self.db_path)
+
+    def tearDown(self) -> None:
+        os.unlink(self.db_path)
+
+    def test_q_overview_bruker_bulk_fetch_ikke_n_pluss_1(self) -> None:
+        """Med N=5 apper skal q_overview gjøre ≤15 DB-kall, ikke N×10=50+1."""
+        real_conn = self.api.open_ro()
+        counting = self._CountingConn(real_conn)
+        try:
+            result = self.api.q_overview(counting, ["primary"])
+        finally:
+            counting.close()
+
+        self.assertEqual(len(result), 5, "Skal returnere alle 5 apper")
+        MAX_QUERIES = 15
+        self.assertLessEqual(
+            counting.call_count, MAX_QUERIES,
+            f"Forventet ≤{MAX_QUERIES} DB-kall (bulk-fetching), "
+            f"fikk {counting.call_count}. N+1-mønster ikke eliminert."
+        )
+
+    def test_q_overview_returnerer_korrekte_felt_for_app_med_data(self) -> None:
+        """Bulk-refaktorering skal returnere identisk struktur som originalkode."""
+        with sqlite3.connect(self.db_path) as conn:
+            conn.execute(
+                "INSERT INTO health_checks (app_slug, status, response_ms, ts) "
+                "VALUES ('app0','ok',42,'2026-06-18T10:00:00')"
+            )
+            conn.execute(
+                "INSERT INTO deploys (app_slug, commit_sha, status, ts, slot) "
+                "VALUES ('app0','abc123','success','2026-06-18T09:00:00','blue')"
+            )
+            conn.execute(
+                "INSERT INTO concerns (app_slug, status, severity, created_at) "
+                "VALUES ('app0','open','high','2026-06-18T08:00:00')"
+            )
+            conn.commit()
+        self.api = load_status_api(self.db_path)
+
+        conn = self.api.open_ro()
+        try:
+            result = self.api.q_overview(conn, ["primary"])
+        finally:
+            conn.close()
+
+        app0 = next(r for r in result if r["slug"] == "app0")
+        self.assertEqual(app0["health"]["status"], "ok")
+        self.assertEqual(app0["health"]["response_ms"], 42)
+        self.assertEqual(app0["last_deploy"]["commit_sha"], "abc123")
+        self.assertEqual(app0["last_deploy"]["status"], "success")
+        self.assertEqual(app0["concerns"], {"high": 1})
+        self.assertIsNone(app0["github"])
+        self.assertIsNone(app0["cloudflare"])
+        self.assertEqual(app0["plans"], {})
+
+    def test_q_overview_tom_liste_uten_apper(self) -> None:
+        conn = self.api.open_ro()
+        try:
+            result = self.api.q_overview(conn, ["finnes-ikke"])
+        finally:
+            conn.close()
+        self.assertEqual(result, [])
+
+
 if __name__ == "__main__":
     unittest.main()

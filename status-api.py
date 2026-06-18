@@ -78,73 +78,110 @@ def q_apps(conn, tiers: list[str] | None) -> list[dict]:
 
 def q_overview(conn, tiers: list[str]) -> list[dict]:
     apps = q_apps(conn, tiers)
-    out = []
-    for a in apps:
-        slug = a["slug"]
-        latest_health = conn.execute(
-            "SELECT status, response_ms, ts FROM health_checks WHERE app_slug = ? "
-            "ORDER BY ts DESC LIMIT 1", (slug,)).fetchone()
-        latest_deploy = conn.execute(
-            "SELECT commit_sha, status, ts, slot FROM deploys WHERE app_slug = ? "
-            "ORDER BY ts DESC LIMIT 1", (slug,)).fetchone()
-        latest_gh = conn.execute(
-            "SELECT open_prs, draft_prs, open_issues, dependabot_alerts, ci_status, "
-            "last_commit_sha, last_commit_ts FROM github_snapshots "
-            "WHERE app_slug = ? ORDER BY ts DESC LIMIT 1", (slug,)).fetchone()
-        # Aggreger over alle tenants (hostnames) for siste tilgjengelige dato
-        latest_cf = conn.execute(
-            "SELECT date, SUM(requests) AS requests, SUM(unique_visitors) AS unique_visitors, "
-            "CASE WHEN SUM(requests) > 0 "
-            "     THEN ROUND(SUM(requests * cache_hit_pct / 100.0) * 100.0 / SUM(requests), 2) "
-            "     ELSE NULL END AS cache_hit_pct, "
-            "SUM(errors_4xx) AS errors_4xx, SUM(errors_5xx) AS errors_5xx, "
-            "COUNT(DISTINCT hostname) AS tenant_count "
-            "FROM cloudflare_daily WHERE app_slug = ? "
-            "AND date = (SELECT MAX(date) FROM cloudflare_daily WHERE app_slug = ?) "
-            "GROUP BY date", (slug, slug)).fetchone()
-        latest_lh = conn.execute(
-            "SELECT performance, accessibility, best_practices, seo, ts "
-            "FROM lighthouse_scores WHERE app_slug = ? "
-            "ORDER BY ts DESC LIMIT 1", (slug,)).fetchone()
-        latest_tls = conn.execute(
-            "SELECT domain, days_until_expiry, expires_at FROM tls_checks "
-            "WHERE app_slug = ? ORDER BY ts DESC LIMIT 1", (slug,)).fetchone()
-        latest_backup = conn.execute(
-            "SELECT status, ts, detail FROM backups WHERE app_slug = ? "
-            "ORDER BY ts DESC LIMIT 1", (slug,)).fetchone()
+    if not apps:
+        return []
 
-        concerns = rows_to_dicts(conn.execute(
-            "SELECT severity, COUNT(*) AS n FROM concerns WHERE app_slug = ? "
-            "AND status != 'resolved' GROUP BY severity", (slug,)))
-        plans = rows_to_dicts(conn.execute(
-            "SELECT status, COUNT(*) AS n FROM plans WHERE app_slug = ? "
-            "AND status NOT IN ('done','cancelled') GROUP BY status", (slug,)))
+    slugs = [a["slug"] for a in apps]
+    ph = ",".join(["?"] * len(slugs))
 
-        # Siste 24t helse-trend (opp/ned ratio) for sparkline
-        health_24h = rows_to_dicts(conn.execute(
-            "SELECT status, response_ms, ts FROM health_checks "
-            "WHERE app_slug = ? AND ts > datetime('now','-1 day') "
-            "ORDER BY ts", (slug,)))
+    def _latest_map(table: str, cols: str, order_col: str = "ts") -> dict:
+        """Hent siste rad per app_slug fra en tabell i én bulk-query."""
+        tcols = ", ".join(f"t.{c.strip()}" for c in cols.split(","))
+        result: dict = {}
+        for row in conn.execute(
+            f"SELECT t.app_slug, {tcols} FROM {table} t "
+            f"INNER JOIN (SELECT app_slug, MAX({order_col}) AS {order_col} FROM {table} "
+            f"            WHERE app_slug IN ({ph}) GROUP BY app_slug) lat "
+            f"ON t.app_slug = lat.app_slug AND t.{order_col} = lat.{order_col} "
+            f"WHERE t.app_slug IN ({ph})",
+            slugs + slugs
+        ):
+            d = dict(row)
+            result[d.pop("app_slug")] = d
+        return result
 
-        out.append({
-            "slug": slug,
+    health_map = _latest_map("health_checks", "status, response_ms, ts")
+    deploy_map = _latest_map("deploys", "commit_sha, status, ts, slot")
+    gh_map = _latest_map(
+        "github_snapshots",
+        "open_prs, draft_prs, open_issues, dependabot_alerts, ci_status, "
+        "last_commit_sha, last_commit_ts",
+    )
+    lh_map = _latest_map("lighthouse_scores", "performance, accessibility, best_practices, seo, ts")
+    tls_map = _latest_map("tls_checks", "domain, days_until_expiry, expires_at")
+    backup_map = _latest_map("backups", "status, ts, detail")
+
+    # Aggreger over alle hostnames for siste tilgjengelige dato per app
+    cf_map: dict = {}
+    for row in conn.execute(
+        f"SELECT cf.app_slug, cf.date, "
+        f"SUM(cf.requests) AS requests, SUM(cf.unique_visitors) AS unique_visitors, "
+        f"CASE WHEN SUM(cf.requests) > 0 "
+        f"     THEN ROUND(SUM(cf.requests * cf.cache_hit_pct / 100.0) * 100.0 "
+        f"               / SUM(cf.requests), 2) "
+        f"     ELSE NULL END AS cache_hit_pct, "
+        f"SUM(cf.errors_4xx) AS errors_4xx, SUM(cf.errors_5xx) AS errors_5xx, "
+        f"COUNT(DISTINCT cf.hostname) AS tenant_count "
+        f"FROM cloudflare_daily cf "
+        f"INNER JOIN (SELECT app_slug, MAX(date) AS date FROM cloudflare_daily "
+        f"            WHERE app_slug IN ({ph}) GROUP BY app_slug) lat "
+        f"ON cf.app_slug = lat.app_slug AND cf.date = lat.date "
+        f"WHERE cf.app_slug IN ({ph}) "
+        f"GROUP BY cf.app_slug, cf.date",
+        slugs + slugs,
+    ):
+        d = dict(row)
+        cf_map[d.pop("app_slug")] = d
+
+    concerns_map: dict = {}
+    for row in conn.execute(
+        f"SELECT app_slug, severity, COUNT(*) AS n FROM concerns "
+        f"WHERE app_slug IN ({ph}) AND status != 'resolved' "
+        f"GROUP BY app_slug, severity",
+        slugs,
+    ):
+        concerns_map.setdefault(row["app_slug"], {})[row["severity"]] = row["n"]
+
+    plans_map: dict = {}
+    for row in conn.execute(
+        f"SELECT app_slug, status, COUNT(*) AS n FROM plans "
+        f"WHERE app_slug IN ({ph}) AND status NOT IN ('done','cancelled') "
+        f"GROUP BY app_slug, status",
+        slugs,
+    ):
+        plans_map.setdefault(row["app_slug"], {})[row["status"]] = row["n"]
+
+    # Alle helse-rader siste 24t for sparkline — bulk per app
+    health_24h_map: dict = {}
+    for row in conn.execute(
+        f"SELECT app_slug, status, response_ms, ts FROM health_checks "
+        f"WHERE app_slug IN ({ph}) AND ts > datetime('now','-1 day') ORDER BY ts",
+        slugs,
+    ):
+        d = dict(row)
+        health_24h_map.setdefault(d.pop("app_slug"), []).append(d)
+
+    return [
+        {
+            "slug": a["slug"],
             "display_name": a["display_name"],
             "tier": a["tier"],
             "github_repo": a["github_repo"],
             "prod_url": a["prod_url"],
             "dev_url": a["dev_url"],
-            "health": dict(latest_health) if latest_health else None,
-            "health_24h": health_24h,
-            "last_deploy": dict(latest_deploy) if latest_deploy else None,
-            "github": dict(latest_gh) if latest_gh else None,
-            "cloudflare": dict(latest_cf) if latest_cf else None,
-            "lighthouse": dict(latest_lh) if latest_lh else None,
-            "tls": dict(latest_tls) if latest_tls else None,
-            "backup": dict(latest_backup) if latest_backup else None,
-            "concerns": {r["severity"]: r["n"] for r in concerns},
-            "plans": {r["status"]: r["n"] for r in plans},
-        })
-    return out
+            "health": health_map.get(a["slug"]),
+            "health_24h": health_24h_map.get(a["slug"], []),
+            "last_deploy": deploy_map.get(a["slug"]),
+            "github": gh_map.get(a["slug"]),
+            "cloudflare": cf_map.get(a["slug"]),
+            "lighthouse": lh_map.get(a["slug"]),
+            "tls": tls_map.get(a["slug"]),
+            "backup": backup_map.get(a["slug"]),
+            "concerns": concerns_map.get(a["slug"], {}),
+            "plans": plans_map.get(a["slug"], {}),
+        }
+        for a in apps
+    ]
 
 
 def q_app_truth(conn, slug: str) -> dict | None:
