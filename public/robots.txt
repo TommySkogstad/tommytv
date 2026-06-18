@@ -7,7 +7,6 @@ Allow: /
 Disallow: /status-api/
 Disallow: /status.html
 Disallow: /status-app.html
-Disallow: /heating.html
 Disallow: /sparing.html
 Disallow: /photos.html
 Disallow: /dashboard.html
