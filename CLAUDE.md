@@ -11,7 +11,6 @@
   - `index.html` — Hoveddashboard med e-post, VPN, offentlige tjenester og LAN-tjenester
   - `status.html` — Status-side (LAN): Smarthus (Hue + Homey + Nanoleaf + Plejd + Yale + gardiner) + Infrastruktur (UniFi + speedtest + WiFi restart)
   - `bookmarks.html` — Bokmerkeside med eksterne tjenester og lenker
-  - `heating.html` — Avviklet (homey-shs avviklet 2026-06-01)
   - `sparing.html` — Spareoversikt-side (portefølje, fordeling, anbefalinger)
   - `photos.html` — Videresendes til bilder.tommytv.no
   - `tommy_skogstad_brand_guide.html` — Brand guide (visuell identitet, logo, farger, typografi) — standalone side uten header.js/footer.js
@@ -33,8 +32,8 @@
   - `logo.svg` — SVG-tekstlogo med gradient (Tommy=blå gradient, TV=hvit)
 - `nginx.conf` — Nginx-konfigurasjon (git-crypt-kryptert)
 - `docker-compose.yml` — Cloudflared + Nginx + sparing-api, port 8880 eksponert for LAN
-- `.env.example` — Eksempel på environment-variabler: `CLOUDFLARE_TUNNEL_TOKEN` og `SPARING_API_TOKEN`
-- `.env` — Hemmeligheter (git-crypt-kryptert): `CLOUDFLARE_TUNNEL_TOKEN` for Tunnel. (`SPARING_API_TOKEN` er utfaset — sparing bruker nå Cloudflare Access, ikke Bearer-token; env-en kan fjernes ved neste opprydding.)
+- `.env.example` — Eksempel på environment-variabler: `CLOUDFLARE_TUNNEL_TOKEN`
+- `.env` — Hemmeligheter (git-crypt-kryptert): `CLOUDFLARE_TUNNEL_TOKEN` for Tunnel.
 
 ## Tjenester (Docker Compose)
 - **nginx** — Bygges via `Dockerfile.nginx` (COPY `nginx.conf`), serverer statiske filer, port 8880
