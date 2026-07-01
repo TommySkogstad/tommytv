@@ -9,7 +9,7 @@
 ## Filstruktur
 - `public/` — Alle statiske filer servert av nginx (én katalog-mount, inode-immun)
   - `index.html` — Hoveddashboard med e-post, VPN, offentlige tjenester og LAN-tjenester
-  - `status.html` — Status-side (LAN): Smarthus (Hue + Homey + Nanoleaf + Plejd + Yale + gardiner) + Infrastruktur (UniFi + speedtest + WiFi restart)
+  - `status.html` — Status-dashboard (LAN): App-helse for primære og sekundære apper (respons, Lighthouse, CF-trafikk, TLS, deploys), åpne bekymringer, issue-triage siste 24t og shadow-modes. Henter data fra /status-api/.
   - `bookmarks.html` — Bokmerkeside med eksterne tjenester og lenker
   - `sparing.html` — Spareoversikt-side (portefølje, fordeling, anbefalinger)
   - `photos.html` — Videresendes til bilder.tommytv.no
@@ -22,7 +22,7 @@
   - `sitemap.xml` — SEO: sitemap for søkemotorer
   - `llms.txt` — GEO: maskinlesbar profilside for AI-søkemotorer
   - `icons/` — Ikonmappe
-  - `dashboard.html` — Alternativt dashboard
+  - `dashboard.html` — Porteføljeside (offentlig, tilgjengelig fra headeren som «Portefølje»)
   - `status-app.html` — Status-app side
   - `favicon.svg` — Nettstedets favicon (SVG)
   - `tommy_skogstad_favicon_16.svg` — Brand favicon 16px
